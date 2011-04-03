@@ -1,0 +1,22 @@
+Transformation test
+-------------------
+
+A regular paragraph with *bold* and _italic_ text in. It is followed
+by a list:
+
+	* item, with *bolded* text
+	* item
+
+	NOTE: A note can span
+	multiple lines. It can contain a [http://link].
+
+	* item, with _italic_ text
+	* item
+
+A code example is also indented. It can be used to display code:
+
+	CODE:
+		CODE:
+		<?php // code goes here ?>
+
+This paragraph is the end of this sample.

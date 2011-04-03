@@ -1,0 +1,94 @@
+---------------
+What is Vidola?
+---------------
+
+Vidola is a documentation markup language. It is designed to make end-user documentation 
+as natural as possible. The reason for yet another markup language 
+is that none of the others satisfied how I wanted to document. Eg DocBook has 
+a lot of options but writing documentation for the web with it is unnatural. Markdown 
+is more intuitive and natural but has limitations for creating multi-page documents. 
+Vidola does draw a lot of inspiration from both Markdown and reStructuredText.
+
+
+------------------
+How to use Vidola?
+------------------
+
+Vidola is a library to transform documents into HTML. It also defines a markup language 
+to use for such documents. Here I describe the markup.
+
+
+Headings
+========
+
+For all headings the following applies:
+
+	* It is preceded by a blank line
+	* Unless it is the start of the document
+	* They can be indented to improve readability
+	* They Are followed by a blank line
+
+Headers are assigned a level in order of appearance. The first used markup will be 
+used as a level 1 header throughout the document.
+
+Allowed signs to mark headers are: -=+*^#. At least three such signs must be used and 
+they can appear before or before and after the header text.
+
+Examples of a valid header:
+
+	CODE:
+		---
+		a header
+		---
+
+		=_=_=_=
+		another header
+		*******
+
+The first three signs are what counts. Eg the following two will have the same level:
+
+	CODE:
+		---***
+		a header
+		---***
+
+		---+++
+		same level header
+		---+++
+
+
+Paragraphs
+==========
+
+A paragraph is formed by text preceded and followed by a blank line.
+
+	CODE:
+		This is a paragraph. It is followed by a blank line.
+		
+		This is also a paragraph. It is preceded by a blank line. It is not followed by a 
+		blank line because it is the end of the virtual file.
+
+Indentation can be used to make the document more readable.
+
+Code
+====
+
+Code is preceded by the word 'CODE:' with the actual code following on the second 
+line. Both are indented. The code block must be indented in respect to the previous
+lines and stops when the indentation goes back.
+
+	CODE:
+		This is a regular paragraph with samples of code blocks:
+	
+			CODE:
+			Note the 'CODE:' word. It is followed by the actual code.
+
+			CODE:
+
+				White space is possible.
+
+			CODE: This is another possibility.
+	
+		This is the next paragraph.
+
+The code block must be preceded and followed by a blank line.
