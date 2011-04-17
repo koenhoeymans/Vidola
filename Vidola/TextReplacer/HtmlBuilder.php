@@ -20,11 +20,21 @@ class HtmlBuilder implements TextReplacer
 		$this->patternList = $patternList;
 	}
 
+	/**
+	 * @see Vidola\TextReplacer.TextReplacer::getExtension()
+	 */
+	public function getExtension()
+	{
+		return 'html';
+	}
+
+	/**
+	 * @see Vidola\TextReplacer.TextReplacer::replace()
+	 */
 	public function replace($text)
 	{
 		foreach( $this->patternList->getPatterns() as $pattern)
 		{
-			// Replace: see class below
 			$text = RecursivePatternReplacer::using($pattern, $this->patternList)->text($text);			
 		}
 

@@ -8,7 +8,7 @@ namespace Vidola\Patterns;
 /**
  * @package Vidola
  */
-class Document implements Pattern
+class Page implements Pattern
 {
 	public function replace($text)
 	{

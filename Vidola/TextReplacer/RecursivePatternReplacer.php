@@ -12,7 +12,7 @@ use \Vidola\Patterns\PatternList;
 ini_set('pcre.backtrack_limit', 10000000);
 
 /**
- * Class used for HtmlBuilder to seperate the recursive logic from the class.
+ * Class used in HtmlBuilder to seperate the recursive logic from the class.
  * 
  * @package Vidola
  */
@@ -75,7 +75,7 @@ class RecursivePatternReplacer
 		foreach($this->patternList->getSubpatterns($this->pattern) as $subpattern)
 		{
 			// if text is replaced by a previous subpattern we need to untag
-			// back at the beginning
+			// => back at the beginning
 			$text[4] = self::using($subpattern, $this->patternList)->text($text[4]);
 		}
 

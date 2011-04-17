@@ -2,7 +2,7 @@
 
 require_once('TestHelper.php');
 
-class TransformationTest extends PHPUnit_Framework_TestCase
+class Vidola_EndToEndTests_TransformationTest extends \PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{

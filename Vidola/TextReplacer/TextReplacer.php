@@ -12,5 +12,16 @@ namespace Vidola\TextReplacer;
  */
 interface TextReplacer
 {
+	/**
+	 * The extension that belongs with the type of text.
+	 * 
+	 * @return string
+	 */
+	public function getExtension();
+
+	/**
+	 * @param string $text
+	 * @return string The replaced text.
+	 */
 	public function replace($text);
 }

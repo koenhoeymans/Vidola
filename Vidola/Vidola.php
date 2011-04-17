@@ -8,19 +8,21 @@ class Vidola
 	{
 		$config = new Util\CommandLineIniConfig(
 			$_SERVER['argv'],
-			__DIR__ . DIRECTORY_SEPARATOR . 'Vidola.ini'
+			__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini'
 		);
 
-		$patternList = new Patterns\PatternList();
+		$patternListFiller = new Util\PatternListFiller();
+		$patternList = $patternListFiller->fill(new Patterns\PatternList(), $config);
 
-		$patternBuilder = new Util\PatternBuilder();
-		$patternBuilder->build($patternList, $config);
-
-		$htmlBuilder = new \Vidola\TextReplacer\HtmlBuilder($patternList);
-		$html = $htmlBuilder->replace(file_get_contents($config->get('file')));
-
-		$writer = new Util\Writer();
-		$writer->write($html, $config->get('target'));
+		$documentBuilder = new \Vidola\Util\DocumentBuilder(
+			new \Vidola\TextReplacer\HtmlBuilder($patternList),
+			new Util\Writer()
+		);
+		$documentBuilder->build(
+			$config->get('source'),
+			$config->get('target.dir'),
+			$config->get('target.name')
+		);
 	}
 }
 
