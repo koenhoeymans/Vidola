@@ -30,7 +30,7 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	{
 		return preg_replace(
 			$this->betweenTagsRegex,
-			"\${1}*\${2}*\${5}",
+			"\${1}*\${4}*\${5}",
 			$text
 		);
 	}
@@ -122,11 +122,23 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	/**
 	 * @test
 	 */
-	public function nestedTagsAreLeftOut()
+	public function differentNestedTagsAreLeftOut()
 	{
 		$text = "start<a>a<b>b</b>a</a>end";
 		$this->assertEquals(
 			"*start*<a>a<b>b</b>a</a>*end*",
+			$this->replaceUntagged($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function sameNestedTagsAreLeftOut()
+	{
+		$text = "start<a>xx<a>yy<a>kk</a>ll</a>zz</a>end";
+		$this->assertEquals(
+			"*start*<a>xx<a>yy<a>kk</a>ll</a>zz</a>*end*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -142,6 +154,32 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 			$this->replaceUntagged($text)
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function stringCanStartWithTag()
+	{
+		$text = "<a>a</a>end";
+		$this->assertEquals(
+			"<a>a</a>*end*",
+			$this->replaceUntagged($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function stringCanEndWithTag()
+	{
+		$text = "start<a>a</a>";
+		$this->assertEquals(
+			"*start*<a>a</a>",
+			$this->replaceUntagged($text)
+		);
+	}
+
+	// -------------- text between tag ---------------------------
 
 	/**
 	 * @test
@@ -163,6 +201,42 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 		$text = "start<a id=\"a\">a</a>end";
 		$this->assertEquals(
 			"start<a id=\"a\">*a*</a>end",
+			$this->replaceBetweenTags($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function matchTextBetweenTagThatIsEndOfString()
+	{
+		$text = "start<a>a\n\n</a>";
+		$this->assertEquals(
+			"start<a>*a\n\n*</a>",
+			$this->replaceBetweenTags($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function matchTextBetweenTagThatIsStartOfString()
+	{
+		$text = "<a>a</a>end";
+		$this->assertEquals(
+			"<a>*a*</a>end",
+			$this->replaceBetweenTags($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function matchTextBetweenMultipleTags()
+	{
+		$text = "start<a>a</a>middle<a>a</a>end";
+		$this->assertEquals(
+			"start<a>*a*</a>middle<a>*a*</a>end",
 			$this->replaceBetweenTags($text)
 		);
 	}

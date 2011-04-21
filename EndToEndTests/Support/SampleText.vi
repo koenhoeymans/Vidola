@@ -8,10 +8,19 @@ by a list:
 	* item
 
 	NOTE: A note can span
-	multiple lines. It can contain a [http://link].
+	multiple lines. It can contain a [http://link]. Let's create a note
+	in a note:
+
+		NOTE: a subnote.
+
+		And now we're in our parent note again.
+
+	NOTE: A note following a note.
 
 	* item, with _italic_ text
 	* item
+
+NOTE: A note starting unindented.
 
 A code example is also indented. It can be used to display code:
 

@@ -92,3 +92,14 @@ lines and stops when the indentation goes back.
 		This is the next paragraph.
 
 The code block must be preceded and followed by a blank line.
+
+Note
+====
+
+Notes can be created as follows:
+
+	CODE:
+		NOTE: This is a note.
+
+A note block is ended with a blank line followed by text less indented.
+This means that it will keep going with text equally or more indented.

@@ -35,13 +35,13 @@ class Block implements Pattern
 	 * @see Vidola\Patterns.Pattern::replace()
 	 */
 	public function replace($text)
-	{	
+	{
 		$componentPatterns = $this->componentPatterns;
 		$elementName = $this->elementName;
 		$className = $this->className;
 
 		return preg_replace_callback(
-			"#(?<=\n\n)(\s+)" . $this->identifier . "\s*(.+)(((\n\\1|\n\n\\1\s).+)*)(?=\n\n)#i",
+			"#(?<=\n\n)(\s*)" . $this->identifier . "\s*(.+)(((\n\\1|\n\n\\1\s).+)*)(?=\n\n)#i",
 			function($match) use ($componentPatterns, $elementName, $className)
 			{
 				$classAttr = ($className !== null) ? ' class="' . $className . '"' : '';

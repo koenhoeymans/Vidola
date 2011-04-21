@@ -41,7 +41,10 @@ class PatternListFiller
 				$this->getPattern($subpattern),
 				$this->getPattern($pattern)
 			);
-			$this->addSubpatterns($subpattern, $patternList, $config);
+			if ($pattern != $subpattern)
+			{
+				$this->addSubpatterns($subpattern, $patternList, $config);
+			}
 		}
 	}
 

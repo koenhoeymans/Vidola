@@ -28,6 +28,23 @@ class PatternList
 
 	/**
 	 * @param Pattern $pattern
+	 * @return array
+	 */
+	public function getSubpatterns(Pattern $pattern)
+	{
+		foreach ($this->subpatterns as $patternArr)
+		{
+			if ($patternArr['pattern'] == $pattern)
+			{
+				return $patternArr['subpatterns'];
+			}
+		}
+
+		return array();
+	}
+
+	/**
+	 * @param Pattern $pattern
 	 * 
 	 * @return PatternList
 	 */
@@ -60,23 +77,5 @@ class PatternList
 		);
 
 		return $this;
-	}
-
-	/**
-	 * @param Pattern $pattern
-	 * @return array
-	 */
-	public function getSubpatterns(Pattern $pattern)
-	{
-
-		foreach ($this->subpatterns as $patternArr)
-		{
-			if ($patternArr['pattern'] == $pattern)
-			{
-				return $patternArr['subpatterns'];
-			}
-		}
-
-		return array();
 	}
 }

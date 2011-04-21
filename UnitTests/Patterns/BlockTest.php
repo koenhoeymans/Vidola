@@ -9,7 +9,7 @@ class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function blocksAreIntroducedByTwoNewLinesBoldTextFollowedByAColon()
+	public function blocksAreIntroducedByBlankLineWordAndColon()
 	{
 		$text = "A paragraph.\n\n\tBLOCK: some text\n\nAnother paragraph.";
 		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
@@ -98,6 +98,20 @@ class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 		$text = "A paragraph.\n\n\tBLOCK: a block\n\n\t\tBLOCK: deeper nested block\n\nanother paragraph";
 		$this->assertEquals(
 			"A paragraph.\n\n\t<block>a block\n\n\t\tBLOCK: deeper nested block</block>\n\nanother paragraph",
+			$block->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function aBlockCanContinueIndentedAfterNestedBlock()
+	{
+		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+
+		$text = "A paragraph.\n\n\tBLOCK: a block\n\tblock continued\n\n\t\tBLOCK: deeper nested block\n\n\t Block continued\n\nanother paragraph";
+		$this->assertEquals(
+			"A paragraph.\n\n\t<block>a block\n\tblock continued\n\n\t\tBLOCK: deeper nested block\n\n\t Block continued</block>\n\nanother paragraph",
 			$block->replace($text)
 		);
 	}
