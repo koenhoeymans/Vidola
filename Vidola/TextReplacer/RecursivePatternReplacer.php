@@ -12,7 +12,8 @@ use \Vidola\Patterns\PatternList;
 ini_set('pcre.backtrack_limit', 10000000);
 
 /**
- * Class used in HtmlBuilder to seperate the recursive logic from the class.
+ * Class used in HtmlBuilder to seperate the recursive logic from the class. Would
+ * be inner class if that was possible.
  * 
  * @package Vidola
  */
@@ -35,43 +36,48 @@ class RecursivePatternReplacer
 	const between_single_tags_regex =
 		"#(<(?P<tag>[a-z0-9]+?)( [^>]+)?>)(.*?)(</(?P=tag)>)#sD";
 
+	private $text;
+
 	private $pattern;
 
 	private $patternList;
 
-	public function __construct(Pattern $pattern, PatternList $patternList)
+	public function __construct($text, Pattern $pattern, PatternList $patternList)
 	{
+		$this->text = $text;
 		$this->pattern = $pattern;
 		$this->patternList = $patternList;
 	}
 
-	public static function using(Pattern $pattern, PatternList $patternList)
-	{
-		return new self($pattern, $patternList);
+	public static function replaceRecursively(
+		$text, Pattern $startPattern, PatternList $patternList
+	) {
+		$instance = new self($text, $startPattern, $patternList);
+		return $instance->findUntaggedPartsOfText();
 	}
 
-	public function text($text)
+	private function findUntaggedPartsOfText()
 	{
 		return preg_replace_callback(
 			self::untagged_text_regex,
-			array($this, 'replaceUntaggedRegexMatched'),
-			$text
+			array($this, 'replaceUntaggedPartsByPattern'),
+			$this->text
 		);
 	}
 
-	private function replaceUntaggedRegexMatched($regexMatch)
+	private function replaceUntaggedPartsByPattern($regexMatch)
 	{
 		$replaced = $this->pattern->replace($regexMatch[1]);
 		if ($replaced !== $regexMatch[1]) // tags were inserted because of match
 		{
 			// find text between tags and present to subpatterns
-			$replaced = $this->presentTextBetweenTagsToSubpatterns($replaced);
+			$replaced = $this->findReplacedTextBetweenTags($replaced);
 		}
 
 		return $replaced . $regexMatch[2];
 	}
 
-	private function presentTextBetweenTagsToSubpatterns($textBetweenTags)
+	private function findReplacedTextBetweenTags($textBetweenTags)
 	{
 		return preg_replace_callback(
 			self::between_single_tags_regex,
@@ -86,7 +92,9 @@ class RecursivePatternReplacer
 		{
 			// if text is replaced by a previous subpattern we need to untag
 			// => back at the beginning
-			$text[4] = self::using($subpattern, $this->patternList)->text($text[4]);
+			$text[4] = self::replaceRecursively(
+				$text[4], $subpattern, $this->patternList
+			);
 		}
 		return $text[1] . $text[4] . $text[5];
 	}

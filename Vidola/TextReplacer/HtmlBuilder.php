@@ -35,7 +35,9 @@ class HtmlBuilder implements TextReplacer
 	{
 		foreach( $this->patternList->getPatterns() as $pattern)
 		{
-			$text = RecursivePatternReplacer::using($pattern, $this->patternList)->text($text);			
+			$text = RecursivePatternReplacer::replaceRecursively(
+				$text, $pattern, $this->patternList
+			);			
 		}
 
 		return $text;
