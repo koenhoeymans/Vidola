@@ -14,7 +14,7 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 	/**
 	 * @test
 	 */
-	public function aLinkDefinitionIsSquareBracketsWithDefinitionFollowedBySemicolonAndUrl()
+	public function linkDefintionCollectorRemovesLinkDefinitionsFromText()
 	{
 		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
 		$this->assertEquals(
@@ -26,7 +26,7 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 	/**
 	 * @test
 	 */
-	public function linkDefintionCollectorRemovesLinkDefinitionsFromText()
+	public function aLinkDefinitionIsSquareBracketsWithDefinitionFollowedBySemicolonAndUrl()
 	{
 		// given
 		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
@@ -41,6 +41,8 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 			),
 			$this->collector->get('linkDefinition')
 		);
+
+		$this->assertNull($this->collector->get('non existend definition'));
 	}
 
 	/**
