@@ -27,6 +27,32 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function emptyLineThenTextThenLineBreakAndEndOfTextIsParagraph()
+	{
+		$text = "\n\nparagraph\n";
+		$html = $this->pattern->replace($text);
+		$this->assertEquals(
+			"\n\n<p>paragraph</p>\n",
+			$html
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function emptyLineThenTextThenEndOfTextIsParagraph()
+	{
+		$text = "\n\nparagraph";
+		$html = $this->pattern->replace($text);
+		$this->assertEquals(
+			"\n\n<p>paragraph</p>",
+			$html
+		);
+	}
+
+	/**
+	 * @test
+	 */
 	public function multipleParagraphsCanBePlacedAfterEachOther()
 	{
 		$text = "\n\nparagraph\n\nanother\n\nyet another\n\n";
@@ -45,6 +71,18 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 		$text = "\n\n\tparagraph\n\n";
 		$this->assertEquals(
 			"\n\n\t<p>paragraph</p>\n\n",
+			$this->pattern->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function aParagraphCannotContainOnlyWhiteSpace()
+	{
+		$text = "\n\n\t\n\n";
+		$this->assertEquals(
+			"\n\n\t\n\n",
 			$this->pattern->replace($text)
 		);
 	}

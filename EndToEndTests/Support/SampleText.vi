@@ -18,7 +18,8 @@ by a list:
 	NOTE: A note following a note.
 
 	* item, with _italic_ text
-	* item
+	* item, with a [link reference] [1]
+	* other [link reference] [2]
 
 NOTE: A note starting unindented.
 
@@ -28,4 +29,7 @@ A code example is also indented. It can be used to display code:
 		CODE:
 		<?php // code goes here ?>
 
-This paragraph is the end of this sample.
+This is another paragraph.
+
+	[1]: http://www.example.com
+	[2]: http://example.com "title"

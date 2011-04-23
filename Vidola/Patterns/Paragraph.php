@@ -18,7 +18,7 @@ class Paragraph implements Pattern
 	public function replace($text)
 	{
 		return preg_replace(
-			"#(?<=\n\n)(\s*)(.+)((\n\\1(.+))*)(?=\n\n)#",
+			"#(?<=\n\n)(\s*)([^\s].*)((\n\\1(.+))*)(?=\n\n|\n$|$)#",
 			"\${1}<p>\${2}\${3}</p>",
 			$text
 		);

@@ -11,7 +11,7 @@ class Vidola
 			__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini'
 		);
 
-		$patternListFiller = new Util\PatternListFiller();
+		$patternListFiller = new Util\PatternListFiller(new Util\PatternCreator());
 		$patternList = $patternListFiller->fill(new Patterns\PatternList(), $config);
 
 		$documentBuilder = new \Vidola\Util\DocumentBuilder(

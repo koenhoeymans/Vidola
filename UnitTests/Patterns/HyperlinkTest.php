@@ -8,7 +8,10 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->hyperlink = new \Vidola\Patterns\Hyperlink();
+		$this->linkDefinitions = $this->getMock(
+			'\\Vidola\\Patterns\\LinkDefinitionCollector'
+		);
+		$this->hyperlink = new \Vidola\Patterns\Hyperlink($this->linkDefinitions);
 	}
 
 	/**
@@ -38,10 +41,10 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function theUrlCanBePlacedElsewhereWhenLinkTextIsFollowedBySquareBracketedTitleAsReference()
+	public function anchorTextIsBetweenBracketsFollowedByUrl()
 	{
-		$text = "Visit [examples website \"website of example.com\"] for info.\n\nparagraph\n\n[website of example.com]: http://example.com\n";
-		$html = "Visit <a title=\"website of example.com\" href=\"http://example.com\">examples website</a> for info.\n\nparagraph\n";
+		$text = "Visit [my website][http://example.com] for info.";
+		$html = "Visit <a href=\"http://example.com\">my website</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
 		);
@@ -50,8 +53,103 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function multipleReferencedLinksArePossible()
+	public function anchorTextIsBetweenBracketsFollowedByUrlBetweenBracketsAndOptionallyTitle()
 	{
-		$this->markTestIncomplete();
+		$text = "Visit [my website][http://example.com \"a title\"] for info.";
+		$html = "Visit <a title=\"a title\" href=\"http://example.com\">my website</a> for info.";
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+
+	/**
+	 * @test
+	 */
+	public function theUrlCanBePlacedElsewhereWhenLinkTextIsFollowedBySquareBracketedTitleAsReference()
+	{
+		$this->linkDefinitions
+			->expects($this->once())
+			->method('get')->with('1')
+			->will($this->returnValue(
+				new \Vidola\Patterns\LinkDefinition('1', 'http://example.com')));
+		$text = "Visit [my site][1] for info.\n\n"
+			. "paragraph\n\n"
+			. "[1]: http://example.com\n";
+		$html = "Visit <a href=\"http://example.com\">my site</a> for info.\n\n"
+			. "paragraph\n\n"
+			. "[1]: http://example.com\n";
+
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function titleTextCanComeFromLinkDefinition()
+	{
+		$this->linkDefinitions
+			->expects($this->once())
+			->method('get')->with('1')
+			->will($this->returnValue(
+				new \Vidola\Patterns\LinkDefinition('1', 'http://example.com', 'title')));
+		$text = "Visit [my site][1] for info.\n\n"
+			. "paragraph\n\n"
+			. "[1]: http://example.com\n";
+		$html = "Visit <a title=\"title\" href=\"http://example.com\">my site</a> for info.\n\n"
+			. "paragraph\n\n"
+			. "[1]: http://example.com\n";
+
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function linkDefinitionMayBePlacedSpaceAfterAnchorText()
+	{
+		$this->linkDefinitions
+			->expects($this->once())
+			->method('get')->with('1')
+			->will($this->returnValue(
+				new \Vidola\Patterns\LinkDefinition('1', 'http://example.com')));
+		$text = "Visit [my site] [1] for info.\n\n"
+			. "paragraph\n\n"
+			. "[1]: http://example.com\n";
+		$html = "Visit <a href=\"http://example.com\">my site</a> for info.\n\n"
+			. "paragraph\n\n"
+			. "[1]: http://example.com\n";
+
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function anchorTextCanContainLink()
+	{
+		$text = "Visit [site http://x.com][http://y.com \"title\"] for info.";
+		$html = "Visit <a title=\"title\" href=\"http://y.com\">site http://x.com</a> for info.";
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function textBetweenBracketsIsNotMistakenForLink()
+	{
+		$text = "Not a [link] pattern, nor is [\"this\"] a link.";
+		$html = "Not a [link] pattern, nor is [\"this\"] a link.";
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
 	}
 }

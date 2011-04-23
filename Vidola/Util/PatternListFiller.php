@@ -13,7 +13,12 @@ use Vidola\Util\Config;
  */
 class PatternListFiller
 {
-	private $patterns = array();
+	private $patternCreator;
+
+	public function __construct(PatternCreator $patternCreator)
+	{
+		$this->patternCreator = $patternCreator;
+	}
 
 	/**
 	 * Fill PatternList based on patterns in config.
@@ -50,13 +55,6 @@ class PatternListFiller
 
 	private function getPattern($name)
 	{
-		$class = '\\Vidola\\Patterns\\' . ucfirst($name);
-
-		if (!isset($this->patterns[$class]))
-		{
-			$this->patterns[$class] = new $class;
-		}
-
-		return $this->patterns[$class];
+		return $this->patternCreator->get($name);
 	}
 }

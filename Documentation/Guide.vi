@@ -103,3 +103,21 @@ Notes can be created as follows:
 
 A note block is ended with a blank line followed by text less indented.
 This means that it will keep going with text equally or more indented.
+
+Links
+=====
+
+An url between square brackets is automatically converted to a hyperlink. Thus
+
+	CODE:
+		[http://www.mysite.com]
+
+becomes
+
+	CODE:
+		<a href="http://www.mysite.com">http://www.mysite.com</a>
+
+You can also place anchor text in the square brackets.
+Can also place a link title.
+Url can be placed somewhere else using title reference.
+If no anchor text the link is used as anchor text, unless anchor text placed first?
