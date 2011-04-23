@@ -35,9 +35,9 @@ class Hyperlink implements Pattern
 			"#\[.+\]( )?\[.+\]|\[http://.+\]#U",
 			function ($match) use ($linkDefinitions)
 			{
-				if (preg_match("#\[.+?\]\[(\http://[^\s\]]+)\]#", $match[0], $matches))
+				if (preg_match("#\[.+?\]( )?\[(http://[^\s]+)\]#", $match[0], $matches))
 				{
-					$url = $matches[1];
+					$url = $matches[2];
 				}
 				elseif (preg_match("#\[(http://[^\s\]]+)#", $match[0], $matches))
 				{
