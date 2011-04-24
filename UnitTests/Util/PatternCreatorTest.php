@@ -32,4 +32,15 @@ class Vidola_Util_PatternCreatorTest extends PHPUnit_Framework_TestCase
 			$this->patternCreator->get('hyperlink')
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function onlyOneInstanceIsGiven()
+	{
+		$patternA = $this->patternCreator->get('bold');
+		$patternB = $this->patternCreator->get('bold');
+
+		$this->assertSame($patternA, $patternB);
+	}
 }

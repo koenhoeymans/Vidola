@@ -64,11 +64,7 @@ class DocumentBuilder
 	 */
 	private function formatSource($source)
 	{
-		if (!($formattedSource = realpath($source)))
-		{
-			$formattedSource = realpath(getcwd() . DIRECTORY_SEPARATOR . $source);
-		}
-
+		$formattedSource = realpath($source);
 		return $formattedSource;
 	}
 
@@ -103,10 +99,7 @@ class DocumentBuilder
 	{
 		$targetFiles = array();
 		$sourceFiles = scandir($source);
-		if ($sourceFiles === false)
-		{
-			throw new Exception("Failed to get list of files of $source.");
-		}
+
 		foreach ($sourceFiles as $sourceFileName)
 		{
 			if ($sourceFileName === '.' || $sourceFileName ==='..')
