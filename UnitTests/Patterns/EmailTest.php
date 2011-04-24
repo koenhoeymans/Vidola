@@ -16,8 +16,8 @@ class Vidola_Patterns_EmailTest extends PHPUnit_Framework_TestCase
 	 */
 	public function anEmailAddressIsLinkedWhenPlacedBetweenAngledBrackets()
 	{
-		$text = "Mail to <me@example.com>, it's an email address link.";
-		$html = "Mail to <a href=\"mailto:me@example.com\">me@example.com</a>, it's an email address link.";
+		$text = "Mail to [me@xmpl.com].";
+		$html = "Mail to <a href=\"mailto:me@xmpl.com\">me@xmpl.com</a>.";
 		$this->assertEquals(
 			$html, $this->email->replace($text)
 		);
