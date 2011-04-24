@@ -137,3 +137,13 @@ can contain the title attribute:
 		optionally indented.
 
 			[1]: http://example.com "title"
+
+Email
+=====
+
+An email link is created by placing the email adress in square brackets. The anchor text
+precedes this and is also placed within square brackets, but is optional. If it is not
+there, the address itself will be used.
+
+	CODE:
+		Mail me at my [email address][mail@example.com].

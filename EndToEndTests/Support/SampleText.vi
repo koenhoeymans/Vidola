@@ -29,7 +29,7 @@ A code example is also indented. It can be used to display code:
 		CODE:
 		<?php // code goes here ?>
 
-This is another paragraph.
+This is another paragraph with an [email link] [mail@example.com].
 
 	[1]: http://www.example.com
 	[2]: http://example.com "title"

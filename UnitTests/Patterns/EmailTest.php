@@ -26,6 +26,18 @@ class Vidola_Patterns_EmailTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function anchorTextPrecedesAddressInBrackets()
+	{
+		$text = "Mail to [my mail][me@xmpl.com].";
+		$html = "Mail to <a href=\"mailto:me@xmpl.com\">my mail</a>.";
+		$this->assertEquals(
+			$html, $this->email->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
 	public function withoutAngledBracketsNoLinkIsCreated()
 	{
 		$text = "Mail to me@example.com, it's an email address link.";

@@ -55,30 +55,30 @@ class Vidola_EndToEndTests_FileCreationTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
-//	/**
-//	 * @test
-//	 */
-//	public function directoryAsInputTransformsAllFilesContained()
-//	{
-//		// given
-//		$_SERVER['argv']['source'] = __DIR__
-//			. DIRECTORY_SEPARATOR . 'Support'
-//			. DIRECTORY_SEPARATOR . 'FolderWithTwoDocuments';
-//		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-//
-//		// when
-//		\Vidola\Vidola::run();
-//
-//		// then
-//		$this->assertTrue(
-//			file_exists(
-//				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Subdocument1.html'
-//			)
-//		);
-//		$this->assertTrue(
-//			file_exists(
-//				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Subdocument2.html'
-//			)
-//		);
-//	}
+	/**
+	 * @test
+	 */
+	public function directoryAsInputTransformsAllFilesContained()
+	{
+		// given
+		$_SERVER['argv']['source'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'FolderWithTwoDocuments';
+		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+
+		// when
+		\Vidola\Vidola::run();
+
+		// then
+		$this->assertTrue(
+			file_exists(
+				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Subdocument1.html'
+			)
+		);
+		$this->assertTrue(
+			file_exists(
+				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Subdocument2.html'
+			)
+		);
+	}
 }
