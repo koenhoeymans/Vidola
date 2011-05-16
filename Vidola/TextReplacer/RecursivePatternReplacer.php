@@ -26,7 +26,7 @@ class RecursivePatternReplacer
 	 * @var string
 	 */
 	const untagged_text_regex =
-		"#(.*)(<(.+)( .+)?>([^<]|(?R))+</\\3>|$)#UsD";
+		"#(.*)(<.+>([^<]|(?R))+</.+>|$)#UsD";
 
 	/**
 	 * $match[1] + $match[2] + $match[5] = opening tag + text + closing tag
@@ -34,7 +34,7 @@ class RecursivePatternReplacer
 	 * @var string
 	 */
 	const between_single_tags_regex =
-		"#(<(?P<tag>[a-z0-9]+?)( [^>]+)?>)(.*?)(</(?P=tag)>)#sD";
+		"#(<([a-z0-9]+?)( [^>]+)?>)(.*?)(</\\2>)#sD";
 
 	private $text;
 
@@ -44,6 +44,7 @@ class RecursivePatternReplacer
 
 	public function __construct($text, Pattern $pattern, PatternList $patternList)
 	{
+//var_dump($text);
 		$this->text = $text;
 		$this->pattern = $pattern;
 		$this->patternList = $patternList;
@@ -53,7 +54,8 @@ class RecursivePatternReplacer
 		$text, Pattern $startPattern, PatternList $patternList
 	) {
 		$instance = new self($text, $startPattern, $patternList);
-		return $instance->findUntaggedPartsOfText();
+		$untaggedParts = $instance->findUntaggedPartsOfText();
+		return $untaggedParts;
 	}
 
 	private function findUntaggedPartsOfText()
@@ -67,17 +69,22 @@ class RecursivePatternReplacer
 
 	private function replaceUntaggedPartsByPattern($regexMatch)
 	{
+		if ($regexMatch[1] === '')
+		{
+			return '';
+		}
+
 		$replaced = $this->pattern->replace($regexMatch[1]);
-		if ($replaced !== $regexMatch[1]) // tags were inserted because of match
+		if ($replaced !== $regexMatch[1]) // tags were inserted
 		{
 			// find text between tags and present to subpatterns
-			$replaced = $this->findReplacedTextBetweenTags($replaced);
+			$replaced = $this->replaceTextBetweenTags($replaced);
 		}
 
 		return $replaced . $regexMatch[2];
 	}
 
-	private function findReplacedTextBetweenTags($textBetweenTags)
+	private function replaceTextBetweenTags($textBetweenTags)
 	{
 		return preg_replace_callback(
 			self::between_single_tags_regex,
@@ -96,6 +103,7 @@ class RecursivePatternReplacer
 				$text[4], $subpattern, $this->patternList
 			);
 		}
+
 		return $text[1] . $text[4] . $text[5];
 	}
 }

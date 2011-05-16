@@ -32,6 +32,8 @@ class PatternCreator
 	private function createObj($className)
 	{
 		$reflectionClass = new \ReflectionClass($className);
+
+		$reflectionClass = new \ReflectionClass($className);
 		$dependencies = array();
 
 		if ($reflectionClass->hasMethod('__construct'))
