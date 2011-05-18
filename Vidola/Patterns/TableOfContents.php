@@ -19,13 +19,13 @@ class TableOfContents implements Pattern
 
 	public function replace($text)
 	{
-		if (!preg_match("#(\n|^)(\s*)table of contents:((\n\(.+?\))*)((\n|.)+)(?=\n\n(?!\\3)|$)#", $text))
+		if (!preg_match("#(?<=\n\n|^)(\s*)table of contents:((\n\(.+?\))*)(((\n|.)+)$)#", $text))
 		{
 			return $text;
 		}
 
 		return preg_replace_callback(
-			"#(\n|^)(\s*)table of contents:((\n{1,2}\\2((\t| )+).+)*)((.|\n)+)#",
+			"#(?<=\n\n|^)((\t| )*)table of contents:((\n\\1(\t| )+.+)*)(\n\n(.|\n)+)$#",
 			array($this, 'createToc'),
 			$text
 		);
@@ -33,16 +33,31 @@ class TableOfContents implements Pattern
 
 	private function createToc($match)
 	{
-		$text = $match[7];
+		$options = $this->getOptions($match[3]);
+		$text = $match[6];
 		$headers = $this->headerFinder->getHeadersSequentially($text);
-		$headerList = $this->buildHeaderList($headers);
+		$headerList = $this->buildHeaderList($headers, $options);
 
-		return $match[1] . $headerList . $text;
+		return $headerList . $text;
 	}
 
-	private function buildHeaderList(array $headers)
+	private function buildHeaderList(array $headers, array $options)
 	{
-		$list = "<ul>\n";
+		static $depth;
+
+		if (!isset($depth))
+		{
+			$depth = 1;
+		}
+		if (isset($options['depth']))
+		{
+			if ($depth > $options['depth'])
+			{
+				return '';
+			}
+		}
+
+		$list = "<ul>";
 		$listLevel = null;
 
 		foreach ($headers as $key => $header)
@@ -66,20 +81,26 @@ class TableOfContents implements Pattern
 			}
 
 			$ref = str_replace(' ', '_', $title);
-			$list .= "\t<li>\n\t\t<a href=\"#$ref\">$title</a>\n";
+			$list .= "\n\t<li>\n\t\t<a href=\"#$ref\">$title</a>";
 
 			if (isset($headers[$key+1]))
 			{
 				if ($headers[$key+1]['level'] > $level)
 				{
-					$list .= $this->buildHeaderList($headers);
+					$depth++;
+					$sublist = $this->buildHeaderList($headers, $options);
+					if ($sublist !== '')
+					{
+						$list .= "\n$sublist";
+					}
+					$depth--;
 				}
 			}
 
-			$list .= "\t</li>\n";
+			$list .= "\n\t</li>";
 		}
 
-		$list .= "</ul>\n";
+		$list .= "\n</ul>";
 
 		return $list;
 	}
@@ -88,8 +109,8 @@ class TableOfContents implements Pattern
 	{
 		$options = array();
 
-		preg_match_all("#\n\s*\((.+?)\)#", $text, $matches);
-		foreach ($matches[1] as $line)
+		preg_match_all("#\n(\t| )+(.+?)(?=\n|$)#", $text, $matches);
+		foreach ($matches[2] as $line)
 		{
 			$option = explode(':', $line);
 			$options[$option[0]] = trim($option[1]);
@@ -97,21 +118,4 @@ class TableOfContents implements Pattern
 
 		return $options;
 	}
-
-//	private function getPageList($text)
-//	{
-//		preg_match_all("#.+(?=\n|$)#", $text, $matches);
-//		return $matches;
-//	}
-
-//	private function createLinkList($pageList)
-//	{
-//		$list = '<ul>';
-//		foreach ($pageList as $page)
-//		{
-//			$list .= "\n<li>" . $page . '</li>';
-//		}
-//
-//		return $list . "\n</ul>";
-//	}
 }

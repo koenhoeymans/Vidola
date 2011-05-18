@@ -17,10 +17,15 @@ class Vidola_Patterns_TableOfContentsTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function createsLocalTocWhenNoPageIsSpecified()
+	public function createsLocalToc()
 	{
 		// given
-		$text = "\ntable of contents:\n\nheader\n----\n\nparagraph";
+		$text = "table of contents:
+
+header
+----
+
+paragraph";
 
 		$this->headerFinder
 			->expects($this->any())
@@ -33,13 +38,11 @@ class Vidola_Patterns_TableOfContentsTest extends PHPUnit_Framework_TestCase
 		$result = $this->toc->replace($text);
 
 		// then
-		$this->assertEquals("
-<ul>
+		$this->assertEquals("<ul>
 	<li>
 		<a href=\"#header\">header</a>
 	</li>
 </ul>
-
 
 header
 ----
@@ -55,7 +58,12 @@ paragraph",
 	public function respectsLevelOfHeadersThroughSublists()
 	{
 		// given
-		$text = "\ntable of contents:\n\nheader\n----\n\nparagraph";
+		$text = "table of contents:
+
+header
+----
+
+paragraph";
 
 		$this->headerFinder
 			->expects($this->any())
@@ -69,8 +77,8 @@ paragraph",
 		$result = $this->toc->replace($text);
 
 		// then
-		$this->assertEquals("
-<ul>
+		$this->assertEquals(
+"<ul>
 	<li>
 		<a href=\"#header\">header</a>
 <ul>
@@ -80,7 +88,6 @@ paragraph",
 </ul>
 	</li>
 </ul>
-
 
 header
 ----
@@ -96,7 +103,12 @@ paragraph",
 	public function createsNestedToc()
 	{
 				// given
-		$text = "\ntable of contents:\n\nheader\n----\n\nparagraph";
+		$text = "table of contents:
+
+header
+----
+
+paragraph";
 
 		$this->headerFinder
 			->expects($this->any())
@@ -112,8 +124,8 @@ paragraph",
 		$result = $this->toc->replace($text);
 
 		// then
-		$this->assertEquals("
-<ul>
+		$this->assertEquals(
+"<ul>
 	<li>
 		<a href=\"#header1a\">header1a</a>
 <ul>
@@ -130,7 +142,6 @@ paragraph",
 	</li>
 </ul>
 
-
 header
 ----
 
@@ -144,7 +155,110 @@ paragraph",
 	 */
 	public function tocIsLimitedToItsSectionDeterminedByHeaderLevel()
 	{
-		$this->markTestIncomplete();
+		// given
+		$text = 
+"header
+---
+
+paragraph
+
+table of contents:
+
+subheader
+===
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->any())
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'subheader', 'level' => 2)
+			)));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"header
+---
+
+paragraph
+
+<ul>
+	<li>
+		<a href=\"#subheader\">subheader</a>
+	</li>
+</ul>
+
+subheader
+===
+
+paragraph",
+			$result
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function tocOfSectionStopsAtSectionWithHigherLevelHeader()
+	{
+		// given
+		$text = 
+"header
+---
+
+paragraph
+
+table of contents:
+
+subheader
+===
+
+paragraph
+
+other header
+---
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->any())
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'subheader', 'level' => 2),
+				array('title' => 'other header', 'level' => 1)
+			)));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"header
+---
+
+paragraph
+
+<ul>
+	<li>
+		<a href=\"#subheader\">subheader</a>
+	</li>
+</ul>
+
+subheader
+===
+
+paragraph
+
+other header
+---
+
+paragraph",
+			$result
+		);
 	}
 
 	/**
@@ -152,6 +266,50 @@ paragraph",
 	 */
 	public function depthOptionLimitsDepthOfToc()
 	{
-		$this->markTestIncomplete();
+				// given
+		$text = 
+"table of contents:
+	depth: 1
+
+header
+---
+
+paragraph
+
+subheader
+===
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->any())
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'header', 'level' => 1),
+				array('title' => 'subheader', 'level' => 2)
+			)));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"<ul>
+	<li>
+		<a href=\"#header\">header</a>
+	</li>
+</ul>
+
+header
+---
+
+paragraph
+
+subheader
+===
+
+paragraph",
+			$result
+		);
 	}
 }
