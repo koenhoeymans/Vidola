@@ -147,3 +147,21 @@ there, the address itself will be used.
 
 	CODE:
 		Mail me at my [email address][mail@example.com].
+
+Table of contents
+=================
+
+You can create a table of contents and have it filled automatically with
+the headers that follow. It takes all headers and displays a nested list
+stopping at the end of the document or when it encounters a header at a
+higher level of the first one encounterd. Optionally you can specify the
+depth.
+
+	CODE:
+		table of contents:
+			depth: 2
+
+		a header
+		========
+
+		etc
