@@ -1,0 +1,14 @@
+SubDocument second level header
+-------------------------------
+
+This is the subdocument.
+
+third level header
+++++++++++++++++++
+
+Maximum depth reached here.
+
+fourth level header
+-+-+-+-+-+-+-+-+-+-
+
+The header above should not make it into the toc of the parent document.

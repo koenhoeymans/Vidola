@@ -23,13 +23,13 @@ class Hyperlink implements Pattern
 		// --------------
 		// [anchor text][http://url "title"]
 		// [anchor text][http://url]
-		// [anchor text][link def]
+		// [anchor text][link definition]
 		// [http://url]
 		// [http://url "title"]
 		//
 		// link definition (see Pattern LinkDefinitionCollector)
 		// ----------------
-		// [link def]: http://www.example.com "title"
+		// [link definition]: http://www.example.com "title"
 		$linkDefinitions = $this->linkDefinitions;
 		return preg_replace_callback(
 			"#\[.+\]( )?\[.+\]|\[http://.+\]#U",

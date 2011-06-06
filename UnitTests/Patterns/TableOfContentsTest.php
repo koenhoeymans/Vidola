@@ -8,10 +8,18 @@ class Vidola_Patterns_TableOfContentsTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->headerFinder = $this->getMockBuilder('\\Vidola\\Patterns\\HeaderFinder')
-									->disableOriginalConstructor()
-									->getMock();
-		$this->toc = new \Vidola\Patterns\TableOfContents($this->headerFinder);
+		$this->headerFinder =
+			$this->getMockBuilder('\\Vidola\\Patterns\\TableOfContents\\HeaderFinder')
+					->disableOriginalConstructor()
+					->getMock();
+		$this->fileRetriever =
+			$this->getMockBuilder('\\Vidola\\Services\\FileRetriever')
+					->disableOriginalConstructor()
+					->getMock();
+		$this->toc = new \Vidola\Patterns\TableOfContents(
+			$this->headerFinder,
+			$this->fileRetriever
+		);
 	}
 
 	/**
@@ -307,6 +315,271 @@ paragraph
 
 subheader
 ===
+
+paragraph",
+			$result
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function addingFileNameIncludesHeadersFromThatFileAfterCurrentDocumentHeaders()
+	{
+		// given
+		$text =
+"table of contents:
+
+	includedfile
+
+header
+----
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->at(0))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'header', 'level' => 1)
+			)));
+		$this->headerFinder
+			->expects($this->at(1))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'included header', 'level' => 1)
+			)));
+		$this->fileRetriever
+			->expects($this->any())
+			->method('retrieveContent')
+			->with('Includedfile.vi')
+			->will($this->returnValue(
+"included header
+----
+
+some text"
+			));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"<ul>
+	<li>
+		<a href=\"#header\">header</a>
+	</li>
+	<li>
+		<a href=\"#included_header\">included header</a>
+	</li>
+</ul>
+
+header
+----
+
+paragraph",
+			$result
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function firstEncounteredHeaderInCurrentDocumentDeterminesHighestLevel()
+	{
+		// given
+		$text =
+"level1
+===
+
+table of contents:
+
+	includedfile
+
+level2
+---
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->at(0))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'level2', 'level' => 2)
+			)));
+		$this->headerFinder
+			->expects($this->at(1))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'level3', 'level' => 3)
+			)));
+		$this->fileRetriever
+			->expects($this->any())
+			->method('retrieveContent')
+			->with('Includedfile.vi')
+			->will($this->returnValue(
+"level3
++++
+
+some text"
+			));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"level1
+===
+
+<ul>
+	<li>
+		<a href=\"#level2\">level2</a>
+<ul>
+	<li>
+		<a href=\"#level3\">level3</a>
+	</li>
+</ul>
+	</li>
+</ul>
+
+level2
+---
+
+paragraph",
+			$result
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function moreThanOneFileCanBeSpecified()
+	{
+		// given
+		$text =
+"table of contents:
+
+	includedfile1
+	includedfile2
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->at(0))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array()));
+		$this->headerFinder
+			->expects($this->at(1))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'level1a', 'level' => 1)
+			)));
+		$this->headerFinder
+			->expects($this->at(2))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'level1b', 'level' => 1)
+			)));
+		$this->fileRetriever
+			->expects($this->at(0))
+			->method('retrieveContent')
+			->with('Includedfile1.vi')
+			->will($this->returnValue(
+"level1a
++++
+
+some text"
+			));
+		$this->fileRetriever
+			->expects($this->at(1))
+			->method('retrieveContent')
+			->with('Includedfile2.vi')
+			->will($this->returnValue(
+"level1b
++++
+
+some text"
+			));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"<ul>
+	<li>
+		<a href=\"#level1a\">level1a</a>
+	</li>
+	<li>
+		<a href=\"#level1b\">level1b</a>
+	</li>
+</ul>
+
+paragraph",
+			$result
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function usesTocOfIncludedFiles()
+	{
+		// given
+		$text =
+"table of contents:
+
+	includedfile
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->at(0))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array()));
+		$this->headerFinder
+			->expects($this->at(1))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array()));
+		$this->headerFinder
+			->expects($this->at(2))
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'header', 'level' => 1)
+			)));
+		$this->fileRetriever
+			->expects($this->at(0))
+			->method('retrieveContent')
+			->with('Includedfile.vi')
+			->will($this->returnValue(
+"table of contents:
+
+	subincludedfile
+
+paragraph"
+			));
+		$this->fileRetriever
+			->expects($this->at(1))
+			->method('retrieveContent')
+			->with('Subincludedfile.vi')
+			->will($this->returnValue(
+"header
+---
+
+some text"
+			));
+
+		// when
+		$result = $this->toc->replace($text);
+
+		// then
+		$this->assertEquals(
+"<ul>
+	<li>
+		<a href=\"#header\">header</a>
+	</li>
+</ul>
 
 paragraph",
 			$result

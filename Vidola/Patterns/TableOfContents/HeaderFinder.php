@@ -3,7 +3,7 @@
 /**
  * @package Vidola
  */
-namespace Vidola\Patterns;
+namespace Vidola\Patterns\TableOfContents;
 
 /**
  * @package Vidola
@@ -12,7 +12,7 @@ class HeaderFinder
 {
 	private $header;
 
-	public function __construct(Header $header)
+	public function __construct(\Vidola\Patterns\Header $header)
 	{
 		$this->header = $header;
 	}

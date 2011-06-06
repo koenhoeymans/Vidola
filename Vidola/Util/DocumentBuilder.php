@@ -5,55 +5,67 @@
  */
 namespace Vidola\Util;
 
-use Vidola\TextReplacer\TextReplacer;
+use Vidola\Patterns\Header,
+	Vidola\TextReplacer\TextReplacer;
 
 /**
  * @package Vidola
  */
 class DocumentBuilder
 {
+	private $documentStructure;
+
 	private $textReplacer;
 
 	private $writer;
 
-	public function __construct(TextReplacer $textReplacer, Writer $writer)
-	{
+	public function __construct(
+		DocumentStructure $documentStructure,
+		TextReplacer $textReplacer,
+		Writer $writer,
+		Header $header
+	) {
+		$this->documentStructure = $documentStructure;
 		$this->textReplacer = $textReplacer;
 		$this->writer = $writer;
+		$this->headers = $header;
 	}
 
 	/**
+	 * Builds a document from a given target and puts it in the destination
+	 * directory.
+	 * 
 	 * @param string $from
 	 * @param string $targetDir
-	 * @param bool $single Defaults to false but is always true when $from is a file.
+	 * @param string $targetFileName
 	 */
-	public function build($from, $targetDir, $targetFileName = false)
+	public function build($from, $targetDir)
 	{
 		$source = $this->formatSource($from);
 		$targetDir = $this->formatTargetDir($targetDir);
 
 		if (is_file($source))
 		{
-			if (!$targetFileName)
-			{
-				$sourceFileName = substr(strrchr($source, DIRECTORY_SEPARATOR), 1);
-				$targetFileName = $this->createTargetFileName($sourceFileName);
-			}
-
-			$files = array($targetFileName => file_get_contents($source));
+			$sourceFileName = substr($source, strripos($source, DIRECTORY_SEPARATOR) + 1);
+			$sourceDir = substr($source, 0, strripos($source, DIRECTORY_SEPARATOR));
 		}
 		else
 		{
-			$files = $this->buildTargetFileList($source);
+			$sourceDir = $source;
+			$sourceFileName = 'Index.vi';
+			$source = $sourceDir . DIRECTORY_SEPARATOR . $sourceFileName;
 		}
 
-		if ($targetFileName)
+		$targetFileName = $this->createTargetFileName($sourceFileName);
+		$text = file_get_contents($source);
+		$this->headers->replace($text);
+		$replacedText = $this->textReplacer->replace($text);
+
+		$this->writer->write($replacedText, $targetDir . $targetFileName);
+
+		foreach ($this->documentStructure->getSubFiles($text) as $subfile)
 		{
-			$this->buildSingleFile($files, $targetDir . $targetFileName);
-		}
-		else
-		{
-			$this->buildMultipleFiles($files, $targetDir);
+			$this->build($sourceDir . DIRECTORY_SEPARATOR . $subfile, $targetDir);
 		}
 	}
 
@@ -93,47 +105,5 @@ class DocumentBuilder
 		$targetFileName = $nameWithoutExt . '.' . $this->textReplacer->getExtension();
 
 		return $targetFileName;
-	}
-
-	private function buildTargetFileList($source)
-	{
-		$targetFiles = array();
-		$sourceFiles = scandir($source);
-
-		foreach ($sourceFiles as $sourceFileName)
-		{
-			if ($sourceFileName === '.' || $sourceFileName ==='..')
-			{
-				continue;
-			}
-
-			$targetFiles[$this->createTargetFileName($sourceFileName)] = file_get_contents(
-				$source . DIRECTORY_SEPARATOR . $sourceFileName
-			);
-		}
-
-		return $targetFiles;
-	}
-
-	private function buildSingleFile(array $inputFiles, $target)
-	{
-		$text = '';
-		foreach ($inputFiles as $targetFileName => $textToTransform)
-		{
-			$text .= $textToTransform;
-		}
-
-		$this->writer->write($this->textReplacer->replace($text), $target);
-	}
-
-	private function buildMultipleFiles(array $inputFiles, $targetDir)
-	{
-		foreach ($inputFiles as $targetFileName => $contents)
-		{
-			$this->writer->write(
-				$this->textReplacer->replace($contents),
-				$targetDir . DIRECTORY_SEPARATOR . $targetFileName
-			);
-		}
 	}
 }

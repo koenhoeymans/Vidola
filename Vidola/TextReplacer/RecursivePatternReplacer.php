@@ -44,7 +44,6 @@ class RecursivePatternReplacer
 
 	public function __construct($text, Pattern $pattern, PatternList $patternList)
 	{
-//var_dump($text);
 		$this->text = $text;
 		$this->pattern = $pattern;
 		$this->patternList = $patternList;
@@ -73,8 +72,9 @@ class RecursivePatternReplacer
 		{
 			return '';
 		}
-
+	
 		$replaced = $this->pattern->replace($regexMatch[1]);
+
 		if ($replaced !== $regexMatch[1]) // tags were inserted
 		{
 			// find text between tags and present to subpatterns

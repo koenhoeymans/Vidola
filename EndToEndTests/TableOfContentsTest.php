@@ -28,7 +28,6 @@ class Vidola_EndToEndTests_TableOfContentsTest extends PHPUnit_Framework_TestCas
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'TableOfContents.vi';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-		$_SERVER['argv']['target.name'] = 'TableOfContents.html';
 
 		// when
 		\Vidola\Vidola::run();

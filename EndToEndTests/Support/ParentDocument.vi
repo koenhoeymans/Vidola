@@ -1,0 +1,12 @@
+MultidocumentTest
+=================
+
+table of contents:
+	depth: 2
+
+	SubDocument
+
+second level header
+-------------------
+
+First level reached of toc. A subdocument should be loaded after this document.

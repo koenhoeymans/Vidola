@@ -11,13 +11,13 @@ class Vidola_EndToEndTests_FileCreationTest extends PHPUnit_Framework_TestCase
 		{
 			unlink($dir . 'SampleText.html');
 		}
-		if (file_exists($dir . 'Subdocument1.html'))
+		if (file_exists($dir . 'Index.html'))
 		{
-			unlink($dir . 'Subdocument1.html');
+			unlink($dir . 'Index.html');
 		}
-		if (file_exists($dir . 'Subdocument2.html'))
+		if (file_exists($dir . 'OtherDocument.html'))
 		{
-			unlink($dir . 'Subdocument2.html');
+			unlink($dir . 'OtherDocument.html');
 		}
 	}
 
@@ -29,14 +29,13 @@ class Vidola_EndToEndTests_FileCreationTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function sampleTextIsTransformedToHTML()
+	public function specifiedInputFileIsTransformedToHTML()
 	{
 		// given
 		$_SERVER['argv']['source'] = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'SampleText.vi';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-		$_SERVER['argv']['target.name'] = 'SampleText.html';
 
 		// when
 		\Vidola\Vidola::run();
@@ -58,7 +57,7 @@ class Vidola_EndToEndTests_FileCreationTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function directoryAsInputTransformsAllFilesContained()
+	public function directoryAsInputTransformsIndex()
 	{
 		// given
 		$_SERVER['argv']['source'] = __DIR__
@@ -72,12 +71,12 @@ class Vidola_EndToEndTests_FileCreationTest extends PHPUnit_Framework_TestCase
 		// then
 		$this->assertTrue(
 			file_exists(
-				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Subdocument1.html'
+				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Index.html'
 			)
 		);
-		$this->assertTrue(
+		$this->assertFalse(
 			file_exists(
-				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Subdocument2.html'
+				sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'OtherDocument.html'
 			)
 		);
 	}

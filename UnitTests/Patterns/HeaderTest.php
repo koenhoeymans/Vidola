@@ -54,6 +54,16 @@ class Vidola_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function onlyTheFirstThreeCharactersCount()
+	{
+		$text = "\n\nthis is a header\n-----\n\nanother header\n---\n\n";
+		$html = "\n\n<h1>this is a header</h1>\n\n<h1>another header</h1>\n\n";
+		$this->assertEquals($html, $this->header()->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
 	public function characterLinesCannotBeLessThanThreeCharacters()
 	{
 		$text = "\n\n--\nthis is a header\n--\n\n";

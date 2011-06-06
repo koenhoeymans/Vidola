@@ -5,53 +5,124 @@
  */
 namespace Vidola\Patterns;
 
+use Vidola\Services\FileRetriever;
+use Vidola\Patterns\TableOfContents\HeaderFinder;
+
 /**
  * @package Vidola
  */
 class TableOfContents implements Pattern
 {
+	const TOC_REGEX = "#(?<=\n\n|^\n|^)((\t| )*)table of contents:((\n\\1(\t| ).+)*)(\n(\n\\1(\t| ).+)+)?(\n\n(?!\\1(\t| ))(.|\n)+|$)#";
+
 	private $headerFinder;
 
-	public function __construct(HeaderFinder $headerFinder)
-	{
+	private $fileRetriever;
+
+	public function __construct(
+		HeaderFinder $headerFinder,
+		FileRetriever $fileRetriever
+	) {
 		$this->headerFinder = $headerFinder;
+		$this->fileRetriever = $fileRetriever;
 	}
 
 	public function replace($text)
 	{
-		if (!preg_match("#(?<=\n\n|^)(\s*)table of contents:((\n\(.+?\))*)(((\n|.)+)$)#", $text))
-		{
-			return $text;
-		}
-
 		return preg_replace_callback(
-			"#(?<=\n\n|^)((\t| )*)table of contents:((\n\\1(\t| )+.+)*)(\n\n(.|\n)+)$#",
-			array($this, 'createToc'),
+			self::TOC_REGEX,
+			array($this, 'buildReplacement'),
 			$text
 		);
 	}
 
-	private function createToc($match)
+	private function buildReplacement($match)
 	{
 		$options = $this->getOptions($match[3]);
-		$text = $match[6];
-		$headers = $this->headerFinder->getHeadersSequentially($text);
-		$headerList = $this->buildHeaderList($headers, $options);
+		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
+		$listOfSubtexts = $this->recursivelyGetListOfFilesToInclude($match[6]);
+		$textAfterToc = $match[9];
 
-		return $headerList . $text;
+		$headerList = $this->getListOfHeaders($textAfterToc, $listOfSubtexts);
+//var_dump($headerList);
+		$toc = $this->buildToc($headerList, $maxDepth);
+//var_dump($toc);
+//var_dump($this->headerFinder);
+		return $toc . $textAfterToc;
 	}
 
-	private function buildHeaderList(array $headers, array $options)
+	private function recursivelyGetListOfFilesToInclude($text)
 	{
+		$inclusionList = $this->getListFromVidolaText($text);
+
+		foreach ($inclusionList as $fileToInclude)
+		{
+			$textOfFile = $this->fileRetriever->retrieveContent(
+				ucfirst($fileToInclude) . '.vi'
+			);
+			preg_match_all(
+				self::TOC_REGEX, $textOfFile, $tocBlocks, PREG_SET_ORDER
+			);
+			foreach ($tocBlocks as $toc)
+			{
+				$filesToInclude = $this->recursivelyGetListOfFilesToInclude($toc[6]);
+				$inclusionList = array_merge($inclusionList, $filesToInclude);
+			}
+		}
+
+		return $inclusionList;
+	}
+
+	private function getListOfHeaders($textAfterToc, $listOfSubTexts)
+	{
+		$headers = $this->headerFinder->getHeadersSequentially($textAfterToc);
+
+		foreach ($listOfSubTexts as $subTextFileName)
+		{
+			$subText = $this->fileRetriever->retrieveContent(
+				ucfirst($subTextFileName) . '.vi'
+			);
+			$headers = array_merge(
+				$headers,
+				$this->headerFinder->getHeadersSequentially($subText)
+			);
+		}
+
+		return $headers;
+	}
+
+	private function getListFromVidolaText($text)
+	{
+		$inclusionList = array();
+
+		$lines = explode("\n", $text);
+		foreach ($lines as $include)
+		{
+			if ($include !== '')
+			{
+				$inclusionList[] = trim($include);
+			}
+		}
+
+		return $inclusionList;
+	}
+
+	private function buildToc(array $headers, $maxDepth = null)
+	{
+		if (empty($headers))
+		{
+			return '';
+		}
+
 		static $depth;
 
 		if (!isset($depth))
 		{
 			$depth = 1;
 		}
-		if (isset($options['depth']))
+		if ($maxDepth)
 		{
-			if ($depth > $options['depth'])
+			if ($depth > $maxDepth)
 			{
 				return '';
 			}
@@ -88,7 +159,7 @@ class TableOfContents implements Pattern
 				if ($headers[$key+1]['level'] > $level)
 				{
 					$depth++;
-					$sublist = $this->buildHeaderList($headers, $options);
+					$sublist = $this->buildToc($headers, $maxDepth);
 					if ($sublist !== '')
 					{
 						$list .= "\n$sublist";
@@ -104,7 +175,7 @@ class TableOfContents implements Pattern
 
 		return $list;
 	}
-	
+
 	private function getOptions($text)
 	{
 		$options = array();
