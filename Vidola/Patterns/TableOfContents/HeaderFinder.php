@@ -22,7 +22,7 @@ class HeaderFinder
 		$headers = array();
 
 		preg_match_all(
-			"#(<h[123456]>.+?</h[123456]>)#",
+			"#(<h[123456]( .+?)?>.+?</h[123456]>)#",
 			$this->header->replace($text),
 			$taggedHeaders
 		);
@@ -30,7 +30,7 @@ class HeaderFinder
 		foreach ($taggedHeaders[0] as $header)
 		{
 			$headers[] = array(
-				'title' => substr($header, 4, -5),
+				'title' => substr($header, strpos($header, '>') + 1, -5),
 				'level' => $header[2]
 			);
 		}

@@ -42,12 +42,9 @@ class TableOfContents implements Pattern
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
 		$listOfSubtexts = $this->recursivelyGetListOfFilesToInclude($match[6]);
 		$textAfterToc = $match[9];
-
 		$headerList = $this->getListOfHeaders($textAfterToc, $listOfSubtexts);
-//var_dump($headerList);
 		$toc = $this->buildToc($headerList, $maxDepth);
-//var_dump($toc);
-//var_dump($this->headerFinder);
+
 		return $toc . $textAfterToc;
 	}
 
