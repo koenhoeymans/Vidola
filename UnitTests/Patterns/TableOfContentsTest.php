@@ -370,7 +370,7 @@ some text"
 		<a href=\"#header\">header</a>
 	</li>
 	<li>
-		<a href=\"#included_header\">included header</a>
+		<a href=\"Includedfile.html#included_header\">included header</a>
 	</li>
 </ul>
 
@@ -437,7 +437,7 @@ some text"
 		<a href=\"#level2\">level2</a>
 <ul>
 	<li>
-		<a href=\"#level3\">level3</a>
+		<a href=\"Includedfile.html#level3\">level3</a>
 	</li>
 </ul>
 	</li>
@@ -509,10 +509,10 @@ some text"
 		$this->assertEquals(
 "<ul>
 	<li>
-		<a href=\"#level1a\">level1a</a>
+		<a href=\"Includedfile1.html#level1a\">level1a</a>
 	</li>
 	<li>
-		<a href=\"#level1b\">level1b</a>
+		<a href=\"Includedfile2.html#level1b\">level1b</a>
 	</li>
 </ul>
 
@@ -577,7 +577,7 @@ some text"
 		$this->assertEquals(
 "<ul>
 	<li>
-		<a href=\"#header\">header</a>
+		<a href=\"Subincludedfile.html#header\">header</a>
 	</li>
 </ul>
 

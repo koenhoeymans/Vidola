@@ -61,4 +61,32 @@ class Vidola_EndToEndTests_MultiDocumentTest extends PHPUnit_Framework_TestCase
 			)
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function subDocumentCanExistInSubDirectory()
+	{
+		// given
+		$_SERVER['argv']['source'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.vi';
+		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+
+		// when
+		\Vidola\Vidola::run();
+
+		// then
+		$this->assertEquals(
+			file_get_contents(
+				__DIR__
+				. DIRECTORY_SEPARATOR . 'Support'
+				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
+			),
+			file_get_contents(
+				$_SERVER['argv']['target.dir']
+				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
+			)
+		);
+	}
 }

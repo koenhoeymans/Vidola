@@ -36,6 +36,11 @@ class TableOfContents implements Pattern
 		);
 	}
 
+	/**
+	 * @todo double call to file retriever: get all texts first time and extract headers?
+	 * maybe possible to use document structure, eg getSubdocuments, then extract headers
+	 * together with name of documents for use in links
+	 */
 	private function buildReplacement($match)
 	{
 		$options = $this->getOptions($match[3]);
@@ -79,10 +84,16 @@ class TableOfContents implements Pattern
 			$subText = $this->fileRetriever->retrieveContent(
 				ucfirst($subTextFileName) . '.vi'
 			);
-			$headers = array_merge(
-				$headers,
-				$this->headerFinder->getHeadersSequentially($subText)
-			);
+
+			$subTextHeaders = $this->headerFinder->getHeadersSequentially($subText);
+			foreach ($subTextHeaders as $subTextHeader)
+			{
+				$subTextHeader['file'] = ucfirst($subTextFileName) . '.html';
+				$headers = array_merge(
+					$headers,
+					array($subTextHeader)
+				);
+			}
 		}
 
 		return $headers;
@@ -134,6 +145,7 @@ class TableOfContents implements Pattern
 
 			$level = $header['level'];
 			$title = $header['title'];
+			$file = isset($header['file']) ? $header['file'] : '';
 
 			if (!$listLevel)
 			{
@@ -149,7 +161,7 @@ class TableOfContents implements Pattern
 			}
 
 			$ref = str_replace(' ', '_', $title);
-			$list .= "\n\t<li>\n\t\t<a href=\"#$ref\">$title</a>";
+			$list .= "\n\t<li>\n\t\t<a href=\"$file#$ref\">$title</a>";
 
 			if (isset($headers[$key+1]))
 			{
