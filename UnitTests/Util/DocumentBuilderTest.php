@@ -16,9 +16,14 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 		);
 		$this->writer = $this->getMock('\\Vidola\\Util\\Writer');
 		$this->headers = $this->getMock('\\Vidola\\Patterns\\Header');
+		$this->fileRetriever = $this->getMock('\\Vidola\\Services\\FileRetriever');
 
 		$this->documentBuilder = new \Vidola\Util\DocumentBuilder(
-			$this->docStructure, $this->textReplacer, $this->writer, $this->headers
+			$this->docStructure,
+			$this->textReplacer,
+			$this->writer,
+			$this->headers,
+			$this->fileRetriever
 		);
 	}
 
@@ -27,24 +32,26 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function presentsTextReplacerWithContentsFromSpecifiedFile()
 	{
-		// given
 		$file = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'VeryLittleText.vi';
 
-		// then
+		$this->fileRetriever
+			->expects($this->once())
+			->method('retrieveContent')
+			->with('fileName')
+			->will($this->returnValue(file_get_contents($file)));
 		$this->textReplacer
 			->expects($this->once())
 			->method('replace')
 			->with(file_get_contents($file));
 		$this->docStructure
-			->expects($this->any())
+			->expects($this->once())
 			->method('getSubFiles')
 			->will($this->returnValue(array()));
 
-		// when
-		$this->documentBuilder->build($file, 'target.dir');
+		$this->documentBuilder->build('fileName');
 	}
 
 	/**
@@ -52,53 +59,69 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function takesSubdocumentsIntoAccount()
 	{
-		// given
 		$file = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'VeryLittleText.vi';
 
-		// then
+		$this->fileRetriever
+			->expects($this->at(0))
+			->method('retrieveContent')
+			->with('fileName')
+			->will($this->returnValue(file_get_contents($file)));
+		$this->fileRetriever
+			->expects($this->at(1))
+			->method('retrieveContent')
+			->with('subfile');
+		$this->textReplacer
+			->expects($this->any())
+			->method('replace')
+			->will($this->returnValue('output'));
 		$this->docStructure
-			->expects($this->once())
+			->expects($this->at(0))
 			->method('getSubFiles')
-			->with(file_get_contents($file))
+			->with('fileName')
+			->will($this->returnValue(array('subfile')));
+		$this->docStructure
+			->expects($this->at(1))
+			->method('getSubFiles')
+			->with('subfile')
 			->will($this->returnValue(array()));
 
-		// when
-		$this->documentBuilder->build($file, 'target.dir');
+		$this->documentBuilder->build('fileName');
 	}
 
 	/**
 	 * @test
 	 */
-	public function asksWriterToWriteTransformedResultToTargetDestiny()
+	public function asksWriterToWriteReplacedTextWithGivenFileName()
 	{
-		// given
 		$file = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'VeryLittleText.vi';
-		$targetDir = __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Support';
 
-		// then
-		$this->writer
+		$this->fileRetriever
 			->expects($this->once())
-			->method('write')
-			->with('replaced text', substr($file, 0, -2) . 'html');
+			->method('retrieveContent')
+			->with('fileName')
+			->will($this->returnValue(file_get_contents($file)));
 		$this->textReplacer
-			->expects($this->any())
+			->expects($this->once())
 			->method('replace')
-			->will($this->returnValue('replaced text'));
+			->with(file_get_contents($file))
+			->will($this->returnValue('output'));
 		$this->docStructure
-			->expects($this->any())
+			->expects($this->once())
 			->method('getSubFiles')
+			->with('fileName')
 			->will($this->returnValue(array()));
+		$this->writer
+			->expects($this->any())
+			->method('write')
+			->with('output', 'fileName');
 
-		// when
-		$this->documentBuilder->build($file, $targetDir);
+		$this->documentBuilder->build('fileName');
 	}
 
 	/**
@@ -106,25 +129,22 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function aDirectoryCanBeSpecifiedAsSourceTakingIndexAsInput()
 	{
-		// given
 		$dir = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'DirWithMultipleInputFiles';
-		$file1 = $dir . DIRECTORY_SEPARATOR . 'Index.vi';
 
-		// then
-		$this->textReplacer
-			->expects($this->once())
-			->method('replace')
-			->with(file_get_contents($file1));
-		$this->docStructure
+		$this->fileRetriever
 			->expects($this->any())
+			->method('retrieveContent')
+			->with('Index');
+		$this->docStructure
+			->expects($this->once())
 			->method('getSubFiles')
+			->with('Index')
 			->will($this->returnValue(array()));
 
-		// when
-		$this->documentBuilder->build($dir, 'targetDir');
+		$this->documentBuilder->build($dir);
 	}
 
 	/**
@@ -132,13 +152,6 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function outputFilesHasSameNameAsInputFile()
 	{
-		// given
-		$file = __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Support'
-			. DIRECTORY_SEPARATOR . 'VeryLittleText.vi';
-
-		// then
 		$this->textReplacer
 			->expects($this->once())
 			->method('replace')
@@ -146,45 +159,12 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 		$this->writer
 			->expects($this->once())
 			->method('write')
-			->with('some text', __DIR__ . DIRECTORY_SEPARATOR . 'VeryLittleText.html');
+			->with('some text', 'sample');
 		$this->docStructure
 			->expects($this->any())
 			->method('getSubFiles')
 			->will($this->returnValue(array()));
 
-		// when
-		$this->documentBuilder->build($file, __DIR__);
-	}
-
-	/**
-	 * @test
-	 */
-	public function targetDirCanBeRelative()
-	{
-		// given
-		$file = __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Support'
-			. DIRECTORY_SEPARATOR . 'VeryLittleText.vi';
-
-		// then
-		$this->textReplacer
-			->expects($this->any())
-			->method('replace')
-			->will($this->returnValue('replaced text'));
-		$target = getcwd()
-			. DIRECTORY_SEPARATOR . 'relativeDir'
-			. DIRECTORY_SEPARATOR . 'VeryLittleText.html';
-		$this->writer
-			->expects($this->once())
-			->method('write')
-			->with('replaced text', $target);
-		$this->docStructure
-			->expects($this->any())
-			->method('getSubFiles')
-			->will($this->returnValue(array()));
-
-		// when
-		$this->documentBuilder->build($file, 'relativeDir');
+		$this->documentBuilder->build('sample');
 	}
 }

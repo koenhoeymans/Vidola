@@ -24,18 +24,21 @@ class Vidola
 		$patternList = $ogc->getInstance('Vidola\\Patterns\\PatternList');
 		$patternListFiller->fill($patternList, $config);
 
-		// set the documentation directory
-		// -------------------------------
+		// set the source directory or file
+		// --------------------------------
 		$fileRetriever = $ogc->getInstance('Vidola\\Services\\FileRetriever');
 		$fileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
+
+		// set the output directory
+		// ------------------------
+		$writer = $ogc->getInstance('Vidola\\Util\\Writer');
+		$writer->setOutputDir(self::getOutputDir($config->get('target.dir')));
+		$writer->setExtension('.html');
 
 		// build the document(s)
 		// ---------------------
 		$documentBuilder = $ogc->getInstance('Vidola\\Util\\DocumentBuilder');
-		$documentBuilder->build(
-			$config->get('source'),
-			$config->get('target.dir')
-		);
+		$documentBuilder->build($config->get('source'));
 	}
 
 	private static function getSourceDir($source)
@@ -46,6 +49,11 @@ class Vidola
 		}
 
 		return realpath($source);
+	}
+
+	private static function getOutputDir($output)
+	{
+		return realpath($output);
 	}
 }
 

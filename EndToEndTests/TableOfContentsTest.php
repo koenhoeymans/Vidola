@@ -7,9 +7,9 @@ class Vidola_EndToEndTests_TableOfContentsTest extends PHPUnit_Framework_TestCas
 	public function setup()
 	{
 		$dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
-		if (file_exists($dir . 'Toc.html'))
+		if (file_exists($dir . 'TableOfContents.html'))
 		{
-			unlink($dir . 'Toc.html');
+			unlink($dir . 'TableOfContents.html');
 		}
 	}
 

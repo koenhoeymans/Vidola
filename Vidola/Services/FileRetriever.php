@@ -19,6 +19,18 @@ class FileRetriever
 
 	public function retrieveContent($file)
 	{
-		return file_get_contents($this->sourceDir . DIRECTORY_SEPARATOR . $file);
+		if (file_exists($file . '.vi'))
+		{
+			return file_get_contents($file. '.vi');
+		}
+
+		if (file_exists($this->sourceDir . DIRECTORY_SEPARATOR . $file . '.vi'))
+		{
+			return file_get_contents(
+				$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.vi'
+			);
+		}
+
+		throw new \Exception('FileRetriever::retrieveContent() couldn\'t find ' . $file);
 	}
 }

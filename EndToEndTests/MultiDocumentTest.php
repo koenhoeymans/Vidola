@@ -15,6 +15,14 @@ class Vidola_EndToEndTests_MultiDocumentTest extends PHPUnit_Framework_TestCase
 		{
 			unlink($dir . 'SubDocument.html');
 		}
+		if (file_exists($dir . 'Subfolder/Subdocument.html'))
+		{
+			unlink($dir . 'Subfolder/Subdocument.html');
+		}
+		if (file_exists($dir . 'ParentDocumentSubfolderSubdocument.html'))
+		{
+			unlink($dir . 'ParentDocumentSubfolderSubdocument.html');
+		}
 	}
 
 	public function teardown()

@@ -5,7 +5,8 @@
  */
 namespace Vidola\Util;
 
-use Vidola\Patterns\Header,
+use Vidola\Services\FileRetriever,
+	Vidola\Patterns\Header,
 	Vidola\TextReplacer\TextReplacer;
 
 /**
@@ -19,91 +20,55 @@ class DocumentBuilder
 
 	private $writer;
 
+	private $fileRetriever;
+
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
 		Writer $writer,
-		Header $header
+		Header $header,
+		FileRetriever $fileRetriever
 	) {
 		$this->documentStructure = $documentStructure;
 		$this->textReplacer = $textReplacer;
 		$this->writer = $writer;
 		$this->headers = $header;
+		$this->fileRetriever = $fileRetriever;
 	}
 
 	/**
-	 * Builds a document from a given target and puts it in the destination
+	 * Builds a document from a source file or directory and puts it in the destination
 	 * directory.
 	 * 
-	 * @param string $from
-	 * @param string $targetDir
-	 * @param string $targetFileName
+	 * @param string $file Source file or directory
 	 */
-	public function build($from, $targetDir)
+	public function build($fileOrDirectory)
 	{
-		$source = $this->formatSource($from);
-		$targetDir = $this->formatTargetDir($targetDir);
-
-		if (is_file($source))
+		if (is_dir($fileOrDirectory))
 		{
-			$sourceFileName = substr($source, strripos($source, DIRECTORY_SEPARATOR) + 1);
-			$sourceDir = substr($source, 0, strripos($source, DIRECTORY_SEPARATOR));
+			$fileOrDirectory = 'Index';
+		}
+
+		if (file_exists($fileOrDirectory))
+		{
+			$fileName = pathinfo($fileOrDirectory, PATHINFO_FILENAME);
 		}
 		else
 		{
-			$sourceDir = $source;
-			$sourceFileName = 'Index.vi';
-			$source = $sourceDir . DIRECTORY_SEPARATOR . $sourceFileName;
+			$fileName = $fileOrDirectory;
 		}
 
-		$targetFileName = $this->createTargetFileName($sourceFileName);
-		$text = file_get_contents($source);
-		$this->headers->replace($text);
-		$replacedText = $this->textReplacer->replace($text);
+		$textToTransform = $this->fileRetriever->retrieveContent($fileName);
 
-		$this->writer->write($replacedText, $targetDir . $targetFileName);
+		$this->headers->replace($textToTransform); // fill headers before toc but replace nothing
 
-		foreach ($this->documentStructure->getSubFiles($text) as $subfile)
+		$replacedText = $this->textReplacer->replace($textToTransform);
+
+		$this->writer->write($replacedText, $fileName);
+
+		foreach ($this->documentStructure->getSubFiles($fileName) as $subfile)
 		{
-			$this->build($sourceDir . DIRECTORY_SEPARATOR . $subfile, $targetDir);
+			$this->build($subfile);
 		}
-	}
-
-	/**
-	 * Source path conversion to absolute path if needed + canonicalized version.
-	 * 
-	 * @param string $source
-	 */
-	private function formatSource($source)
-	{
-		$formattedSource = realpath($source);
-		return $formattedSource;
-	}
-
-	/**
-	 * Build absolute and canonical target directory.
-	 * 
-	 * @param string $targetDir
-	 */
-	private function formatTargetDir($targetDir)
-	{
-		if (substr($targetDir, -1) !== DIRECTORY_SEPARATOR)
-		{
-			$targetDir .= DIRECTORY_SEPARATOR;
-		}
-		if ($targetDir[0] !== DIRECTORY_SEPARATOR)
-		{
-			$targetDir = getcwd() . DIRECTORY_SEPARATOR . $targetDir;
-		}
-
-		return $targetDir;
-	}
-
-	private function createTargetFileName($sourceFileName)
-	{
-		$nameWithoutExt = substr($sourceFileName, 0, strrpos($sourceFileName, '.'));
-		$targetFileName = $nameWithoutExt . '.' . $this->textReplacer->getExtension();
-
-		return $targetFileName;
 	}
 }
