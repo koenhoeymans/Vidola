@@ -37,11 +37,10 @@ class TableOfContents implements Pattern
 		$list = array();
 
 		preg_match_all(self::TOC_REGEX, $text, $matches, PREG_PATTERN_ORDER);
-		foreach ($matches[6] as $match)
+		foreach ($matches[6] as $regexPartWithIncludeList)
 		{
-			$list = array_merge(
-				$list, $this->recursivelyGetListOfFilesToInclude($match)
-			);
+			$files = $this->recursivelyGetFilesToInclude($regexPartWithIncludeList);
+			$list = array_merge($list, array_keys($files));
 		}
 
 		return $list;
@@ -56,59 +55,53 @@ class TableOfContents implements Pattern
 		);
 	}
 
-	/**
-	 * @todo double call to file retriever: get all texts first time and extract headers?
-	 * maybe possible to use document structure, eg getSubdocuments, then extract headers
-	 * together with name of documents for use in links
-	 */
-	private function buildReplacement($match)
+	private function buildReplacement($regexmatch)
 	{
-		$options = $this->getOptions($match[3]);
+		$options = $this->getOptions($regexmatch[3]);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
-		$listOfSubtexts = $this->recursivelyGetListOfFilesToInclude($match[6]);
-		$textAfterToc = $match[9];
-		$headerList = $this->getListOfHeaders($textAfterToc, $listOfSubtexts);
+		$fileList = $this->recursivelyGetFilesToInclude($regexmatch[6]);
+		$textAfterToc = $regexmatch[9];
+		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
 		$toc = $this->buildToc($headerList, $maxDepth);
 
 		return $toc . $textAfterToc;
 	}
 
-	private function recursivelyGetListOfFilesToInclude($text)
+	private function recursivelyGetFilesToInclude($regexPartWithListOfFiles)
 	{
-		$inclusionList = $this->getListFromVidolaText($text);
+		$fileList = array();
 
-		foreach ($inclusionList as $fileToInclude)
+		$namesFromCurrentList = $this->getListFromVidolaText($regexPartWithListOfFiles);
+
+		foreach ($namesFromCurrentList as $fileToInclude)
 		{
-			$textOfFile = $this->fileRetriever->retrieveContent(
-				$fileToInclude
-			);
+			$textOfFile = $this->fileRetriever->retrieveContent($fileToInclude);
+			$fileList[$fileToInclude] = $textOfFile;
+
 			preg_match_all(
 				self::TOC_REGEX, $textOfFile, $tocBlocks, PREG_SET_ORDER
 			);
+
 			foreach ($tocBlocks as $toc)
 			{
-				$filesToInclude = $this->recursivelyGetListOfFilesToInclude($toc[6]);
-				$inclusionList = array_merge($inclusionList, $filesToInclude);
+				$subFileList = $this->recursivelyGetFilesToInclude($toc[6]);
+				$fileList = array_merge($fileList, $subFileList);
 			}
 		}
 
-		return $inclusionList;
+		return $fileList;
 	}
 
-	private function getListOfHeaders($textAfterToc, $listOfSubTexts)
+	private function getListOfHeaders($textAfterToc, $fileList)
 	{
 		$headers = $this->headerFinder->getHeadersSequentially($textAfterToc);
 
-		foreach ($listOfSubTexts as $subTextFileName)
+		foreach ($fileList as $fileName => $contents)
 		{
-			$subText = $this->fileRetriever->retrieveContent(
-				$subTextFileName
-			);
-
-			$subTextHeaders = $this->headerFinder->getHeadersSequentially($subText);
+			$subTextHeaders = $this->headerFinder->getHeadersSequentially($contents);
 			foreach ($subTextHeaders as $subTextHeader)
 			{
-				$subTextHeader['file'] = ucfirst($subTextFileName) . '.html';
+				$subTextHeader['file'] = ucfirst($fileName) . '.html';
 				$headers = array_merge(
 					$headers,
 					array($subTextHeader)
