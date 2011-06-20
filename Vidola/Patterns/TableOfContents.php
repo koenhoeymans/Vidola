@@ -80,7 +80,7 @@ class TableOfContents implements Pattern
 		foreach ($inclusionList as $fileToInclude)
 		{
 			$textOfFile = $this->fileRetriever->retrieveContent(
-				ucfirst($fileToInclude)
+				$fileToInclude
 			);
 			preg_match_all(
 				self::TOC_REGEX, $textOfFile, $tocBlocks, PREG_SET_ORDER
@@ -102,7 +102,7 @@ class TableOfContents implements Pattern
 		foreach ($listOfSubTexts as $subTextFileName)
 		{
 			$subText = $this->fileRetriever->retrieveContent(
-				ucfirst($subTextFileName)
+				$subTextFileName
 			);
 
 			$subTextHeaders = $this->headerFinder->getHeadersSequentially($subText);

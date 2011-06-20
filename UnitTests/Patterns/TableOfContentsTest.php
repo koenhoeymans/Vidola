@@ -330,7 +330,7 @@ paragraph",
 		$text =
 "table of contents:
 
-	includedfile
+	Includedfile
 
 header
 ----
@@ -394,7 +394,7 @@ paragraph",
 
 table of contents:
 
-	includedfile
+	Includedfile
 
 level2
 ---
@@ -460,8 +460,8 @@ paragraph",
 		$text =
 "table of contents:
 
-	includedfile1
-	includedfile2
+	Includedfile1
+	Includedfile2
 
 paragraph";
 
@@ -530,7 +530,7 @@ paragraph",
 		$text =
 "table of contents:
 
-	includedfile
+	Includedfile
 
 paragraph";
 
@@ -555,7 +555,7 @@ paragraph";
 			->will($this->returnValue(
 "table of contents:
 
-	subincludedfile
+	Subincludedfile
 
 paragraph"
 			));

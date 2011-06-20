@@ -19,6 +19,8 @@ class FileRetriever
 
 	public function retrieveContent($file)
 	{
+		$file = ucfirst($file);
+
 		if (file_exists($file . '.vi'))
 		{
 			return file_get_contents($file. '.vi');
