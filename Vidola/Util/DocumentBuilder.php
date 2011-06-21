@@ -5,7 +5,7 @@
  */
 namespace Vidola\Util;
 
-use Vidola\Services\FileRetriever,
+use Vidola\Util\FileRetriever,
 	Vidola\Patterns\Header,
 	Vidola\TextReplacer\TextReplacer;
 

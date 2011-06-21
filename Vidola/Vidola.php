@@ -26,7 +26,7 @@ class Vidola
 
 		// set the source directory or file
 		// --------------------------------
-		$fileRetriever = $ogc->getInstance('Vidola\\Services\\FileRetriever');
+		$fileRetriever = $ogc->getInstance('Vidola\\Util\\FileRetriever');
 		$fileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
 
 		// set the output directory

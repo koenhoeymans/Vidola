@@ -5,7 +5,7 @@
  */
 namespace Vidola\Patterns;
 
-use Vidola\Services\FileRetriever;
+use Vidola\Util\FileRetriever;
 use Vidola\Patterns\TableOfContents\HeaderFinder;
 
 /**
@@ -46,6 +46,9 @@ class TableOfContents implements Pattern
 		return $list;
 	}
 
+	/**
+	 * @see Vidola\Patterns.Pattern::replace()
+	 */
 	public function replace($text)
 	{
 		return preg_replace_callback(
@@ -59,6 +62,7 @@ class TableOfContents implements Pattern
 	{
 		$options = $this->getOptions($regexmatch[3]);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
+
 		$fileList = $this->recursivelyGetFilesToInclude($regexmatch[6]);
 		$textAfterToc = $regexmatch[9];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
@@ -67,6 +71,9 @@ class TableOfContents implements Pattern
 		return $toc . $textAfterToc;
 	}
 
+	/**
+	 * Builds array fileName => contents
+	 */
 	private function recursivelyGetFilesToInclude($regexPartWithListOfFiles)
 	{
 		$fileList = array();

@@ -3,7 +3,7 @@
 /**
  * @package Vidola
  */
-namespace Vidola\Services;
+namespace Vidola\Util;
 
 /**
  * @package Vidola

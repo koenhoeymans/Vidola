@@ -13,7 +13,7 @@ class Vidola_Patterns_TableOfContentsTest extends PHPUnit_Framework_TestCase
 					->disableOriginalConstructor()
 					->getMock();
 		$this->fileRetriever =
-			$this->getMockBuilder('\\Vidola\\Services\\FileRetriever')
+			$this->getMockBuilder('\\Vidola\\Util\\FileRetriever')
 					->disableOriginalConstructor()
 					->getMock();
 		$this->toc = new \Vidola\Patterns\TableOfContents(
