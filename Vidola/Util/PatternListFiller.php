@@ -16,6 +16,8 @@ class PatternListFiller
 {
 	private $objectGraphConstructor;
 
+	private $doneCombinations = array();
+
 	public function __construct(ObjectGraphConstructor $objectGraphConstructor)
 	{
 		$this->objectGraphConstructor = $objectGraphConstructor;
@@ -36,6 +38,8 @@ class PatternListFiller
 			$this->addSubpatterns($pattern, $patternList, $config);
 		}
 
+		$this->doneCombinations = array();
+
 		return $patternList;
 	}
 
@@ -43,10 +47,18 @@ class PatternListFiller
 	{
 		foreach ((array) $config->get($pattern) as $subpattern)
 		{
+			if (in_array(array($pattern, $subpattern), $this->doneCombinations))
+			{
+				continue;
+			}
+
+			$this->doneCombinations[] = array($pattern, $subpattern);
+
 			$patternList->addSubpattern(
 				$this->getPattern($subpattern),
 				$this->getPattern($pattern)
 			);
+
 			if ($pattern != $subpattern)
 			{
 				$this->addSubpatterns($subpattern, $patternList, $config);

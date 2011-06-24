@@ -14,7 +14,7 @@ class Vidola_Patterns_PatternListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function keepsAllPatterns()
+	public function keepsListOfAllSpecifiedPatterns()
 	{
 		// given
 		$patternA = new \Vidola\UnitTests\Support\MockPattern();
@@ -34,7 +34,7 @@ class Vidola_Patterns_PatternListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function keepsTrackOfSubpatterns()
+	public function keepsListOfSpecifiedSubpatterns()
 	{
 		// given
 		$patternA = new \Vidola\UnitTests\Support\MockPattern();
