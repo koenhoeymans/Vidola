@@ -21,7 +21,7 @@ class PatternList
 	/**
 	 * @return array
 	 */
-	public function getPatterns()
+	public function getRootPatterns()
 	{
 		return $this->patterns;
 	}
@@ -48,7 +48,7 @@ class PatternList
 	 * 
 	 * @return PatternList
 	 */
-	public function addPattern(Pattern $pattern)
+	public function addRootPattern(Pattern $pattern)
 	{
 		$this->patterns[] = $pattern;
 

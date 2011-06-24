@@ -34,7 +34,7 @@ class PatternListFiller
 	{
 		foreach ($config->get('root') as $pattern)
 		{
-			$patternList->addPattern($this->getPattern($pattern));
+			$patternList->addRootPattern($this->getPattern($pattern));
 			$this->addSubpatterns($pattern, $patternList, $config);
 		}
 

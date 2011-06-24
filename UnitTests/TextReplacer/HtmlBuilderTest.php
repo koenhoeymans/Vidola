@@ -24,7 +24,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 		$mockPattern = new \Vidola\UnitTests\Support\MockPattern();
 
 		// when
-		$this->patternList->addPattern($mockPattern);
+		$this->patternList->addRootPattern($mockPattern);
 		$text = $this->htmlBuilder->replace($text);
 
 		// then
@@ -51,7 +51,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 			->with(' in it');
 
 		// when
-		$this->patternList->addPattern($mockPattern);
+		$this->patternList->addRootPattern($mockPattern);
 		$this->htmlBuilder->replace($text);
 	}
 
@@ -75,7 +75,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 			->method('replace');
 
 		// when
-		$this->patternList->addPattern($mockPatternA);
+		$this->patternList->addRootPattern($mockPatternA);
 		$this->patternList->addSubpattern($mockPatternB, $mockPatternA);
 		$this->htmlBuilder->replace($text);
 	}
@@ -102,7 +102,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 			->with('subpattern');	
 
 		// when
-		$this->patternList->addPattern($mockPatternA);
+		$this->patternList->addRootPattern($mockPatternA);
 		$this->patternList->addSubpattern($mockPatternB, $mockPatternA);
 		$this->htmlBuilder->replace($text);
 	}

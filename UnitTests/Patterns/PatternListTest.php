@@ -21,13 +21,13 @@ class Vidola_Patterns_PatternListTest extends PHPUnit_Framework_TestCase
 		$patternB = new \Vidola\UnitTests\Support\MockPattern();
 
 		// when
-		$this->patternList->addPattern($patternA);
-		$this->patternList->addPattern($patternB);
+		$this->patternList->addRootPattern($patternA);
+		$this->patternList->addRootPattern($patternB);
 
 		// then
 		$this->assertEquals(
 			array($patternA, $patternB),
-			$this->patternList->getPatterns()
+			$this->patternList->getRootPatterns()
 		);
 	}
 
@@ -42,7 +42,7 @@ class Vidola_Patterns_PatternListTest extends PHPUnit_Framework_TestCase
 		$patternC = new \Vidola\UnitTests\Support\MockPattern();
 
 		// when
-		$this->patternList->addPattern($patternA);
+		$this->patternList->addRootPattern($patternA);
 		$this->patternList->addSubpattern($patternB, $patternA);
 		$this->patternList->addSubpattern($patternC, $patternA);
 

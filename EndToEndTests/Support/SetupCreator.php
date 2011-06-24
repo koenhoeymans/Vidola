@@ -21,7 +21,7 @@ class SetupCreator
 		{
 			$pattern = "\\Vidola\\Patterns\\" . ucfirst($patternArr['pattern']);
 			$pattern = new $pattern();
-			$this->patternList->addPattern($pattern);
+			$this->patternList->addRootPattern($pattern);
 			$this->addSubpatterns($pattern, $patternArr['subpatterns']);
 		}
 	}
