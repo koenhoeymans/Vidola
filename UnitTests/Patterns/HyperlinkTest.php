@@ -41,7 +41,7 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anchorTextIsBetweenBracketsFollowedByUrl()
+	public function anchorTextIsBetweenBracketsFollowedByUrlBetweenBrackets()
 	{
 		$text = "Visit [my website][http://example.com] for info.";
 		$html = "Visit <a href=\"http://example.com\">my website</a> for info.";
@@ -132,7 +132,7 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anchorTextCanContainLink()
+	public function anchorTextCanContainATextLink()
 	{
 		$text = "Visit [site http://x.com][http://y.com \"title\"] for info.";
 		$html = "Visit <a title=\"title\" href=\"http://y.com\">site http://x.com</a> for info.";
