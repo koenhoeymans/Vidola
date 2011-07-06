@@ -20,63 +20,78 @@ class Hyperlink implements Pattern
 	public function replace($text)
 	{
 		// possibilities:
-		// --------------
-		// [anchor text][http://url "title"]
-		// [anchor text][http://url]
-		// [anchor text][link definition]
-		// [http://url]
-		// [http://url "title"]
 		//
+		// A) with link
+		// [[anchor text http://url "title"]]
+		// [[anchor text http://url]]
+		// [[http://url]]
+		// [[http://url "title"]]
+		// [anchor text][link definition]
+		$replaced = preg_replace_callback(
+			// [[anchor link "title"]]
+			"#\[\[(.+? )?([^\s\"]+)( \".+?\")?]\]#",
+			array($this, 'replaceLink'),
+			$text
+		);
+
+		// B) with link definition
 		// link definition (see Pattern LinkDefinitionCollector)
 		// ----------------
 		// [link definition]: http://www.example.com "title"
-		$linkDefinitions = $this->linkDefinitions;
-		return preg_replace_callback(
-			"#\[.+\]( )?\[.+\]|\[http://.+\]#U",
-			function ($match) use ($linkDefinitions)
-			{
-				if (preg_match("#\[.+?\]( )?\[(http://[^\s]+)\]#", $match[0], $matches))
-				{
-					$url = $matches[2];
-				}
-				elseif (preg_match("#\[(http://[^\s\]]+)#", $match[0], $matches))
-				{
-					$url = $matches[1];
-				}
-				else
-				{
-					preg_match("#\[(.+?)\]( )?\[(.+)\]#", $match[0], $matches);
-					$linkDefinitionName = $matches[3];
-					$linkDefinition = $linkDefinitions->get($linkDefinitionName);
-					$url = $linkDefinition->getUrl();
-				}
-
-				if (preg_match("#\".+\"#U", $match[0], $matches))
-				{
-					$title = 'title=' . $matches[0] . ' ';
-				}
-				else
-				{
-					$title = null;
-					if (isset($linkDefinition))
-					{
-						$title = $linkDefinition->getTitle();
-					}
-					$title = ($title === null) ? '' : 'title="' . $title . '" ';
-				}
-
-				if (preg_match('#\[(.+)\](( )?)\[.+\]#U', $match[0], $matches))
-				{
-					$anchorText = $matches[1];
-				}
-				else
-				{
-					$anchorText = $url;
-				}
-
-				return '<a ' . $title . 'href="' . $url . '">' . $anchorText . '</a>';
-			},
-			$text
+		$replaced = preg_replace_callback(
+			// [anchore][link def]
+			"#\[(.+?)\] ?\[(.+?)\]#",
+			array($this, 'replaceLinkDefinition'),
+			$replaced
 		);
+
+		return $replaced;
+	}
+
+	private function replaceLink($regexMatch)
+	{
+		$url = $regexMatch[2];
+
+		$anchorText = substr($regexMatch[1], 0, -1);
+		if ($anchorText == '')
+		{
+			$anchorText = $url;
+		}
+
+		if (!isset($regexMatch[3]))
+		{
+			$title = null;
+		}
+		else
+		{
+			$title = substr($regexMatch[3], 2, -1);
+		}
+
+		return $this->createLink($title, $url, $anchorText);
+	}
+
+	private function replaceLinkDefinition($regexMatch)
+	{
+		$linkDef = $this->linkDefinitions->get($regexMatch[2]);
+
+		$title = $linkDef->getTitle();
+		$url = $linkDef->getUrl();
+		$anchorText = $regexMatch[1];
+
+		return $this->createLink($title, $url, $anchorText);
+	}
+
+	private function createLink($title, $url, $anchorText)
+	{
+		if ($title)
+		{
+			$titleAttr = $titleAttr = " title=\"$title\"";
+		}
+		else
+		{
+			$titleAttr = "";
+		}
+
+		return '<a' . $titleAttr . ' href="' . $url . '">' . $anchorText . '</a>';
 	}
 }

@@ -29,6 +29,12 @@ class LinkDefinitionCollector implements Pattern
 		$this->linkDefinitions[$name] = new LinkDefinition($name, $url, $title);
 	}
 
+	/**
+	 * Returns a link definition based on reference.
+	 * 
+	 * @param string $linkDefinition
+	 * @return Vidola\Patterns\LinkDefinition
+	 */
 	public function get($linkDefinition)
 	{
 		if (!isset($this->linkDefinitions[$linkDefinition]))

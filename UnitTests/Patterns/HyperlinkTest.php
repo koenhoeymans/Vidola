@@ -17,9 +17,9 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anUrlBetweenBracketsIsAutomaticallyLinked()
+	public function anUrlBetweenDoubleBracketsIsLinked()
 	{
-		$text = "Please visit [http://example.com] for more information.";
+		$text = "Please visit [[http://example.com]] for more information.";
 		$html = "Please visit <a href=\"http://example.com\">http://example.com</a> for more information.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
@@ -29,9 +29,9 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anUrlBetweenBracketsCanHaveATitleBetweenSquareBracketsFollowingTheUrl()
+	public function anUrlBetweenDoubleBracketsCanHaveATitleAttributeFollowingIt()
 	{
-		$text = "Visit [http://example.com \"a title\"] for info.";
+		$text = "Visit [[http://example.com \"a title\"]] for info.";
 		$html = "Visit <a title=\"a title\" href=\"http://example.com\">http://example.com</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
@@ -41,9 +41,9 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anchorTextIsBetweenBracketsFollowedByUrlBetweenBrackets()
+	public function anchorTextIsPlacedBeforeTheUrl()
 	{
-		$text = "Visit [my website][http://example.com] for info.";
+		$text = "Visit [[my website http://example.com]] for info.";
 		$html = "Visit <a href=\"http://example.com\">my website</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
@@ -53,9 +53,9 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anchorTextIsBetweenBracketsFollowedByUrlBetweenBracketsAndOptionallyTitle()
+	public function anchorTextFollowedByUrlCanBeFollowedByTitleAttribute()
 	{
-		$text = "Visit [my website][http://example.com \"a title\"] for info.";
+		$text = "Visit [[my website http://example.com \"a title\"]] for info.";
 		$html = "Visit <a title=\"a title\" href=\"http://example.com\">my website</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
@@ -134,7 +134,7 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function anchorTextCanContainATextLink()
 	{
-		$text = "Visit [site http://x.com][http://y.com \"title\"] for info.";
+		$text = "Visit [[site http://x.com http://y.com \"title\"]] for info.";
 		$html = "Visit <a title=\"title\" href=\"http://y.com\">site http://x.com</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
@@ -144,10 +144,10 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function textBetweenBracketsIsNotMistakenForLink()
+	public function squareBracketsInLinksAreOk()
 	{
-		$text = "Not a [link] pattern, nor is [\"this\"] a link.";
-		$html = "Not a [link] pattern, nor is [\"this\"] a link.";
+		$text = "Visit [[my website http://example.com?x=[y]&foo=[bar]]] for info.";
+		$html = "Visit <a href=\"http://example.com?x=[y]&foo=[bar]\">my website</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
 		);
