@@ -8,7 +8,7 @@ by a list:
 	* item
 
 	NOTE: A note can span
-	multiple lines. It can contain a [http://link]. Let's create a note
+	multiple lines. It can contain a [[http://link]]. Let's create a note
 	in a note:
 
 		NOTE: a subnote.
