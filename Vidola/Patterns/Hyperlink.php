@@ -5,6 +5,8 @@
  */
 namespace Vidola\Patterns;
 
+use Vidola\Util\RelativeUrlBuilder;
+
 /**
  * @package Vidola
  */
@@ -12,9 +14,14 @@ class Hyperlink implements Pattern
 {
 	private $linkDefinitions;
 
-	public function __construct(LinkDefinitionCollector $linkDefinitionCollector)
-	{
+	private $relativeUrlBuilder;
+
+	public function __construct(
+		LinkDefinitionCollector $linkDefinitionCollector,
+		RelativeUrlBuilder $relativeUrlBuilder
+	) {
 		$this->linkDefinitions = $linkDefinitionCollector;
+		$this->relativeUrlBuilder = $relativeUrlBuilder;
 	}
 
 	public function replace($text)
@@ -92,6 +99,28 @@ class Hyperlink implements Pattern
 			$titleAttr = "";
 		}
 
+		if ($this->isRelative($url))
+		{
+			$url = $this->relativeUrlBuilder->buildUrl($url);
+		}
+
 		return '<a' . $titleAttr . ' href="' . $url . '">' . $anchorText . '</a>';
+	}
+
+	private function isRelative($url)
+	{
+		$filePart = strstr($url, "#", true);
+
+		if (!$filePart)
+		{
+			$filePart = $url;
+		}
+
+		if (preg_match("#[^a-zA-Z0-9/]#", $filePart))
+		{
+			return false;
+		}
+
+		return true;
 	}
 }

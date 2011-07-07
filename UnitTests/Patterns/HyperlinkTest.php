@@ -11,7 +11,12 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 		$this->linkDefinitions = $this->getMock(
 			'\\Vidola\\Patterns\\LinkDefinitionCollector'
 		);
-		$this->hyperlink = new \Vidola\Patterns\Hyperlink($this->linkDefinitions);
+		$this->relativeUrlBuilder = $this->getMock(
+			'\\Vidola\\Util\\RelativeUrlBuilder'
+		);
+		$this->hyperlink = new \Vidola\Patterns\Hyperlink(
+			$this->linkDefinitions, $this->relativeUrlBuilder
+		);
 	}
 
 	/**
@@ -148,6 +153,38 @@ class Vidola_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "Visit [[my website http://example.com?x=[y]&foo=[bar]]] for info.";
 		$html = "Visit <a href=\"http://example.com?x=[y]&foo=[bar]\">my website</a> for info.";
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function linksCanBeRelative()
+	{
+		$this->relativeUrlBuilder
+			->expects($this->once())
+			->method('buildUrl')->with('x')
+			->will($this->returnValue('x.html'));
+		$text = "See page [[x]] for info.";
+		$html = "See page <a href=\"x.html\">x</a> for info.";
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function linkIsRelativeIfItContainsOnlyAlphaNumForwardSlashesBeforeAnOptionalNumberSign()
+	{
+		$this->relativeUrlBuilder
+			->expects($this->once())
+			->method('buildUrl')->with('x/6/f4#f')
+			->will($this->returnValue('x.html'));
+		$text = "See page [[x/6/f4#f]] for info.";
+		$html = "See page <a href=\"x.html\">x/6/f4#f</a> for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)
 		);
