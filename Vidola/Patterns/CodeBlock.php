@@ -8,7 +8,7 @@ namespace Vidola\Patterns;
 /**
  * @package Vidola
  */
-class Code implements Pattern
+class CodeBlock implements Pattern
 {
 	/**
 	 * @see Vidola\Patterns.Pattern::replace()

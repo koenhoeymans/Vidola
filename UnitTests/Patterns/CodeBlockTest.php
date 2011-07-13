@@ -4,11 +4,11 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..' 
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Patterns_CodeTest extends PHPUnit_Framework_TestCase
+class Vidola_Patterns_CodeBlockTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->pattern = new \Vidola\Patterns\Code();
+		$this->pattern = new \Vidola\Patterns\CodeBlock();
 	}
 
 	/**
