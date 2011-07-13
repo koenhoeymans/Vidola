@@ -34,7 +34,7 @@ class Vidola_EndToEndTests_FileCreationTest extends PHPUnit_Framework_TestCase
 		// given
 		$_SERVER['argv']['source'] = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
-			. DIRECTORY_SEPARATOR . 'SampleText.vi';
+			. DIRECTORY_SEPARATOR . 'SampleText.txt';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
 
 		// when
