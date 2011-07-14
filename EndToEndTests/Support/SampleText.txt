@@ -29,6 +29,8 @@ A code example is also indented. It can be used to display code:
 		CODE:
 		<?php // code goes here ?>
 
+Code inline uses ´backticks´.
+
 This is another paragraph with an [email link] [mail@example.com].
 
 	[1]: http://www.example.com

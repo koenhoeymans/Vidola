@@ -138,6 +138,11 @@ single brackets are used. The link definition can contain the title attribute:
 
 			[1]: http://example.com "title"
 
+Inline code is also possible with backticks:
+
+	CODE:
+		You could write ´$this->foo´ for example.
+
 Email
 =====
 
