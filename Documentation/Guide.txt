@@ -153,6 +153,15 @@ there, the address itself will be used.
 	CODE:
 		Mail me at my [email address][mail@example.com].
 
+Italic
+======
+
+Words can be italicized by wrapping them between underscores. Underscores 
+in words are left as is. Underscores that span more than one word are allowed.
+
+	CODE:
+		A couple of _italicized words_.
+
 Table of contents
 =================
 
