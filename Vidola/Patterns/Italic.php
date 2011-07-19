@@ -13,7 +13,7 @@ class Italic implements Pattern
 	public function replace($text)
 	{
 		return preg_replace(
-			"#_(?! )(.+)(?<! )_#U",
+			"#(?<= |\n)_(?! )(.+)(?<! )_(?!\w)#U",
 			"<i>\${1}</i>",
 			$text
 		);

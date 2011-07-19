@@ -50,10 +50,22 @@ class Vidola_Patterns_ItalicTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function aWordCanContainAnItalicizedPart()
+	public function aWordCannotContainAnItalicizedPart()
 	{
-		$text = "This is an ita_lic_ized word.";
-		$html = "This is an ita<i>lic</i>ized word.";
+		$text = "This word is not _ita_licized.";
+		$html = "This word is not _ita_licized.";
+		$this->assertEquals(
+			$html, $this->italic->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function firstUnderScoreMustBePrecededBySpace()
+	{
+		$text = "This is not an_italicized_ word.";
+		$html = "This is not an_italicized_ word.";
 		$this->assertEquals(
 			$html, $this->italic->replace($text)
 		);
