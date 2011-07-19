@@ -13,7 +13,7 @@ class Bold implements Pattern
 	public function replace($text)
 	{
 		return preg_replace(
-			"#(?<![0-9])\*(?![0-9]| )(.+)(?<! )\*#U",
+			"#(?<=\s)\*(?![0-9]| )(.+)(?<! )\*(?!\w)#U",
 			"<b>\${1}</b>",
 			$text
 		);

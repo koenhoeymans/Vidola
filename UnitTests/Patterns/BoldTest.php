@@ -50,10 +50,10 @@ class Vidola_Patterns_BoldTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function aWordCanContainBoldParts()
+	public function aWordCannotContainBoldParts()
 	{
-		$text = "This is an b*ol*d word.";
-		$html = "This is an b<b>ol</b>d word.";
+		$text = "This is not a b*ol*d word.";
+		$html = "This is not a b*ol*d word.";;
 		$this->assertEquals(
 			$html, $this->bold->replace($text)
 		);
@@ -92,6 +92,18 @@ class Vidola_Patterns_BoldTest extends PHPUnit_Framework_TestCase
 		$html = "This is not a sentence with *bold * text.";
 		$this->assertEquals(
 			$html, $this->bold->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function firstAsteriskMustBePrecededBySpace()
+	{
+		$text = "This is not a sentence with*bold* text.";
+		$html = "This is not a sentence with*bold* text.";
+		$this->assertEquals(
+		$html, $this->bold->replace($text)
 		);
 	}
 }
