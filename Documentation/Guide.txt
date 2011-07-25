@@ -167,6 +167,11 @@ Bold text is placed between asterisks:
 	CODE:
 		Bold text is placed *between* asterisks.
 
+Newlines
+========
+
+Linebreaks are return based (new lines). 
+
 Table of contents
 =================
 

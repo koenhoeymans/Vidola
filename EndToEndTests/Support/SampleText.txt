@@ -1,15 +1,13 @@
 Transformation test
 -------------------
 
-A regular paragraph with *bold* and _italic_ text in. It is followed
-by a list:
+A regular paragraph with *bold* and _italic_ text in. It is followed by a list:
 
 	* item, with *bolded* text
 	* item
 
 	NOTE: A note can span
-	multiple lines. It can contain a [[http://link]]. Let's create a note
-	in a note:
+	multiple lines. It can contain a [[http://link]]. Let's create a note in a note:
 
 		NOTE: a subnote.
 
