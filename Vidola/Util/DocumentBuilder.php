@@ -5,7 +5,7 @@
  */
 namespace Vidola\Util;
 
-use Vidola\Util\FileRetriever,
+use Vidola\OutputBuilder\OutputBuilder,
 	Vidola\Patterns\Header,
 	Vidola\TextReplacer\TextReplacer;
 
@@ -18,20 +18,20 @@ class DocumentBuilder
 
 	private $textReplacer;
 
-	private $writer;
+	private $outputBuilder;
 
 	private $fileRetriever;
 
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
-		Writer $writer,
+		OutputBuilder $outputBuilder,
 		Header $header,
 		FileRetriever $fileRetriever
 	) {
 		$this->documentStructure = $documentStructure;
 		$this->textReplacer = $textReplacer;
-		$this->writer = $writer;
+		$this->outputBuilder = $outputBuilder;
 		$this->headers = $header;
 		$this->fileRetriever = $fileRetriever;
 	}
@@ -64,7 +64,9 @@ class DocumentBuilder
 
 		$replacedText = $this->textReplacer->replace($textToTransform);
 
-		$this->writer->write($replacedText, $fileName);
+		$this->outputBuilder->setFileName($fileName);
+		$this->outputBuilder->setContent($replacedText);
+		$this->outputBuilder->build();
 
 		foreach ($this->documentStructure->getSubFiles($fileName) as $subfile)
 		{

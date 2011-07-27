@@ -14,14 +14,14 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 		$this->textReplacer = $this->getMock(
 			'\\Vidola\\UnitTests\\Support\\MockTextReplacer', array('replace')
 		);
-		$this->writer = $this->getMock('\\Vidola\\Util\\Writer');
+		$this->outputBuilder = $this->getMock('\\Vidola\\OutputBuilder\\OutputBuilder');
 		$this->headers = $this->getMock('\\Vidola\\Patterns\\Header');
 		$this->fileRetriever = $this->getMock('\\Vidola\\Util\\FileRetriever');
 
 		$this->documentBuilder = new \Vidola\Util\DocumentBuilder(
 			$this->docStructure,
 			$this->textReplacer,
-			$this->writer,
+			$this->outputBuilder,
 			$this->headers,
 			$this->fileRetriever
 		);
@@ -116,10 +116,9 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 			->method('getSubFiles')
 			->with('fileName')
 			->will($this->returnValue(array()));
-		$this->writer
+		$this->outputBuilder
 			->expects($this->any())
-			->method('write')
-			->with('output', 'fileName');
+			->method('build');
 
 		$this->documentBuilder->build('fileName');
 	}
@@ -156,10 +155,9 @@ class Vidola_Util_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 			->expects($this->once())
 			->method('replace')
 			->will($this->returnValue('some text'));
-		$this->writer
+		$this->outputBuilder
 			->expects($this->once())
-			->method('write')
-			->with('some text', 'sample');
+			->method('build');
 		$this->docStructure
 			->expects($this->any())
 			->method('getSubFiles')
