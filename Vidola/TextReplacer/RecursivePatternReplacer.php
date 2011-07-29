@@ -20,7 +20,7 @@ ini_set('pcre.backtrack_limit', 10000000);
 class RecursivePatternReplacer
 {
 	/**
-	 * $match[1] = text before tag or end
+	 * $match[1] = text before tag or end of string
 	 * $match[2] = full element (including recursion) or end
 	 */
 	const untagged_text_regex =
@@ -68,7 +68,7 @@ class RecursivePatternReplacer
 	{
 		if ($regexMatch[1] === '')
 		{
-			return '';
+			return '' . $regexMatch[2];
 		}
 	
 		$replaced = $this->pattern->replace($regexMatch[1]);

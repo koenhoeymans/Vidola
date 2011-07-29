@@ -52,6 +52,11 @@ class ObjectGraphConstructor
 			$className = $this->getImplementingClass($className);
 		}
 
+		if (isset($this->instances[$className]))
+		{
+			return $this->instances[$className];
+		}
+
 		$reflectionClass = new \ReflectionClass($className);
 		$dependencies = array();
 

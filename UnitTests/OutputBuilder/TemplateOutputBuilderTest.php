@@ -34,9 +34,7 @@ class Vidola_OutputBuilder_TemplateOutputBuilderTest extends PHPUnit_Framework_T
 		$this->writer
 			->expects($this->once())
 			->method('write')
-			->with('header
-content
-footer', $target);
+			->with("header\ncontent\nfooter", $target);
 
 		$this->outputBuilder->setTemplate($template);
 		$this->outputBuilder->setContent('content');

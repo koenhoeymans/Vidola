@@ -17,6 +17,7 @@ class Vidola
 		// ---------------------------------------
 		$ogc = new \Vidola\Util\ObjectGraphConstructor();
 		$ogc->willUse('Vidola\\TextReplacer\\HtmlBuilder');
+		$ogc->willUse('Vidola\\OutputBuilder\\TemplateOutputBuilder');
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
@@ -34,6 +35,15 @@ class Vidola
 		$writer = $ogc->getInstance('Vidola\\Util\\Writer');
 		$writer->setOutputDir(self::getOutputDir($config->get('target.dir')));
 		$writer->setExtension('.html');
+
+		// choose the template
+		$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
+		$templateBuilder->setTemplate(
+			__DIR__
+			. DIRECTORY_SEPARATOR . 'Templates'
+			. DIRECTORY_SEPARATOR . 'Default'
+			. DIRECTORY_SEPARATOR . 'Index.php'
+		);
 
 		// build the document(s)
 		// ---------------------

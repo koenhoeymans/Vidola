@@ -43,7 +43,7 @@ class TemplateOutputBuilder implements OutputBuilder
 	public function build()
 	{
 		ob_start();
-		require_once $this->template;
+		include $this->template;
 		$text = ob_get_clean();
 
 		$this->writer->write($text, $this->fileName);
