@@ -66,11 +66,17 @@ class DocumentBuilder
 
 		$this->outputBuilder->setFileName($fileName);
 		$this->outputBuilder->setContent($replacedText);
+		$this->outputBuilder->setTitle($this->createTitle($fileName));
 		$this->outputBuilder->build();
 
 		foreach ($this->documentStructure->getSubFiles($fileName) as $subfile)
 		{
 			$this->build($subfile);
 		}
+	}
+
+	private function createTitle($fileName)
+	{
+		return str_replace(DIRECTORY_SEPARATOR, ' ', $fileName);
 	}
 }

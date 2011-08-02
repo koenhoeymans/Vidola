@@ -14,5 +14,7 @@ interface OutputBuilder
 
 	public function setFileName($fileName);
 
+	public function setTitle($title);
+
 	public function build();
 }
