@@ -37,13 +37,13 @@ class Vidola
 		$writer->setExtension('.html');
 
 		// choose the template
+		$template = $config->get('template') ?:
+						__DIR__
+						. DIRECTORY_SEPARATOR . 'Templates'
+						. DIRECTORY_SEPARATOR . 'Default'
+						. DIRECTORY_SEPARATOR . 'Index.php';
 		$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
-		$templateBuilder->setTemplate(
-			__DIR__
-			. DIRECTORY_SEPARATOR . 'Templates'
-			. DIRECTORY_SEPARATOR . 'Default'
-			. DIRECTORY_SEPARATOR . 'Index.php'
-		);
+		$templateBuilder->setTemplate($template);
 
 		// build the document(s)
 		// ---------------------

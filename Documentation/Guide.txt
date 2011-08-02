@@ -10,9 +10,9 @@ is more intuitive and natural but has limitations for creating multi-page docume
 Vidola does draw a lot of inspiration from both Markdown and reStructuredText.
 
 
-------------------
-How to use Vidola?
-------------------
+-------------
+Vidola syntax
+-------------
 
 Vidola is a library to transform documents into HTML. It also defines a markup language 
 to use for such documents. Here I describe the markup.
@@ -189,3 +189,23 @@ depth.
 		========
 
 		etc
+
+
+-----------
+Library use
+-----------
+
+command line use
+================
+
+
+The following options are present:
+
+template:
+	Path to a template file. If not specified the default template is used.
+
+source:
+	Source file to convert.
+
+target.dir:
+	The directory where the documentation files should be placed.
