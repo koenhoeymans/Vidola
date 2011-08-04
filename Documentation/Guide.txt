@@ -190,6 +190,21 @@ depth.
 
 		etc
 
+Definition lists
+================
+
+A term followed by description. Multiple terms can share the same description. A term can
+have multiple descriptions if they are separated by a tilde. Here's an example:
+
+	CODE:
+		term a
+		term b
+			~explanation of term a and b
+			it continues on the next line
+
+			it contains more than one paragraph
+
+			~alternative explanation
 
 -----------
 Library use

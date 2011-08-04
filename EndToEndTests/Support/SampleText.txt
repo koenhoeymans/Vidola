@@ -29,6 +29,14 @@ A code example is also indented. It can be used to display code:
 
 Code inline uses ´backticks´.
 
+Let's try a short definition list:
+
+term A
+	explanation of term
+
+term B
+	explanation of term
+
 This is another paragraph with an [email link] [mail@example.com].
 
 	[1]: http://www.example.com
