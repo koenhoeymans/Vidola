@@ -25,7 +25,7 @@ A code example is also indented. It can be used to display code:
 
 	CODE:
 		CODE:
-		<?php // code goes here ?>
+			<?php // code goes here ?>
 
 Code inline uses ´backticks´.
 

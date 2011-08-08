@@ -16,10 +16,10 @@ class CodeBlock implements Pattern
 	public function replace($text)
 	{
 		return preg_replace_callback(
-			"#(?<=\n\n)(\s+)CODE:\n((\n*\\1\s*.+)+)(?=\n\n|$)#",
+			"#(?<=\n\n)(\s+)CODE:\n(\n*(\\1\s+).+(\n*\\1\s+.+)*)(?=\n\n|$)#i",
 			function ($match) 
 			{
-				$code = preg_replace("#(\s*)$match[1]#", "\${1}", $match[2]);
+				$code = preg_replace("#$match[3]#", "", $match[2]);
 
 				return
 					'<pre><code>' .

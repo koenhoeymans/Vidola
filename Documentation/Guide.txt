@@ -70,12 +70,14 @@ A paragraph is formed by text preceded and followed by a blank line.
 
 Indentation can be used to make the document more readable.
 
+
 Code
 ====
 
 Code is preceded by the word 'CODE:' with the actual code following on the second 
 line. Both are indented. The code block must be indented in respect to the previous
-lines and stops when the indentation goes back.
+lines. The actual code is indented after the 'code' word. The code block ends when
+a blank line is encountered with text that is equally or less indented as the 'code' word.
 
 	CODE:
 		This is a regular paragraph with samples of code blocks:
@@ -91,7 +93,9 @@ lines and stops when the indentation goes back.
 	
 		This is the next paragraph.
 
-The code block must be preceded and followed by a blank line.
+The code block must be preceded and followed by a blank line. Note that the 'code' word is case
+insensitive.
+
 
 Note
 ====
@@ -103,6 +107,7 @@ Notes can be created as follows:
 
 A note block is ended with a blank line followed by text less indented.
 This means that it will keep going with text equally or more indented.
+
 
 Links
 =====
@@ -143,6 +148,7 @@ Inline code is also possible with backticks:
 	CODE:
 		You could write ´$this->foo´ for example.
 
+
 Email
 =====
 
@@ -167,10 +173,12 @@ Bold text is placed between asterisks:
 	CODE:
 		Bold text is placed *between* asterisks.
 
+
 Newlines
 ========
 
 Linebreaks are return based (new lines). 
+
 
 Table of contents
 =================
@@ -190,6 +198,7 @@ depth.
 
 		etc
 
+
 Definition lists
 ================
 
@@ -205,6 +214,7 @@ have multiple descriptions if they are separated by a tilde. Here's an example:
 			it contains more than one paragraph
 
 			~alternative explanation
+
 
 -----------
 Library use
