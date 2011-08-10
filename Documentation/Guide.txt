@@ -96,6 +96,32 @@ a blank line is encountered with text that is equally or less indented as the 'c
 The code block must be preceded and followed by a blank line. Note that the 'code' word is case
 insensitive.
 
+Another option is to write code between two lines of three tildes.
+
+	code:
+		~~~
+		this is also treated as code
+		~~~
+
+Actually, what is after those three tildes doesn't matter, so you could just as well write:
+
+	code:
+		~~~ code ~~~
+
+		this is also treated as code
+
+		~~~~~~~~~~~~
+
+This type of code doesn't need to be indented. When you need to write three tildes as code
+you'll have to indent it though:
+
+	code:
+		~~~ code ~~~
+			~~~
+			meta code example
+			~~~
+		~~~~~~~~~~~~
+
 
 Note
 ====

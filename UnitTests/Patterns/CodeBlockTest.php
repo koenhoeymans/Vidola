@@ -36,8 +36,8 @@ class Vidola_Patterns_CodeBlockTest extends PHPUnit_Framework_TestCase
 	 */
 	public function codeBlocksKeepIndentationAsOutlined()
 	{
-		$code = "\n\n\tCODE:\n\t\tThis is code.\n\n\t\tThis is also code.\n\t\t\tThis line is indented.";
-		$html = "\n\n<pre><code>This is code.\n\nThis is also code.\n\tThis line is indented.</code></pre>";
+		$code = "\n\n\tCODE:\n\t\tThis is code.\n\n\t\tThis is also code.\n\t\t\t\tThis line is indented.";
+		$html = "\n\n<pre><code>This is code.\n\nThis is also code.\n\t\tThis line is indented.</code></pre>";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 
@@ -68,6 +68,89 @@ class Vidola_Patterns_CodeBlockTest extends PHPUnit_Framework_TestCase
 	{
 		$code = "\n\n\tcoDe:\n\t\tthe code\n\n";
 		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($code));
+	}
+
+	/**
+	 * @test
+	 */
+	public function codeCanBeSurroundedByTwoLinesOfAtLeastThreeTildes()
+	{
+		$code = "\n\n~~~\nthe code\n~~~\n\n";
+		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($code));
+	}
+
+	/**
+	 * @test
+	 */
+	public function tildeBlockCanContainRowOfTildesIfTheyAreIndented()
+	{
+		$code = "
+
+~~~
+	example
+
+	~~~
+
+	code
+
+	~~~
+
+~~~
+
+";
+		$html = "
+
+<pre><code>example
+
+~~~
+
+code
+
+~~~</code></pre>
+
+";
+		$this->assertEquals($html, $this->pattern->replace($code));
+	}
+
+	/**
+	 * @test
+	 */
+	public function afterThreeTildesCanBeAnyText()
+	{
+		$code = "\n\n~~~ code ~~~\nthe code\n~~~~~~~~\n\n";
+		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($code));
+	}
+
+	/**
+	 * @test
+	 */
+	public function firstCharacterDeterminesIndentation()
+	{
+		$code = "\n\n~~~\n\tindented\n\t\tdoubleindented\n~~~\n\n";
+		$html = "\n\n<pre><code>indented\n\tdoubleindented</code></pre>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($code));
+	}
+
+	/**
+	 * @test
+	 */
+	public function wholeTildeCodeBlockCanBeIndented()
+	{
+		$code = "\n\n\t~~~\n\tthe code\n\t~~~\n\n";
+		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($code));
+	}
+
+	/**
+	 * @test
+	 */
+	public function tildeCodeBlockIsNonGreedy()
+	{
+		$code = "\n\n~~~\nthe code\n~~~\n\nparagraph\n\n~~~\ncode\n~~~\n\n";
+		$html = "\n\n<pre><code>the code</code></pre>\n\nparagraph\n\n<pre><code>code</code></pre>\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 }

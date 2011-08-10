@@ -15,11 +15,11 @@ class CodeBlock implements Pattern
 	 */
 	public function replace($text)
 	{
-		return preg_replace_callback(
-			"#(?<=\n\n)(\s+)CODE:\n(\n*(\\1\s+).+(\n*\\1\s+.+)*)(?=\n\n|$)#i",
-			function ($match) 
+		$codeWithCodeWord = preg_replace_callback(
+			"#(?<=\n\n)(\s+)CODE:\n+(\\1\s+)(.+(\n*\\1\s+.+)*)(?=\n\n|$)#i",
+			function ($match)
 			{
-				$code = preg_replace("#$match[3]#", "", $match[2]);
+				$code = preg_replace("#\n$match[2](\s*.+)#", "\n\${1}", $match[3]);
 
 				return
 					'<pre><code>' .
@@ -28,5 +28,21 @@ class CodeBlock implements Pattern
 			},
 			$text
 		);
+
+		$codeWithTildes = preg_replace_callback(
+			"#(?<=\n\n)(\s*)~~~.*\n+(\\1\s*)((\n|.)+?)\n+\\1~~~.*(?=\n\n)#",
+			function ($match)
+			{
+				$code = preg_replace("#\n$match[2](\s*.+)#", "\n\${1}", $match[3]);
+
+				return
+					'<pre><code>' .
+					htmlentities($code) .
+					'</code></pre>';
+			},
+			$codeWithCodeWord
+		);
+
+		return $codeWithTildes;
 	}
 }
