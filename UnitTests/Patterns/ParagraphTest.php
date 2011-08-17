@@ -92,10 +92,20 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	 */
 	public function multipleLinesMustBeIndentedTheSameLength()
 	{
-		$text = "\n\n\tparagraph\n\tparagraph continued\n\n";
+		$text = "
+
+	paragraph
+	paragraph continued
+
+";
 		$html = $this->pattern->replace($text);
 		$this->assertEquals(
-			"\n\n\t<p>paragraph\n\tparagraph continued</p>\n\n",
+			"
+
+	<p>paragraph
+	paragraph continued</p>
+
+",
 			$html
 		);
 	}

@@ -9,7 +9,10 @@ A regular paragraph with *bold* and _italic_ text in. It is followed by a list:
 	NOTE: A note can span
 	multiple lines. It can contain a [[http://link]]. Let's create a note in a note:
 
-		NOTE: a subnote.
+		NOTE: a subnote with a list
+
+			* item
+			* item
 
 		And now we're in our parent note again.
 
@@ -27,14 +30,19 @@ A code example is also indented. It can be used to display code:
 		CODE:
 			<?php // code goes here ?>
 
-Code inline uses ´backticks´.
+Code inline uses ´backticks´ but...
+
+	~~~
+		code can also use tildes and display html
+		todo
+	~~~
 
 Let's try a short definition list:
 
-term A
+term A:
 	explanation of term
 
-term B
+term B:
 	explanation of term
 
 This is another paragraph with an [email link] [mail@example.com].

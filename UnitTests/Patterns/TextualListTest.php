@@ -38,6 +38,18 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function canBeEndOfFile()
+	{
+		$text = "\n\n * an item\n * other item";
+		$html = "\n\n<ul>\n * an item\n * other item\n</ul>";
+		$this->assertEquals(
+		$html, $this->list->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
 	public function listsCanContainWhiteLines()
 	{
 		$text = "\n\n * an item\n\n item continues\n * other item\n\n";

@@ -19,7 +19,7 @@ class Vidola_Patterns_DefinitionListTest extends PHPUnit_Framework_TestCase
 		$text =
 'paragraph
 
-term
+term:
 	explanation
 
 paragraph';
@@ -27,7 +27,7 @@ paragraph';
 'paragraph
 
 <dl>
-term
+term:
 	explanation
 </dl>
 
@@ -42,13 +42,13 @@ paragraph';
 	public function canBeStartOfInputString()
 	{
 				$text =
-'term
+'term:
 	explanation
 
 paragraph';
 		$transformation =
 '<dl>
-term
+term:
 	explanation
 </dl>
 
@@ -65,13 +65,13 @@ paragraph';
 				$text =
 'paragraph
 
-term
+term:
 	explanation';
 		$transformation =
 'paragraph
 
 <dl>
-term
+term:
 	explanation
 </dl>';
 
@@ -125,10 +125,10 @@ paragraph';
 		$text =
 'paragraph
 
-term
+term:
 	explanation
 
-other term
+other term:
 	explanation
 
 paragraph';
@@ -136,15 +136,31 @@ paragraph';
 'paragraph
 
 <dl>
-term
+term:
 	explanation
 
-other term
+other term:
 	explanation
 </dl>
 
 paragraph';
 
 		$this->assertEquals($transformation, $this->dl->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function aParagraphEndingWithSemicolonShouldNotBeMistakenForDefinition()
+	{
+		$text = "
+
+This paragraph is followed by:
+
+	* a listitem
+
+";
+
+		$this->assertEquals($text, $this->dl->replace($text));
 	}
 }

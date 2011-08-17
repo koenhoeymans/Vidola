@@ -16,8 +16,20 @@ class Vidola_Patterns_NoteTest extends PHPUnit_Framework_TestCase
 	 */
 	public function noteIsCreatedByUsingNoteIndented()
 	{
-		$text = "This is a paragraph.\n\n\tnote: This is a note.\n\nAnother paragraph.";
-		$html = "This is a paragraph.\n\n\t<div class=\"note\">This is a note.</div>\n\nAnother paragraph.";
+		$text =
+"This is a paragraph.
+
+	Note: This is a note.
+
+Another paragraph.";
+
+		$html =
+"This is a paragraph.
+
+	<div class=\"note\">This is a note.</div>
+
+Another paragraph.";
+
 		$this->assertEquals(
 			$html, $this->note->replace($text)
 		);

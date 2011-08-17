@@ -131,8 +131,12 @@ Notes can be created as follows:
 	CODE:
 		NOTE: This is a note.
 
-A note block is ended with a blank line followed by text less indented.
-This means that it will keep going with text equally or more indented.
+			This sentence is still
+		part of the note.
+
+		This sentence is outside the note. 
+
+A note block is ended with a blank line followed by text equally or less indented.
 
 
 Links
@@ -228,12 +232,12 @@ depth.
 Definition lists
 ================
 
-A term followed by description. Multiple terms can share the same description. A term can
+A term followed by description followed by a colon. Multiple terms can share the same description. A term can
 have multiple descriptions if they are separated by a tilde. Here's an example:
 
 	CODE:
-		term a
-		term b
+		term a:
+		term b:
 			~explanation of term a and b
 			it continues on the next line
 

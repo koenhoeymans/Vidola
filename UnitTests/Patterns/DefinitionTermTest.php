@@ -17,7 +17,7 @@ class Vidola_Patterns_DefinitionTermTest extends PHPUnit_Framework_TestCase
 	public function aTermCanBeFollowedByADefinition()
 	{
 		$text =
-'term a
+'term a:
 	~explanation
 ';
 		$transformation =
@@ -34,8 +34,8 @@ class Vidola_Patterns_DefinitionTermTest extends PHPUnit_Framework_TestCase
 	public function aTermCanBeFollowedByAnotherTermSharingTheSameDefinition()
 	{
 				$text =
-'term a
-term b
+'term a:
+term b:
 	~explanation
 ';
 		$transformation =
@@ -53,7 +53,7 @@ term b
 	public function termsCanHaveMoreThanOneDefinition()
 	{
 				$text =
-'term a
+'term a:
 	~explanation
 	~explanation
 ';
@@ -72,8 +72,8 @@ term b
 	public function moreThanOneTermCanShareMoreThanOneDefinition()
 	{
 		$text =
-'term a
-term b
+'term a:
+term b:
 	~explanation
 	~explanation
 ';
@@ -93,9 +93,9 @@ term b
 	public function definitionListCanContainMoreThanOneTermWithoutNewlineBetweenPreviousDescriptionAndNewTerm()
 	{
 		$text =
-'term a
+'term a:
 	explanation
-term b
+term b:
 	explanation
 ';
 		$transformation =
