@@ -18,7 +18,10 @@ A regular paragraph with *bold* and _italic_ text in. It is followed by a list:
 
 	NOTE: A note following a note.
 
-	* item, with _italic_ text
+	* Item, with _italic_ text and a paragraph.
+
+	The next paragraph in this item.
+
 	* item, with a [link reference] [1]
 	* other [link reference] [2]
 

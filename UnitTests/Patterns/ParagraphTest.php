@@ -53,6 +53,19 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function canAlsoBeStartOfString()
+	{
+		$text = "paragraph\n\n";
+		$html = $this->pattern->replace($text);
+		$this->assertEquals(
+					"<p>paragraph</p>\n\n",
+		$html
+		);
+	}
+
+	/**
+	 * @test
+	 */
 	public function multipleParagraphsCanBePlacedAfterEachOther()
 	{
 		$text = "\n\nparagraph\n\nanother\n\nyet another\n\n";

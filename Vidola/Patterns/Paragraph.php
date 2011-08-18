@@ -17,16 +17,39 @@ class Paragraph implements Pattern
 	 */
 	public function replace($text)
 	{
-		return preg_replace(
+		return preg_replace_callback(
 			'@
-				(?<=\n\n)				# preceded by blank line
-				(\s*)([^\s].*)			# text optionally indented
-				((\n					# can continue on next line of indented
-					(\n(?=\\1\s))?		# a blank line is possible when text is extra indented
-				\\1(.+))*)				# to allow eg for a code block
-				(?=\n\n(?!\\1\s)|\n$|$)	# followed by blank line or end
+				(?<=\n\n|^\n|^)				# preceded by blank line or start
+				(?P<indentation>\s*)		# indentation possible
+				(?P<firstline>[^\s].*)		# text
+				(?P<nextlines>(\n\\1(.+))*)	# can continue on next line
+				(?=\n\n|\n$)				# followed by blank line
+			|								# cannot both be start and end of string
+				(?<=\n\n|^\n)				# preceded by blank line
+				(?P<indentation_2>\s*)
+				(?P<firstline_2>[^\s].*)
+				(?P<nextlines_2>(\n\\1(.+))*)
+				(?=\n\n|\n$|$)				# followed by blank line or end
 			@x',
-			"\${1}<p>\${2}\${3}</p>",
+			function ($match)
+			{
+				if ($match['firstline'] !== '')
+				{
+					return $match['indentation']
+						. '<p>'
+						. $match['firstline']
+						. $match['nextlines']
+						. '</p>';
+				}
+				else
+				{
+					return $match['indentation_2']
+						. '<p>'
+						. $match['firstline_2']
+						. $match['nextlines_2']
+						. '</p>';
+				}
+			},
 			$text
 		);
 	}
