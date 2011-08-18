@@ -43,7 +43,9 @@ Code inline uses ´backticks´ but...
 Let's try a short definition list:
 
 term A:
-	explanation of term
+	First paragraph of explanation of term.
+
+	Second paragraph of explanation of term.
 
 term B:
 	explanation of term
