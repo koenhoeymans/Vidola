@@ -50,7 +50,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function listsCanContainWhiteLines()
+	public function listsCanContainBlankLines()
 	{
 		$text = "\n\n * an item\n\n item continues\n * other item\n\n";
 		$html = "\n\n<ul>\n * an item\n\n item continues\n * other item\n</ul>\n\n";
@@ -62,7 +62,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function afterWhiteLineItemMustBeIndentedOnFirstLine()
+	public function afterBlankLineItemMustBeIndentedOnFirstLine()
 	{
 		$text = "\n\n * an item\n\nitem continues\n * other item\n\n";
 		$html = "\n\n<ul>\n * an item\n</ul>\n\nitem continues\n * other item\n\n";

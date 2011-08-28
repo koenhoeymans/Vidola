@@ -14,19 +14,22 @@ class Vidola_Patterns_NoteTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function noteIsCreatedByUsingNoteIndented()
+	public function noteIsCreatedByUsingNoteAndTheTextOnNextLineIndented()
 	{
 		$text =
 "This is a paragraph.
 
-	Note: This is a note.
+!Note
+	This is a note.
 
 Another paragraph.";
 
 		$html =
 "This is a paragraph.
 
-	<div class=\"note\">This is a note.</div>
+<div class=\"note\">
+This is a note.
+</div>
 
 Another paragraph.";
 

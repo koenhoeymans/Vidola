@@ -129,14 +129,15 @@ Note
 Notes can be created as follows:
 
 	CODE:
-		NOTE: This is a note.
+		!NOTE This is a note.
 
 			This sentence is still
 		part of the note.
 
 		This sentence is outside the note. 
 
-A note block is ended with a blank line followed by text equally or less indented.
+The word 'note' is case insensitive. A note block is ended with a blank line
+followed by text equally or less indented.
 
 
 Links

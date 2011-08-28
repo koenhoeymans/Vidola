@@ -16,6 +16,6 @@ class Note extends Block
 	 */
 	public function __construct()
 	{
-		parent::__construct('note:', 'div', 'note');
+		parent::__construct('!note', 'div', 'note');
 	}
 }

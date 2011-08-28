@@ -16,7 +16,11 @@ class DefinitionDescription implements Pattern
 			"#(?<=\n)([\ \t]+)~?(.+(\n\n?\\1[\ \t]*[^~].+)*)#",
 			function ($match)
 			{
-				return "$match[1]<dd>$match[2]</dd>";
+				$contents = preg_replace("$\n$match[1]$", "\n", $match[2]);
+				return
+					"<dd>\n"
+					. $contents
+					. "\n</dd>";
 			},
 			$text
 		);

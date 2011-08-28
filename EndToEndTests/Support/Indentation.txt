@@ -1,0 +1,25 @@
+Let's consider this as a 'lorum ipsum' paragraph.
+
+!Note
+	Introduction paragraphs contain an introduction.
+
+	Paragraphs within a note can continue
+	on the next line.
+
+	!Note
+		A note within a note is possible.
+
+	note definition:
+		A definition in a note.
+
+		The definition can contain multiple
+		paragraphs on multiple lines.
+
+		!note
+			A definition can contain a note.
+
+
+	!Note
+		Two blank lines for an unnested note with free indentation.
+
+Regular paragraph.

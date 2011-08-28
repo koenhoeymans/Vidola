@@ -6,17 +6,110 @@ require_once dirname(__FILE__)
 
 class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 {
+	public function setup()
+	{
+		$this->block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+	}
+
 	/**
 	 * @test
 	 */
-	public function blocksAreIntroducedByBlankLineWordAndColon()
+	public function blocksAreIntroducedByBlankLineWordAndColonWithTextIndentedOnFollowingLine()
 	{
-		$text = "A paragraph.\n\n\tBLOCK: some text\n\nAnother paragraph.";
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
-		$this->assertEquals(
-			"A paragraph.\n\n\t<block>some text</block>\n\nAnother paragraph.",
-			$block->replace($text)
-		);
+		$text =
+"A paragraph.
+
+BLOCK:
+	some text
+
+Another paragraph.";
+
+		$html =
+"A paragraph.
+
+<block>
+some text
+</block>
+
+Another paragraph.";
+
+		$this->assertEquals($html, $this->block->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function blocksCanAlsoStartWithTwoBlankLinesAndWhateverIndentation()
+	{
+		$text =
+"A paragraph.
+
+
+	BLOCK:
+		some text
+
+Another paragraph.";
+
+	$html =
+"A paragraph.
+
+<block>
+some text
+</block>
+
+Another paragraph.";
+	
+		$this->assertEquals($html, $this->block->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function aBlankLineIsNotSufficientToStartABlockIfPrecedingTextIsLessIndented()
+	{
+		$text =
+"A paragraph.
+
+	BLOCK:
+		some text
+
+Another paragraph.";
+
+	$html =
+"A paragraph.
+
+	BLOCK:
+		some text
+
+Another paragraph.";
+	
+		$this->assertEquals($html, $this->block->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function blocksAreEndedByABlankLineFollowedByTextEquallyIndented()
+	{
+		$text =
+"	A paragraph.
+
+
+	BLOCK:
+		some text
+
+	Another paragraph.";
+
+		$html =
+"	A paragraph.
+
+<block>
+some text
+</block>
+
+	Another paragraph.";
+
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
@@ -24,68 +117,105 @@ class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 	 */
 	public function blocksAreEndedByABlankLineFollowedByTextLessIndented()
 	{
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+		$text =
+"	A paragraph.
 
-		$text = "A paragraph.\n\n\t\tBLOCK: some text\n\n\tAnother paragraph.";
-		$this->assertEquals(
-			"A paragraph.\n\n\t\t<block>some text</block>\n\n\tAnother paragraph.",
-			$block->replace($text)
-		);
+
+	BLOCK:
+		some text
+
+Another paragraph.";
+
+		$html =
+"	A paragraph.
+
+<block>
+some text
+</block>
+
+Another paragraph.";
+
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function blocksAreAlsoEndedByABlankLineFollowedByEquallyIndentedTextOnFirstLine()
+	public function contentsIsUnindentedForLengthOfIndentationOfBlockWord()
 	{
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+		$text =
+"A paragraph.
 
-		$text = "A paragraph.\n\n\t\tBLOCK: some text\n\n\t\tAnother paragraph.";
-		$this->assertEquals(
-			"A paragraph.\n\n\t\t<block>some text</block>\n\n\t\tAnother paragraph.",
-			$block->replace($text)
-		);
+
+	BLOCK:
+			some text
+
+Another paragraph.";
+	
+		$html =
+"A paragraph.
+
+<block>
+	some text
+</block>
+
+Another paragraph.";
+	
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function blocksCanSpanMultipleParagraphs()
+	public function textCanSpanMultipleLines()
 	{
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+		$text =
+"A paragraph.
 
-		$text = "A paragraph.\n\n\t\tBLOCK: some text\n\n\t\t\ta paragraph in a block.\n\nregular paragraph";
-		$this->assertEquals(
-			"A paragraph.\n\n\t\t<block>some text\n\n\t\t\ta paragraph in a block.</block>\n\nregular paragraph",
-			$block->replace($text)
-		);
+BLOCK:
+	some text
+	continued on another line
+
+Another paragraph.";
+
+		$html =
+"A paragraph.
+
+<block>
+some text
+continued on another line
+</block>
+
+Another paragraph.";
+
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function blocksCanSpanMultipleLines()
+	public function textCanSpanMultipleLinesLazyStyle()
 	{
-		$text = "A paragraph.\n\n\tBLOCK: some text\n\tcontinued on another line\n\nAnother paragraph.";
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
-		$this->assertEquals(
-			"A paragraph.\n\n\t<block>some text\n\tcontinued on another line</block>\n\nAnother paragraph.",
-			$block->replace($text)
-		);
-	}
+		$text =
+"A paragraph.
 
-	/**
-	 * @test
-	 */
-	public function stopsWhenAnotherBlockBeginsAtSameIndentLevel()
-	{
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+BLOCK:
+	some text
+continued on another line
 
-		$text = "A paragraph.\n\n\tBLOCK: a block\n\n\tANOTHERBLOCK: another block\n\nanother paragraph";
-		$this->assertEquals(
-			"A paragraph.\n\n\t<block>a block</block>\n\n\tANOTHERBLOCK: another block\n\nanother paragraph",
-			$block->replace($text)
-		);
+Another paragraph.";
+
+		$html =
+"A paragraph.
+
+<block>
+some text
+continued on another line
+</block>
+
+Another paragraph.";
+
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
@@ -93,13 +223,30 @@ class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 	 */
 	public function aBlockWithinABlockIsLeftAsIs()
 	{
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+		$text =
+"A paragraph.
 
-		$text = "A paragraph.\n\n\tBLOCK: a block\n\n\t\tBLOCK: deeper nested block\n\nanother paragraph";
-		$this->assertEquals(
-			"A paragraph.\n\n\t<block>a block\n\n\t\tBLOCK: deeper nested block</block>\n\nanother paragraph",
-			$block->replace($text)
-		);
+BLOCK:
+	a block
+
+	BLOCK:
+		deeper nested block
+
+another paragraph";
+
+		$html =
+"A paragraph.
+
+<block>
+a block
+
+BLOCK:
+	deeper nested block
+</block>
+
+another paragraph";
+
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
@@ -107,13 +254,38 @@ class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 	 */
 	public function aBlockCanContinueIndentedAfterNestedBlock()
 	{
-		$block = new \Vidola\Patterns\Block('BLOCK:', 'block');
+		$text =
+"A paragraph.
 
-		$text = "A paragraph.\n\n\tBLOCK: a block\n\tblock continued\n\n\t\tBLOCK: deeper nested block\n\n\t Block continued\n\nanother paragraph";
-		$this->assertEquals(
-			"A paragraph.\n\n\t<block>a block\n\tblock continued\n\n\t\tBLOCK: deeper nested block\n\n\t Block continued</block>\n\nanother paragraph",
-			$block->replace($text)
-		);
+BLOCK:
+	a block
+
+	block continued
+
+	BLOCK:
+		deeper nested block
+
+	Block continued
+
+another paragraph";
+
+		$html =
+"A paragraph.
+
+<block>
+a block
+
+block continued
+
+BLOCK:
+	deeper nested block
+
+Block continued
+</block>
+
+another paragraph";
+
+		$this->assertEquals($html, $this->block->replace($text));
 	}
 
 	/**
@@ -123,10 +295,23 @@ class Vidola_Patterns_BlockTest extends PHPUnit_Framework_TestCase
 	{
 		$block = new \Vidola\Patterns\Block('BLOCK:', 'block', 'block');
 		
-		$text = "A paragraph.\n\n\tBLOCK: a block\n\nanother paragraph";
-		$html = "A paragraph.\n\n\t<block class=\"block\">a block</block>\n\nanother paragraph";
-		$this->assertEquals(
-			$html, $block->replace($text)
-		);
+		$text =
+"A paragraph.
+
+BLOCK:
+	a block
+
+another paragraph";
+
+		$html =
+"A paragraph.
+
+<block class=\"block\">
+a block
+</block>
+
+another paragraph";
+
+		$this->assertEquals($html, $block->replace($text));
 	}
 }

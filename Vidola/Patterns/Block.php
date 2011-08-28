@@ -10,15 +10,11 @@ namespace Vidola\Patterns;
  */
 class Block implements Pattern
 {
-	const pattern = '[a-zA-Z]+:';
-
 	private $identifier;
 
 	private $elementName;
 
 	private $className;
-
-	private $componentPatterns = array();
 
 	/**
 	 * @param string $identifier
@@ -36,21 +32,35 @@ class Block implements Pattern
 	 */
 	public function replace($text)
 	{
-		$componentPatterns = $this->componentPatterns;
 		$elementName = $this->elementName;
 		$className = $this->className;
 
 		return preg_replace_callback(
-			"#(?<=\n\n)(\s*)" . $this->identifier . "\s*(.+)(((\n\\1|\n\n\\1\s).+)*)(?=\n\n)#i",
-			function($match) use ($componentPatterns, $elementName, $className)
+			'@
+			(							# relative to previous text:
+			\n\n+(?=[^\s]|[ ]{1,3})		# at least a blank line when not indented or
+			|							# indented with max 1-3 spaces 
+			\n\n\n+(?=[\s]+)			# at least two blank lines when indented more 
+			)
+			(\s*)						# ${2}
+			' . $this->identifier . '
+			\n							# text on new line
+			(\\2\t|\\2[ ]{4})			# ${3}, extra indented tab or four lines
+			(.+)						# ${4}, followed by text
+			(							# ${5}
+			((\n|\n\n\\3).+)*			# text can continue on next line or 
+			)							# blank line and indented
+			(?=\n\n|$)
+			@ix',
+			function($match) use ($elementName, $className)
 			{
 				$classAttr = ($className !== null) ? ' class="' . $className . '"' : '';
-				$contents = isset($match[3]) ? $match[2] . $match[3] : $match[2];
-				return 
-					$match[1]
-					. "<" . $elementName . $classAttr . ">"
+				$contents = preg_replace("$\n$match[3]$", "\n", $match[4] . $match[5]);
+
+				return
+					"\n\n<" . $elementName . $classAttr . ">\n"
 					. $contents
-					. "</$elementName>";
+					. "\n</$elementName>";
 			},
 			$text
 		);

@@ -23,6 +23,7 @@ term:
 	explanation
 
 paragraph';
+
 		$transformation =
 'paragraph
 
@@ -46,6 +47,7 @@ paragraph';
 	explanation
 
 paragraph';
+
 		$transformation =
 '<dl>
 term:
@@ -67,6 +69,7 @@ paragraph';
 
 term:
 	explanation';
+
 		$transformation =
 'paragraph
 
@@ -81,6 +84,57 @@ term:
 	/**
 	 * @test
 	 */
+	public function indentationDoesntMatterWhenPrecededByTwoBlankLines()
+	{
+		$text =
+'paragraph
+
+
+	term:
+		explanation
+
+paragraph';
+
+		$transformation =
+'paragraph
+
+<dl>
+term:
+	explanation
+</dl>
+
+paragraph';
+
+		$this->assertEquals($transformation, $this->dl->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function whenOnlyOneBlankLineNoDefintionListWhenIndentedMoreThan3Spaces()
+	{
+		$text =
+'paragraph
+
+	term:
+		explanation
+
+paragraph';
+
+		$transformation =
+'paragraph
+
+	term:
+		explanation
+
+paragraph';
+
+		$this->assertEquals($transformation, $this->dl->replace($text));		
+	}
+
+	/**
+	 * @test
+	 */
 	public function thereCanBeMultipleTermsAndDescriptionsWithParagraphs()
 	{
 				$text =
@@ -88,6 +142,7 @@ term:
 
 term a:
 term b:
+term c:
 	~explanation x
 
 	Continuation of explanation.
@@ -97,12 +152,14 @@ term b:
 	Continuation of explanation.
 
 paragraph';
+
 		$transformation =
 'paragraph
 
 <dl>
 term a:
 term b:
+term c:
 	~explanation x
 
 	Continuation of explanation.
@@ -132,6 +189,7 @@ other term:
 	explanation
 
 paragraph';
+
 		$transformation =
 'paragraph
 
@@ -157,7 +215,7 @@ paragraph';
 
 This paragraph is followed by:
 
-	* a listitem
+	code
 
 ";
 
