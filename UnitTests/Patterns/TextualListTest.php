@@ -14,25 +14,59 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function shouldBeIndented()
+	public function canBeUnindented()
 	{
 		$text = "\n\n* an item\n* other item\n\n";
-		$html = "\n\n* an item\n* other item\n\n";
-		$this->assertEquals(
-			$html, $this->list->replace($text)
-		);
+		$html = "\n\n<ul>\n* an item\n* other item\n</ul>\n\n";
+		$this->assertEquals($html, $this->list->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function mustBePrecededAndFollowedByBlankLineAtStartAndEndOfList()
+	public function canBeIndented()
 	{
-		$text = "\n * an item\n * other item\n";
-		$html = "\n * an item\n * other item\n";
-		$this->assertEquals(
-			$html, $this->list->replace($text)
-		);
+		$text = "\n\n * an item\n * other item\n\n";
+		$html = "\n\n<ul>\n* an item\n* other item\n</ul>\n\n";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function indetationDoesntMatterIfPrecededByMoreThanOneBlankLine()
+	{
+		$text = "paragraph\n\n\n\t\t* an item\n\t\t* other item";
+		$html = "paragraph\n\n<ul>\n* an item\n* other item\n</ul>";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function noListWhenBlankLineAndTabIndented()
+	{
+		$text = "!note\n\n\t* an item\n\t* other item";
+		$this->assertEquals($text, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function noListWhenBlankLineAndMoreThanThreeSpacesIndented()
+	{
+		$text = "!note\n\n    * an item\n    * other item";
+		$this->assertEquals($text, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function canBeStartOfFile()
+	{
+		$text = " * an item\n * other item\n\n";
+		$html = "<ul>\n* an item\n* other item\n</ul>\n\n";
+		$this->assertEquals($html, $this->list->replace($text));
 	}
 
 	/**
@@ -41,10 +75,8 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function canBeEndOfFile()
 	{
 		$text = "\n\n * an item\n * other item";
-		$html = "\n\n<ul>\n * an item\n * other item\n</ul>";
-		$this->assertEquals(
-		$html, $this->list->replace($text)
-		);
+		$html = "\n\n<ul>\n* an item\n* other item\n</ul>";
+		$this->assertEquals($html, $this->list->replace($text));
 	}
 
 	/**
@@ -53,10 +85,8 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function listsCanContainBlankLines()
 	{
 		$text = "\n\n * an item\n\n item continues\n * other item\n\n";
-		$html = "\n\n<ul>\n * an item\n\n item continues\n * other item\n</ul>\n\n";
-		$this->assertEquals(
-			$html, $this->list->replace($text)
-		);
+		$html = "\n\n<ul>\n* an item\n\nitem continues\n* other item\n</ul>\n\n";
+		$this->assertEquals($html, $this->list->replace($text));
 	}
 
 	/**
@@ -65,10 +95,8 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function afterBlankLineItemMustBeIndentedOnFirstLine()
 	{
 		$text = "\n\n * an item\n\nitem continues\n * other item\n\n";
-		$html = "\n\n<ul>\n * an item\n</ul>\n\nitem continues\n * other item\n\n";
-		$this->assertEquals(
-			$html, $this->list->replace($text)
-		);
+		$html = "\n\n<ul>\n* an item\n</ul>\n\nitem continues\n * other item\n\n";
+		$this->assertEquals($html, $this->list->replace($text));
 	}
 
 	/**
@@ -76,10 +104,36 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function textCanContainMultipleLists()
 	{
-		$text = "\n\n\t\t* an item\n\t\t* other item\n\n\tpara indented one tab\n\n\t\t* an item\n\t\t* other item\n\n";
-		$html = "\n\n<ul>\n\t\t* an item\n\t\t* other item\n</ul>\n\n\tpara indented one tab\n\n<ul>\n\t\t* an item\n\t\t* other item\n</ul>\n\n";
-		$this->assertEquals(
-			$html, $this->list->replace($text)
-		);
+		$text =
+"paragraph
+
+ * an item
+ * other item
+
+paragraph
+
+ * an item
+ * other item
+
+paragraph";
+
+		$html =
+"paragraph
+
+<ul>
+* an item
+* other item
+</ul>
+
+paragraph
+
+<ul>
+* an item
+* other item
+</ul>
+
+paragraph";
+
+		$this->assertEquals($html, $this->list->replace($text));
 	}
 }

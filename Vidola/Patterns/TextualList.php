@@ -14,18 +14,32 @@ class TextualList implements Pattern
 	{
 		return preg_replace_callback(
 			'@
-			(?<=\n\n)						# preceded by newline
-			(
-				((\s+)([*+#-]|[0-9]+\.) )	# list item markers
-				.+(\n[^\s\n].+|\n\n?\\3.+)*	#
+			(?<start>
+			^								# start of text
+			|
+			\n*\n\n(?=([ ]{1,3})?[^\s])		# indented with max 3 spaces
+			|
+			\n+\n\n(?=[ \t]+)				# indented more if at least 2 blank lines 
 			)
-			(?=\n\n|$)						# followed by newline or end
+
+			(?<list>
+			(?<indentation>[ \t]*)			# indentation
+			([*+#-]|[0-9]+\.)				# list markers
+			\ .+							# space and text
+			(\n(\n\g{indentation})?.+)*		# continuation of list
+			)
+
+			(?<end>\n\n|$)
 			@x',
 			function($match)
 			{
 				$list = (preg_match("/([0-9]+\.|#)/", $match[4]) === 1) ? 'ol' : 'ul';
+				$start = ($match['start'] !== '') ? "\n\n": '';
+				$items = preg_replace(
+					"#(\n|^)" . $match['indentation'] . "#", "\${1}", $match['list']
+				);
 
-				return "<$list>\n" . $match[1] . "\n</$list>";
+				return "$start<$list>\n" . $items . "\n</$list>" . $match['end'];
 			},
 			$text
 		);

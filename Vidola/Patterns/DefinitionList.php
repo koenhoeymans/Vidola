@@ -36,11 +36,11 @@ class DefinitionList implements Pattern
 			'@
 			(?<start>
 			^								# start of text
-			|								# or relative to preceding text:
-			\n*\n\n(?=([ ]{1,3})?[^\s])		# blank line is enough indented
-			|								# with max 1-3 spaces 
-			\n+\n\n(?=[ \t]+)				# or at least two blank lines when 
-			)								# indented more
+			|
+			\n*\n\n(?=([ ]{1,3})?[^\s])		# max 3 spaces
+			| 
+			\n+\n\n(?=[ \t]+)				# more indentation if at least 2 blank lines 
+			)
 
 			((
 			(?<t_indent>[ \t]*)				# indentation
@@ -48,7 +48,7 @@ class DefinitionList implements Pattern
 			(\n\g{t_indent}.+:)*			# other terms with same description
 			\n								# description on new line
 			(?<d_indent>\g{t_indent}[ \t]+).+		# indented, text
-			(\n(\n\g{d_indent})?.+)*	# following lines: text on next line or
+			(\n(\n\g{d_indent})?.+)*		# following lines: text on next line or
 											# blank line and text indented
 			(?<end>\n\n|$))+)
 			@x',
