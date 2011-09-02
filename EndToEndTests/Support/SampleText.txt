@@ -54,6 +54,9 @@ term A:
 term B:
 	explanation of term
 
+	* listitem in term B
+	* other listitem
+
 This is another paragraph with an [email link] [mail@example.com].
 
 Let's end with code indented:
