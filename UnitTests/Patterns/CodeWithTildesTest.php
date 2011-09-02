@@ -17,7 +17,7 @@ class Vidola_Patterns_CodeWithTildesTest extends PHPUnit_Framework_TestCase
 	public function codeCanBeSurroundedByTwoLinesOfAtLeastThreeTildes()
 	{
 		$code = "\n\n~~~\nthe code\n~~~\n\n";
-		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$html = "\n\n<code>the code</code>\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 
@@ -42,13 +42,13 @@ class Vidola_Patterns_CodeWithTildesTest extends PHPUnit_Framework_TestCase
 ";
 		$html = "
 
-<pre><code>example
+<code>example
 
 ~~~
 
 code
 
-~~~</code></pre>
+~~~</code>
 
 ";
 		$this->assertEquals($html, $this->pattern->replace($code));
@@ -60,7 +60,7 @@ code
 	public function afterThreeTildesCanBeAnyText()
 	{
 		$code = "\n\n~~~ code ~~~\nthe code\n~~~~~~~~\n\n";
-		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$html = "\n\n<code>the code</code>\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 
@@ -70,7 +70,7 @@ code
 	public function firstCharacterDeterminesIndentation()
 	{
 		$code = "\n\n~~~\n\tindented\n\t\tdoubleindented\n~~~\n\n";
-		$html = "\n\n<pre><code>indented\n\tdoubleindented</code></pre>\n\n";
+		$html = "\n\n<code>indented\n\tdoubleindented</code>\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 
@@ -80,7 +80,7 @@ code
 	public function wholeTildeCodeBlockCanBeIndented()
 	{
 		$code = "\n\n\t~~~\n\tthe code\n\t~~~\n\n";
-		$html = "\n\n<pre><code>the code</code></pre>\n\n";
+		$html = "\n\n<code>the code</code>\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 
@@ -90,7 +90,7 @@ code
 	public function tildeCodeBlockIsNonGreedy()
 	{
 		$code = "\n\n~~~\nthe code\n~~~\n\nparagraph\n\n~~~\ncode\n~~~\n\n";
-		$html = "\n\n<pre><code>the code</code></pre>\n\nparagraph\n\n<pre><code>code</code></pre>\n\n";
+		$html = "\n\n<code>the code</code>\n\nparagraph\n\n<code>code</code>\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 }

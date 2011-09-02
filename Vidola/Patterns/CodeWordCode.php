@@ -22,9 +22,9 @@ class CodeWordCode implements Pattern
 				$code = preg_replace("#\n$match[2](\s*.+)#", "\n\${1}", $match[3]);
 
 				return
-					'<pre><code>' .
+					'<code>' .
 					htmlentities($code) .
-					'</code></pre>';
+					'</code>';
 			},
 			$text
 		);

@@ -134,7 +134,7 @@ Notes can be created as follows:
 			This sentence is still
 		part of the note.
 
-		This sentence is outside the note. 
+		This sentence is outside the note.
 
 The word 'note' is case insensitive. A note block is ended with a blank line
 followed by text equally or less indented.
