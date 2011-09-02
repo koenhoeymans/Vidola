@@ -27,6 +27,11 @@ Let's consider this as a 'lorum ipsum' paragraph.
 	!Note
 		Two blank lines for an unnested note with free indentation.
 
+		It can contain some code:
+
+			!note
+				a note in code
+
  * list item
  * list item
 

@@ -56,6 +56,12 @@ term B:
 
 This is another paragraph with an [email link] [mail@example.com].
 
+Let's end with code indented:
+
+	code example
+
+The link definitions below disappear.
+
 	[1]: http://www.example.com
 	[2]: http://example.com "title"
 	[3]: Foo/Bar.html
