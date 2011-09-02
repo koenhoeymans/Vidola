@@ -14,6 +14,16 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function noBlankLineNecessaryBefore()
+	{
+		$text = "not a paragraph\n* an item\n* other item\n\nparagraph";
+		$html = "not a paragraph\n<ul>\n* an item\n* other item\n</ul>\n\nparagraph";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
 	public function canBeUnindented()
 	{
 		$text = "\n\n* an item\n* other item\n\n";
@@ -84,8 +94,30 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function listsCanContainBlankLines()
 	{
-		$text = "\n\n * an item\n\n item continues\n * other item\n\n";
-		$html = "\n\n<ul>\n* an item\n\nitem continues\n* other item\n</ul>\n\n";
+		$text =
+"
+
+ * an item
+
+   item continues
+
+ * other item
+
+";
+
+		$html =
+"
+
+<ul>
+* an item
+
+  item continues
+
+* other item
+</ul>
+
+";
+
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -94,8 +126,8 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function afterBlankLineItemMustBeIndentedOnFirstLine()
 	{
-		$text = "\n\n * an item\n\nitem continues\n * other item\n\n";
-		$html = "\n\n<ul>\n* an item\n</ul>\n\nitem continues\n * other item\n\n";
+		$text = "\n\n * an item\n\nitem continues\n\n";
+		$html = "\n\n<ul>\n* an item\n</ul>\n\nitem continues\n\n";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 

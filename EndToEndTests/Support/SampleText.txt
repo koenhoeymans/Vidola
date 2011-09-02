@@ -3,31 +3,35 @@ Transformation test
 
 A regular paragraph with *bold* and _italic_ text in. It is followed by a list:
 
-	* item, with *bolded* text
-	* item
+* item, with *bolded* text
+* item
 
-	NOTE: A note can span
-	multiple lines. It can contain a [[http://link]]. Let's create a note in a note:
+!note
+	A note can span
+multiple lines. It can contain a [[http://link]]. Let's create a note in a note:
 
-		NOTE: a subnote with a list
+	!note
+		a subnote with a list
 
-			* item
-			* item
+		* item
+		* item
 
-		And now we're in our parent note again.
+	And now we're in our parent note again.
 
-	NOTE: A note following a note.
+!note
+	A note following a note.
 
-	* Item, with _italic_ text and a paragraph.
+ * Item, with _italic_ text and a paragraph.
 
-	The next paragraph in this item.
+   The next paragraph in this item.
 
-	* item, with a [link reference] [1]
-	* other [link reference] [2]
+ * item, with a [link reference] [1]
+ * other [link reference] [2]
 
-NOTE: A note starting unindented. With a [relative] [3] link.
+!note
+	A note starting unindented. With a [relative] [3] link.
 
-A code example is also indented. It can be used to display code:
+A code example. It can be used to display code:
 
 	CODE:
 		CODE:

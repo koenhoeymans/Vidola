@@ -18,9 +18,9 @@ class DefinitionDescription implements Pattern
 			{
 				$contents = preg_replace("$\n$match[1]$", "\n", $match[2]);
 				return
-					"<dd>\n"
+					"<dd>"
 					. $contents
-					. "\n</dd>";
+					. "</dd>";
 			},
 			$text
 		);

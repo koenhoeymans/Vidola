@@ -17,38 +17,37 @@ class Paragraph implements Pattern
 	 */
 	public function replace($text)
 	{
+		# Cannot both be start and end of text.
+		# This is to avoid that eg simple list items
+		# are regarded as parameters.
+		if (!preg_match("#^\n|\n\n#",$text))
+		{
+			return $text;
+		}
+
 		return preg_replace_callback(
 			'@
-				(?<=\n\n|^\n|^)				# preceded by blank line or start
-				(?P<indentation>\s*)		# indentation possible
-				(?P<firstline>[^\s].*)		# text
-				(?P<nextlines>(\n\\1(.+))*)	# can continue on next line
-				(?=\n\n|\n$)				# followed by blank line
-			|								# cannot both be start and end of string
-				(?<=\n\n|^\n)				# preceded by blank line
-				(?P<indentation_2>\s*)
-				(?P<firstline_2>[^\s].*)
-				(?P<nextlines_2>(\n\\1(.+))*)
-				(?=\n\n|\n$|$)				# followed by blank line or end
+			(										# before
+			^\n?(?=[ ]{0,3}[^\s])
+			|
+			\n\n\n(?=[ \t]*[^\s])
+			|
+			\n\n(?=[ ]{0,3}[^\s])
+			)
+			(?<indentation>[ \t]*)					# indentation
+			(?<contents>
+			([^\s].*)								# first line
+			(\n\g{indentation}?[^\s].*)*			# following lines
+			)
+			(?=\n\n|\n$|$)							# after
 			@x',
 			function ($match)
 			{
-				if ($match['firstline'] !== '')
-				{
-					return $match['indentation']
-						. '<p>'
-						. $match['firstline']
-						. $match['nextlines']
-						. '</p>';
-				}
-				else
-				{
-					return $match['indentation_2']
-						. '<p>'
-						. $match['firstline_2']
-						. $match['nextlines_2']
-						. '</p>';
-				}
+				# unindent
+				$paragraph = preg_replace("#(^|\n)[ \t]+#", "\${1}", $match['contents']);
+				$before = preg_replace("#\n\n\n*#", "\n\n", $match[1]);
+
+				return $before . "<p>" . $paragraph . "</p>";
 			},
 			$text
 		);

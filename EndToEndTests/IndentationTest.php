@@ -2,7 +2,7 @@
 
 require_once('TestHelper.php');
 
-class Vidola_EndToEndTests_SampleTextTest extends PHPUnit_Framework_TestCase
+class Vidola_EndToEndTests_IndentationTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{

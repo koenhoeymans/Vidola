@@ -17,11 +17,8 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	public function emptyLineThenTextThenEmptyLineIsParagraph()
 	{
 		$text = "\n\nparagraph\n\n";
-		$html = $this->pattern->replace($text);
-		$this->assertEquals(
-			"\n\n<p>paragraph</p>\n\n",
-			$html
-		);
+		$html = "\n\n<p>paragraph</p>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -30,11 +27,8 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	public function emptyLineThenTextThenLineBreakAndEndOfTextIsParagraph()
 	{
 		$text = "\n\nparagraph\n";
-		$html = $this->pattern->replace($text);
-		$this->assertEquals(
-			"\n\n<p>paragraph</p>\n",
-			$html
-		);
+		$html = "\n\n<p>paragraph</p>\n";
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -43,11 +37,8 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	public function emptyLineThenTextThenEndOfTextIsParagraph()
 	{
 		$text = "\n\nparagraph";
-		$html = $this->pattern->replace($text);
-		$this->assertEquals(
-			"\n\n<p>paragraph</p>",
-			$html
-		);
+		$html = "\n\n<p>paragraph</p>";
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -56,11 +47,17 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	public function canAlsoBeStartOfString()
 	{
 		$text = "paragraph\n\n";
-		$html = $this->pattern->replace($text);
-		$this->assertEquals(
-					"<p>paragraph</p>\n\n",
-		$html
-		);
+		$html = "<p>paragraph</p>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function cannotBeBothStartAndEndOfString()
+	{
+		$text = "paragraph";
+		$this->assertEquals($text, $this->pattern->replace($text));
 	}
 
 	/**
@@ -69,23 +66,8 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	public function multipleParagraphsCanBePlacedAfterEachOther()
 	{
 		$text = "\n\nparagraph\n\nanother\n\nyet another\n\n";
-		$html = $this->pattern->replace($text);
-		$this->assertEquals(
-			"\n\n<p>paragraph</p>\n\n<p>another</p>\n\n<p>yet another</p>\n\n",
-			$html
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function useOfWhitespaceDoesntMatterForRecognition()
-	{
-		$text = "\n\n\tparagraph\n\n";
-		$this->assertEquals(
-			"\n\n\t<p>paragraph</p>\n\n",
-			$this->pattern->replace($text)
-		);
+		$html = "\n\n<p>paragraph</p>\n\n<p>another</p>\n\n<p>yet another</p>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -93,33 +75,93 @@ class Vidola_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	 */
 	public function aParagraphCannotContainOnlyWhiteSpace()
 	{
-		$text = "\n\n\t\n\n";
-		$this->assertEquals(
-			"\n\n\t\n\n",
-			$this->pattern->replace($text)
-		);
+		$text = "\n\n  \n\n";
+		$this->assertEquals($text, $this->pattern->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function multipleLinesMustBeIndentedTheSameLength()
+	public function indentationOfThreeSpacesMaximum()
 	{
-		$text = "
+		$text = "\n\n paragraph\n\n";
+		$html = "\n\n<p>paragraph</p>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
 
-	paragraph
-	paragraph continued
+	/**
+	 * @test
+	 */
+	public function indentedMoreThanThreeSpacesIsNoParagraph()
+	{
+		$text = "\n\n    paragraph\n\n";
+		$this->assertEquals($text, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function indentedATabIsNoParagraph()
+	{
+		$text = "\n\n\tparagraph\n\n";
+		$this->assertEquals($text, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function afterTwoBlankLinesIndentationOfFirstLineDoesntMatter()
+	{
+		$text = "\n\n\n\t\tparagraph\n\n";
+		$html = "\n\n<p>paragraph</p>\n\n";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function followingLinesCanBeIndentedTheSame()
+	{
+		$text =
+"
+
+ paragraph
+ paragraph continued
 
 ";
-		$html = $this->pattern->replace($text);
-		$this->assertEquals(
-			"
 
-	<p>paragraph
-	paragraph continued</p>
+		$html =
+"
 
-",
-			$html
-		);
+<p>paragraph
+paragraph continued</p>
+
+";
+
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function followingLinesCanBeLeftUnindented()
+	{
+		$text =
+"
+
+ paragraph
+paragraph continued
+
+";
+
+		$html =
+"
+
+<p>paragraph
+paragraph continued</p>
+
+";
+
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 }

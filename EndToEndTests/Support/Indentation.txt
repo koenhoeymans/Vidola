@@ -9,7 +9,9 @@ Let's consider this as a 'lorum ipsum' paragraph.
 	!Note
 		A note within a note is possible.
 
-		 * a list within a note
+		 * item
+		   * a list within
+		   * a list
 		 * other item
 
 	note definition:
