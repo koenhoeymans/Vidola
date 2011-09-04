@@ -23,8 +23,8 @@ class Vidola_Patterns_DefinitionDescriptionTest extends PHPUnit_Framework_TestCa
 ';
 		$transformation =
 'term a
-<dd>explanation on
-more than one line</dd>
+{{dd}}explanation on
+more than one line{{/dd}}
 ';
 
 		$this->assertEquals($transformation, $this->dd->replace($text));
@@ -43,9 +43,9 @@ more than one line</dd>
 ';
 		$transformation =
 'term a
-<dd>explanation on
-more than one line</dd>
-<dd>second explanation</dd>
+{{dd}}explanation on
+more than one line{{/dd}}
+{{dd}}second explanation{{/dd}}
 ';
 
 		$this->assertEquals($transformation, $this->dd->replace($text));
@@ -65,8 +65,8 @@ term b
 		$transformation =
 'term a
 term b
-<dd>explanation on
-more than one line</dd>
+{{dd}}explanation on
+more than one line{{/dd}}
 ';
 
 		$this->assertEquals($transformation, $this->dd->replace($text));
@@ -86,10 +86,10 @@ more than one line</dd>
 ';
 		$transformation =
 'term a
-<dd>explanation on
+{{dd}}explanation on
 more than one line
 
-explanation continues with new paragraph</dd>
+explanation continues with new paragraph{{/dd}}
 ';
 
 		$this->assertEquals($transformation, $this->dd->replace($text));
@@ -111,12 +111,12 @@ explanation continues with new paragraph</dd>
 ';
 		$transformation =
 'term a
-<dd>explanation on
+{{dd}}explanation on
 more than one line
 
-explanation continues with new paragraph</dd>
+explanation continues with new paragraph{{/dd}}
 
-<dd>second explanation</dd>
+{{dd}}second explanation{{/dd}}
 ';
 
 		$this->assertEquals($transformation, $this->dd->replace($text));

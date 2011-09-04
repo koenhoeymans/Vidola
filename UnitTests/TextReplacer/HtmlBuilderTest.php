@@ -34,10 +34,40 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function doesNotPresentTagsInTextToPatterns()
+	public function textIsPresentedFirstToPreProcessors()
+	{
+		$preProcessor = $this->getMock('\Vidola\Processor\Processor');
+		$preProcessor
+			->expects($this->once())
+			->method('process')
+			->with('short text');
+		$this->htmlBuilder->addPreProcessor($preProcessor);
+
+		$text = $this->htmlBuilder->replace('short text');
+	}
+
+	/**
+	 * @test
+	 */
+	public function textIsPresentedafterwardsToPostProcessors()
+	{
+		$preProcessor = $this->getMock('\Vidola\Processor\Processor');
+		$preProcessor
+		->expects($this->once())
+		->method('process')
+		->with('short text');
+		$this->htmlBuilder->addPostProcessor($preProcessor);
+	
+		$text = $this->htmlBuilder->replace('short text');
+	}
+
+	/**
+	 * @test
+	 */
+	public function doesNotPresentVidolaTagsInTextToPatterns()
 	{
 		// given
-		$text = 'a text with <a>tags</a> in it';
+		$text = 'a text with {{a}}tags{{/a}} in it';
 		$mockPattern = $this->getMock('\Vidola\Patterns\Pattern');
 
 		// expect
@@ -95,7 +125,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 			->expects($this->at(0))
 			->method('replace')
 			->with('some text to test subpattern handling')
-			->will($this->returnValue('some text to test <sub>subpattern</sub> handling'));
+			->will($this->returnValue('some text to test {{sub}}subpattern{{/sub}} handling'));
 		$mockPatternB
 			->expects($this->at(0))
 			->method('replace')

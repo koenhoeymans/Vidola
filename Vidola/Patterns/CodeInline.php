@@ -14,7 +14,7 @@ class CodeInline implements Pattern
 	{
 		return preg_replace(
 			'#´(.+)?´#',
-			"<code>\${1}</code>",
+			"{{code}}\${1}{{/code}}",
 			$text
 		);
 	}

@@ -104,7 +104,7 @@ class Hyperlink implements Pattern
 			$url = $this->relativeUrlBuilder->buildUrl($url);
 		}
 
-		return '<a' . $titleAttr . ' href="' . $url . '">' . $anchorText . '</a>';
+		return '{{a' . $titleAttr . ' href="' . $url . '"}}' . $anchorText . '{{/a}}';
 	}
 
 	private function isRelative($url)

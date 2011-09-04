@@ -36,12 +36,13 @@ A code example. It can be used to display code:
 	CODE:
 		CODE:
 			<?php // code goes here ?>
+			<i>html goes here</i>
 
 Code inline uses ´backticks´ but...
 
 	~~~
 		code can also use tildes and display html
-		todo
+		<a>element</a>
 	~~~
 
 Let's try a short definition list:
@@ -61,7 +62,7 @@ This is another paragraph with an [email link] [mail@example.com].
 
 Let's end with code indented:
 
-	code example
+	code example with <b>html</b> in it
 
 The link definitions below disappear.
 

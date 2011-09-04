@@ -17,7 +17,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function noBlankLineNecessaryBefore()
 	{
 		$text = "not a paragraph\n* an item\n* other item\n\nparagraph";
-		$html = "not a paragraph\n<ul>\n* an item\n* other item\n</ul>\n\nparagraph";
+		$html = "not a paragraph\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\nparagraph";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -27,7 +27,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function canBeUnindented()
 	{
 		$text = "\n\n* an item\n* other item\n\n";
-		$html = "\n\n<ul>\n* an item\n* other item\n</ul>\n\n";
+		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -37,7 +37,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function canBeIndented()
 	{
 		$text = "\n\n * an item\n * other item\n\n";
-		$html = "\n\n<ul>\n* an item\n* other item\n</ul>\n\n";
+		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -47,7 +47,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function indetationDoesntMatterIfPrecededByMoreThanOneBlankLine()
 	{
 		$text = "paragraph\n\n\n\t\t* an item\n\t\t* other item";
-		$html = "paragraph\n\n<ul>\n* an item\n* other item\n</ul>";
+		$html = "paragraph\n\n{{ul}}\n* an item\n* other item\n{{/ul}}";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -75,7 +75,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function canBeStartOfFile()
 	{
 		$text = " * an item\n * other item\n\n";
-		$html = "<ul>\n* an item\n* other item\n</ul>\n\n";
+		$html = "{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -85,7 +85,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function canBeEndOfFile()
 	{
 		$text = "\n\n * an item\n * other item";
-		$html = "\n\n<ul>\n* an item\n* other item\n</ul>";
+		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -108,13 +108,13 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 		$html =
 "
 
-<ul>
+{{ul}}
 * an item
 
   item continues
 
 * other item
-</ul>
+{{/ul}}
 
 ";
 
@@ -127,7 +127,7 @@ class Vidola_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	public function afterBlankLineItemMustBeIndentedOnFirstLine()
 	{
 		$text = "\n\n * an item\n\nitem continues\n\n";
-		$html = "\n\n<ul>\n* an item\n</ul>\n\nitem continues\n\n";
+		$html = "\n\n{{ul}}\n* an item\n{{/ul}}\n\nitem continues\n\n";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -152,17 +152,17 @@ paragraph";
 		$html =
 "paragraph
 
-<ul>
+{{ul}}
 * an item
 * other item
-</ul>
+{{/ul}}
 
 paragraph
 
-<ul>
+{{ul}}
 * an item
 * other item
-</ul>
+{{/ul}}
 
 paragraph";
 

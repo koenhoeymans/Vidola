@@ -17,7 +17,7 @@ class Vidola_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
 	public function transformsCodeBetweenBackticks()
 	{
 		$this->assertEquals(
-			'Text with <code>code</code> in between.',
+			'Text with {{code}}code{{/code}} in between.',
 			$this->codeInline->replace('Text with ´code´ in between.')
 		);
 	}

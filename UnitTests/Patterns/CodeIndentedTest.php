@@ -26,7 +26,7 @@ paragraph";
 		$html =
 "paragraph
 
-<code>code</code>
+{{code}}code{{/code}}
 
 paragraph";
 
@@ -50,9 +50,9 @@ paragraph";
 		$html =
 "paragraph
 
-<code>	a
+{{code}}	a
 b
-	c</code>
+	c{{/code}}
 
 paragraph";
 		
@@ -74,7 +74,7 @@ paragraph";
 		$html =
 "
 
-<code>code</code>
+{{code}}code{{/code}}
 
 ";
 		

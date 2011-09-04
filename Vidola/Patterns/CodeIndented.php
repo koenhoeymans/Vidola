@@ -30,7 +30,7 @@ class CodeIndented implements Pattern
 			function ($match)
 			{
 				$code = preg_replace("#(\n|^)(\t|    )#", "\${1}", $match['code']);
-				return $match[1] . "<code>" . $code . "</code>";
+				return $match[1] . "{{code}}" . $code . "{{/code}}";
 			},
 			$text
 		);

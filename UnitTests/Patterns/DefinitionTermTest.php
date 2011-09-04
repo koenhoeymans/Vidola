@@ -21,7 +21,7 @@ class Vidola_Patterns_DefinitionTermTest extends PHPUnit_Framework_TestCase
 	~explanation
 ';
 		$transformation =
-'<dt>term a</dt>
+'{{dt}}term a{{/dt}}
 	~explanation
 ';
 
@@ -39,8 +39,8 @@ term b:
 	~explanation
 ';
 		$transformation =
-'<dt>term a</dt>
-<dt>term b</dt>
+'{{dt}}term a{{/dt}}
+{{dt}}term b{{/dt}}
 	~explanation
 ';
 
@@ -58,7 +58,7 @@ term b:
 	~explanation
 ';
 		$transformation =
-'<dt>term a</dt>
+'{{dt}}term a{{/dt}}
 	~explanation
 	~explanation
 ';
@@ -78,8 +78,8 @@ term b:
 	~explanation
 ';
 		$transformation =
-'<dt>term a</dt>
-<dt>term b</dt>
+'{{dt}}term a{{/dt}}
+{{dt}}term b{{/dt}}
 	~explanation
 	~explanation
 ';
@@ -99,9 +99,9 @@ term b:
 	explanation
 ';
 		$transformation =
-'<dt>term a</dt>
+'{{dt}}term a{{/dt}}
 	explanation
-<dt>term b</dt>
+{{dt}}term b{{/dt}}
 	explanation
 ';
 

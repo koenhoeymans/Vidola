@@ -52,9 +52,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function pcreBacktrackLimitNeedsToBeSetToAHigherValueThanDefault()
 	{
-		$text = "a link <http://link>.\n\nSome code:\n\nCODE:\n<?php // code goes here ?>\n\nEnd of this sample.";
+		$text = "a link {{http://link}}.\n\nSome code:\n\nCODE:\n<?php // code goes here ?>\n\nEnd of this sample.";
 		$this->assertEquals(
-			"*a link <http://link>.\n\nSome code:\n\nCODE:\n<?php // code goes here ?>\n\nEnd of this sample.*",
+			"*a link {{http://link}}.\n\nSome code:\n\nCODE:\n<?php // code goes here ?>\n\nEnd of this sample.*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -64,9 +64,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function anElementInAStringIsLeftOut()
 	{
-		$text = "a<a>a</a>a";
+		$text = "a{{a}}a{{/a}}a";
 		$this->assertEquals(
-			"*a*<a>a</a>*a*",
+			"*a*{{a}}a{{/a}}*a*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -76,9 +76,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function anElementAtStartOfAStringIsLeftOut()
 	{
-		$text = "<a>a</a>text with an element";
+		$text = "{{a}}a{{/a}}text with an element";
 		$this->assertEquals(
-			"<a>a</a>*text with an element*",
+			"{{a}}a{{/a}}*text with an element*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -88,9 +88,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function anElementAtTheEndOfAStringIsLeftOut()
 	{
-		$text = "text with an<a>element</a>";
+		$text = "text with an{{a}}element{{/a}}";
 		$this->assertEquals(
-			"*text with an*<a>element</a>",
+			"*text with an*{{a}}element{{/a}}",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -100,9 +100,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function multipleElementsAreLeftOut()
 	{
-		$text = "this is<a>a</a>text with<b>two</b>elements";
+		$text = "this is{{a}}a{{/a}}text with{{b}}two{{/b}}elements";
 		$this->assertEquals(
-			"*this is*<a>a</a>*text with*<b>two</b>*elements*",
+			"*this is*{{a}}a{{/a}}*text with*{{b}}two{{/b}}*elements*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -112,9 +112,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function multipleIdenticalElementsAreLeftOut()
 	{
-		$text = "start<a>a</a>middle<a>a</a>end";
+		$text = "start{{a}}a{{/a}}middle{{a}}a{{/a}}end";
 		$this->assertEquals(
-			"*start*<a>a</a>*middle*<a>a</a>*end*",
+			"*start*{{a}}a{{/a}}*middle*{{a}}a{{/a}}*end*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -124,9 +124,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function differentNestedTagsAreLeftOut()
 	{
-		$text = "start<a>a<b>b</b>a</a>end";
+		$text = "start{{a}}a{{b}}b{{/b}}a{{/a}}end";
 		$this->assertEquals(
-			"*start*<a>a<b>b</b>a</a>*end*",
+			"*start*{{a}}a{{b}}b{{/b}}a{{/a}}*end*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -136,9 +136,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function sameNestedTagsAreLeftOut()
 	{
-		$text = "start<a>xx<a>yy<a>kk</a>ll</a>zz</a>end";
+		$text = "start{{a}}xx{{a}}yy{{a}}kk{{/a}}ll{{/a}}zz{{/a}}end";
 		$this->assertEquals(
-			"*start*<a>xx<a>yy<a>kk</a>ll</a>zz</a>*end*",
+			"*start*{{a}}xx{{a}}yy{{a}}kk{{/a}}ll{{/a}}zz{{/a}}*end*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -148,9 +148,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function attributesArePossibleOnOpeningTag()
 	{
-		$text = "start<a id=\"a\">a</a>end";
+		$text = "start{{a id=\"a\"}}a{{/a}}end";
 		$this->assertEquals(
-			"*start*<a id=\"a\">a</a>*end*",
+			"*start*{{a id=\"a\"}}a{{/a}}*end*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -160,9 +160,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function stringCanStartWithTag()
 	{
-		$text = "<a>a</a>end";
+		$text = "{{a}}a{{/a}}end";
 		$this->assertEquals(
-			"<a>a</a>*end*",
+			"{{a}}a{{/a}}*end*",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -172,9 +172,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function stringCanEndWithTag()
 	{
-		$text = "start<a>a</a>";
+		$text = "start{{a}}a{{/a}}";
 		$this->assertEquals(
-			"*start*<a>a</a>",
+			"*start*{{a}}a{{/a}}",
 			$this->replaceUntagged($text)
 		);
 	}
@@ -186,9 +186,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function matchTextBetweenSingleTag()
 	{
-		$text = "start<a>a</a>end";
+		$text = "start{{a}}a{{/a}}end";
 		$this->assertEquals(
-			"start<a>*a*</a>end",
+			"start{{a}}*a*{{/a}}end",
 			$this->replaceBetweenTags($text)
 		);
 	}
@@ -198,9 +198,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function matchTextBetweenSingleTagWithAttribute()
 	{
-		$text = "start<a id=\"a\">a</a>end";
+		$text = "start{{a id=\"a\"}}a{{/a}}end";
 		$this->assertEquals(
-			"start<a id=\"a\">*a*</a>end",
+			"start{{a id=\"a\"}}*a*{{/a}}end",
 			$this->replaceBetweenTags($text)
 		);
 	}
@@ -210,9 +210,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function matchTextBetweenTagThatIsEndOfString()
 	{
-		$text = "start<a>a\n\n</a>";
+		$text = "start{{a}}a\n\n{{/a}}";
 		$this->assertEquals(
-			"start<a>*a\n\n*</a>",
+			"start{{a}}*a\n\n*{{/a}}",
 			$this->replaceBetweenTags($text)
 		);
 	}
@@ -222,9 +222,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function matchTextBetweenTagThatIsStartOfString()
 	{
-		$text = "<a>a</a>end";
+		$text = "{{a}}a{{/a}}end";
 		$this->assertEquals(
-			"<a>*a*</a>end",
+			"{{a}}*a*{{/a}}end",
 			$this->replaceBetweenTags($text)
 		);
 	}
@@ -234,9 +234,9 @@ class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework
 	 */
 	public function matchTextBetweenMultipleTags()
 	{
-		$text = "start<a>a</a>middle<a>a</a>end";
+		$text = "start{{a}}a{{/a}}middle{{a}}a{{/a}}end";
 		$this->assertEquals(
-			"start<a>*a*</a>middle<a>*a*</a>end",
+			"start{{a}}*a*{{/a}}middle{{a}}*a*{{/a}}end",
 			$this->replaceBetweenTags($text)
 		);
 	}

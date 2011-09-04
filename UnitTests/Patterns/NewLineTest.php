@@ -20,7 +20,7 @@ class Vidola_Patterns_NewLineTest extends PHPUnit_Framework_TestCase
 "Some text
 Other text";
 		$html =
-"Some text<br />
+"Some text{{br /}}
 Other text";
 		$this->assertEquals($html, $this->newLine->replace($text));
 	}
@@ -34,7 +34,7 @@ Other text";
 "	Some text
 	Other text";
 		$html =
-"	Some text<br />
+"	Some text{{br /}}
 	Other text";
 		$this->assertEquals($html, $this->newLine->replace($text));		
 	}

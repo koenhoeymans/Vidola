@@ -27,9 +27,9 @@ Another paragraph.";
 		$html =
 "A paragraph.
 
-<block>
+{{block}}
 some text
-</block>
+{{/block}}
 
 Another paragraph.";
 
@@ -53,9 +53,9 @@ Another paragraph.";
 	$html =
 "A paragraph.
 
-<block>
+{{block}}
 some text
-</block>
+{{/block}}
 
 Another paragraph.";
 	
@@ -103,9 +103,9 @@ Another paragraph.";
 		$html =
 "	A paragraph.
 
-<block>
+{{block}}
 some text
-</block>
+{{/block}}
 
 	Another paragraph.";
 
@@ -129,9 +129,9 @@ Another paragraph.";
 		$html =
 "	A paragraph.
 
-<block>
+{{block}}
 some text
-</block>
+{{/block}}
 
 Another paragraph.";
 
@@ -155,9 +155,9 @@ Another paragraph.";
 		$html =
 "A paragraph.
 
-<block>
+{{block}}
 	some text
-</block>
+{{/block}}
 
 Another paragraph.";
 	
@@ -181,10 +181,10 @@ Another paragraph.";
 		$html =
 "A paragraph.
 
-<block>
+{{block}}
 some text
 continued on another line
-</block>
+{{/block}}
 
 Another paragraph.";
 
@@ -208,10 +208,10 @@ Another paragraph.";
 		$html =
 "A paragraph.
 
-<block>
+{{block}}
 some text
 continued on another line
-</block>
+{{/block}}
 
 Another paragraph.";
 
@@ -237,12 +237,12 @@ another paragraph";
 		$html =
 "A paragraph.
 
-<block>
+{{block}}
 a block
 
 BLOCK:
 	deeper nested block
-</block>
+{{/block}}
 
 another paragraph";
 
@@ -272,7 +272,7 @@ another paragraph";
 		$html =
 "A paragraph.
 
-<block>
+{{block}}
 a block
 
 block continued
@@ -281,7 +281,7 @@ BLOCK:
 	deeper nested block
 
 Block continued
-</block>
+{{/block}}
 
 another paragraph";
 
@@ -306,9 +306,9 @@ another paragraph";
 		$html =
 "A paragraph.
 
-<block class=\"block\">
+{{block class=\"block\"}}
 a block
-</block>
+{{/block}}
 
 another paragraph";
 

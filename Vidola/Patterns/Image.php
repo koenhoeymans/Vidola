@@ -22,7 +22,7 @@ class Image implements Pattern
 			function($match)
 			{
 				$alt = (isset($match[2])) ? "alt=\"$match[4]\" " : "";
-				return "<img " . $alt . "src=\"http://" . $match[1] . "\">";
+				return "{{img " . $alt . "src=\"http://" . $match[1] . "\"}}";
 			},
 			$text
 		);
@@ -38,7 +38,7 @@ class Image implements Pattern
 			function($match)
 			{
 				$alt = "alt=\"$match[2]\" ";
-				return "<img " . $alt . "src=\"http://" . $match[5] . "\">" . $match[3];
+				return "{{img " . $alt . "src=\"http://" . $match[5] . "\"}}" . $match[3];
 			},
 			$text
 		);

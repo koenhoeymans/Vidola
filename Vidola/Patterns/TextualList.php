@@ -41,7 +41,7 @@ class TextualList implements Pattern
 					"#(\n|^)" . $match['indentation'] . "#", "\${1}", $match['list']
 				);
 
-				return "$start<$list>\n" . $items . "\n</$list>";
+				return $start . "{{" . $list . "}}\n" . $items . "\n{{/" . $list . "}}";
 			},
 			$text
 		);

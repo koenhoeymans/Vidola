@@ -58,9 +58,9 @@ class Block implements Pattern
 				$contents = preg_replace("$\n$match[3]$", "\n", $match[4] . $match[5]);
 
 				return
-					"\n\n<" . $elementName . $classAttr . ">\n"
+					"\n\n{{" . $elementName . $classAttr . "}}\n"
 					. $contents
-					. "\n</$elementName>";
+					. "\n{{/" . $elementName . "}}";
 			},
 			$text
 		);

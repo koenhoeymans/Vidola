@@ -156,7 +156,7 @@ class TableOfContents implements Pattern
 			}
 		}
 
-		$list = "<ul>";
+		$list = "{{ul}}";
 		$listLevel = null;
 
 		foreach ($headers as $key => $header)
@@ -181,7 +181,7 @@ class TableOfContents implements Pattern
 			}
 
 			$ref = str_replace(' ', '_', $title);
-			$list .= "\n\t<li>\n\t\t<a href=\"$file#$ref\">$title</a>";
+			$list .= "\n\t{{li}}\n\t\t{{a href=\"$file#$ref\"}}$title{{/a}}";
 
 			if (isset($headers[$key+1]))
 			{
@@ -197,10 +197,10 @@ class TableOfContents implements Pattern
 				}
 			}
 
-			$list .= "\n\t</li>";
+			$list .= "\n\t{{/li}}";
 		}
 
-		$list .= "\n</ul>";
+		$list .= "\n{{/ul}}";
 
 		return $list;
 	}

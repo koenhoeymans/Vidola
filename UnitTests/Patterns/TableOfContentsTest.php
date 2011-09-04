@@ -46,11 +46,11 @@ paragraph";
 		$result = $this->toc->replace($text);
 
 		// then
-		$this->assertEquals("<ul>
-	<li>
-		<a href=\"#header\">header</a>
-	</li>
-</ul>
+		$this->assertEquals("{{ul}}
+	{{li}}
+		{{a href=\"#header\"}}header{{/a}}
+	{{/li}}
+{{/ul}}
 
 header
 ----
@@ -86,16 +86,16 @@ paragraph";
 
 		// then
 		$this->assertEquals(
-"<ul>
-	<li>
-		<a href=\"#header\">header</a>
-<ul>
-	<li>
-		<a href=\"#subheader\">subheader</a>
-	</li>
-</ul>
-	</li>
-</ul>
+"{{ul}}
+	{{li}}
+		{{a href=\"#header\"}}header{{/a}}
+{{ul}}
+	{{li}}
+		{{a href=\"#subheader\"}}subheader{{/a}}
+	{{/li}}
+{{/ul}}
+	{{/li}}
+{{/ul}}
 
 header
 ----
@@ -133,22 +133,22 @@ paragraph";
 
 		// then
 		$this->assertEquals(
-"<ul>
-	<li>
-		<a href=\"#header1a\">header1a</a>
-<ul>
-	<li>
-		<a href=\"#header2a\">header2a</a>
-	</li>
-	<li>
-		<a href=\"#header2b\">header2b</a>
-	</li>
-</ul>
-	</li>
-	<li>
-		<a href=\"#header1b\">header1b</a>
-	</li>
-</ul>
+"{{ul}}
+	{{li}}
+		{{a href=\"#header1a\"}}header1a{{/a}}
+{{ul}}
+	{{li}}
+		{{a href=\"#header2a\"}}header2a{{/a}}
+	{{/li}}
+	{{li}}
+		{{a href=\"#header2b\"}}header2b{{/a}}
+	{{/li}}
+{{/ul}}
+	{{/li}}
+	{{li}}
+		{{a href=\"#header1b\"}}header1b{{/a}}
+	{{/li}}
+{{/ul}}
 
 header
 ----
@@ -194,11 +194,11 @@ paragraph";
 
 paragraph
 
-<ul>
-	<li>
-		<a href=\"#subheader\">subheader</a>
-	</li>
-</ul>
+{{ul}}
+	{{li}}
+		{{a href=\"#subheader\"}}subheader{{/a}}
+	{{/li}}
+{{/ul}}
 
 subheader
 ===
@@ -250,11 +250,11 @@ paragraph";
 
 paragraph
 
-<ul>
-	<li>
-		<a href=\"#subheader\">subheader</a>
-	</li>
-</ul>
+{{ul}}
+	{{li}}
+		{{a href=\"#subheader\"}}subheader{{/a}}
+	{{/li}}
+{{/ul}}
 
 subheader
 ===
@@ -302,11 +302,11 @@ paragraph";
 
 		// then
 		$this->assertEquals(
-"<ul>
-	<li>
-		<a href=\"#header\">header</a>
-	</li>
-</ul>
+"{{ul}}
+	{{li}}
+		{{a href=\"#header\"}}header{{/a}}
+	{{/li}}
+{{/ul}}
 
 header
 ---
@@ -365,14 +365,14 @@ some text"
 
 		// then
 		$this->assertEquals(
-"<ul>
-	<li>
-		<a href=\"#header\">header</a>
-	</li>
-	<li>
-		<a href=\"Includedfile.html#included_header\">included header</a>
-	</li>
-</ul>
+"{{ul}}
+	{{li}}
+		{{a href=\"#header\"}}header{{/a}}
+	{{/li}}
+	{{li}}
+		{{a href=\"Includedfile.html#included_header\"}}included header{{/a}}
+	{{/li}}
+{{/ul}}
 
 header
 ----
@@ -432,16 +432,16 @@ some text"
 "level1
 ===
 
-<ul>
-	<li>
-		<a href=\"#level2\">level2</a>
-<ul>
-	<li>
-		<a href=\"Includedfile.html#level3\">level3</a>
-	</li>
-</ul>
-	</li>
-</ul>
+{{ul}}
+	{{li}}
+		{{a href=\"#level2\"}}level2{{/a}}
+{{ul}}
+	{{li}}
+		{{a href=\"Includedfile.html#level3\"}}level3{{/a}}
+	{{/li}}
+{{/ul}}
+	{{/li}}
+{{/ul}}
 
 level2
 ---
@@ -507,14 +507,14 @@ some text"
 
 		// then
 		$this->assertEquals(
-"<ul>
-	<li>
-		<a href=\"Includedfile1.html#level1a\">level1a</a>
-	</li>
-	<li>
-		<a href=\"Includedfile2.html#level1b\">level1b</a>
-	</li>
-</ul>
+"{{ul}}
+	{{li}}
+		{{a href=\"Includedfile1.html#level1a\"}}level1a{{/a}}
+	{{/li}}
+	{{li}}
+		{{a href=\"Includedfile2.html#level1b\"}}level1b{{/a}}
+	{{/li}}
+{{/ul}}
 
 paragraph",
 			$result
@@ -575,11 +575,11 @@ some text"
 
 		// then
 		$this->assertEquals(
-"<ul>
-	<li>
-		<a href=\"Subincludedfile.html#header\">header</a>
-	</li>
-</ul>
+"{{ul}}
+	{{li}}
+		{{a href=\"Subincludedfile.html#header\"}}header{{/a}}
+	{{/li}}
+{{/ul}}
 
 paragraph",
 			$result

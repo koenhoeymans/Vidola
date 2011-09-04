@@ -61,7 +61,7 @@ class DefinitionList implements Pattern
 				# only one blank line even when there are more
 				$start = ($match['start'] === '') ? '' : "\n\n";
 
-				return $start . "<dl>\n$contents\n</dl>" . $match['end'];
+				return $start . "{{dl}}\n$contents\n{{/dl}}" . $match['end'];
 			},
 			$text
 		);

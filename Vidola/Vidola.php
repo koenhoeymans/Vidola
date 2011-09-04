@@ -25,6 +25,11 @@ class Vidola
 		$patternList = $ogc->getInstance('Vidola\\Patterns\\PatternList');
 		$patternListFiller->fill($patternList, $config);
 
+		// adding processors
+		// -----------------
+		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\HtmlBuilder');
+		$htmlBuilder->addPostProcessor(new \Vidola\Processor\VidolaTagsToHtmlTags());
+
 		// set the source directory or file
 		// --------------------------------
 		$fileRetriever = $ogc->getInstance('Vidola\\Util\\FileRetriever');

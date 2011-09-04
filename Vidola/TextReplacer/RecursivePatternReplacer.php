@@ -24,7 +24,7 @@ class RecursivePatternReplacer
 	 * $match[2] = full element (including recursion) or end
 	 */
 	const untagged_text_regex =
-		"#(.*)(<(.(?! /))+>([^<]|(?R))+</.+>|<br />|$)#UsD";
+		"#(.*)({{(.(?! /))+}}([^{]|(?R))+{{/.+}}|{{br /}}|$)#UsD";
 
 	/**
 	 * $match[1] = opening tag
@@ -32,7 +32,7 @@ class RecursivePatternReplacer
 	 * $match[5] = closing tag
 	 */
 	const between_single_tags_regex =
-		"#(<([a-z0-9]+?)( [^>]+)?>)(.*?)(</\\2>)#sD";
+		"#({{([a-z0-9]+?)( [^}]+)?}})(.*?)({{/\\2}})#sD";
 
 	private $text;
 

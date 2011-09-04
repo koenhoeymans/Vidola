@@ -27,10 +27,10 @@ paragraph';
 		$transformation =
 'paragraph
 
-<dl>
+{{dl}}
 term:
 	explanation
-</dl>
+{{/dl}}
 
 paragraph';
 
@@ -49,10 +49,10 @@ paragraph';
 paragraph';
 
 		$transformation =
-'<dl>
+'{{dl}}
 term:
 	explanation
-</dl>
+{{/dl}}
 
 paragraph';
 
@@ -73,10 +73,10 @@ term:
 		$transformation =
 'paragraph
 
-<dl>
+{{dl}}
 term:
 	explanation
-</dl>';
+{{/dl}}';
 
 		$this->assertEquals($transformation, $this->dl->replace($text));
 	}
@@ -98,10 +98,10 @@ paragraph';
 		$transformation =
 'paragraph
 
-<dl>
+{{dl}}
 term:
 	explanation
-</dl>
+{{/dl}}
 
 paragraph';
 
@@ -156,7 +156,7 @@ paragraph';
 		$transformation =
 'paragraph
 
-<dl>
+{{dl}}
 term a:
 term b:
 term c:
@@ -167,7 +167,7 @@ term c:
 	~explanation y
 
 	Continuation of explanation.
-</dl>
+{{/dl}}
 
 paragraph';
 
@@ -193,13 +193,13 @@ paragraph';
 		$transformation =
 'paragraph
 
-<dl>
+{{dl}}
 term:
 	explanation
 
 other term:
 	explanation
-</dl>
+{{/dl}}
 
 paragraph';
 

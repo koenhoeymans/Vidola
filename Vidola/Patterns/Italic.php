@@ -14,7 +14,7 @@ class Italic implements Pattern
 	{
 		return preg_replace(
 			"#(?<= |\n)_(?! )(.+)(?<! )_(?!\w)#U",
-			"<i>\${1}</i>",
+			"{{i}}\${1}{{/i}}",
 			$text
 		);
 	}

@@ -17,7 +17,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsArePrecededByAnAsterisk()
 	{
 		$text = "\n\n * an item\n * other item\n\n";
-		$html = "\n\n<li>an item</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -29,7 +29,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsCanAlsoBePrecededByPlusSign()
 	{
 		$text = "\n\n + an item\n + other item\n\n";
-		$html = "\n\n<li>an item</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -41,7 +41,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsCanBePrecededByMinusSign()
 	{
 		$text = "\n\n - an item\n - other item\n\n";
-		$html = "\n\n<li>an item</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -53,7 +53,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsCanBePrecededWithNumbersFollowedByDot()
 	{
 		$text = "\n\n 1. an item\n 2. other item\n\n";
-		$html = "\n\n<li>an item</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -65,7 +65,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsCanBePrecededWithNumberSign()
 	{
 		$text = "\n\n # an item\n # other item\n\n";
-		$html = "\n\n<li>an item</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -77,7 +77,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function canBeUnindented()
 	{
 		$text = "\n\n* an item\n* other item\n\n";
-		$html = "\n\n<li>an item</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -89,7 +89,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsCanContinueUnindentedOnFollowingLine()
 	{
 		$text = "\n\n * an item\nitem continues\n * other item\n\n";
-		$html = "\n\n<li>an item\nitem continues</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item\nitem continues{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -101,7 +101,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function listItemsCanContinueIndentedOnFollowingLine()
 	{
 		$text = "\n\n\t* an item\n\titem continues\n\t* other item\n\n";
-		$html = "\n\n<li>an item\n\titem continues</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item\n\titem continues{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -113,7 +113,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function itemsCanContainWhiteLines()
 	{
 		$text = "\n\n * an item\n\n item continues\n * other item\n\n";
-		$html = "\n\n<li>an item\n\n item continues</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an item\n\n item continues{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -125,7 +125,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function afterWhiteLineItemMustBeIndentedOnFirstLine()
 	{
 		$text = "\n\n * an item\n\nitem doesnt continue\n\n";
-		$html = "\n\n<li>an item</li>\n\nitem doesnt continue\n\n";
+		$html = "\n\n{{li}}an item{{/li}}\n\nitem doesnt continue\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);
@@ -137,7 +137,7 @@ class Vidola_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function aListItemCanContainAsterisks()
 	{
 		$text = "\n\n * an *item*\n * other item\n\n";
-		$html = "\n\n<li>an *item*</li>\n<li>other item</li>\n\n";
+		$html = "\n\n{{li}}an *item*{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);

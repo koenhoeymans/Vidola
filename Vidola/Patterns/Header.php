@@ -50,6 +50,6 @@ class Header implements Pattern
 
 		$id = str_replace(' ', '_', $match[3]);
 
-		return $match[1] . "<h$level id=\"$id\">$match[3]</h$level>";
+		return $match[1] . "{{h$level id=\"$id\"}}$match[3]{{/h$level}}";
 	}
 }

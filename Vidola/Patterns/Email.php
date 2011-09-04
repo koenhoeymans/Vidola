@@ -33,15 +33,8 @@ class Email implements Pattern
 					$before = '';
 				}
 
-				return "$before<a href=\"mailto:$address\">$anchorText</a>";
+				return "$before{{a href=\"mailto:$address\"}}$anchorText{{/a}}";
 			},
-			$text
-		);
-		$anchorText = $match[1];
-		return "<a href=\"mailto:$match[4]\">$match[2]</a>";
-		return preg_replace(
-			"#\[([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})\]#i",
-			"<a href=\"mailto:\${1}\">\${1}</a>",
 			$text
 		);
 	}

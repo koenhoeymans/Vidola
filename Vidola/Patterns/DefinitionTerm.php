@@ -17,16 +17,16 @@ class DefinitionTerm implements Pattern
 			"#(?<=^|\n)(([\ \t]*)(.+)):((\n\\2.+)*?(\n\\2[\ \t]+))#",
 			function ($match)
 			{
-				return "$match[2]<dt>$match[3]</dt>$match[4]";
+				return "$match[2]{{dt}}$match[3]{{/dt}}$match[4]";
 			},
 			$text
 		);
 
 		$otherTermsOfDefinitionReplaced = preg_replace_callback(
-			"#(?<=</dt>\n)([^\ \t].*):(?=\n)#",
+			"#(?<={{/dt}}\n)([^\ \t].*):(?=\n)#",
 			function ($match)
 			{
-				return "<dt>$match[1]</dt>";
+				return "{{dt}}$match[1]{{/dt}}";
 			},
 			$firstTermOfDefinitionReplaced
 		);

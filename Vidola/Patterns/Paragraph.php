@@ -36,8 +36,17 @@ class Paragraph implements Pattern
 			)
 			(?<indentation>[ \t]*)					# indentation
 			(?<contents>
-			([^\s].*)								# first line
-			(\n\g{indentation}?[^\s].*)*			# following lines
+				(?(?=<)								# first line
+				<(?![^\s][a-z0-9]+ [a-z0-9 ]*>\n).*	# trying to avoid tags
+				|
+				[^\s].*)
+
+				(\n\g{indentation}?					# next lines
+				(?(?=<)
+				<(?![^\s][a-z0-9]+ [a-z0-9 ]*>\n).*
+				|
+				[^\s].*)
+				)*
 			)
 			(?=\n\n|\n$|$)							# after
 			@x',
@@ -47,7 +56,7 @@ class Paragraph implements Pattern
 				$paragraph = preg_replace("#(^|\n)[ \t]+#", "\${1}", $match['contents']);
 				$before = preg_replace("#\n\n\n*#", "\n\n", $match[1]);
 
-				return $before . "<p>" . $paragraph . "</p>";
+				return $before . "{{p}}" . $paragraph . "{{/p}}";
 			},
 			$text
 		);

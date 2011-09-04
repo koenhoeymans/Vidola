@@ -32,7 +32,7 @@ class ListItem implements Pattern
 			@x',
 			function($match)
 			{
-				return '<li>' . $match['content'] . '</li>';
+				return '{{li}}' . $match['content'] . '{{/li}}';
 			},
 			$text
 		);

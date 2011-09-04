@@ -27,9 +27,9 @@ Another paragraph.";
 		$html =
 "This is a paragraph.
 
-<div class=\"note\">
+{{div class=\"note\"}}
 This is a note.
-</div>
+{{/div}}
 
 Another paragraph.";
 
