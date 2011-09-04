@@ -17,6 +17,34 @@ Vidola syntax
 Vidola is a library to transform documents into HTML. It also defines a markup language 
 to use for such documents. Here I describe the markup.
 
+Raw HTML
+========
+
+Not everything is possible with the simple syntax rules Vidola uses. If you would need to
+you can add raw HTML to the text. Everything is allow but you have to keep one rule in
+mind: each pattern should still have the same form. Take a paragrap. It needs a blank line
+before and after its text. That means that you can add HTML like this
+
+	A short paragraph.
+
+	<div>
+
+	A paragraph withing manually added tags.
+
+	</div>
+
+	Note the blank lines.
+
+But not like this:
+
+	A short paragraph.
+
+	<div>
+	A paragraph withing manually added tags.
+	</div>
+
+	This won't work.
+
 
 Headings
 ========
