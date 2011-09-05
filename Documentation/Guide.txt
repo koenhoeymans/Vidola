@@ -45,6 +45,18 @@ But not like this:
 
 	This won't work.
 
+If the pattern is indented, as when you are writing a paragraph in a list item, the tags that
+surround it should also be indented.
+
+	* item a
+	* Item b has an extra paragraph.
+	
+	  <div>
+
+	  This paragraph is within div tags that need to be indented.
+
+	  </div>
+
 
 Headings
 ========

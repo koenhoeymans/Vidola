@@ -16,6 +16,12 @@ A paragraph containing <span>special</span> text.
 !note
 	<span>a note</span>
 
+	<div>
+
+	The note has a paragraph.
+
+	</div>
+
 </div>
 
 <div>
