@@ -4,7 +4,7 @@ require_once dirname(__FILE__)
 . DIRECTORY_SEPARATOR . '..'
 . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Patterns_CodeBlockTest extends PHPUnit_Framework_TestCase
+class Vidola_Patterns_CodeIndentedTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
@@ -79,5 +79,15 @@ paragraph";
 ";
 		
 		$this->assertEquals($html, $this->pattern->replace($code));		
+	}
+
+	/**
+	* @test
+	*/
+	public function angledBracketsAreReplacedWithEntities()
+	{
+		$code = "text\n\n\ta <tag>\n\n";
+		$html = "text\n\n{{code}}a &lt;tag&gt;{{/code}}\n\n";
+		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 }
