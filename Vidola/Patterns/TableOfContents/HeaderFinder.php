@@ -34,7 +34,7 @@ class HeaderFinder
 				'level' => $header[3]
 			);
 		}
-var_dump($headers);
+
 		return $headers;
 	}
 }
