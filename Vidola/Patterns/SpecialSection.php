@@ -8,7 +8,7 @@ namespace Vidola\Patterns;
 /**
  * @package Vidola
  */
-class Block implements Pattern
+class SpecialSection implements Pattern
 {
 	private $identifier;
 

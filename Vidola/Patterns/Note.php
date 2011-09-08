@@ -8,7 +8,7 @@ namespace Vidola\Patterns;
 /**
  * @package Vidola
  */
-class Note extends Block
+class Note extends SpecialSection
 {
 	/**
 	 * @param string $identifier
