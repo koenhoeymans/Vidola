@@ -8,7 +8,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->patternList = new \Vidola\Patterns\PatternList();
+		$this->patternList = new \Vidola\Pattern\PatternList();
 		$this->htmlBuilder = new \Vidola\TextReplacer\HtmlBuilder(
 			$this->patternList
 		);		
@@ -68,7 +68,7 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		// given
 		$text = 'a text with {{a}}tags{{/a}} in it';
-		$mockPattern = $this->getMock('\Vidola\Patterns\Pattern');
+		$mockPattern = $this->getMock('\Vidola\Pattern\Pattern');
 
 		// expect
 		$mockPattern
@@ -92,8 +92,8 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		// given
 		$text = 'some text';
-		$mockPatternA = $this->getMock('\Vidola\Patterns\Pattern');
-		$mockPatternB = $this->getMock('\Vidola\Patterns\Pattern');
+		$mockPatternA = $this->getMock('\Vidola\Pattern\Pattern');
+		$mockPatternB = $this->getMock('\Vidola\Pattern\Pattern');
 
 		// expect
 		$mockPatternA
@@ -117,8 +117,8 @@ class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		// given
 		$text = 'some text to test subpattern handling';
-		$mockPatternA = $this->getMock('\Vidola\Patterns\Pattern');
-		$mockPatternB = $this->getMock('\Vidola\Patterns\Pattern');
+		$mockPatternA = $this->getMock('\Vidola\Pattern\Pattern');
+		$mockPatternB = $this->getMock('\Vidola\Pattern\Pattern');
 
 		// expect
 		$mockPatternA

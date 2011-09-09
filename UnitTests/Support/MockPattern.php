@@ -2,7 +2,7 @@
 
 namespace Vidola\UnitTests\Support;
 
-class MockPattern implements \Vidola\Patterns\Pattern
+class MockPattern implements \Vidola\Pattern\Pattern
 {
 	public function replace($text)
 	{

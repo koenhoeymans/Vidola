@@ -36,7 +36,7 @@ class Vidola_Processor_LinkDefinitionCollectorTest extends PHPUnit_Framework_Tes
 
 		// then
 		$this->assertEquals(
-			new \Vidola\Patterns\LinkDefinition(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
 				'linkDefinition', 'http://example.com', 'title'
 			),
 			$this->collector->get('linkDefinition')
@@ -70,7 +70,7 @@ class Vidola_Processor_LinkDefinitionCollectorTest extends PHPUnit_Framework_Tes
 
 		// then
 		$this->assertEquals(
-			new \Vidola\Patterns\LinkDefinition(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
 				'linkDefinition', 'http://example.com', 'title'
 			),
 			$this->collector->get('linkDefinition')

@@ -5,9 +5,9 @@
  */
 namespace Vidola\Util;
 
-use Vidola\OutputBuilder\OutputBuilder,
-	Vidola\Patterns\Header,
-	Vidola\TextReplacer\TextReplacer;
+use Vidola\OutputBuilder\OutputBuilder;
+use Vidola\Pattern\Patterns\Header;
+use	Vidola\TextReplacer\TextReplacer;
 
 /**
  * @package Vidola

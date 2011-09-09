@@ -5,8 +5,8 @@
  */
 namespace Vidola\TextReplacer;
 
-use \Vidola\Patterns\Pattern;
-use \Vidola\Patterns\PatternList;
+use \Vidola\Pattern\Pattern;
+use \Vidola\Pattern\PatternList;
 
 // needed to avoid backtrack limit error for the regex
 ini_set('pcre.backtrack_limit', 10000000);

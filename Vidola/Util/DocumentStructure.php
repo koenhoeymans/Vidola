@@ -5,8 +5,8 @@
  */
 namespace Vidola\Util;
 
-use Vidola\Patterns\TableOfContents,
-	Vidola\Util\FileRetriever;
+use Vidola\Pattern\Patterns\TableOfContents;
+use Vidola\Util\FileRetriever;
 
 /**
  * @package Vidola

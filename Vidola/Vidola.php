@@ -22,7 +22,7 @@ class Vidola
 		// filling the pattern list with the patterns
 		// ------------------------------------------
 		$patternListFiller = $ogc->getInstance('Vidola\\Util\\PatternListFiller');
-		$patternList = $ogc->getInstance('Vidola\\Patterns\\PatternList');
+		$patternList = $ogc->getInstance('Vidola\\Pattern\\PatternList');
 		$patternListFiller->fill($patternList, $config);
 
 		// adding processors

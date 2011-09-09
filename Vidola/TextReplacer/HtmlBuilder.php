@@ -5,9 +5,9 @@
  */
 namespace Vidola\TextReplacer;
 
-use \Vidola\Patterns\Pattern;
-use \Vidola\Patterns\PatternList;
-use \Vidola\Processor\Processor;
+use Vidola\Pattern\Pattern;
+use Vidola\Pattern\PatternList;
+use Vidola\Processor\Processor;
 
 /**
  * @package vidola

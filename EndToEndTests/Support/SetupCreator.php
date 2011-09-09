@@ -9,7 +9,7 @@ class SetupCreator
 	public function createSetup($patterns)
 	{
 		$args = func_get_args();
-		$this->patternList = new \Vidola\Patterns\PatternList();
+		$this->patternList = new \Vidola\Pattern\PatternList();
 		$this->createPatternStructure($args);
 
 		return new \Vidola\TextReplacer\HtmlBuilder($this->patternList);
@@ -19,7 +19,7 @@ class SetupCreator
 	{
 		foreach($patterns as $patternArr)
 		{
-			$pattern = "\\Vidola\\Patterns\\" . ucfirst($patternArr['pattern']);
+			$pattern = "\\Vidola\\Pattern\\Patterns\\" . ucfirst($patternArr['pattern']);
 			$pattern = new $pattern();
 			$this->patternList->addRootPattern($pattern);
 			$this->addSubpatterns($pattern, $patternArr['subpatterns']);
@@ -30,7 +30,7 @@ class SetupCreator
 	{
 		foreach($subpatterns as $subpatternArr)
 		{
-			$subpattern = "\\Vidola\\Patterns\\" . ucfirst($subpatternArr['pattern']);
+			$subpattern = "\\Vidola\\Pattern\\Patterns\\" . ucfirst($subpatternArr['pattern']);
 			$subpattern = new $subpattern();
 			$this->patternList->addSubpattern(
 				$subpattern, $pattern
