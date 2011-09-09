@@ -47,6 +47,7 @@ class Vidola
 		$writer->setExtension('.html');
 
 		// choose the template
+		// -------------------
 		$template = $config->get('template') ?:
 						__DIR__
 						. DIRECTORY_SEPARATOR . 'Templates'
