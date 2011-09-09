@@ -3,12 +3,12 @@
 /**
  * @package Vidola
  */
-namespace Vidola\Util;
+namespace Vidola\Util\Config;
 
 /**
  * @package Vidola
  */
-class CommandLineIniConfig implements Config
+class CommandLineIniConfig implements \Vidola\Util\Config
 {
 	private $argv;
 

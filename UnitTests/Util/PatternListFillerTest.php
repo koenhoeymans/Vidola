@@ -22,7 +22,7 @@ class Vidola_Util_PatternListFillerTest extends PHPUnit_Framework_TestCase
 	public function handlesCircularDependencies()
 	{
 		$patternList = new \Vidola\Pattern\PatternList();
-		$config = new \Vidola\Util\CommandLineIniConfig(
+		$config = new \Vidola\Util\Config\CommandLineIniConfig(
 			array('root' => array('Bold'), 'Bold' => array('Italic'), 'Italic' => 'Bold'),
 			$this->dummyConfig
 		);
