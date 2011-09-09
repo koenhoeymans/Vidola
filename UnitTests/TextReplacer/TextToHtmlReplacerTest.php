@@ -4,12 +4,12 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..' 
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_TextReplacer_HtmlBuilderTest extends PHPUnit_Framework_TestCase
+class Vidola_TextReplacer_TextToHtmlReplacerTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
 		$this->patternList = new \Vidola\Pattern\PatternList();
-		$this->htmlBuilder = new \Vidola\TextReplacer\HtmlBuilder(
+		$this->htmlBuilder = new \Vidola\TextReplacer\TextToHtmlReplacer(
 			$this->patternList
 		);		
 	}

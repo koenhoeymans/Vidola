@@ -12,7 +12,7 @@ use Vidola\Processor\Processor;
 /**
  * @package vidola
  */
-class HtmlBuilder implements TextReplacer
+class TextToHtmlReplacer implements TextReplacer
 {
 	private $patternList;
 
