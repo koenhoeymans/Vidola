@@ -1,14 +1,15 @@
 <?php
 
 require_once dirname(__FILE__)
-	. DIRECTORY_SEPARATOR . '..' 
+	. DIRECTORY_SEPARATOR . '..'
+	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Processor_VidolaTagsToHtmlTagsTest extends PHPUnit_Framework_TestCase
+class Vidola_Processor_Processors_VidolaTagsToHtmlTagsTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->pattern = new \Vidola\Processor\VidolaTagsToHtmlTags();
+		$this->pattern = new \Vidola\Processor\Processors\VidolaTagsToHtmlTags();
 	}
 
 	/**

@@ -6,7 +6,7 @@
 namespace Vidola\Pattern\Patterns;
 
 use Vidola\Util\RelativeUrlBuilder;
-use Vidola\Processor\LinkDefinitionCollector;
+use Vidola\Processor\Processors\LinkDefinitionCollector;
 use Vidola\Pattern\Pattern;
 
 /**

@@ -10,7 +10,7 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	public function setup()
 	{
 		$this->linkDefinitions = $this->getMock(
-			'\\Vidola\\Processor\\LinkDefinitionCollector'
+			'\\Vidola\\Processor\\Processors\\LinkDefinitionCollector'
 		);
 		$this->relativeUrlBuilder = $this->getMock(
 			'\\Vidola\\Util\\RelativeUrlBuilder'

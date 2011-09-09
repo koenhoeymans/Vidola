@@ -1,14 +1,15 @@
 <?php
 
 require_once dirname(__FILE__)
-	. DIRECTORY_SEPARATOR . '..' 
+	. DIRECTORY_SEPARATOR . '..'
+	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Processor_LinkDefinitionCollectorTest extends PHPUnit_Framework_TestCase
+class Vidola_Processor_Processors_LinkDefinitionCollectorTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->collector = new \Vidola\Processor\LinkDefinitionCollector();
+		$this->collector = new \Vidola\Processor\Processors\LinkDefinitionCollector();
 	}
 
 	/**

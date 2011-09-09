@@ -3,7 +3,9 @@
 /**
  * @package Vidola
  */
-namespace Vidola\Processor;
+namespace Vidola\Processor\Processors;
+
+use Vidola\Processor\Processor;
 
 /**
  * @package Vidola

@@ -28,8 +28,12 @@ class Vidola
 		// adding processors
 		// -----------------
 		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\HtmlBuilder');
-		$htmlBuilder->addPostProcessor($ogc->getInstance('Vidola\\Processor\\VidolaTagsToHtmlTags'));
-		$htmlBuilder->addPreProcessor($ogc->getInstance('Vidola\\Processor\\LinkDefinitionCollector'));
+		$htmlBuilder->addPostProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
+		);
+		$htmlBuilder->addPreProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
+		);
 
 		// set the source directory or file
 		// --------------------------------
