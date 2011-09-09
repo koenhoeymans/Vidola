@@ -6,6 +6,7 @@
 namespace Vidola\Patterns;
 
 use Vidola\Util\RelativeUrlBuilder;
+use Vidola\Processor\LinkDefinitionCollector;
 
 /**
  * @package Vidola
@@ -80,6 +81,13 @@ class Hyperlink implements Pattern
 	private function replaceLinkDefinition($regexMatch)
 	{
 		$linkDef = $this->linkDefinitions->get($regexMatch[2]);
+
+		if (!$linkDef)
+		{
+			throw new \Exception('Following link definition not found: "['
+				. $regexMatch[2] . ']"'
+			);
+		}
 
 		$title = $linkDef->getTitle();
 		$url = $linkDef->getUrl();

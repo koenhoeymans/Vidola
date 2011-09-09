@@ -4,11 +4,11 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..' 
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_TestCase
+class Vidola_Processor_LinkDefinitionCollectorTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->collector = new \Vidola\Patterns\LinkDefinitionCollector();
+		$this->collector = new \Vidola\Processor\LinkDefinitionCollector();
 	}
 
 	/**
@@ -19,7 +19,7 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
 		$this->assertEquals(
 			"\n",
-			$this->collector->replace($text)
+			$this->collector->process($text)
 		);
 	}
 
@@ -32,7 +32,7 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
 
 		// when
-		$this->collector->replace($text);
+		$this->collector->process($text);
 
 		// then
 		$this->assertEquals(
@@ -53,7 +53,7 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 		$text = "text [linkDefinition]: http://example.com";
 		$this->assertEquals(
 			"text [linkDefinition]: http://example.com",
-			$this->collector->replace($text)
+			$this->collector->process($text)
 		);
 	}
 
@@ -66,7 +66,7 @@ class Vidola_Patterns_LinkDefinitionCollectorTest extends PHPUnit_Framework_Test
 		$text = "\n\t[linkDefinition]: http://example.com \"title\"\n";
 
 		// when
-		$this->collector->replace($text);
+		$this->collector->process($text);
 
 		// then
 		$this->assertEquals(

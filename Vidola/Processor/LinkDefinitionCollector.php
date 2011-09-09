@@ -3,16 +3,16 @@
 /**
  * @package Vidola
  */
-namespace Vidola\Patterns;
+namespace Vidola\Processor;
 
 /**
  * @package Vidola
  */
-class LinkDefinitionCollector implements Pattern
+class LinkDefinitionCollector implements Processor
 {
 	private $linkDefinitions = array();
 
-	public function replace($text)
+	public function process($text)
 	{
 		return preg_replace_callback(
 			"#(\n\s*|^\s*)\[(.+)\]: (.+?)( \"(.+)\")?(?=\n|$)#",
@@ -26,7 +26,7 @@ class LinkDefinitionCollector implements Pattern
 		$name = $linkDefinition[2];
 		$url = $linkDefinition[3];
 		$title = isset($linkDefinition[5]) ? $linkDefinition[5] : null;
-		$this->linkDefinitions[$name] = new LinkDefinition($name, $url, $title);
+		$this->linkDefinitions[$name] = new \Vidola\Patterns\LinkDefinition($name, $url, $title);
 	}
 
 	/**
