@@ -36,5 +36,4 @@ interface TextReplacer
 	 * @return string The replaced text.
 	 */
 	public function replace($text);
-	
 }
