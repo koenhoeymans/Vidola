@@ -6,12 +6,9 @@ class Vidola
 {
 	public static function run()
 	{
-		// the value objects
+		// configuration
 		// -----------------
-		$config = new Config\CommandLineIniConfig(
-			$_SERVER['argv'],
-			__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini'
-		);
+		$config = new Config\CommandLineConfig($_SERVER['argv']);
 
 		// setting up the object graph constructor
 		// ---------------------------------------
@@ -23,7 +20,7 @@ class Vidola
 		// ------------------------------------------
 		$patternListFiller = $ogc->getInstance('Vidola\\Util\\PatternListFiller');
 		$patternList = $ogc->getInstance('Vidola\\Pattern\\PatternList');
-		$patternListFiller->fill($patternList, $config);
+		$patternListFiller->fill($patternList, __DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini');
 
 		// adding processors
 		// -----------------

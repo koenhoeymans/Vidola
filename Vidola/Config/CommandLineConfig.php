@@ -8,13 +8,13 @@ namespace Vidola\Config;
 /**
  * @package Vidola
  */
-class CommandLineIniConfig implements Config
+class CommandLineConfig implements Config
 {
-	private $argv;
+	private $settings;
 
-	public function __construct(array $argv, $ini)
+	public function __construct(array $argv)
 	{
-		$this->settings = array_merge(parse_ini_file($ini), $this->parseArgv($argv));
+		$this->settings = $this->parseArgv($argv);
 	}
 
 	public function get($name)

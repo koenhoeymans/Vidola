@@ -30,22 +30,29 @@ class PatternListFiller
 	 * @param Config $config
 	 * @return PatternList
 	 */
-	public function fill(PatternList $patternList, Config $config)
+	public function fill(PatternList $patternList, $iniFile)
 	{
-		foreach ($config->get('root') as $pattern)
+		$patternTree = parse_ini_file($iniFile);
+
+		foreach ($patternTree['root'] as $pattern)
 		{
 			$patternList->addRootPattern($this->getPattern($pattern));
-			$this->addSubpatterns($pattern, $patternList, $config);
+			$this->addSubpatterns($pattern, $patternList, $patternTree);
 		}
 
 		$this->doneCombinations = array();
 
-		return $patternList;
+		return $patternTree;
 	}
 
-	private function addSubpatterns($pattern, PatternList $patternList, Config $config)
+	private function addSubpatterns($pattern, PatternList $patternList, array $patternTree)
 	{
-		foreach ((array) $config->get($pattern) as $subpattern)
+		if (!isset($patternTree[$pattern]))
+		{
+			return;
+		}
+
+		foreach ($patternTree[$pattern] as $subpattern)
 		{
 			if (in_array(array($pattern, $subpattern), $this->doneCombinations))
 			{
@@ -61,7 +68,7 @@ class PatternListFiller
 
 			if ($pattern != $subpattern)
 			{
-				$this->addSubpatterns($subpattern, $patternList, $config);
+				$this->addSubpatterns($subpattern, $patternList, $patternTree);
 			}
 		}
 	}
