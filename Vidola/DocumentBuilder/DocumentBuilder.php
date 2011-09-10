@@ -3,11 +3,13 @@
 /**
  * @package Vidola
  */
-namespace Vidola\Util;
+namespace Vidola\DocumentBuilder;
 
 use Vidola\OutputBuilder\OutputBuilder;
 use Vidola\Pattern\Patterns\Header;
 use	Vidola\TextReplacer\TextReplacer;
+use Vidola\Util\DocumentStructure;
+use Vidola\Util\FileRetriever;
 
 /**
  * @package Vidola

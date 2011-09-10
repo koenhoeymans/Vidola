@@ -58,7 +58,7 @@ class Vidola
 
 		// build the document(s)
 		// ---------------------
-		$documentBuilder = $ogc->getInstance('Vidola\\Util\\DocumentBuilder');
+		$documentBuilder = $ogc->getInstance('Vidola\\DocumentBuilder\\DocumentBuilder');
 		$documentBuilder->build($config->get('source'));
 	}
 
