@@ -16,7 +16,7 @@ class Vidola
 		// setting up the object graph constructor
 		// ---------------------------------------
 		$ogc = new \Vidola\Util\ObjectGraphConstructor();
-		$ogc->willUse('Vidola\\TextReplacer\\TextToHtmlReplacer');
+		$ogc->willUse('Vidola\\TextReplacer\\TextToHtmlReplacer\\TextToHtmlReplacer');
 		$ogc->willUse('Vidola\\OutputBuilder\\TemplateOutputBuilder');
 
 		// filling the pattern list with the patterns
@@ -27,7 +27,7 @@ class Vidola
 
 		// adding processors
 		// -----------------
-		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextToHtmlReplacer');
+		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextToHtmlReplacer\\TextToHtmlReplacer');
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
 		);

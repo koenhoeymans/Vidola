@@ -3,7 +3,7 @@
 /**
  * @package Vidola
  */
-namespace Vidola\TextReplacer;
+namespace Vidola\TextReplacer\TextToHtmlReplacer;
 
 use \Vidola\Pattern\Pattern;
 use \Vidola\Pattern\PatternList;

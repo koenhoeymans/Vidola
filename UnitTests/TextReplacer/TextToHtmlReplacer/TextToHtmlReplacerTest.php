@@ -1,15 +1,16 @@
 <?php
 
 require_once dirname(__FILE__)
-	. DIRECTORY_SEPARATOR . '..' 
+	. DIRECTORY_SEPARATOR . '..'
+	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_TextReplacer_TextToHtmlReplacerTest extends PHPUnit_Framework_TestCase
+class Vidola_TextReplacer_TextToHtmlReplacer_TextToHtmlReplacerTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
 		$this->patternList = new \Vidola\Pattern\PatternList();
-		$this->htmlBuilder = new \Vidola\TextReplacer\TextToHtmlReplacer(
+		$this->htmlBuilder = new \Vidola\TextReplacer\TextToHtmlReplacer\TextToHtmlReplacer(
 			$this->patternList
 		);		
 	}

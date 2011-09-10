@@ -1,15 +1,18 @@
 <?php
 
 require_once dirname(__FILE__)
-	. DIRECTORY_SEPARATOR . '..' 
+	. DIRECTORY_SEPARATOR . '..'
+	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_TextReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework_TestCase
+class Vidola_TextReplacer_TextToHtmlReplacer_RecursivePatternReplacerTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->untaggedTextRegex = \Vidola\TextReplacer\RecursivePatternReplacer::untagged_text_regex;
-		$this->betweenTagsRegex = \Vidola\TextReplacer\RecursivePatternReplacer::between_single_tags_regex;
+		$this->untaggedTextRegex =
+			\Vidola\TextReplacer\TextToHtmlReplacer\RecursivePatternReplacer::untagged_text_regex;
+		$this->betweenTagsRegex =
+			\Vidola\TextReplacer\TextToHtmlReplacer\RecursivePatternReplacer::between_single_tags_regex;
 		
 	}
 
