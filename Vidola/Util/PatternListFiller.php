@@ -7,7 +7,7 @@ namespace Vidola\Util;
 
 use Vidola\Pattern\PatternList;
 use Vidola\Util\ObjectGraphConstructor;
-use Vidola\Util\Config;
+use Vidola\Config\Config;
 
 /**
  * @package Vidola

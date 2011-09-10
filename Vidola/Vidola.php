@@ -8,7 +8,7 @@ class Vidola
 	{
 		// the value objects
 		// -----------------
-		$config = new Util\Config\CommandLineIniConfig(
+		$config = new Config\CommandLineIniConfig(
 			$_SERVER['argv'],
 			__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini'
 		);

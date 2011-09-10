@@ -1,7 +1,7 @@
 <?php
 
 require_once dirname(__FILE__)
-	. DIRECTORY_SEPARATOR . '..' 
+	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 class Vidola_Util_PatternListFillerTest extends PHPUnit_Framework_TestCase
@@ -22,7 +22,7 @@ class Vidola_Util_PatternListFillerTest extends PHPUnit_Framework_TestCase
 	public function handlesCircularDependencies()
 	{
 		$patternList = new \Vidola\Pattern\PatternList();
-		$config = new \Vidola\Util\Config\CommandLineIniConfig(
+		$config = new \Vidola\Config\CommandLineIniConfig(
 			array('root' => array('Bold'), 'Bold' => array('Italic'), 'Italic' => 'Bold'),
 			$this->dummyConfig
 		);
