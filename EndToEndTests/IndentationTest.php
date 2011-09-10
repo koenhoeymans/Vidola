@@ -28,6 +28,9 @@ class Vidola_EndToEndTests_IndentationTest extends PHPUnit_Framework_TestCase
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'Indentation.txt';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		$_SERVER['argv']['template'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
 		\Vidola\Vidola::run();

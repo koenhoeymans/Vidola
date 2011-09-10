@@ -25,9 +25,12 @@ class Vidola_EndToEndTests_HtmlTest extends PHPUnit_Framework_TestCase
 	{
 		// given
 		$_SERVER['argv']['source'] = __DIR__
-		. DIRECTORY_SEPARATOR . 'Support'
-		. DIRECTORY_SEPARATOR . 'HtmlTest.txt';
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'HtmlTest.txt';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		$_SERVER['argv']['template'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 	
 		// when
 		\Vidola\Vidola::run();
