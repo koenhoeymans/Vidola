@@ -4,7 +4,7 @@ Transformation test
 A regular paragraph with *emphasized* and _italic_ text in. It is followed by a list:
 
 * item, with *emphasized* text and escaped \*emphasized\* text
-* item
+* item, with **strong** text
 
 !note
 	A note can span

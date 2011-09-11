@@ -238,19 +238,24 @@ there, the address itself will be used.
 	CODE:
 		Mail me at my [email address][mail@example.com].
 
-Italic and emphasized text
-====================
+Italic, emphasized and important text
+==================================
 
 Words can be italicized by wrapping them between underscores. Underscores 
 in words are left as is. Underscores that span more than one word are allowed.
 
-	CODE:
-		A couple of _italicized words_.
+	A couple of _italicized words_.
 
 Emphasized text is placed between asterisks:
 
-	CODE:
-		Emphasized text is placed *between* asterisks.
+	Emphasized text is placed *between* asterisks.
+
+Important text is achieved by putting words between double asterisks:
+
+	A sentence with **important** text.
+
+!Note: Importance is chosen instead of strong importance to reflect the change coming with HTML5. See
+the [[section on changed elements http://www.w3.org/TR/html5-diff/#changed-elements]].
 
 
 Newlines
