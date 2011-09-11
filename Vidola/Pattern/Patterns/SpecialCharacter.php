@@ -10,17 +10,16 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class CodeInline implements Pattern
+class SpecialCharacter implements Pattern
 {
 	public function replace($text)
 	{
 		return preg_replace_callback(
-			'#´(.+)?´#',
+			"#(.*)(</?([a-z0-9]+)( [^\s]+)*>|\n|$)#iU",
 			function ($match)
 			{
-				$code = $match[1];
-				$code = htmlspecialchars($code, ENT_NOQUOTES, 'UTF-8');
-				return '{{code}}' . $code . '{{/code}}';
+				return htmlspecialchars($match[1], ENT_NOQUOTES, 'UTF-8', false)
+					. $match[2];
 			},
 			$text
 		);

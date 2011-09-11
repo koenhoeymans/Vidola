@@ -17,6 +17,14 @@ Vidola syntax
 Vidola is a library to transform documents into HTML. It also defines a markup language 
 to use for such documents. Here I describe the markup.
 
+Handling of special characters
+==============================
+
+As in the [[Markdown http://daringfireball.net/projects/markdown/syntax]] implementation
+the ampersand (&), greater than sign (>) and lesser than sign (>) are automatically converted to
+entities so you don't have to worry about that when you are writing. The ampersand is not replaced
+when it is part of an entity (except in code blocks).
+
 Raw HTML
 ========
 

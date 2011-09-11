@@ -19,11 +19,8 @@ class CodeWithTildes implements Pattern
 			function ($match)
 			{
 				$code = preg_replace("#\n$match[2](\s*.+)#", "\n\${1}", $match[3]);
-
-				return
-					'{{code}}' .
-					htmlentities($code) .
-					'{{/code}}';
+				$code = htmlspecialchars($code, ENT_NOQUOTES, 'UTF-8');
+				return '{{code}}' . $code . '{{/code}}';
 			},
 			$text
 		);
