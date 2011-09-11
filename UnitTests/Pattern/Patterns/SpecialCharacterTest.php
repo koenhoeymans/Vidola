@@ -46,7 +46,7 @@ class Vidola_Pattern_Patterns_SpecialCharacterTest extends PHPUnit_Framework_Tes
 	 */
 	public function tagsAreLeftAsIs()
 	{
-		$text = 'Contains <b>bold</b> text.';
+		$text = 'Contains <em>emphasized</em> text.';
 		$this->assertEquals($text, $this->pattern->replace($text));
 	}
 }

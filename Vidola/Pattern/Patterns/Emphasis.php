@@ -10,13 +10,13 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class Bold implements Pattern
+class Emphasis implements Pattern
 {
 	public function replace($text)
 	{
 		return preg_replace(
 			"#(?<=\s)\*(?![0-9]| )(.+)(?<! )\*(?!\w)#U",
-			"{{b}}\${1}{{/b}}",
+			"{{em}}\${1}{{/em}}",
 			$text
 		);
 	}

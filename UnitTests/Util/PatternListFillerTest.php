@@ -22,11 +22,11 @@ class Vidola_Util_PatternListFillerTest extends PHPUnit_Framework_TestCase
 		$patternListMock
 			->expects($this->once())
 			->method('addRootPattern')
-			->with(new \Vidola\Pattern\Patterns\Bold());
+			->with(new \Vidola\Pattern\Patterns\Emphasis());
 		$patternListMock
 			->expects($this->once())
 			->method('addSubPattern')
-			->with(new \Vidola\Pattern\Patterns\Italic(), new \Vidola\Pattern\Patterns\Bold());
+			->with(new \Vidola\Pattern\Patterns\Italic(), new \Vidola\Pattern\Patterns\Emphasis());
 		$dummyIni = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
 			. DIRECTORY_SEPARATOR . 'Support'

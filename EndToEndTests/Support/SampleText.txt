@@ -1,9 +1,9 @@
 Transformation test
 -------------------
 
-A regular paragraph with *bold* and _italic_ text in. It is followed by a list:
+A regular paragraph with *emphasized* and _italic_ text in. It is followed by a list:
 
-* item, with *bolded* text
+* item, with *emphasized* text and escaped \*emphasized\* text
 * item
 
 !note
