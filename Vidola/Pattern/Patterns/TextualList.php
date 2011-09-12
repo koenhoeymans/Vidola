@@ -26,11 +26,11 @@ class TextualList implements Pattern
 
 			(?<list>
 			(?<indentation>[ \t]*)			# indentation
-			([*+#-]|[0-9]+\.)				# list markers
+			([*+-]|[0-9]+\.)				# list markers
 			\ [^\s].*						# space and text
 			(\n								# continuation of list: newline
 			(\n\g{indentation}				# or two lines for paragraph
-			(\ |[*+#-]|[0-9]+\.)\ )?		# or new item 
+			(\ |[*+-]|[0-9]+\.)\ )?		# or new item 
 			.+)*
 			)
 			(?=\n\n|$)

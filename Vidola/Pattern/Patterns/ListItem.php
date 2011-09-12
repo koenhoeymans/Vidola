@@ -12,7 +12,7 @@ use Vidola\Pattern\Pattern;
  */
 class ListItem implements Pattern
 {
-	private $markers = "[*+#-]|[0-9]+\.";
+	private $markers = "[*+-]|[0-9]+\.";
 
 	public function replace($text)
 	{

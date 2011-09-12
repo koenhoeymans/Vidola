@@ -63,18 +63,6 @@ class Vidola_Pattern_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function listItemsCanBePrecededWithNumberSign()
-	{
-		$text = "\n\n # an item\n # other item\n\n";
-		$html = "\n\n{{li}}an item{{/li}}\n{{li}}other item{{/li}}\n\n";
-		$this->assertEquals(
-			$html, $this->list->replace($text)
-		);
-	}
-
-	/**
-	 * @test
-	 */
 	public function canBeUnindented()
 	{
 		$text = "\n\n* an item\n* other item\n\n";
