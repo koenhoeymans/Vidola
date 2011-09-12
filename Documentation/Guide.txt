@@ -194,6 +194,29 @@ The word 'note' is case insensitive. A note block is ended with a blank line
 followed by text equally or less indented.
 
 
+blockquote
+==========
+
+Blockquote are quoted text preceded by ´>´.
+
+	> this is a blockquote
+	> continues on the next line
+
+Lazy quoting is also possible.
+
+	> this is a blockquote
+	continues on the next line
+
+Blockquotes can contain other markup.
+
+	> this is a blockquote
+	>
+	> > within a blockquote
+	> > another blockquote
+	>
+	> notice the blank lines
+
+
 Links
 =====
 

@@ -62,6 +62,14 @@ This is another paragraph with an [email link] [mail@example.com]. It uses AT&T 
 Markdown manual. The ampersand is translated in http://url.com?a=1&b=2 but not in &copy;. Another special
 character is < and >: 4<5 or 4 < 5 should use entities.
 
+> a blockquote can contain a blockquote
+>
+> > a subblockquote
+>
+> and code
+>
+> 	> indented code for blockquote
+
 Let's end with code indented:
 
 	code example with <b>html</b> in it
