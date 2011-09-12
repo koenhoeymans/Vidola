@@ -12,6 +12,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 		return new \Vidola\Pattern\Patterns\Header();
 	}
 
+	// ------------ Setext style ------------
+
 	/**
 	 * @test
 	 */
@@ -209,6 +211,72 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "\n\n\ta header\n\t---\n\n\t\tanother header\n+++\n\n";
 		$html = "\n\n\t{{h1 id=\"a_header\"}}a header{{/h1}}\n\n\t\t{{h2 id=\"another_header\"}}another header{{/h2}}\n\n";
+		$this->assertEquals($html, $this->header()->replace($text));
+	}
+
+	// ------------ atx style ------------
+
+	/**
+	 * @test
+	 */
+	public function oneToSixHashesBeforeHeaderDeterminesHeaderLevel()
+	{
+		$text =
+"paragraph
+
+# level 1
+
+## level 2
+
+### level 3
+
+#### level 4
+
+##### level 5
+
+###### level 6
+
+paragraph";
+
+		$html =
+"paragraph
+
+<h1>level 1</h1>
+
+<h2>level 2</h2>
+
+<h3>level 3</h3>
+
+<h4>level 4</h4>
+
+<h5>level 5</h5>
+
+<h6>level 6</h6>
+
+paragraph";
+
+		$this->assertEquals($html, $this->header()->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function closingHashesAreOptional()
+	{
+		$text =
+"paragraph
+
+## level 2 #####
+
+paragraph";
+
+		$html =
+"paragraph
+
+<h2>level 2</h2>
+
+paragraph";
+
 		$this->assertEquals($html, $this->header()->replace($text));
 	}
 }

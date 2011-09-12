@@ -23,14 +23,42 @@ class Header implements Pattern
 
 	public function replace($text)
 	{
+		return $this->replaceSetext($this->replaceAtx($text));
+	}
+
+	private function replaceSetext($text)
+	{
 		return preg_replace_callback(
 			"#(\n\s*|^\s*)([-=+*^\#]{3,})?\n?\s*(.+)\n\s*((?<!\n\n)[-=+*^\#]{3,})(?=\n)#",
-			array($this, 'createHeaders'),
+			array($this, 'createSetextHeaders'),
 			$text
 		);
 	}
 
-	private function createHeaders($match)
+	private function replaceAtx($text)
+	{
+		return preg_replace_callback(
+			'@
+			(?<=^|\n)
+			(?<level>[#]{1,6})
+			\ (?<text>.+?)
+			(\ [#]+)?
+			(?=\n)
+			@x',
+			function ($match)
+			{
+				$level = strlen($match['level']);
+				$level = ($level > 5) ? 6 : $level;
+
+				return '<h' . $level . '>'
+					. $match['text']
+					. '</h' . $level . '>';
+			},
+			$text
+		);
+	}
+
+	private function createSetextHeaders($match)
 	{
 		foreach ($this->headerList as $level => $header)
 		{

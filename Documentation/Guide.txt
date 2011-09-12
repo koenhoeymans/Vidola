@@ -72,23 +72,23 @@ surround it should also be indented.
 	  </div>
 
 
-Headings
+Headers
 ========
 
-For all headings the following applies:
+[[Atx http://www.aaronsw.com/2002/atx/intro]] style headers are headers preceded
+by one or more dash signs. The number of them determines its level.
 
-	* It is preceded by a blank line
-	* Unless it is the start of the document
-	* They can be indented to improve readability
-	* They Are followed by a blank line
+	## level 2 header
 
-Headers are assigned a level in order of appearance. The first used markup will be 
-used as a level 1 header throughout the document.
+[[Setext http://docutils.sourceforge.net/mirror/setext.html]] style headers are
+supported too but are made a bit more powerful. They are assigned a level in order
+of appearance. The first used markup will be used as a level 1 header throughout
+the document.
 
 Allowed signs to mark headers are: -=+*^#. At least three such signs must be used and 
 they can appear before or before and after the header text.
 
-Examples of a valid header:
+Some examples will make this clear:
 
 	CODE:
 		---
