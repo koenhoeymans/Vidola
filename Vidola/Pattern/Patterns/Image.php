@@ -6,12 +6,20 @@
 namespace Vidola\Pattern\Patterns;
 
 use Vidola\Pattern\Pattern;
+use Vidola\Processor\Processors\LinkDefinitionCollector;
 
 /**
  * @package Vidola
  */
 class Image implements Pattern
 {
+	private $linkDefinitions;
+
+	public function __construct(LinkDefinitionCollector $linkDefinitionCollector)
+	{
+		$this->linkDefinitions = $linkDefinitionCollector;
+	}
+
 	public function replace($text)
 	{
 		return $this->replaceReference($this->replaceInline($text));
@@ -20,13 +28,33 @@ class Image implements Pattern
 	private function replaceInline($text)
 	{
 		return preg_replace_callback(
-			"#\[img: http://(.+)( ([\"\'])(.+)\\3)?]#U",
-			function($match)
+			'@
+			(?<begin>^|\ )
+			!\[(?<alt>.+)\]					# ![alternate text]
+			\(								# (
+			(?<path>[^\s]+)					# path
+			(\ ("|\')(?<title>.+)("|\'))?	# "optional title"
+			\)								# )
+			(?<end>\ |$)
+			@xU',
+		function($match)
+		{
+			$title = $match['title'];
+			if ($title !== '')
 			{
-				$alt = (isset($match[2])) ? "alt=\"$match[4]\" " : "";
-				return "{{img " . $alt . "src=\"http://" . $match[1] . "\"}}";
-			},
-			$text
+				$title = 'title="' . $match['title'] . '" ';
+			}
+
+			return
+			$match['begin']
+			. '{{img '
+			. 'alt="' . $match['alt'] . '" '
+			. $title
+			. 'src="' . $match['path'] . '"'
+			. '}}'
+			. $match['end'];
+		},
+		$text
 		);
 	}
 
@@ -35,21 +63,46 @@ class Image implements Pattern
 	 */
 	private function replaceReference($text)
 	{
-		$replaced = preg_replace_callback(
-			"#\[img: ([\"\'])(.+)\\1\]((.|\n)*\n)\[\\2\]: http://(.+)(\n|$)#U",
-			function($match)
-			{
-				$alt = "alt=\"$match[2]\" ";
-				return "{{img " . $alt . "src=\"http://" . $match[5] . "\"}}" . $match[3];
-			},
-			$text
-		);
+		$linkDefinitions = $this->linkDefinitions;
 
-		if ($replaced == $text)
+		return preg_replace_callback(
+			'@
+			(?<begin>^|\ )
+			!\[(?<alt>.+)\]					# ![alternate text]
+			\[(?<id>.+)\]					# [id]
+			(?<end>\ |$)
+			@xU',
+		function($match) use ($linkDefinitions)
 		{
-			return $replaced;
-		}
+			$linkDefinition = $linkDefinitions->get($match['id']);
 
-		return $this->replaceReference($replaced);
+			if (!$linkDefinition)
+			{
+				throw new \Exception('Following link definition not found: "['
+				. $regexMatch['id'] . ']"'
+				);
+			}
+
+			$title = $linkDefinition->getTitle();
+			if ($title)
+			{
+				$title = 'title="' . $title . '" ';
+			}
+			else
+			{
+				$title = '';
+			}
+				
+			return
+			$match['begin']
+			. '{{img '
+			. 'alt="' . $match['alt'] . '" '
+			. $title
+			. 'src="' . $linkDefinition->getUrl() . '"'
+			. '}}'
+			. $match['end'];
+		},
+		$text
+		);
 	}
 }

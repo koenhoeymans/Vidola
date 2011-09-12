@@ -257,6 +257,28 @@ Inline code is also possible with backticks:
 		You could write ´$this->foo´ for example.
 
 
+Images
+======
+
+The syntax for images follows the [[Markdown implementation http://daringfireball.net/projects/markdown/syntax#link]].
+The two styles are inline and reference.
+
+Inline images are written as follows:
+
+	![alternate text](link/to/image "optional title")
+
+The title can be between single and double quotes.
+
+Reference style images have the following syntax:
+
+	![alternate text][link id]
+
+The link id syntax is the same as with regular links. You can place the link
+definition anywhere in the text.
+
+	[link id]: link/to/image "optional title"
+
+
 Email
 =====
 

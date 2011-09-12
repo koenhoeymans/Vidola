@@ -9,54 +9,71 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->image = new \Vidola\Pattern\Patterns\Image();
+		$this->linkDefinitions = $this->getMock(
+			'\\Vidola\\Processor\\Processors\\LinkDefinitionCollector'
+		);
+		$this->image = new \Vidola\Pattern\Patterns\Image($this->linkDefinitions);
 	}
 
 	/**
 	 * @test
 	 */
-	public function anInlineImageIsPlacedOnItsOwnLineWithImgItsLocationAndAltTextBetweenSquareBrackets()
+	public function anInlineImageStartsWithAnExclamationMarkAndHasAltTextBetweenSquareBracketsFollowedByPathToImgBetweenRoundBrackets()
 	{
-		$text = "Image follows: [img: http://example.com/image.jpg \"example image\"]\n\nSee image above.";
-		$html = "Image follows: {{img alt=\"example image\" src=\"http://example.com/image.jpg\"}}\n\nSee image above.";
-		$this->assertEquals(
-			$html, $this->image->replace($text)
-		);
+		$text = "Image is ![alt text](http://example.com/image.jpg) in between.";
+		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$this->assertEquals($html, $this->image->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function alternateTextIsOptionalForInlineImages()
+	public function titleTextIsOptionalInSingleQuotes()
 	{
-		$text = "Image follows: [img: http://example.com/image.jpg]\n\nSee image above.";
-		$html = "Image follows: {{img src=\"http://example.com/image.jpg\"}}\n\nSee image above.";
-		$this->assertEquals(
-			$html, $this->image->replace($text)
-		);
+		$text = "Image is ![alt text](http://example.com/image.jpg 'title text') in between.";
+		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$this->assertEquals($html, $this->image->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function referenceStyleUsesAltTextToPlaceTheLinkElsewhere()
+	public function titleTextIsOptionalInDoubleQuotes()
 	{
-		$text = "Image follows: [img: \"example image\"]\n\nSee image above.\n[example image]: http://example.com/image.jpg\n";
-		$html = "Image follows: {{img alt=\"example image\" src=\"http://example.com/image.jpg\"}}\n\nSee image above.\n";
-		$this->assertEquals(
-			$html, $this->image->replace($text)
-		);
+		$text = "Image is ![alt text](http://example.com/image.jpg \"title text\") in between.";
+		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$this->assertEquals($html, $this->image->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function orderOfReferenceIsNotImportant()
+	public function referenceStyleHasSameAltTextButWithLinkReferenceBetweenSquareBrackets()
 	{
-		$text = "Image1: [img: \"image1\"]\nImage2: [img: \"image2\"]\n[image2]: http://e.com/img2.jpg\n[image1]: http://e.com/img1.jpg\n";
-		$html = "Image1: {{img alt=\"image1\" src=\"http://e.com/img1.jpg\"}}\nImage2: {{img alt=\"image2\" src=\"http://e.com/img2.jpg\"}}\n";
-		$this->assertEquals(
-			$html, $this->image->replace($text)
-		);
+		$this->linkDefinitions
+			->expects($this->once())
+			->method('get')->with('id')
+			->will($this->returnValue(
+				new \Vidola\Pattern\Patterns\LinkDefinition('id', 'http://example.com/image.jpg')));
+
+		$text = "Image is ![alt text][id] in between.";
+		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$this->assertEquals($html, $this->image->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function referenceStyleCanContainOptionalTitle()
+	{
+		$this->linkDefinitions
+			->expects($this->once())
+			->method('get')->with('id')
+			->will($this->returnValue(
+				new \Vidola\Pattern\Patterns\LinkDefinition('id', 'http://example.com/image.jpg', 'title')));
+
+		$text = "Image is ![alt text][id] in between.";
+		$html = "Image is {{img alt=\"alt text\" title=\"title\" src=\"http://example.com/image.jpg\"}} in between.";
+		$this->assertEquals($html, $this->image->replace($text));
 	}
 }
