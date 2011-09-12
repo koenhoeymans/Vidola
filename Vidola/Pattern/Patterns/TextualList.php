@@ -26,18 +26,19 @@ class TextualList implements Pattern
 
 			(?<list>
 			(?<indentation>[ \t]*)			# indentation
-			([*+-]|[0-9]+\.)				# list markers
+			(?<marker>[*+-]|([0-9]+|\#)\.)	# list markers
 			\ [^\s].*						# space and text
 			(\n								# continuation of list: newline
 			(\n\g{indentation}				# or two lines for paragraph
-			(\ |[*+-]|[0-9]+\.)\ )?		# or new item 
+			(\ |[*+-]|([0-9]+|\#)\.)\ )?	# or new item 
 			.+)*
 			)
 			(?=\n\n|$)
 			@x',
 			function($match)
 			{
-				$list = (preg_match("/([0-9]+\.|#)/", $match[4]) === 1) ? 'ol' : 'ul';
+				$list = (preg_match("/([0-9]+\.|#\.)/", $match['marker']) === 1)
+					? 'ol' : 'ul';
 				$start = preg_replace("#^(\n\n?)\n*#", "\${1}", $match['start']);
 				$items = preg_replace(
 					"#(\n|^)" . $match['indentation'] . "#", "\${1}", $match['list']

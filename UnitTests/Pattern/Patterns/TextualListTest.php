@@ -169,4 +169,34 @@ paragraph";
 
 		$this->assertEquals($html, $this->list->replace($text));
 	}
+
+	/**
+	 * @test
+	 */
+	public function orderedListsAreCreatedByNumberFollowedByDotAsListMarker()
+	{
+		$text = "not a paragraph\n1. an item\n2. other item\n\nparagraph";
+		$html = "not a paragraph\n{{ol}}\n1. an item\n2. other item\n{{/ol}}\n\nparagraph";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function orderedListsCanAlsoBeCreatedByHashSignFollowedByDot()
+	{
+		$text = "not a paragraph\n#. an item\n#. other item\n\nparagraph";
+		$html = "not a paragraph\n{{ol}}\n#. an item\n#. other item\n{{/ol}}\n\nparagraph";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function actualNumberDoesNotNeedToBeOneTwoThreeEtc()
+	{
+		$text = "not a paragraph\n15. an item\n52. other item\n\nparagraph";
+		$html = "not a paragraph\n{{ol}}\n15. an item\n52. other item\n{{/ol}}\n\nparagraph";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
 }

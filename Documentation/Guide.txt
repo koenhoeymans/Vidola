@@ -217,6 +217,26 @@ Blockquotes can contain other markup.
 	> notice the blank lines
 
 
+Lists
+=====
+
+For unordered lists you can use *, + or -.
+
+	+ an item
+	+ other item
+
+For ordered lists use a number followed by a dot.
+
+	1. First item
+	2. Second item
+
+The actual numbers used do not influence order. Instead of numbers you can also
+use the hash sign followed by a dot (inspired by [[Pandoc http://johnmacfarlane.net/pandoc/README.html#ordered-lists]].
+
+	#. First item
+	#. Second item
+
+
 Links
 =====
 
