@@ -39,4 +39,14 @@ Other text";
 	Other text";
 		$this->assertEquals($html, $this->newLine->replace($text));		
 	}
+
+	/**
+	 * @test
+	 */
+	public function doubleSpaceAtEndOfLineBecomesNewLine()
+	{
+		$text = "Some text before  \nand after double space";
+		$html = "Some text before{{br /}}\nand after double space";
+		$this->assertEquals($html, $this->newLine->replace($text));
+	}
 }

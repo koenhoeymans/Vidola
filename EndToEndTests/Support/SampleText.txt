@@ -60,7 +60,8 @@ term B:
 
 This is another paragraph with an [email link] [mail@example.com]. It uses AT&T as in the
 Markdown manual. The ampersand is translated in http://url.com?a=1&b=2 but not in &copy;. Another special
-character is < and >: 4<5 or 4 < 5 should use entities.
+character is < and >: 4<5 or 4 < 5 should use entities.  
+Previous line had two spaces for a line break.
 
 > a blockquote can contain a blockquote
 >
