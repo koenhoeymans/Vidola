@@ -5,7 +5,7 @@
  */
 namespace Vidola\Pattern\Patterns;
 
-use Vidola\Util\FileRetriever;
+use Vidola\Util\DocFileRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use Vidola\Pattern\Pattern;
 
@@ -18,14 +18,14 @@ class TableOfContents implements Pattern
 
 	private $headerFinder;
 
-	private $fileRetriever;
+	private $docFileRetriever;
 
 	public function __construct(
 		HeaderFinder $headerFinder,
-		FileRetriever $fileRetriever
+		DocFileRetriever $docFileRetriever
 	) {
 		$this->headerFinder = $headerFinder;
-		$this->fileRetriever = $fileRetriever;
+		$this->docFileRetriever = $docFileRetriever;
 	}
 
 	/**
@@ -80,7 +80,7 @@ class TableOfContents implements Pattern
 
 		foreach ($namesFromCurrentList as $fileToInclude)
 		{
-			$textOfFile = $this->fileRetriever->retrieveContent($fileToInclude);
+			$textOfFile = $this->docFileRetriever->retrieveContent($fileToInclude);
 			$fileList[$fileToInclude] = $textOfFile;
 
 			preg_match_all(

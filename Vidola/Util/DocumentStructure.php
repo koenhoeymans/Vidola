@@ -6,7 +6,7 @@
 namespace Vidola\Util;
 
 use Vidola\Pattern\Patterns\TableOfContents;
-use Vidola\Util\FileRetriever;
+use Vidola\Util\DocFileRetriever;
 
 /**
  * @package Vidola
@@ -17,7 +17,7 @@ class DocumentStructure
 
 	private $toc;
 
-	public function __construct(FileRetriever $fileRetriever, TableOfContents $toc)
+	public function __construct(DocFileRetriever $fileRetriever, TableOfContents $toc)
 	{
 		$this->fileRetriever = $fileRetriever;
 		$this->toc = $toc;

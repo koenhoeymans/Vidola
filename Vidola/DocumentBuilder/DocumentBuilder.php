@@ -9,7 +9,7 @@ use Vidola\OutputBuilder\OutputBuilder;
 use Vidola\Pattern\Patterns\Header;
 use	Vidola\TextReplacer\TextReplacer;
 use Vidola\Util\DocumentStructure;
-use Vidola\Util\FileRetriever;
+use Vidola\Util\DocFileRetriever;
 
 /**
  * @package Vidola
@@ -22,20 +22,20 @@ class DocumentBuilder
 
 	private $outputBuilder;
 
-	private $fileRetriever;
+	private $docFileRetriever;
 
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
 		OutputBuilder $outputBuilder,
 		Header $header,
-		FileRetriever $fileRetriever
+		DocFileRetriever $docFileRetriever
 	) {
 		$this->documentStructure = $documentStructure;
 		$this->textReplacer = $textReplacer;
 		$this->outputBuilder = $outputBuilder;
 		$this->headers = $header;
-		$this->fileRetriever = $fileRetriever;
+		$this->docFileRetriever = $docFileRetriever;
 	}
 
 	/**
@@ -60,7 +60,7 @@ class DocumentBuilder
 			$fileName = $fileOrDirectory;
 		}
 
-		$textToTransform = $this->fileRetriever->retrieveContent($fileName);
+		$textToTransform = $this->docFileRetriever->retrieveContent($fileName);
 
 		$this->headers->replace($textToTransform); // fill headers before toc but replace nothing
 

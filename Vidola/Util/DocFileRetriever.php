@@ -8,7 +8,7 @@ namespace Vidola\Util;
 /**
  * @package Vidola
  */
-class FileRetriever
+class DocFileRetriever
 {
 	private $sourceDir = '';
 
@@ -33,6 +33,6 @@ class FileRetriever
 			);
 		}
 
-		throw new \Exception('FileRetriever::retrieveContent() couldn\'t find ' . $file);
+		throw new \Exception('DocFileRetriever::retrieveContent() couldn\'t find ' . $file);
 	}
 }

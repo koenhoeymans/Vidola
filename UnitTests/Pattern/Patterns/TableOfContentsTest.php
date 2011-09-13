@@ -13,13 +13,13 @@ class Vidola_Pattern_Patterns_TableOfContentsTest extends PHPUnit_Framework_Test
 			$this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents\\HeaderFinder')
 					->disableOriginalConstructor()
 					->getMock();
-		$this->fileRetriever =
-			$this->getMockBuilder('\\Vidola\\Util\\FileRetriever')
+		$this->docFileRetriever =
+			$this->getMockBuilder('\\Vidola\\Util\\DocFileRetriever')
 					->disableOriginalConstructor()
 					->getMock();
 		$this->toc = new \Vidola\Pattern\Patterns\TableOfContents(
 			$this->headerFinder,
-			$this->fileRetriever
+			$this->docFileRetriever
 		);
 	}
 
@@ -350,7 +350,7 @@ paragraph";
 			->will($this->returnValue(array(
 				array('title' => 'included header', 'level' => 1)
 			)));
-		$this->fileRetriever
+		$this->docFileRetriever
 			->expects($this->any())
 			->method('retrieveContent')
 			->with('Includedfile')
@@ -414,7 +414,7 @@ paragraph";
 			->will($this->returnValue(array(
 				array('title' => 'level3', 'level' => 3)
 			)));
-		$this->fileRetriever
+		$this->docFileRetriever
 			->expects($this->any())
 			->method('retrieveContent')
 			->with('Includedfile')
@@ -482,7 +482,7 @@ paragraph";
 			->will($this->returnValue(array(
 				array('title' => 'level1b', 'level' => 1)
 			)));
-		$this->fileRetriever
+		$this->docFileRetriever
 			->expects($this->at(0))
 			->method('retrieveContent')
 			->with('Includedfile1')
@@ -492,7 +492,7 @@ paragraph";
 
 some text"
 			));
-		$this->fileRetriever
+		$this->docFileRetriever
 			->expects($this->at(1))
 			->method('retrieveContent')
 			->with('Includedfile2')
@@ -549,7 +549,7 @@ paragraph";
 			->will($this->returnValue(array(
 				array('title' => 'header', 'level' => 1)
 			)));
-		$this->fileRetriever
+		$this->docFileRetriever
 			->expects($this->at(0))
 			->method('retrieveContent')
 			->with('Includedfile')
@@ -560,7 +560,7 @@ paragraph";
 
 paragraph"
 			));
-		$this->fileRetriever
+		$this->docFileRetriever
 			->expects($this->at(1))
 			->method('retrieveContent')
 			->with('Subincludedfile')
