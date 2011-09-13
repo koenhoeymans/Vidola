@@ -70,6 +70,8 @@ character is < and >: 4<5 or 4 < 5 should use entities.
 >
 > 	> indented code for blockquote
 
+ * * *
+
 Let's end with code indented:
 
 	code example with <b>html</b> in it

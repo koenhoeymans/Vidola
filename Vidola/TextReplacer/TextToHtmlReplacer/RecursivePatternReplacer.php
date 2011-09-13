@@ -24,7 +24,7 @@ class RecursivePatternReplacer
 	 * $match[2] = full element (including recursion) or end
 	 */
 	const untagged_text_regex =
-		"#(.*)({{(.(?! /))+}}([^{]|(?R))+{{/.+}}|{{br /}}|$)#UsD";
+		"#(.*)({{(.(?! /))+}}([^{]|(?R))+{{/.+}}|{{br /}}|{{hr /}}|$)#UsD";
 
 	/**
 	 * $match[1] = opening tag

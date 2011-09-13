@@ -237,6 +237,19 @@ use the hash sign followed by a dot (inspired by [[Pandoc http://johnmacfarlane.
 	#. Second item
 
 
+Horizontal rules
+================
+
+Three or more hyphens, underscores or asterisks on its own line. Spacing is allowed
+but take not that if you start the line with four or more spaces it will become code.
+
+	* * *
+	---
+	 _ __
+
+All three will produce a horizontal rule.
+
+
 Links
 =====
 
