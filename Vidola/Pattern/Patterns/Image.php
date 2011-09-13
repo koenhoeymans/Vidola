@@ -51,7 +51,7 @@ class Image implements Pattern
 			. 'alt="' . $match['alt'] . '" '
 			. $title
 			. 'src="' . $match['path'] . '"'
-			. '}}'
+			. ' /}}'
 			. $match['end'];
 		},
 		$text
@@ -99,7 +99,7 @@ class Image implements Pattern
 			. 'alt="' . $match['alt'] . '" '
 			. $title
 			. 'src="' . $linkDefinition->getUrl() . '"'
-			. '}}'
+			. ' /}}'
 			. $match['end'];
 		},
 		$text

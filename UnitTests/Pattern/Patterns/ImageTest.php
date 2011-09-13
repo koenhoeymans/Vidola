@@ -21,7 +21,7 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 	public function anInlineImageStartsWithAnExclamationMarkAndHasAltTextBetweenSquareBracketsFollowedByPathToImgBetweenRoundBrackets()
 	{
 		$text = "Image is ![alt text](http://example.com/image.jpg) in between.";
-		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\" /}} in between.";
 		$this->assertEquals($html, $this->image->replace($text));
 	}
 
@@ -31,7 +31,7 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 	public function titleTextIsOptionalInSingleQuotes()
 	{
 		$text = "Image is ![alt text](http://example.com/image.jpg 'title text') in between.";
-		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\" /}} in between.";
 		$this->assertEquals($html, $this->image->replace($text));
 	}
 
@@ -41,7 +41,7 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 	public function titleTextIsOptionalInDoubleQuotes()
 	{
 		$text = "Image is ![alt text](http://example.com/image.jpg \"title text\") in between.";
-		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\" /}} in between.";
 		$this->assertEquals($html, $this->image->replace($text));
 	}
 
@@ -57,7 +57,7 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('id', 'http://example.com/image.jpg')));
 
 		$text = "Image is ![alt text][id] in between.";
-		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\"}} in between.";
+		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\" /}} in between.";
 		$this->assertEquals($html, $this->image->replace($text));
 	}
 
@@ -73,7 +73,7 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('id', 'http://example.com/image.jpg', 'title')));
 
 		$text = "Image is ![alt text][id] in between.";
-		$html = "Image is {{img alt=\"alt text\" title=\"title\" src=\"http://example.com/image.jpg\"}} in between.";
+		$html = "Image is {{img alt=\"alt text\" title=\"title\" src=\"http://example.com/image.jpg\" /}} in between.";
 		$this->assertEquals($html, $this->image->replace($text));
 	}
 }

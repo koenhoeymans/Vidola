@@ -13,7 +13,7 @@ multiple lines. It can contain a [[http://link]]. Let's create a note in a note:
 	!note
 		a subnote with a list
 
-		* item
+		* item with an ![image test](http://example.com "example image")
 		* item
 
 	And now we're in our parent note again.
