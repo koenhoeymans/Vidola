@@ -345,7 +345,19 @@ the [[section on changed elements http://www.w3.org/TR/html5-diff/#changed-eleme
 Newlines
 ========
 
-Linebreaks are return based (new lines). 
+Newlines can be inserted by adding a double space at the end of the line. This
+follows Markdown convention. Writing documentation is a different context from
+writing forum o blog posts. I think there are less cases in documentation where
+having a hard line break would be beneficial. More technically oriented users
+will also have less problem adoption this, although admittedly it is
+counterintuitive.
+
+I've considered adopting the [[suggestion http://michelf.com/weblog/2009/markdown-sustainability/]]
+here in the comments of allowing hard line breaks in top-level paragraphs. But
+it adds complexity.
+
+Readability should be the prime goal and I believe that for writing documentation
+using two spaces has the most benefits in that regard.
 
 
 Table of contents

@@ -15,34 +15,6 @@ class Vidola_Pattern_Patterns_NewLineTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function aReturnOrNewLineAfterAndBeforeTextIsANewLine()
-	{
-		$text =
-"Some text
-Other text";
-		$html =
-"Some text{{br /}}
-Other text";
-		$this->assertEquals($html, $this->newLine->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function indentationIsPreserved()
-	{
-		$text =
-"	Some text
-	Other text";
-		$html =
-"	Some text{{br /}}
-	Other text";
-		$this->assertEquals($html, $this->newLine->replace($text));		
-	}
-
-	/**
-	 * @test
-	 */
 	public function doubleSpaceAtEndOfLineBecomesNewLine()
 	{
 		$text = "Some text before  \nand after double space";

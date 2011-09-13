@@ -14,16 +14,10 @@ class NewLine implements Pattern
 {
 	public function replace($text)
 	{
-		$hardRet = preg_replace(
-			"#(.+)(?<!  )[\r|\n](.+)#U",
-			"\${1}{{br /}}\n\${2}",
-			$text
-		);
-
 		$doubleSpace = preg_replace(
 			"#[ ]{2,}\n#",
 			"{{br /}}\n",
-			$hardRet
+			$text
 		);
 
 		return $doubleSpace;
