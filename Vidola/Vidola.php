@@ -26,6 +26,9 @@ class Vidola
 		// -----------------
 		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextToHtmlReplacer\\TextToHtmlReplacer');
 		$htmlBuilder->addPreProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\EmptyLineFixer')
+		);
+		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LineEndingsStandardizer')
 		);
 		$htmlBuilder->addPostProcessor(
