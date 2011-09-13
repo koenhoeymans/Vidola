@@ -25,6 +25,9 @@ class Vidola
 		// adding processors
 		// -----------------
 		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextToHtmlReplacer\\TextToHtmlReplacer');
+		$htmlBuilder->addPreProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\LineEndingsStandardizer')
+		);
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
 		);
