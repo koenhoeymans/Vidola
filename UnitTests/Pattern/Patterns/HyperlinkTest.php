@@ -5,7 +5,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_AlternativeHyperlinkTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
@@ -15,7 +15,7 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 		$this->relativeUrlBuilder = $this->getMock(
 			'\\Vidola\\Util\\RelativeUrlBuilder'
 		);
-		$this->hyperlink = new \Vidola\Pattern\Patterns\Hyperlink(
+		$this->hyperlink = new \Vidola\Pattern\Patterns\AlternativeHyperlink(
 			$this->linkDefinitions, $this->relativeUrlBuilder
 		);
 	}

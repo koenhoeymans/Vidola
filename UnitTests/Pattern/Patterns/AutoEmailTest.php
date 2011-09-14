@@ -5,7 +5,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_EmailTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_AutoEmailTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
