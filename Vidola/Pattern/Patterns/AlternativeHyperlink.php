@@ -12,7 +12,7 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class Hyperlink implements Pattern
+class AlternativeHyperlink implements Pattern
 {
 	private $linkDefinitions;
 
