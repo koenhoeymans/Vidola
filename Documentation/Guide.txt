@@ -315,12 +315,14 @@ definition anywhere in the text.
 Email
 =====
 
-An email link is created by placing the email adress in square brackets. The anchor text
-precedes this and is also placed within square brackets, but is optional. If it is not
-there, the address itself will be used.
+An automatic email link is created by placing the email address between a lesser than
+and greater than sign.
 
-	CODE:
-		Mail me at my [email address][mail@example.com].
+	Mail me at my <mail@example.com>.
+
+The regular link syntax allows to create an email link with anchor text.
+
+	This is [my email](mailto:mail@example.com).
 
 Italic, emphasized and important text
 ==================================

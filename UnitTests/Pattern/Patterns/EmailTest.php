@@ -9,31 +9,17 @@ class Vidola_Pattern_Patterns_EmailTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->email = new \Vidola\Pattern\Patterns\Email();
+		$this->email = new \Vidola\Pattern\Patterns\AutoEmail();
 	}
 
 	/**
 	 * @test
 	 */
-	public function anEmailAddressIsLinkedWhenPlacedBetweenAngledBrackets()
+	public function anEmailAddressIsLinkedWhenPlacedBetweenALesserThanAndGreaterThanSign()
 	{
-		$text = "Mail to [me@xmpl.com].";
+		$text = "Mail to <me@xmpl.com>.";
 		$html = "Mail to {{a href=\"mailto:me@xmpl.com\"}}me@xmpl.com{{/a}}.";
-		$this->assertEquals(
-			$html, $this->email->replace($text)
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function anchorTextPrecedesAddressInBrackets()
-	{
-		$text = "Mail to [my mail][me@xmpl.com].";
-		$html = "Mail to {{a href=\"mailto:me@xmpl.com\"}}my mail{{/a}}.";
-		$this->assertEquals(
-			$html, $this->email->replace($text)
-		);
+		$this->assertEquals($html, $this->email->replace($text));
 	}
 
 	/**
@@ -42,9 +28,6 @@ class Vidola_Pattern_Patterns_EmailTest extends PHPUnit_Framework_TestCase
 	public function withoutAngledBracketsNoLinkIsCreated()
 	{
 		$text = "Mail to me@example.com, it's an email address link.";
-		$html = "Mail to me@example.com, it's an email address link.";
-		$this->assertEquals(
-			$html, $this->email->replace($text)
-		);
+		$this->assertEquals($text, $this->email->replace($text));
 	}
 }
