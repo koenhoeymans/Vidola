@@ -133,48 +133,48 @@ line. Both are indented. The code block must be indented in respect to the previ
 lines. The actual code is indented after the 'code' word. The code block ends when
 a blank line is encountered with text that is equally or less indented as the 'code' word.
 
-	CODE:
-		This is a regular paragraph with samples of code blocks:
-	
-			CODE:
-			Note the 'CODE:' word. It is followed by the actual code.
+	This is a regular paragraph with samples of code blocks:
 
-			CODE:
+		CODE:
+		Note the 'CODE:' word. It is followed by the actual code.
 
-				White space is possible.
+		CODE:
 
-			CODE: This is another possibility.
-	
-		This is the next paragraph.
+			White space is possible.
+
+		CODE: This is another possibility.
+
+	This is the next paragraph.
 
 The code block must be preceded and followed by a blank line. Note that the 'code' word is case
 insensitive.
 
 Another option is to write code between two lines of three tildes.
 
-	code:
-		~~~
-		this is also treated as code
-		~~~
+	~~~
+	this is also treated as code
+	~~~
 
 Actually, what is after those three tildes doesn't matter, so you could just as well write:
 
-	code:
-		~~~ code ~~~
+	~~~ code ~~~
 
-		this is also treated as code
+	this is also treated as code
 
-		~~~~~~~~~~~~
+	~~~~~~~~~~~~
 
 This type of code doesn't need to be indented. When you need to write three tildes as code
 you'll have to indent it though:
 
-	code:
-		~~~ code ~~~
-			~~~
-			meta code example
-			~~~
-		~~~~~~~~~~~~
+	~~~ code ~~~
+		~~~
+		meta code example
+		~~~
+	~~~~~~~~~~~~
+
+Inline code is also possible with backticks:
+
+	You could write ´$this->foo´ for example.
 
 
 Note
@@ -255,39 +255,35 @@ Links
 
 An url between double square brackets is automatically converted to a hyperlink. Thus
 
-	CODE:
-		[[http://www.mysite.com]]
+	[[http://www.mysite.com]]
 
 becomes
 
-	CODE:
-		<a href="http://www.mysite.com">http://www.mysite.com</a>
+	<a href="http://www.mysite.com">http://www.mysite.com</a>
 
 Optionally a title attribute can be specified:
 
-	CODE:
-		[[http://example.com "title"]]
+	[[http://example.com "title"]]
 
-Optionally anchor text is written before the link:
+Also optionally anchor text is written before the link:
 
-	CODE:
-		This is a [[link http://example.com]] in text.
+	This is a [[link http://example.com]] in text.
 
-A link reference is used to place the actual url somewhere else in your text. Note that
+Standard [Markdown link syntax][1] is also available.
+
+	(anchor text)[url "title text"]
+
+A link reference can be used to place the actual url somewhere else in your text. Note that
 single brackets are used. The link definition can contain the title attribute:
 
-	CODE:
-		This is a [link] [1] in text.
+	This is a [link] [1] in text.
 
-		The link definition can be placed somewhere else on its own line, 
-		optionally indented.
+	The link definition can be placed somewhere else on its own line, 
+	optionally indented one to three spaces.
 
-			[1]: http://example.com "title"
+	[1]: http://example.com "title"
 
-Inline code is also possible with backticks:
-
-	CODE:
-		You could write ´$this->foo´ for example.
+ [1]: http://daringfireball.net/projects/markdown/syntax#link
 
 
 Images

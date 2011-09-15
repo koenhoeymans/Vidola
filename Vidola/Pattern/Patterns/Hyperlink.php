@@ -12,7 +12,7 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class AlternativeHyperlink implements Pattern
+class Hyperlink implements Pattern
 {
 	private $linkDefinitions;
 
@@ -28,36 +28,58 @@ class AlternativeHyperlink implements Pattern
 
 	public function replace($text)
 	{
-		// [[anchor text http://url "title"]]
-		// [[anchor text http://url]]
-		// [[http://url]]
-		// [[http://url "title"]]
-		return preg_replace_callback(
-			// [[anchor link "title"]]
-			"#\[\[(.+? )?([^\s\"]+)( \".+?\")?]\]#",
+		$replaced = preg_replace_callback(
+			'@
+			\[(?<anchor>.+?)\]			# anchor text
+			\(
+			(?<url>[^\s\"\']+)			# url
+			(							# title
+			\ 								# space
+			(?<quotes>"|\')					# single or double quotes
+			(?<title>.+?)					# title text
+			\g{quotes}
+			)?								# title is optional
+			\)
+			@x',
 			array($this, 'replaceLink'),
 			$text
 		);
+		$replaced = preg_replace_callback(
+			'@
+			\[(?<anchor>.+?)\]\ ?\[(?<id>.*?)\]
+			@x',
+			array($this, 'replaceLinkDefinition'),
+			$replaced
+		);
+
+		return $replaced;
 	}
 
 	private function replaceLink($regexMatch)
 	{
-		$url = $regexMatch[2];
+		$title = isset($regexMatch['title']) ? $regexMatch['title'] : null;
+		return $this->createLink($title, $regexMatch['url'], $regexMatch['anchor']);
+	}
 
-		$anchorText = substr($regexMatch[1], 0, -1);
-		if ($anchorText == '')
+	private function replaceLinkDefinition($regexMatch)
+	{
+		if ($regexMatch['id'] === '')
 		{
-			$anchorText = $url;
+			$regexMatch['id'] = $regexMatch['anchor'];
 		}
 
-		if (!isset($regexMatch[3]))
+		$linkDef = $this->linkDefinitions->get($regexMatch['id']);
+
+		if (!$linkDef)
 		{
-			$title = null;
+			throw new \Exception('Following link definition not found: "['
+				. $regexMatch['id'] . ']"'
+			);
 		}
-		else
-		{
-			$title = substr($regexMatch[3], 2, -1);
-		}
+
+		$title = $linkDef->getTitle();
+		$url = $linkDef->getUrl();
+		$anchorText = $regexMatch['anchor'];
 
 		return $this->createLink($title, $url, $anchorText);
 	}

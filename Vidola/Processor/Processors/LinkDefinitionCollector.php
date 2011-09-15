@@ -17,18 +17,30 @@ class LinkDefinitionCollector implements Processor
 	public function process($text)
 	{
 		return preg_replace_callback(
-			"#(\n\s*|^\s*)\[(.+)\]: (.+?)( \"(.+)\")?(?=\n|$)#",
+			'@
+			(^|\n)[ ]{0,3}							# new line, 0-3 spaces
+			(\[(?<id>.+)\]):[ ]	 					# id:space 
+			(<(?<url1>\S+)>|(?<url2>\S+))			# url or <url>
+			(										# "title"|\'title\'|(title)
+			\n?[\t ]*								# options: on new line, indented
+			("|\'|\()
+			(?<title>.+)
+			("|\'|\))
+			)?
+			(?=\n|$)
+			@x',
 			array($this, 'save'),
 			$text
 		);
 	}
 
-	private function save($linkDefinition)
+	private function save($definition)
 	{
-		$name = $linkDefinition[2];
-		$url = $linkDefinition[3];
-		$title = isset($linkDefinition[5]) ? $linkDefinition[5] : null;
-		$this->linkDefinitions[$name] = new \Vidola\Pattern\Patterns\LinkDefinition($name, $url, $title);
+		$id = $definition['id'];
+		$url = ($definition['url1']) ?: $definition['url2'];
+		$title = isset($definition['title']) ? $definition['title'] : null;
+		$this->linkDefinitions[$id] =
+			new \Vidola\Pattern\Patterns\LinkDefinition($id, $url, $title);
 	}
 
 	/**

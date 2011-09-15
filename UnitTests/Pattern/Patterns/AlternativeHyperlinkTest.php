@@ -68,73 +68,6 @@ class Vidola_Pattern_Patterns_AlternativeHyperlinkTest extends PHPUnit_Framework
 		);
 	}
 
-
-	/**
-	 * @test
-	 */
-	public function theUrlCanBePlacedElsewhereWhenLinkTextIsFollowedBySquareBracketedTitleAsReference()
-	{
-		$this->linkDefinitions
-			->expects($this->once())
-			->method('get')->with('1')
-			->will($this->returnValue(
-				new \Vidola\Pattern\Patterns\LinkDefinition('1', 'http://example.com')));
-		$text = "Visit [my site][1] for info.\n\n"
-			. "paragraph\n\n"
-			. "[1]: http://example.com\n";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n"
-			. "[1]: http://example.com\n";
-
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function titleTextCanComeFromLinkDefinition()
-	{
-		$this->linkDefinitions
-			->expects($this->once())
-			->method('get')->with('1')
-			->will($this->returnValue(
-				new \Vidola\Pattern\Patterns\LinkDefinition('1', 'http://example.com', 'title')));
-		$text = "Visit [my site][1] for info.\n\n"
-			. "paragraph\n\n"
-			. "[1]: http://example.com\n";
-		$html = "Visit {{a title=\"title\" href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n"
-			. "[1]: http://example.com\n";
-
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function linkDefinitionMayBePlacedSpaceAfterAnchorText()
-	{
-		$this->linkDefinitions
-			->expects($this->once())
-			->method('get')->with('1')
-			->will($this->returnValue(
-				new \Vidola\Pattern\Patterns\LinkDefinition('1', 'http://example.com')));
-		$text = "Visit [my site] [1] for info.\n\n"
-			. "paragraph\n\n"
-			. "[1]: http://example.com\n";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n"
-			. "[1]: http://example.com\n";
-
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
-	}
-
 	/**
 	 * @test
 	 */
@@ -180,6 +113,7 @@ class Vidola_Pattern_Patterns_AlternativeHyperlinkTest extends PHPUnit_Framework
 	 */
 	public function linkIsRelativeIfItContainsOnlyAlphaNumForwardSlashesBeforeAnOptionalNumberSign()
 	{
+$this->markTestIncomplete();
 		$this->relativeUrlBuilder
 			->expects($this->once())
 			->method('buildUrl')->with('x/6/f4#f')

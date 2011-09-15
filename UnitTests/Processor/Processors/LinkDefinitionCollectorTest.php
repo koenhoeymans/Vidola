@@ -17,7 +17,7 @@ class Vidola_Processor_Processors_LinkDefinitionCollectorTest extends PHPUnit_Fr
 	 */
 	public function linkDefintionCollectorRemovesLinkDefinitionsFromText()
 	{
-		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
+		$text = "\n[linkDefinition]: http://example.com\n";
 		$this->assertEquals(
 			"\n",
 			$this->collector->process($text)
@@ -30,7 +30,7 @@ class Vidola_Processor_Processors_LinkDefinitionCollectorTest extends PHPUnit_Fr
 	public function aLinkDefinitionIsSquareBracketsWithDefinitionFollowedBySemicolonAndUrl()
 	{
 		// given
-		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
+		$text = "\n[linkDefinition]: http://example.com\n";
 
 		// when
 		$this->collector->process($text);
@@ -38,12 +38,92 @@ class Vidola_Processor_Processors_LinkDefinitionCollectorTest extends PHPUnit_Fr
 		// then
 		$this->assertEquals(
 			new \Vidola\Pattern\Patterns\LinkDefinition(
-				'linkDefinition', 'http://example.com', 'title'
+				'linkDefinition', 'http://example.com'
 			),
 			$this->collector->get('linkDefinition')
 		);
 
-		$this->assertNull($this->collector->get('non existend definition'));
+		$this->assertNull($this->collector->get('non existent definition'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function aTitleAttributeCanBeSpecifiedBetweenDoubleQuotes()
+	{
+		// given
+		$text = "\n[linkDefinition]: http://example.com \"title\"\n";
+	
+		// when
+		$this->collector->process($text);
+	
+		// then
+		$this->assertEquals(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
+				'linkDefinition', 'http://example.com', 'title'
+			),
+			$this->collector->get('linkDefinition')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function aTitleAttributeCanBeSpecifiedBetweenSingleQuotes()
+	{
+		// given
+		$text = "\n[linkDefinition]: http://example.com 'title'\n";
+	
+		// when
+		$this->collector->process($text);
+	
+		// then
+		$this->assertEquals(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
+				'linkDefinition', 'http://example.com', 'title'
+			),
+			$this->collector->get('linkDefinition')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function aTitleAttributeCanBeSpecifiedBetweenDoubleParentheses()
+	{
+		// given
+		$text = "\n[linkDefinition]: http://example.com (title)\n";
+	
+		// when
+		$this->collector->process($text);
+	
+		// then
+		$this->assertEquals(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
+				'linkDefinition', 'http://example.com', 'title'
+			),
+			$this->collector->get('linkDefinition')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function urlCanBePlacedBetweenAngleBrackets()
+	{
+		// given
+		$text = "\n[linkDefinition]: <http://example.com>\n";
+	
+		// when
+		$this->collector->process($text);
+	
+		// then
+		$this->assertEquals(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
+				'linkDefinition', 'http://example.com'
+			),
+			$this->collector->get('linkDefinition')
+		);
 	}
 
 	/**
@@ -51,9 +131,9 @@ class Vidola_Processor_Processors_LinkDefinitionCollectorTest extends PHPUnit_Fr
 	 */
 	public function aLinkDefinitionMustBePlacedOnItsOwnLine()
 	{
-		$text = "text [linkDefinition]: http://example.com";
+		$text = "\ntext [linkDefinition]: http://example.com\n";
 		$this->assertEquals(
-			"text [linkDefinition]: http://example.com",
+			"\ntext [linkDefinition]: http://example.com\n",
 			$this->collector->process($text)
 		);
 	}
@@ -61,15 +141,25 @@ class Vidola_Processor_Processors_LinkDefinitionCollectorTest extends PHPUnit_Fr
 	/**
 	 * @test
 	 */
-	public function aLinkDefinitionCanBeIndented()
+	public function titleAttributeCanBePlacedOnNextLine()
 	{
-		// given
-		$text = "\n\t[linkDefinition]: http://example.com \"title\"\n";
-
-		// when
+		$text = "\n[linkDefinition]: http://example.com\n'title'\n";
 		$this->collector->process($text);
+		$this->assertEquals(
+			new \Vidola\Pattern\Patterns\LinkDefinition(
+				'linkDefinition', 'http://example.com', 'title'
+			),
+			$this->collector->get('linkDefinition')
+		);
+	}
 
-		// then
+	/**
+	 * @test
+	 */
+	public function titleAttributeCanBePlacedIndentedOnNextLine()
+	{
+		$text = "\n[linkDefinition]: http://example.com\n\t'title'\n";
+		$this->collector->process($text);
 		$this->assertEquals(
 			new \Vidola\Pattern\Patterns\LinkDefinition(
 				'linkDefinition', 'http://example.com', 'title'
