@@ -38,7 +38,7 @@ A code example. It can be used to display code:
 			<?php // code goes here ?>
 			<i>html goes here</i>
 
-Code inline uses ´backticks´ but...
+Code inline uses `backticks` but...
 
 	~~~
 		code can also use tildes and display html

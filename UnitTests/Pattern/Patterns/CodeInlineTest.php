@@ -19,7 +19,29 @@ class Vidola_Pattern_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'Text with {{code}}code{{/code}} in between.',
-			$this->codeInline->replace('Text with ´code´ in between.')
+			$this->codeInline->replace('Text with `code` in between.')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function canStartAndEndWithMultipleBackticks()
+	{
+		$this->assertEquals(
+			'Text with {{code}}code{{/code}} in between.',
+			$this->codeInline->replace('Text with ``code`` in between.')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function backtickCanBePlacedWithinMultipleBackticks()
+	{
+		$this->assertEquals(
+				'Text with {{code}}co`de{{/code}} in between.',
+		$this->codeInline->replace('Text with ``co`de`` in between.')
 		);
 	}
 }
