@@ -37,13 +37,19 @@ class Paragraph implements Pattern
 			(?<indentation>[ \t]*)					# indentation
 			(?<contents>
 				(?(?=<)								# first line
-				<(?![^\s][a-z0-9]+ [a-z0-9 ]*>\n).*	# trying to avoid tags
+				<									# trying to avoid tags
+				(?!\S[a-z0-9]*[a-z0-9 ]*>\n
+				|
+				p>
+				|
+				!--[.\n]*?-->
+				).*
 				|
 				[^\s].*)
 
 				(\n\g{indentation}?					# next lines
 				(?(?=<)
-				<(?![^\s][a-z0-9]+ [a-z0-9 ]*>\n).*
+				<(?!\S[a-z0-9]*[a-z0-9 ]*>\n).*
 				|
 				[^\s].*)
 				)*

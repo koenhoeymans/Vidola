@@ -180,37 +180,17 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function headerMustNotFollowABlankLine()
 	{
 		$text = "some text\na header\n---\n\n";
-		$html = "some text\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
+		$html = "some text\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
 		$this->assertEquals($html, $this->header()->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function headerCanBeIndentedWithTabs()
+	public function canBeIndentedByUptoThreeSpaces()
 	{
-		$text = "\n\n\ta header\n\t---\n\n";
-		$html = "\n\n\t{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function canBeIndentedBySpaces()
-	{
-		$text = "\n\n  a header\n  ---\n\n";
-		$html = "\n\n  {{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function multipleHeadersCanBeIndentedDifferently()
-	{
-		$text = "\n\n\ta header\n\t---\n\n\t\tanother header\n+++\n\n";
-		$html = "\n\n\t{{h1 id=\"a_header\"}}a header{{/h1}}\n\n\t\t{{h2 id=\"another_header\"}}another header{{/h2}}\n\n";
+		$text = "\n\n   a header\n   ---\n\n";
+		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
 		$this->assertEquals($html, $this->header()->replace($text));
 	}
 
@@ -241,17 +221,17 @@ paragraph";
 		$html =
 "paragraph
 
-<h1>level 1</h1>
+{{h1}}level 1{{/h1}}
 
-<h2>level 2</h2>
+{{h2}}level 2{{/h2}}
 
-<h3>level 3</h3>
+{{h3}}level 3{{/h3}}
 
-<h4>level 4</h4>
+{{h4}}level 4{{/h4}}
 
-<h5>level 5</h5>
+{{h5}}level 5{{/h5}}
 
-<h6>level 6</h6>
+{{h6}}level 6{{/h6}}
 
 paragraph";
 
@@ -273,7 +253,7 @@ paragraph";
 		$html =
 "paragraph
 
-<h2>level 2</h2>
+{{h2}}level 2{{/h2}}
 
 paragraph";
 

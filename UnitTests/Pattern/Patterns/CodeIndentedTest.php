@@ -27,7 +27,7 @@ paragraph";
 		$html =
 "paragraph
 
-{{code}}code{{/code}}
+{{pre}}{{code}}code{{/code}}{{/pre}}
 
 paragraph";
 
@@ -51,9 +51,9 @@ paragraph";
 		$html =
 "paragraph
 
-{{code}}	a
+{{pre}}{{code}}	a
 b
-	c{{/code}}
+	c{{/code}}{{/pre}}
 
 paragraph";
 		
@@ -75,7 +75,7 @@ paragraph";
 		$html =
 "
 
-{{code}}code{{/code}}
+{{pre}}{{code}}code{{/code}}{{/pre}}
 
 ";
 		
@@ -88,7 +88,7 @@ paragraph";
 	public function angledBracketsAreReplacedWithEntities()
 	{
 		$code = "text\n\n\ta <tag>\n\n";
-		$html = "text\n\n{{code}}a &lt;tag&gt;{{/code}}\n\n";
+		$html = "text\n\n{{pre}}{{code}}a &lt;tag&gt;{{/code}}{{/pre}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 }

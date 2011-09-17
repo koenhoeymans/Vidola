@@ -28,8 +28,10 @@ paragraph";
 		$html =
 "paragraph
 
-{{blockquote}}quote
-continued{{/blockquote}}
+{{blockquote}}
+quote
+continued
+{{/blockquote}}
 
 paragraph";
 
@@ -52,8 +54,10 @@ paragraph";
 		$html =
 "paragraph
 
-{{blockquote}}quote
-continued{{/blockquote}}
+{{blockquote}}
+quote
+continued
+{{/blockquote}}
 
 paragraph";
 		
@@ -79,11 +83,13 @@ paragraph";
 		$html =
 "paragraph
 
-{{blockquote}}quote
+{{blockquote}}
+quote
 
 > subquote
 
-quote continued{{/blockquote}}
+quote continued
+{{/blockquote}}
 
 paragraph";
 		

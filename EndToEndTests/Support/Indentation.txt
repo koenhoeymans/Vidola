@@ -10,8 +10,10 @@ Let's consider this as a 'lorum ipsum' paragraph.
 		A note within a note is possible.
 
 		 * item
+
 		   * a list within
 		   * a list
+
 		 * other item
 
 	note definition:

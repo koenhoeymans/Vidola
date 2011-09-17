@@ -20,7 +20,7 @@ class CodeWordCode implements Pattern
 			{
 				$code = preg_replace("#\n$match[2](\s*.+)#", "\n\${1}", $match[3]);
 				$code = htmlspecialchars($code, ENT_NOQUOTES, 'UTF-8');
-				return '{{code}}' . $code . '{{/code}}';
+				return '{{pre}}{{code}}' . $code . '{{/code}}{{/pre}}';
 			},
 			$text
 		);

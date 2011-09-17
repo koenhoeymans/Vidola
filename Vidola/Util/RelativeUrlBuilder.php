@@ -43,6 +43,11 @@ class RelativeUrlBuilder
 			$relPart = substr($relativeFile, $numberSignPos);
 		}
 
+		if (!$this->extension)
+		{
+			return $filePart;
+		}
+
 		return $filePart . '.' . $this->extension . $relPart;
 	}
 }

@@ -15,11 +15,10 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function noBlankLineNecessaryBefore()
+	public function blankLineNecessaryBefore()
 	{
 		$text = "not a paragraph\n* an item\n* other item\n\nparagraph";
-		$html = "not a paragraph\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\nparagraph";
-		$this->assertEquals($html, $this->list->replace($text));
+		$this->assertEquals($text, $this->list->replace($text));
 	}
 
 	/**
@@ -175,8 +174,8 @@ paragraph";
 	 */
 	public function orderedListsAreCreatedByNumberFollowedByDotAsListMarker()
 	{
-		$text = "not a paragraph\n1. an item\n2. other item\n\nparagraph";
-		$html = "not a paragraph\n{{ol}}\n1. an item\n2. other item\n{{/ol}}\n\nparagraph";
+		$text = "not a paragraph\n\n1. an item\n2. other item\n\nparagraph";
+		$html = "not a paragraph\n\n{{ol}}\n1. an item\n2. other item\n{{/ol}}\n\nparagraph";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -185,8 +184,8 @@ paragraph";
 	 */
 	public function orderedListsCanAlsoBeCreatedByHashSignFollowedByDot()
 	{
-		$text = "not a paragraph\n#. an item\n#. other item\n\nparagraph";
-		$html = "not a paragraph\n{{ol}}\n#. an item\n#. other item\n{{/ol}}\n\nparagraph";
+		$text = "not a paragraph\n\n#. an item\n#. other item\n\nparagraph";
+		$html = "not a paragraph\n\n{{ol}}\n#. an item\n#. other item\n{{/ol}}\n\nparagraph";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 
@@ -195,8 +194,8 @@ paragraph";
 	 */
 	public function actualNumberDoesNotNeedToBeOneTwoThreeEtc()
 	{
-		$text = "not a paragraph\n15. an item\n52. other item\n\nparagraph";
-		$html = "not a paragraph\n{{ol}}\n15. an item\n52. other item\n{{/ol}}\n\nparagraph";
+		$text = "not a paragraph\n\n15. an item\n52. other item\n\nparagraph";
+		$html = "not a paragraph\n\n{{ol}}\n15. an item\n52. other item\n{{/ol}}\n\nparagraph";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 }

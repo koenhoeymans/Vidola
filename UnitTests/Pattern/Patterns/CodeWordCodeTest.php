@@ -18,7 +18,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	public function codeBlockIsWordCodeCapitalisedAndIndentedFollowedByColon()
 	{
 		$code = "\n\n\tCODE:\n\t\tthe code\n\n";
-		$html = "\n\n{{code}}the code{{/code}}\n\n";
+		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 	
@@ -28,7 +28,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	public function angledBracketsAreReplacedWithEntities()
 	{
 		$code = "text\n\n\tCODE:\n\t\ta <tag>\n\n";
-		$html = "text\n\n{{code}}a &lt;tag&gt;{{/code}}\n\n";
+		$html = "text\n\n{{pre}}{{code}}a &lt;tag&gt;{{/code}}{{/pre}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 	
@@ -38,7 +38,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	public function codeBlocksKeepIndentationAsOutlined()
 	{
 		$code = "\n\n\tCODE:\n\t\tThis is code.\n\n\t\tThis is also code.\n\t\t\t\tThis line is indented.";
-		$html = "\n\n{{code}}This is code.\n\nThis is also code.\n\t\tThis line is indented.{{/code}}";
+		$html = "\n\n{{pre}}{{code}}This is code.\n\nThis is also code.\n\t\tThis line is indented.{{/code}}{{/pre}}";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 	
@@ -68,7 +68,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 		$html =
 "
 
-{{code}}This is code.{{/code}}
+{{pre}}{{code}}This is code.{{/code}}{{/pre}}
 
 	This line is not code.";
 	
@@ -81,7 +81,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	public function theCodeWordIsCaseInsensitive()
 	{
 		$code = "\n\n\tcoDe:\n\t\tthe code\n\n";
-		$html = "\n\n{{code}}the code{{/code}}\n\n";
+		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
 }

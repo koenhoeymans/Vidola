@@ -30,15 +30,17 @@ class Hyperlink implements Pattern
 	{
 		$replaced = preg_replace_callback(
 			'@
-			\[(?<anchor>.+?)\]			# anchor text
+			\[(?<anchor>					# anchor text
+				(\[(?2)*?\].*?|.+?)			
+			)\]
 			\(
-			(?<url>[^\s\"\']+)			# url
-			(							# title
-			\ 								# space
-			(?<quotes>"|\')					# single or double quotes
-			(?<title>.+?)					# title text
+			(<(?<url1>\S+)>|(?<url2>\S+))	# url or <url>
+			(								# title
+			[ ]									# space
+			(?<quotes>"|\')						# single or double quotes
+			(?<title>.+?)						# title text
 			\g{quotes}
-			)?								# title is optional
+			)?									# title is optional
 			\)
 			@x',
 			array($this, 'replaceLink'),
@@ -57,8 +59,9 @@ class Hyperlink implements Pattern
 
 	private function replaceLink($regexMatch)
 	{
+		$url = ($regexMatch['url1']) ?: $regexMatch['url2'];
 		$title = isset($regexMatch['title']) ? $regexMatch['title'] : null;
-		return $this->createLink($title, $regexMatch['url'], $regexMatch['anchor']);
+		return $this->createLink($title, $url, $regexMatch['anchor']);
 	}
 
 	private function replaceLinkDefinition($regexMatch)
@@ -88,7 +91,7 @@ class Hyperlink implements Pattern
 	{
 		if ($title)
 		{
-			$titleAttr = $titleAttr = " title=\"$title\"";
+			$titleAttr = " title=\"$title\"";
 		}
 		else
 		{
@@ -99,8 +102,11 @@ class Hyperlink implements Pattern
 		{
 			$url = $this->relativeUrlBuilder->buildUrl($url);
 		}
+		$url = str_replace('&', '&amp;', $url);
+		$url = str_replace('<', '&lt;', $url);
+		$url = str_replace('"', '&quot;', $url);
 
-		return '{{a' . $titleAttr . ' href="' . $url . '"}}' . $anchorText . '{{/a}}';
+		return '{{a href="' . $url . '"' . $titleAttr . '}}' . $anchorText . '{{/a}}';
 	}
 
 	private function isRelative($url)

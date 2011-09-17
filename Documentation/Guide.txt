@@ -236,6 +236,19 @@ use the hash sign followed by a dot (inspired by [[Pandoc http://johnmacfarlane.
 	#. First item
 	#. Second item
 
+A list needs a blank line before and after it. Nested lists are possible if you
+follow this rule.
+
+	* item
+	* item with a sublist
+
+	    * item in sublist
+	    * other item in sublist
+
+	* item in main list
+
+This is a difference with Markdown which requires only a blank line in the first
+level of the list.
 
 Horizontal rules
 ================
@@ -401,14 +414,19 @@ Library use
 command line use
 ================
 
+Run Vidola with `php RunVidola.php`. The following options are present:
 
-The following options are present:
-
-template:
+--template
 	Path to a template file. If not specified the default template is used.
 
-source:
+	Example: --template=/home/Koen/Vidola/Templates/Default.php
+
+--source
 	Source file to convert.
 
-target.dir:
+	Example: --source=/home/Koen/MyProject/Docs/Index.txt
+
+--target.dir:
 	The directory where the documentation files should be placed.
+
+	Example: --source=/home/Koen/MyProject/Docs/HTML/

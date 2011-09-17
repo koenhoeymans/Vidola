@@ -39,7 +39,7 @@ multiple lines. It can contain a <a href="http://link">http://link</a>. Let's cr
 <p>The next paragraph in this item.</p></li>
 
 <li>item, with a <a href="http://www.example.com">link reference</a></li>
-<li>other <a title="title" href="http://example.com">link reference</a></li>
+<li>other <a href="http://example.com" title="title">link reference</a></li>
 </ul>
 
 <div class="note">
@@ -48,14 +48,14 @@ multiple lines. It can contain a <a href="http://link">http://link</a>. Let's cr
 
 <p>A code example. It can be used to display code:</p>
 
-<code>CODE:
+<pre><code>CODE:
 	&lt;?php // code goes here ?&gt;
-	&lt;i&gt;html goes here&lt;/i&gt;</code>
+	&lt;i&gt;html goes here&lt;/i&gt;</code></pre>
 
 <p>Code inline uses <code>backticks</code> but...</p>
 
-<code>code can also use tildes and display html
-&lt;a&gt;element&lt;/a&gt;</code>
+<pre><code>code can also use tildes and display html
+&lt;a&gt;element&lt;/a&gt;</code></pre>
 
 <p>Let's try a short definition list:</p>
 
@@ -79,19 +79,23 @@ Markdown manual. The ampersand is translated in http://url.com?a=1&amp;b=2 but n
 character is &lt; and &gt;: 4&lt;5 or 4 &lt; 5 should use entities.<br />
 Previous line had two spaces for a line break.</p>
 
-<blockquote><p>a blockquote can contain a blockquote</p>
+<blockquote>
+<p>a blockquote can contain a blockquote</p>
 
-<blockquote>a subblockquote</blockquote>
+<blockquote>
+<p>a subblockquote</p>
+</blockquote>
 
 <p>and code</p>
 
-<code>&gt; indented code for blockquote</code></blockquote>
+<pre><code>&gt; indented code for blockquote</code></pre>
+</blockquote>
 
 <hr />
 
 <p>Let's end with code indented:</p>
 
-<code>code example with &lt;b&gt;html&lt;/b&gt; in it</code>
+<pre><code>code example with &lt;b&gt;html&lt;/b&gt; in it</code></pre>
 
 <p>The link definitions below disappear.</p>
 

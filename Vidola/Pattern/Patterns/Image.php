@@ -29,30 +29,24 @@ class Image implements Pattern
 	{
 		return preg_replace_callback(
 			'@
-			(?<begin>^|\ )
-			!\[(?<alt>.+)\]					# ![alternate text]
+			(?<=^|\n|\ )
+			!\[(?<alt>.*)\]					# ![alternate text]
 			\(								# (
 			(?<path>[^\s]+)					# path
 			(\ ("|\')(?<title>.+)("|\'))?	# "optional title"
 			\)								# )
-			(?<end>\ |$)
+			(?=\ |\n|$)
 			@xU',
 		function($match)
 		{
-			$title = $match['title'];
-			if ($title !== '')
-			{
-				$title = 'title="' . $match['title'] . '" ';
-			}
+			$title = isset($match['title']) ? 'title="' . $match['title'] . '" ' : '';
 
 			return
-			$match['begin']
-			. '{{img '
+			'{{img '
 			. 'alt="' . $match['alt'] . '" '
 			. $title
-			. 'src="' . $match['path'] . '"'
-			. ' /}}'
-			. $match['end'];
+			. 'src="' . str_replace('"', '&quot;', $match['path']) . '"'
+			. ' /}}';
 		},
 		$text
 		);

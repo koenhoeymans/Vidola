@@ -23,13 +23,19 @@ class Header implements Pattern
 
 	public function replace($text)
 	{
-		return $this->replaceSetext($this->replaceAtx($text));
+		return $this->replaceAtx($this->replaceSetext($text));
 	}
 
 	private function replaceSetext($text)
 	{
 		return preg_replace_callback(
-			"#(\n\s*|^\s*)([-=+*^\#]{3,})?\n?\s*(.+)\n\s*((?<!\n\n)[-=+*^\#]{3,})(?=\n)#",
+			'@
+			(?<start>(\n+|^)[ ]{0,3})
+			(?<pre>[-=+*^\#]{3,})?
+			\n?\s*(?<text>.+)\n\s*
+			(?<post>(?<!\n\n)[-=+*^\#]{3,})
+			(?=\n)
+			@x',
 			array($this, 'createSetextHeaders'),
 			$text
 		);
@@ -39,20 +45,22 @@ class Header implements Pattern
 	{
 		return preg_replace_callback(
 			'@
-			(?<=^|\n)
+			(?<start>(\n+|^)[ ]{0,3})
 			(?<level>[#]{1,6})
-			\ (?<text>.+?)
-			(\ [#]+)?
+			\ ?(?<text>.+?)
+			(\ ?[#]+)?
 			(?=\n)
 			@x',
 			function ($match)
 			{
 				$level = strlen($match['level']);
 				$level = ($level > 5) ? 6 : $level;
+				$start = ($match['start'] == '') ? '' : "\n\n";
 
-				return '<h' . $level . '>'
+				return $start
+					. '{{h' . $level . '}}'
 					. $match['text']
-					. '</h' . $level . '>';
+					. '{{/h' . $level . '}}';
 			},
 			$text
 		);
@@ -64,19 +72,20 @@ class Header implements Pattern
 		{
 			if ($header['after'] === null)
 			{
-				$this->headerList[$level]['before'] = substr($match[2], 0, 3);
-				$this->headerList[$level]['after'] = substr($match[4], 0, 3);
+				$this->headerList[$level]['before'] = substr($match['pre'], 0, 3);
+				$this->headerList[$level]['after'] = substr($match['post'], 0, 3);
 				break;
 			}
-			if ($header['before'] === substr($match[2], 0, 3)
-				&& $header['after'] === substr($match[4], 0, 3))
+			if ($header['before'] === substr($match['pre'], 0, 3)
+				&& $header['after'] === substr($match['post'], 0, 3))
 			{
 				break;
 			}
 		}
 
-		$id = str_replace(' ', '_', $match[3]);
+		$id = str_replace(' ', '_', $match['text']);
+		$start = ($match['start'] == '') ? '' : "\n\n";
 
-		return $match[1] . "{{h$level id=\"$id\"}}$match[3]{{/h$level}}";
+		return $start . "{{h$level id=\"$id\"}}" . $match['text'] . "{{/h$level}}";
 	}
 }
