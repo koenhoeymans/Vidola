@@ -9,7 +9,7 @@ class Vidola_Pattern_Patterns_AutoLinkTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->email = new \Vidola\Pattern\Patterns\AutoLink();
+		$this->pattern = new \Vidola\Pattern\Patterns\AutoLink();
 	}
 
 	/**
@@ -19,15 +19,25 @@ class Vidola_Pattern_Patterns_AutoLinkTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "Mail to <me@xmpl.com>.";
 		$html = "Mail to {{a href=\"mailto:me@xmpl.com\"}}me@xmpl.com{{/a}}.";
-		$this->assertEquals($html, $this->email->replace($text));
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function withoutAngledBracketsNoLinkIsCreated()
+	public function withoutAngledBracketsNoMailLinkIsCreated()
 	{
 		$text = "Mail to me@example.com, it's an email address link.";
-		$this->assertEquals($text, $this->email->replace($text));
+		$this->assertEquals($text, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function anUrlBetweenLesserThanAndreaterThanSignIsAutolinked()
+	{
+		$text = "Visit <http://example.com>.";
+		$html = "Visit {{a href=\"http://example.com\"}}http://example.com{{/a}}.";
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 }
