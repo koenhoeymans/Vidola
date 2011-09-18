@@ -10,7 +10,7 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class AutoEmail implements Pattern
+class AutoLink implements Pattern
 {
 	/**
 	 * http://www.regular-expressions.info/email.html
