@@ -38,10 +38,10 @@ class Vidola
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
 		);
 		$htmlBuilder->addPreProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\Escaper')
+			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
 		);
 		$htmlBuilder->addPostProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\EscapeRemover')
+			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostHandler')
 		);
 
 		// set the source directory or file

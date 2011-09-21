@@ -5,17 +5,17 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Processor_Processors_EscaperTest extends PHPUnit_Framework_TestCase
+class Vidola_Processor_Processors_SpecialCharacterPreHandlerTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
-		$this->pattern = new \Vidola\Processor\Processors\Escaper();
+		$this->pattern = new \Vidola\Processor\Processors\SpecialCharacterPreHandler();
 	}
 
 	/**
 	 * @test
 	 */
-	public function convertsEscapedCharacterToSomethingThatShouldNotInterfere()
+	public function convertsEscapedCharacterToSomethingThatShouldNotInterfereWithMarkup()
 	{
 		$text = "These \*words* were e\\\scaped.";
 		$html = "These ,,,,&#42;,,,,words* were e,,,,&#92;,,,,scaped.";

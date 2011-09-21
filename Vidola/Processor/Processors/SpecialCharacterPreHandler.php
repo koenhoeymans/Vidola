@@ -13,7 +13,7 @@ use Vidola\Processor\Processor;
  * Works in combination with EscapeRemover to hide the special meaning
  * of escaped characters.
  */
-class Escaper implements Processor
+class SpecialCharacterPreHandler implements Processor
 {
 	/**
 	 * Escapes characters preceded by backslash. Converts these to numeric entity.

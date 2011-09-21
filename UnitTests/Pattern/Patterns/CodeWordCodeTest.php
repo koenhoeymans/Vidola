@@ -21,17 +21,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
-	
-	/**
-	 * @test
-	 */
-	public function angledBracketsAreReplacedWithEntities()
-	{
-		$code = "text\n\n\tCODE:\n\t\ta <tag>\n\n";
-		$html = "text\n\n{{pre}}{{code}}a &lt;tag&gt;{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
-	}
-	
+
 	/**
 	 * @test
 	 */
@@ -41,7 +31,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 		$html = "\n\n{{pre}}{{code}}This is code.\n\nThis is also code.\n\t\tThis line is indented.{{/code}}{{/pre}}";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
-	
+
 	/**
 	 * @test
 	 */
@@ -51,7 +41,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 		$html = "\n\n\tCODE:\n\tthe code\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
-	
+
 	/**
 	 * @test
 	 */
@@ -74,7 +64,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
-	
+
 	/**
 	 * @test
 	 */

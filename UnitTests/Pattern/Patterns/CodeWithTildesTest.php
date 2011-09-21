@@ -94,14 +94,4 @@ code
 		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\nparagraph\n\n{{pre}}{{code}}code{{/code}}{{/pre}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($code));
 	}
-
-	/**
-	 * @test
-	 */
-	public function angledBracketsAreReplacedWithEntities()
-	{
-		$code = "text\n\n~~~\n\t\ta <tag>\n~~~\n\n";
-		$html = "text\n\n{{pre}}{{code}}a &lt;tag&gt;{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
-	}
 }

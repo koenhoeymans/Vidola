@@ -10,13 +10,13 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class CodeIndented implements Pattern
+class CodeIndented extends Code
 {
 	public function replace($text)
 	{
 		return preg_replace_callback(
 			'@
-			(
+			(?<pre_code>
 			(?<indentation>[ \t]*)
 			.*\n\n
 			)
@@ -26,13 +26,14 @@ class CodeIndented implements Pattern
 			)
 			(?=\n\n|$)
 			@x',
-			function ($match)
-			{
-				$code = preg_replace("#(\n|^)(\t|    )#", "\${1}", $match['code']);
-				$code = htmlspecialchars($code, ENT_NOQUOTES, 'UTF-8');
-				return $match[1] . "{{pre}}{{code}}" . $code . "{{/code}}{{/pre}}";
-			},
+			array($this, 'replacecode'),
 			$text
 		);
+	}
+
+	protected function replaceCode($match)
+	{
+		$code = preg_replace("#(\n|^)(\t|    )#", "\${1}", $match['code']);
+		return $match['pre_code'] . $this->createCodeInHtml($code);
 	}
 }

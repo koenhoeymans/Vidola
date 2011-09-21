@@ -10,23 +10,25 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class CodeInline implements Pattern
+class CodeInline extends Code
 {
 	public function replace($text)
 	{
 		return preg_replace_callback(
 			'@
-			(?<number_bt>[`]+)
-			(.+?)
-			\g{number_bt}
+			(?<=^|\ )
+			[`](?<extra_bt>([`])*)
+			(?<code>.+?)
+			\g{extra_bt}[`]
+			(?=\ |$)
 			@x',
-			function ($match)
-			{
-				$code = $match[2];
-				$code = htmlspecialchars($code, ENT_NOQUOTES, 'UTF-8');
-				return '{{code}}' . $code . '{{/code}}';
-			},
+			array($this, 'replaceCode'),
 			$text
 		);
+	}
+
+	protected function replaceCode($match)
+	{
+		return $this->createCodeInHtml($match['code'], false);
 	}
 }

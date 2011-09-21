@@ -24,6 +24,8 @@ class Vidola_EndToEndTests_EscapeTest extends PHPUnit_Framework_TestCase
 	 * See http://git.michelf.com/mdtest/, test 'backslash escapes'.
 	 * I've adapted the result of '\\>' which would produce invalid output
 	 * as '\>'.
+	 * I also believe that '\\' in an attribute value in a tag should result
+	 * into '\', not '\'.
 	 */
 	public function escapingPreventsSpecialMeaning()
 	{
