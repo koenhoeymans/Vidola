@@ -1,7 +1,7 @@
 MultidocumentTest
 =================
 
-table of contents:
+{table of contents}
 	depth: 2
 
 	SubDocument

@@ -35,8 +35,8 @@ class TableOfContents implements Pattern
 	{
 		$list = array();
 
-		preg_match_all(self::TOC_REGEX, $text, $matches, PREG_PATTERN_ORDER);
-		foreach ($matches[6] as $regexPartWithIncludeList)
+		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
+		foreach ($matches['pages'] as $regexPartWithIncludeList)
 		{
 			$files = $this->recursivelyGetFilesToInclude($regexPartWithIncludeList);
 			$list = array_merge($list, array_keys($files));
@@ -63,8 +63,8 @@ class TableOfContents implements Pattern
 					(\n(\t+|[ ]{4,}).+)+
 				)?
 			)
-			(?<text>([\n.]+)?)
 			(?=\n\n|$)
+			(?<text>(\n|.)+|$)
 			@x';
 	}
 
@@ -83,7 +83,7 @@ class TableOfContents implements Pattern
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
 
 		$fileList = $this->recursivelyGetFilesToInclude($regexmatch['pages']);
-		$textAfterToc = $regexmatch[9];
+		$textAfterToc = $regexmatch['text'];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
 		$toc = $this->buildToc($headerList, $maxDepth);
 
@@ -110,7 +110,7 @@ class TableOfContents implements Pattern
 
 			foreach ($tocBlocks as $toc)
 			{
-				$subFileList = $this->recursivelyGetFilesToInclude($toc[6]);
+				$subFileList = $this->recursivelyGetFilesToInclude($toc['pages']);
 				$fileList = array_merge($fileList, $subFileList);
 			}
 		}
@@ -228,8 +228,8 @@ class TableOfContents implements Pattern
 	{
 		$options = array();
 
-		preg_match_all("#\n(\t| )+(.+?)(?=\n|$)#", $text, $matches);
-		foreach ($matches[2] as $line)
+		preg_match_all("#($|\n)(\t| )*(.+?)(?=\n|$)#", $text, $matches);
+		foreach ($matches[3] as $line)
 		{
 			$option = explode(':', $line);
 			$options[$option[0]] = trim($option[1]);

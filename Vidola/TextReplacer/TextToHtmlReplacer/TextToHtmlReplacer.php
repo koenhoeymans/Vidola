@@ -55,6 +55,8 @@ class TextToHtmlReplacer implements TextReplacer
 	 */
 	public function replace($text)
 	{
+		$text = "\n\n" . $text;
+
 		foreach ($this->preProcessors as $processor)
 		{
 			$text = $processor->process($text);
@@ -72,6 +74,6 @@ class TextToHtmlReplacer implements TextReplacer
 			$text = $processor->process($text);
 		}
 
-		return $text;
+		return trim($text);
 	}
 }

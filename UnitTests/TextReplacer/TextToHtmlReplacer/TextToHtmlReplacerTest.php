@@ -41,7 +41,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_TextToHtmlReplacerTest extends PHPU
 		$preProcessor
 			->expects($this->once())
 			->method('process')
-			->with('short text');
+			->with("\n\nshort text");
 		$this->htmlBuilder->addPreProcessor($preProcessor);
 
 		$text = $this->htmlBuilder->replace('short text');
@@ -56,7 +56,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_TextToHtmlReplacerTest extends PHPU
 		$preProcessor
 		->expects($this->once())
 		->method('process')
-		->with('short text');
+		->with("\n\nshort text");
 		$this->htmlBuilder->addPostProcessor($preProcessor);
 	
 		$text = $this->htmlBuilder->replace('short text');
@@ -75,7 +75,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_TextToHtmlReplacerTest extends PHPU
 		$mockPattern
 			->expects($this->at(0))
 			->method('replace')
-			->with('a text with ');
+			->with("\n\na text with ");
 		$mockPattern
 			->expects($this->at(1))
 			->method('replace')
@@ -100,7 +100,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_TextToHtmlReplacerTest extends PHPU
 		$mockPatternA
 			->expects($this->at(0))
 			->method('replace')
-			->with('some text');
+			->with("\n\nsome text");
 		$mockPatternB
 			->expects($this->never())
 			->method('replace');
@@ -125,7 +125,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_TextToHtmlReplacerTest extends PHPU
 		$mockPatternA
 			->expects($this->at(0))
 			->method('replace')
-			->with('some text to test subpattern handling')
+			->with("\n\nsome text to test subpattern handling")
 			->will($this->returnValue('some text to test {{sub}}subpattern{{/sub}} handling'));
 		$mockPatternB
 			->expects($this->at(0))
