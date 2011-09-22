@@ -14,8 +14,6 @@ use Vidola\Pattern\Pattern;
  */
 class TableOfContents implements Pattern
 {
-	const TOC_REGEX = "#(?<=\n\n|^\n|^)((\t| )*)table of contents:((\n\\1(\t| ).+)*)(\n(\n\\1(\t| ).+)+)?(\n\n(?!\\1(\t| ))(.|\n)+|$)#";
-
 	private $headerFinder;
 
 	private $docFileRetriever;
@@ -47,10 +45,33 @@ class TableOfContents implements Pattern
 		return $list;
 	}
 
+	private function getRegex()
+	{
+		return
+			'@
+			(?<=\n\n|\n^|^)
+ 			{table\ of\ contents} 
+ 			(?<options>
+				(
+				\n
+					((\t+|[ ]{4,}).+)*
+				)?
+			)
+			(?<pages>
+				(
+				\n
+					(\n(\t+|[ ]{4,}).+)+
+				)?
+			)
+			(?<text>([\n.]+)?)
+			(?=\n\n|$)
+			@x';
+	}
+
 	public function replace($text)
 	{
 		return preg_replace_callback(
-			self::TOC_REGEX,
+			$this->getRegex(),
 			array($this, 'buildReplacement'),
 			$text
 		);
@@ -58,10 +79,10 @@ class TableOfContents implements Pattern
 
 	private function buildReplacement($regexmatch)
 	{
-		$options = $this->getOptions($regexmatch[3]);
+		$options = $this->getOptions($regexmatch['options']);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
 
-		$fileList = $this->recursivelyGetFilesToInclude($regexmatch[6]);
+		$fileList = $this->recursivelyGetFilesToInclude($regexmatch['pages']);
 		$textAfterToc = $regexmatch[9];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
 		$toc = $this->buildToc($headerList, $maxDepth);
@@ -84,7 +105,7 @@ class TableOfContents implements Pattern
 			$fileList[$fileToInclude] = $textOfFile;
 
 			preg_match_all(
-				self::TOC_REGEX, $textOfFile, $tocBlocks, PREG_SET_ORDER
+				$this->getRegex(), $textOfFile, $tocBlocks, PREG_SET_ORDER
 			);
 
 			foreach ($tocBlocks as $toc)

@@ -6,16 +6,19 @@ Vidola is a documentation markup language. It is designed to make end-user docum
 as natural as possible. The reason for yet another markup language 
 is that none of the others satisfied how I wanted to document. Eg DocBook has 
 a lot of options but writing documentation for the web with it is unnatural. Markdown 
-is more intuitive and natural but has limitations for creating multi-page documents. 
-Vidola does draw a lot of inspiration from both Markdown and reStructuredText.
+is more intuitive and natural but has limitations for creating multi-page documents.
 
 
 -------------
 Vidola syntax
 -------------
 
-Vidola is a library to transform documents into HTML. It also defines a markup language 
-to use for such documents. Here I describe the markup.
+Vidola is a library to transform documents into HTML. It also is a markup language 
+to use for such documents. The markup follows mostly regular Markdown markup with
+some extensions and some differences.
+
+
+{table of contents}
 
 
 Handling of special characters
@@ -380,14 +383,20 @@ stopping at the end of the document or when it encounters a header at a
 higher level of the first one encounterd. Optionally you can specify the
 depth.
 
-	CODE:
-		table of contents:
+		{table of contents}
 			depth: 2
+
+			about
+			introduction
 
 		a header
 		========
 
-		etc
+		A paragraph.
+
+The example above creates a table of contents if the current document, the about document
+and the introduction document with all top-level headers found and their immediate
+subheaders.
 
 
 Definition lists

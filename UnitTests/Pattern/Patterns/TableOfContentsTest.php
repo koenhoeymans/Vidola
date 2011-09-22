@@ -29,7 +29,7 @@ class Vidola_Pattern_Patterns_TableOfContentsTest extends PHPUnit_Framework_Test
 	public function createsLocalToc()
 	{
 		// given
-		$text = "table of contents:
+		$text = "{table of contents}
 
 header
 ----
@@ -67,7 +67,7 @@ paragraph",
 	public function respectsLevelOfHeadersThroughSublists()
 	{
 		// given
-		$text = "table of contents:
+		$text = "{table of contents}
 
 header
 ----
@@ -112,7 +112,7 @@ paragraph",
 	public function createsNestedToc()
 	{
 				// given
-		$text = "table of contents:
+		$text = "{table of contents}
 
 header
 ----
@@ -171,7 +171,7 @@ paragraph",
 
 paragraph
 
-table of contents:
+{table of contents}
 
 subheader
 ===
@@ -221,7 +221,7 @@ paragraph",
 
 paragraph
 
-table of contents:
+{table of contents}
 
 subheader
 ===
@@ -277,7 +277,7 @@ paragraph",
 	{
 				// given
 		$text = 
-"table of contents:
+"{table of contents}
 	depth: 1
 
 header
@@ -329,7 +329,7 @@ paragraph",
 	{
 		// given
 		$text =
-"table of contents:
+"{table of contents}
 
 	Includedfile
 
@@ -393,7 +393,7 @@ paragraph",
 "level1
 ===
 
-table of contents:
+{table of contents}
 
 	Includedfile
 
@@ -459,7 +459,7 @@ paragraph",
 	{
 		// given
 		$text =
-"table of contents:
+"{table of contents}
 
 	Includedfile1
 	Includedfile2
@@ -529,7 +529,7 @@ paragraph",
 	{
 		// given
 		$text =
-"table of contents:
+"{table of contents}
 
 	Includedfile
 
@@ -554,7 +554,7 @@ paragraph";
 			->method('retrieveContent')
 			->with('Includedfile')
 			->will($this->returnValue(
-"table of contents:
+"{table of contents}
 
 	Subincludedfile
 
