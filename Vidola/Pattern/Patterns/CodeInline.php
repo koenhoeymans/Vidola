@@ -16,11 +16,9 @@ class CodeInline extends Code
 	{
 		return preg_replace_callback(
 			'@
-			(?<=^|\ )
 			[`](?<extra_bt>([`])*)
 			(?<code>.+?)
 			\g{extra_bt}[`]
-			(?=\ |$)
 			@x',
 			array($this, 'replaceCode'),
 			$text

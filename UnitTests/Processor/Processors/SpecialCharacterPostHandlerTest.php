@@ -60,4 +60,14 @@ class Vidola_Processor_Processors_SpecialCharacterPostHandlerTest extends PHPUni
 		$html = "These &amp; <code>these &amp; and these &amp;amp;</code>.";
 		$this->assertEquals($html, $this->pattern->process($text));
 	}
+
+	/**
+	 * @test
+	 */
+	public function unhashesStartTags()
+	{
+		$text = "A <span:::&#32;&#105;&#100;&#61;&#39;&#180;&#35;&#60;&#115;&#112;&#97;&#110;&#62;&#180;&#39;&#32;&#118;&#97;&#108;&#117;&#101;&#61;&#39;&#35;&#60;&#39;:::>span</span> element.";
+		$html = "A <span id='´#<span>´' value='#<'>span</span> element.";
+		$this->assertEquals($html, $this->pattern->process($text));
+	}
 }

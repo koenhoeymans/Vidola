@@ -17,8 +17,8 @@ class HorizontalRule implements Pattern
 		return preg_replace_callback(
 			'@
 			\n
-			([ ]*(?<marker>-|\*|_))
-			([ ]*\g{marker}){2,}
+			([ ]{0,3}(?<marker>-|\*|_))
+			([ ]{0,3}\g{marker}){2,}
 			\n
 			@x',
 			function ($match)

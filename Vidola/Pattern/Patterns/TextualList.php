@@ -30,17 +30,17 @@ class TextualList implements Pattern
 			(?<indentation>[ \t]*)			# indentation
 			(
 				(?<ul>[*+-])				# unordered list markers
-				\ [^\s].*						# space and text
+				[ ]+[^\s].*						# space and text
 				(\n								# continuation of list: newline
 				(\n\g{indentation}				# or two lines for paragraph
-				(\ |[*+-])\ )?					# or new item 
+				([ ]+|[*+-])\ )?					# or new item 
 				.+)*
 			|
 				(?<ol>([0-9]+|\#)\.)		# ordered list markers
-				\ [^\s].*						# space and text
+				[ ]+[^\s].*						# space and text
 				(\n								# continuation of list: newline
 				(\n\g{indentation}				# or two lines for paragraph
-				(\ |[0-9]+|\#)\.)?				# or new item 
+				([ ]+|[0-9]+|\#)\.)?				# or new item 
 				.+)*
 			)
 			)

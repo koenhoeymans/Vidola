@@ -44,7 +44,7 @@ class SpecialCharacterPostHandler implements Processor
 			$text
 		);
 
-		# htmlspecialchars, except for tags unless withing code
+		# htmlspecialchars, except for the < and > of tags unless withing code
 		$text = preg_replace_callback(
 			'@
 			(?<text>.+?)
@@ -59,16 +59,28 @@ class SpecialCharacterPostHandler implements Processor
 				$text = preg_replace_callback(
 					'@
 					(?<text>.*?)
-					(?<tag>
-					</?[a-z].*?(\ /)?>
+					(
+					<
+					(?<tag>/?[a-z].*?(\ /)?)
+					>
 					|
 					$
 					)
 					@xsi',
 					function ($match)
 					{
+						if (isset($match['tag']))
+						{
+							$tag = '<' . htmlspecialchars(
+								$match['tag'], ENT_NOQUOTES, 'UTF-8', false
+							) . '>';
+						}
+						else
+						{
+							$tag = '';
+						}
 						return htmlspecialchars($match['text'], ENT_NOQUOTES, 'UTF-8', false)
-							. $match['tag'];
+							. $tag;
 					},
 					$match['text']
 				);
@@ -86,6 +98,19 @@ class SpecialCharacterPostHandler implements Processor
 				return $text . $code;
 			},
 		$text
+		);
+
+		$text = preg_replace_callback(
+			'@
+			<([a-z][a-z-0-9]*?):::(.+?):::>
+			@xis',
+			function ($match)
+			{
+				$convmap = array(0x0, 0xffff, 0, 0xffff);
+				$decoded = mb_decode_numericentity($match[2], $convmap, 'UTF-8');
+				return '<' . $match[1] . $decoded . '>';
+			},
+			$text
 		);
 
 		return $text;

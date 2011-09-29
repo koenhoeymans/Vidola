@@ -32,7 +32,7 @@ class Header implements Pattern
 			'@
 			(?<start>(\n+|^)[ ]{0,3})
 			(?<pre>[-=+*^\#]{3,})?
-			\n?\s*(?<text>.+)\n\s*
+			\n?[ ]{0,3}(?<text>.+)\n[ ]{0,3}
 			(?<post>(?<!\n\n)[-=+*^\#]{3,})
 			(?=\n)
 			@x',

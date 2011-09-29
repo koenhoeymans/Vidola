@@ -34,18 +34,19 @@ class Paragraph implements Pattern
 			|
 			\n\n(?=[ ]{0,3}[^\s])
 			)
-			(?<indentation>[ \t]*)					# indentation
+			(?<indentation>[ \t]{0,})					# indentation
 			(?<contents>
-				(?(?=<)								# first line
-				<									# trying to avoid tags
-				(?!\S[a-z0-9]*[a-z0-9 ]*>\n
-				|
-				p>
-				|
-				!--[.\n]*?-->
-				).*
-				|
-				[^\s].*)
+				(?(?=<)								# if first line starts with <
+					<
+					(
+					(?!/?(div|pre|p|li|dl|blockquote|table)[a-z0-9 \"\'=]*>)	# make sure it is not a block level tag
+					|
+					!--[.\n]*?-->						# or a comment
+					)
+					.*
+				|									# line does not start with <
+					.*
+				)
 
 				(\n\g{indentation}?					# next lines
 				(?(?=<)

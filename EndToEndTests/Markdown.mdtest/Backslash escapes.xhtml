@@ -20,7 +20,7 @@
 
 <p>Right paren: )</p>
 
-<p>Greater-than: &gt;</p>
+<p>Greater-than: ></p>
 
 <p>Hash: #</p>
 
@@ -64,13 +64,14 @@ Bang: \!
 
 Plus: \+
 
-Minus: \-</code></pre>
+Minus: \-
+</code></pre>
 
 <p>Nor should these, which occur in code spans:</p>
 
 <p>Backslash: <code>\\</code></p>
 
-<p>Backtick: <code> \` </code></p>
+<p>Backtick: <code>\`</code></p>
 
 <p>Asterisk: <code>\*</code></p>
 
@@ -100,6 +101,7 @@ Minus: \-</code></pre>
 
 <p>Minus: <code>\-</code></p>
 
+
 <p>These should get escaped, even though they're matching pairs for
 other Markdown constructs:</p>
 
@@ -109,18 +111,8 @@ other Markdown constructs:</p>
 
 <p>`backticks`</p>
 
-<p>This is a code span with a literal backslash-backtick sequence: <code> \` </code></p>
+<p>This is a code span with a literal backslash-backtick sequence: <code>\`</code></p>
 
-<p>This is a tag with unescaped backticks <span id='`ticks`'>bar</span>.</p>
+<p>This is a tag with unescaped backticks <span attr='`ticks`'>bar</span>.</p>
 
-<p>This is a tag with backslashes <span id='\backslashes\'>bar</span>.</p>
-
-<p>Tricky combinaisons:</p>
-
-<p>backslash with \-- two dashes</p>
-
-<p>backslash with \&gt; greater than</p>
-
-<p>\[test](not a link)</p>
-
-<p>\*no emphasis*</p>
+<p>This is a tag with backslashes <span attr='\\backslashes\\'>bar</span>.</p>

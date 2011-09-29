@@ -75,9 +75,7 @@ class Hyperlink implements Pattern
 
 		if (!$linkDef)
 		{
-			throw new \Exception('Following link definition not found: "['
-				. $regexMatch['id'] . ']"'
-			);
+			return $regexMatch[0];
 		}
 
 		$title = $linkDef->getTitle();
