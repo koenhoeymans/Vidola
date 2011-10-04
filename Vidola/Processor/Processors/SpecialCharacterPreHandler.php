@@ -38,6 +38,13 @@ class SpecialCharacterPreHandler implements Processor
 			$text
 		);
 
+		$leftCurlyBracketsNeutralized = str_replace(
+			'{{', ',,,,&#123;,,,,,,,,&#123;,,,,', $tagsNeutralized
+		);
+		$rightCurlyBracketsNeutralized = str_replace(
+			'}}', ',,,,&#125;,,,,,,,,&#125;,,,,', $leftCurlyBracketsNeutralized
+		);
+
 		$entities = preg_replace_callback(
 			"#\\\\.#",
 			function ($match)
@@ -48,7 +55,7 @@ class SpecialCharacterPreHandler implements Processor
 					. mb_encode_numericentity($match[0][1], $convmap, 'UTF-8')
 					. ',,,,';
 			},
-			$tagsNeutralized
+			$rightCurlyBracketsNeutralized
 		);
 
 		return $entities;

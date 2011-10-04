@@ -182,6 +182,24 @@ class Vidola_TextReplacer_TextToHtmlReplacer_RecursivePatternReplacerTest extend
 		);
 	}
 
+	/**
+	 * @test
+	 */
+	public function curlyBracketsTagsInCode()
+	{
+		$text =
+"start{{pre}}{{code}}sub status {
+	print \"working\";
+}{{/code}}{{/end}}end";
+
+		$replacement =
+"*start*{{pre}}{{code}}sub status {
+	print \"working\";
+}{{/code}}{{/end}}*end*";
+
+		$this->assertEquals($replacement, $this->replaceUntagged($text));
+	}
+
 	// -------------- text between tag ---------------------------
 
 	/**

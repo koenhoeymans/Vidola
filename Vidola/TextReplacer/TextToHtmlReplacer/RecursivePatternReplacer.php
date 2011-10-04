@@ -20,11 +20,26 @@ ini_set('pcre.backtrack_limit', 10000000);
 class RecursivePatternReplacer
 {
 	/**
-	 * $match[1] = text before tag or end of string
-	 * $match[2] = full element (including recursion) or end
+	 * $match['before_element'] = text before tag or end of string
+	 * $match['element'] = full element (including recursion) or end
 	 */
 	const untagged_text_regex =
-		"#(.*)({{(.(?! /))+}}([^{]|(?R))+{{/.+}}|{{br /}}|{{hr /}}|{{img (.)+ /}}|$)#UsD";
+		'@
+		(?<before_element>.*)
+			(?<element>
+				{{(.(?![ ]/))+}}	# opening tag
+				((?(?={){[^{]|.)|(?R))+
+				{{/.+}}				# closing tag
+				|
+				{{br[ ]/}}
+				|
+				{{hr[ ]/}}
+				|
+				{{img[ ].+[ ]/}}
+				|
+				$
+			)
+		@xUsD';
 
 	/**
 	 * $match[1] = opening tag
@@ -66,20 +81,20 @@ class RecursivePatternReplacer
 
 	private function replaceUntaggedPartsByPattern($regexMatch)
 	{
-		if ($regexMatch[1] === '')
+		if ($regexMatch['before_element'] === '')
 		{
-			return '' . $regexMatch[2];
+			return '' . $regexMatch['element'];
 		}
 	
-		$replaced = $this->pattern->replace($regexMatch[1]);
+		$replaced = $this->pattern->replace($regexMatch['before_element']);
 
-		if ($replaced !== $regexMatch[1]) // tags were inserted
+		if ($replaced !== $regexMatch['before_element']) // tags were inserted
 		{
 			// find text between tags and present to subpatterns
 			$replaced = $this->replaceTextBetweenTags($replaced);
 		}
 
-		return $replaced . $regexMatch[2];
+		return $replaced . $regexMatch['element'];
 	}
 
 	private function replaceTextBetweenTags($textBetweenTags)

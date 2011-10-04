@@ -48,11 +48,37 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * Changed:
-	 *  * <p>6 > 5.</p> to <p>6 &gt; 5.</p> as expected outcome
+	 * changed <p>6 > 5.</p> to <p>6 &gt; 5.</p> as expected outcome
 	 */
 	public function ampsAndAngleEncoding()
 	{
 		$this->createTestFor('AmpsAndAngleEncoding');
+	}
+
+	/**
+	 * @test
+	 * changed some formatting
+	 */
+	public function autoLinks()
+	{
+		$this->createTestFor('AutoLinks');
+	}
+
+	/**
+	 * @test
+	 * changed some formatting
+	 */
+	public function backslashEscapes()
+	{
+		$this->createTestFor('BackslashEscapes');
+	}
+
+	/**
+	 * @test
+	 * changed some formatting
+	 */
+	public function blockquotesWithCodeBlocks()
+	{
+		$this->createTestFor('BlockquotesWithCodeBlocks');
 	}
 }

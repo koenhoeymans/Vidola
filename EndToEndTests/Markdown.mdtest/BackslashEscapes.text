@@ -32,8 +32,6 @@ Plus: \+
 
 Minus: \-
 
-
-
 These should not, because they occur within a code block:
 
 	Backslash: \\
@@ -68,12 +66,11 @@ These should not, because they occur within a code block:
 
 	Minus: \-
 
-
 Nor should these, which occur in code spans:
 
 Backslash: `\\`
 
-Backtick: `` \` ``
+Backtick: ``\```
 
 Asterisk: `\*`
 
@@ -103,7 +100,6 @@ Plus: `\+`
 
 Minus: `\-`
 
-
 These should get escaped, even though they're matching pairs for
 other Markdown constructs:
 
@@ -113,7 +109,7 @@ other Markdown constructs:
 
 \`backticks\`
 
-This is a code span with a literal backslash-backtick sequence: `` \` ``
+This is a code span with a literal backslash-backtick sequence: ``\```
 
 This is a tag with unescaped backticks <span attr='`ticks`'>bar</span>.
 
