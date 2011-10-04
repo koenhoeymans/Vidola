@@ -81,4 +81,12 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('BlockquotesWithCodeBlocks');
 	}
+
+	/**
+	 * @test
+	 */
+	public function codeBlocks()
+	{
+		$this->createTestFor('CodeBlocks');
+	}
 }
