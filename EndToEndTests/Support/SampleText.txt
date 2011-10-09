@@ -76,6 +76,8 @@ Previous line had two spaces for a line break.
 Let's end with code indented:
 
 	code example with <b>html</b> in it
+	also with </code>
+	tag
 
 The link definitions below disappear.
 

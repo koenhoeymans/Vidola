@@ -16,48 +16,70 @@ use Vidola\Processor\Processor;
 class SpecialCharacterPreHandler implements Processor
 {
 	/**
-	 * Escapes characters preceded by backslash. Converts these to numeric entity.
-	 * The EscapeRemover decodes them back in the end. Thus they lose their special
-	 * meaning while the conversion takes place.
-	 * 
 	 * @see Vidola\Processor.Processor::process()
 	 */
 	public function process($text)
 	{
-		$tagsNeutralized = preg_replace_callback(
+		$text = $this->neutralizeManuallyAddedTags($text);
+		$text = $this->neutralizeCurlyBrackets($text);
+		$text = $this->neutralizeEscapedChars($text);
+		$text = $this->neutralizeCodeTags($text);
+
+		return $text;
+	}
+
+	private function neutralizeManuallyAddedTags($text)
+	{
+		return preg_replace_callback(
 			'@
 			(<[a-z][a-z0-9]+)((([ ].+?=(\'|").+?(\'|"))(?=(>|[ ])))+)>
 			@xi',
 			function ($match)
 			{
-			# http://stackoverflow.com/questions/3005116/how-to-convert-all-characters-to-their-html-entity-equivalent-using-php/
+				# http://stackoverflow.com/questions/3005116/how-to-convert-all-characters-to-their-html-entity-equivalent-using-php/
 				$convmap = array(0x0, 0xffff, 0, 0xffff);
 				$encoded = mb_encode_numericentity($match[2], $convmap, 'UTF-8');
+
 				return $match[1] . ':::' . $encoded . ':::>';
 			},
 			$text
 		);
+	}
 
-		$leftCurlyBracketsNeutralized = str_replace(
-			'{{', ',,,,&#123;,,,,,,,,&#123;,,,,', $tagsNeutralized
+	private function neutralizeCurlyBrackets($text)
+	{
+		$text = str_replace(
+			'{{', ',,,,&#123;,,,,,,,,&#123;,,,,', $text
 		);
-		$rightCurlyBracketsNeutralized = str_replace(
-			'}}', ',,,,&#125;,,,,,,,,&#125;,,,,', $leftCurlyBracketsNeutralized
+		$text = str_replace(
+			'}}', ',,,,&#125;,,,,,,,,&#125;,,,,', $text
 		);
 
-		$entities = preg_replace_callback(
+		return $text;
+	}
+
+	private function neutralizeEscapedChars($text)
+	{
+		return preg_replace_callback(
 			"#\\\\.#",
 			function ($match)
 			{
 				# http://stackoverflow.com/questions/3005116/how-to-convert-all-characters-to-their-html-entity-equivalent-using-php/
 				$convmap = array(0x0, 0xffff, 0, 0xffff);
-				return ',,,,'
-					. mb_encode_numericentity($match[0][1], $convmap, 'UTF-8')
-					. ',,,,';
-			},
-			$rightCurlyBracketsNeutralized
-		);
+				$encoded = mb_encode_numericentity($match[0][1], $convmap, 'UTF-8');
 
-		return $entities;
+				return ',,,,' . $encoded . ',,,,';
+			},
+			$text
+		);
+	}
+
+	/**
+	 * If code contains </code> ... <code> we won't know anymore what the
+	 * actual code is.
+	 */
+	private function neutralizeCodeTags($text)
+	{
+		return preg_replace("@<(/?code.*?)>@", "|||\${1}|||", $text);
 	}
 }

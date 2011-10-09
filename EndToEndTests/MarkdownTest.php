@@ -2,14 +2,12 @@
 
 require_once('TestHelper.php');
 
+/**
+ * These are the Markdown tests as found in the test suite of PHPMarkdown.
+ * Some formatting was changed, eg removed blank lines before closing code.
+ */
 class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 {
-	public function setup()
-	{}
-
-	public function teardown()
-	{}
-
 	public function createTestFor($name)
 	{
 		$dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
@@ -57,7 +55,6 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * changed some formatting
 	 */
 	public function autoLinks()
 	{
@@ -66,7 +63,6 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * changed some formatting
 	 */
 	public function backslashEscapes()
 	{
@@ -75,7 +71,6 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * changed some formatting
 	 */
 	public function blockquotesWithCodeBlocks()
 	{
@@ -88,5 +83,17 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	public function codeBlocks()
 	{
 		$this->createTestFor('CodeBlocks');
+	}
+
+	/**
+	 * @test
+	 * `<test a="` content of attribute `">` does not convert to
+	 * <p><code>&lt;test a="</code> content of attribute <code>"&gt;</code></p>
+	 * but to
+	 * <p><code>&lt;test a="` content of attribute `"&gt;</code></p>
+	 */
+	public function codeSpans()
+	{
+		$this->createTestFor('CodeSpans');
 	}
 }

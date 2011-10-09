@@ -31,14 +31,14 @@ class Vidola
 		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LineEndingsStandardizer')
 		);
-		$htmlBuilder->addPostProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
+		$htmlBuilder->addPreProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
 		);
 		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
 		);
-		$htmlBuilder->addPreProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
+		$htmlBuilder->addPostProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
 		);
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostHandler')

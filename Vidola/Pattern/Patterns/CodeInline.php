@@ -16,9 +16,9 @@ class CodeInline extends Code
 	{
 		return preg_replace_callback(
 			'@
-			[`](?<extra_bt>([`])*)
+			[`](?<extra_backticks>([`])*)
 			(?<code>.+?)
-			\g{extra_bt}[`]
+			\g{extra_backticks}[`]
 			@x',
 			array($this, 'replaceCode'),
 			$text
@@ -27,6 +27,10 @@ class CodeInline extends Code
 
 	protected function replaceCode($match)
 	{
-		return $this->createCodeInHtml($match['code'], false);
+		# if code between backticks starts or ends with code between
+		# backticks: remove the spacing
+		$code = preg_replace("#^\s*(.+?)\s*$#", "\${1}", $match['code']);
+
+		return $this->createCodeInHtml($code, false);
 	}
 }

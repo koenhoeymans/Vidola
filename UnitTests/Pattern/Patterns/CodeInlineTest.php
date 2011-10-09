@@ -40,8 +40,8 @@ class Vidola_Pattern_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
 	public function backtickCanBePlacedWithinMultipleBackticks()
 	{
 		$this->assertEquals(
-				'Text with {{code}}co`de{{/code}} in between.',
-		$this->codeInline->replace('Text with ``co`de`` in between.')
+			'Text with {{code}}co`de{{/code}} in between.',
+			$this->codeInline->replace('Text with ``co`de`` in between.')
 		);
 	}
 }
