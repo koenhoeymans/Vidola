@@ -4,7 +4,11 @@ require_once('TestHelper.php');
 
 /**
  * These are the Markdown tests as found in the test suite of PHPMarkdown.
- * Some formatting was changed, eg removed blank lines before closing code.
+ * Some formatting was changed:
+ *  * removed blank lines before closing code tag
+ *  * removed empty line at the end of the tests
+ * 
+ * Other changes have been documented before each test.
  */
 class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 {
@@ -46,7 +50,8 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * changed <p>6 > 5.</p> to <p>6 &gt; 5.</p> as expected outcome
+	 * 
+	 * Changed <p>6 > 5.</p> to <p>6 &gt; 5.</p> as expected outcome
 	 */
 	public function ampsAndAngleEncoding()
 	{
@@ -87,13 +92,39 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * `<test a="` content of attribute `">` does not convert to
-	 * <p><code>&lt;test a="</code> content of attribute <code>"&gt;</code></p>
-	 * but to
-	 * <p><code>&lt;test a="` content of attribute `"&gt;</code></p>
+	 * 
+	 * Changed expected outcome of `<test a="` content of attribute `">`
+	 * from <p><code>&lt;test a="</code> content of attribute <code>"&gt;</cde></p>
+	 * to <p><code>&lt;test a="` content of attribute `"&gt;</code></p>
 	 */
 	public function codeSpans()
 	{
 		$this->createTestFor('CodeSpans');
+	}
+
+	/**
+	 * @test
+	 */
+	public function hardWrappedParagraphsWithListLikeLines()
+	{
+		$this->createTestFor('HardWrappedParagraphsWithListLikeLines');
+	}
+
+	/**
+	 * @test
+	 */
+	public function horizontalRules()
+	{
+		$this->createTestFor('HorizontalRules');
+	}
+
+	/**
+	 * @test
+	 * 
+	 * Changed place of src attribute.
+	 */
+	public function images()
+	{
+		$this->createTestFor('Images');
 	}
 }

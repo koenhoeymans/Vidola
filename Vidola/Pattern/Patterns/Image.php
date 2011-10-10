@@ -29,23 +29,30 @@ class Image implements Pattern
 	{
 		return preg_replace_callback(
 			'@
-			(?<=^|\n|\ )
-			!\[(?<alt>.*)\]					# ![alternate text]
-			\(								# (
-			(?<path>[^\s]+)					# path
-			(\ ("|\')(?<title>.+)("|\'))?	# "optional title"
-			\)								# )
-			(?=\ |\n|$)
+			!\[(?<alt>.*)\]							# ![alternate text]
+			\(										# (
+				(?<path>							# path|<path>
+				<(\S+?)?>
+				|
+				(\S+?)?
+				)
+				([ ]+("|\')(?<title>.+)("|\')[ ]*)?	# "optional title"
+			\)										# )
 			@xU',
 		function($match)
 		{
 			$title = isset($match['title']) ? 'title="' . $match['title'] . '" ' : '';
+			$path = str_replace('"', '&quot;', $match['path']);
+			if (isset($path[0]) && $path[0] === '<')
+			{
+				$path = substr($path, 1, -1);
+			}
 
 			return
 			'{{img '
 			. 'alt="' . $match['alt'] . '" '
 			. $title
-			. 'src="' . str_replace('"', '&quot;', $match['path']) . '"'
+			. 'src="' . $path . '"'
 			. ' /}}';
 		},
 		$text
@@ -61,10 +68,10 @@ class Image implements Pattern
 
 		return preg_replace_callback(
 			'@
-			(?<begin>^|\ )
+			(?<begin>^|[ ]+)
 			!\[(?<alt>.+)\]					# ![alternate text]
 			\[(?<id>.+)\]					# [id]
-			(?<end>\ |$)
+			(?<end>[ ]+|$)
 			@xU',
 		function($match) use ($linkDefinitions)
 		{
