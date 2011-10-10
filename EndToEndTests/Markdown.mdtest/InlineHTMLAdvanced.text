@@ -1,8 +1,8 @@
-<p>Simple block on one line:</p>
+Simple block on one line:
 
 <div>foo</div>
 
-<p>And nested without indentation:</p>
+And nested without indentation:
 
 <div>
 <div>
@@ -14,14 +14,14 @@ foo
 <div>bar</div>
 </div>
 
-<p>And with attributes:</p>
+And with attributes:
 
 <div>
-    <div id="foo">
-    </div>
+	<div id="foo">
+	</div>
 </div>
 
-<p>This was broken in 1.0.2b7:</p>
+This was broken in 1.0.2b7:
 
 <div class="inlinepage">
 <div class="toggleableend">

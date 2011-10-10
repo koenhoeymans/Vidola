@@ -127,4 +127,12 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('Images');
 	}
+
+	/**
+	 * @test
+	 */
+	public function inlineHTMLAdvanced()
+	{
+		$this->createTestFor('InlineHTMLAdvanced');
+	}
 }
