@@ -100,6 +100,8 @@ class SpecialCharacterPostHandler implements Processor
 				|						# tag
 				<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|\'.*?\'|[^\'\">\s]+))?)+\s*|\s*)\/?>
 				|
+				<!--(.|\n)*?-->			# comments
+				|
 				$						# or end
 			)
 			@xsi',

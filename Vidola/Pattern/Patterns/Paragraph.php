@@ -38,10 +38,10 @@ class Paragraph implements Pattern
 			(?<contents>
 				(?(?=<)								# if first line starts with <
 					<
-					(
-					(?!/?(div|pre|p|li|dl|blockquote|table)[a-z0-9 \"\'=]*>)	# make sure it is not a block level tag
+					(?!
+					(/?(hr|div|pre|p|li|dl|blockquote|table)[a-z0-9 \"\'=]*/?>	# make sure it is not a block level tag
 					|
-					!--[.\n]*?-->						# or a comment
+					!--(.|\n)*?-->)						# nor a comment
 					)
 					.*
 				|									# line does not start with <

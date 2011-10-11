@@ -185,4 +185,22 @@ paragraph continued{{/p}}
 		$html = "\n\n{{p}}<paragraph{{/p}}\n\n";
 		$this->assertEquals($html, $this->pattern->replace($text));
 	}
+
+	/**
+	 * @test
+	 */
+	public function avoidsHTMLComments()
+	{
+		$text = "\n\n<!-- comment -->\n\n";
+		$this->assertEquals($text, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function avoidsMultilineComments()
+	{
+		$text = "\n\n<!--\ncomment\n-->\n\n";
+		$this->assertEquals($text, $this->pattern->replace($text));
+	}
 }
