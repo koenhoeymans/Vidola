@@ -143,4 +143,12 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('InlineHTMLSimple');
 	}
+
+	/**
+	 * @test
+	 */
+	public function inlineHTMLComments()
+	{
+		$this->createTestFor('InlineHTMLComments');
+	}
 }
