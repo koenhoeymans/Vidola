@@ -151,4 +151,12 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('InlineHTMLComments');
 	}
+
+	/**
+	 * @test
+	 */
+	public function linksInlineStyle()
+	{
+		$this->createTestFor('LinksInlineStyle');
+	}
 }

@@ -34,12 +34,17 @@ class Hyperlink implements Pattern
 				(\[(?2)*?\].*?|.+?)			
 			)\]
 			\(
-			(<(?<url1>\S+)>|(?<url2>\S+))	# url or <url>
+			(?<url>							# url or <url>
+				<\S*>
+				|
+				\S*?(?(?=\()\(\S*?\)\S*?)	# note: url can contain ( & )
+			)
 			(								# title
-			[ ]									# space
+			[ \t]+								# space(s)
 			(?<quotes>"|\')						# single or double quotes
 			(?<title>.+?)						# title text
 			\g{quotes}
+			[ \t]*								# space(s)
 			)?									# title is optional
 			\)
 			@x',
@@ -59,7 +64,8 @@ class Hyperlink implements Pattern
 
 	private function replaceLink($regexMatch)
 	{
-		$url = ($regexMatch['url1']) ?: $regexMatch['url2'];
+		$url = (isset($regexMatch['url'][0]) && ($regexMatch['url'][0] == '<'))
+			 ? substr($regexMatch['url'], 1, -1) : $regexMatch['url'];
 		$title = isset($regexMatch['title']) ? $regexMatch['title'] : null;
 		return $this->createLink($title, $url, $regexMatch['anchor']);
 	}
