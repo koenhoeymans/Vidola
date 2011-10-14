@@ -13,7 +13,7 @@ use Vidola\Pattern\Pattern;
 class TextualList implements Pattern
 {
 	public function replace($text)
-	{
+	{var_dump($text);
 		return preg_replace_callback(
 			'@
 			(?<start>

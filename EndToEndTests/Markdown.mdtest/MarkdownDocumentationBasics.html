@@ -1,4 +1,4 @@
-<h1>Markdown: Basics</h1>
+<h1 id="Markdown:_Basics">Markdown: Basics</h1>
 
 <ul id="ProjectSubmenu">
     <li><a href="/projects/markdown/" title="Markdown Project Page">Main</a></li>
@@ -8,7 +8,7 @@
     <li><a href="/projects/markdown/dingus" title="Online Markdown Web Form">Dingus</a></li>
 </ul>
 
-<h2>Getting the Gist of Markdown's Formatting Syntax</h2>
+<h2 id="Getting_the_Gist_of_Markdown's_Formatting_Syntax">Getting the Gist of Markdown's Formatting Syntax</h2>
 
 <p>This page offers a brief overview of what it's like to use Markdown.
 The <a href="/projects/markdown/syntax" title="Markdown Syntax">syntax page</a> provides complete, detailed documentation for
@@ -61,8 +61,7 @@ dog's back.
 &gt; 
 &gt; This is the second paragraph in the blockquote.
 &gt;
-&gt; ## This is an H2 in a blockquote
-</code></pre>
+&gt; ## This is an H2 in a blockquote</code></pre>
 
 <p>Output:</p>
 
@@ -85,8 +84,7 @@ dog's back.&lt;/p&gt;
     &lt;p&gt;This is the second paragraph in the blockquote.&lt;/p&gt;
 
     &lt;h2&gt;This is an H2 in a blockquote&lt;/h2&gt;
-&lt;/blockquote&gt;
-</code></pre>
+&lt;/blockquote&gt;</code></pre>
 
 <h3>Phrase Emphasis</h3>
 
@@ -98,8 +96,7 @@ dog's back.&lt;/p&gt;
 Some of these words _are emphasized also_.
 
 Use two asterisks for **strong emphasis**.
-Or, if you prefer, __use two underscores instead__.
-</code></pre>
+Or, if you prefer, __use two underscores instead__.</code></pre>
 
 <p>Output:</p>
 
@@ -107,8 +104,7 @@ Or, if you prefer, __use two underscores instead__.
 Some of these words &lt;em&gt;are emphasized also&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;Use two asterisks for &lt;strong&gt;strong emphasis&lt;/strong&gt;.
-Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;/p&gt;
-</code></pre>
+Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;/p&gt;</code></pre>
 
 <h2>Lists</h2>
 
@@ -118,22 +114,19 @@ interchangable; this:</p>
 
 <pre><code>*   Candy.
 *   Gum.
-*   Booze.
-</code></pre>
+*   Booze.</code></pre>
 
 <p>this:</p>
 
 <pre><code>+   Candy.
 +   Gum.
-+   Booze.
-</code></pre>
++   Booze.</code></pre>
 
 <p>and this:</p>
 
 <pre><code>-   Candy.
 -   Gum.
--   Booze.
-</code></pre>
+-   Booze.</code></pre>
 
 <p>all produce the same output:</p>
 
@@ -141,16 +134,14 @@ interchangable; this:</p>
 &lt;li&gt;Candy.&lt;/li&gt;
 &lt;li&gt;Gum.&lt;/li&gt;
 &lt;li&gt;Booze.&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
+&lt;/ul&gt;</code></pre>
 
 <p>Ordered (numbered) lists use regular numbers, followed by periods, as
 list markers:</p>
 
 <pre><code>1.  Red
 2.  Green
-3.  Blue
-</code></pre>
+3.  Blue</code></pre>
 
 <p>Output:</p>
 
@@ -158,8 +149,7 @@ list markers:</p>
 &lt;li&gt;Red&lt;/li&gt;
 &lt;li&gt;Green&lt;/li&gt;
 &lt;li&gt;Blue&lt;/li&gt;
-&lt;/ol&gt;
-</code></pre>
+&lt;/ol&gt;</code></pre>
 
 <p>If you put blank lines between items, you'll get <code>&lt;p&gt;</code> tags for the
 list item text. You can create multi-paragraph list items by indenting
@@ -169,8 +159,7 @@ the paragraphs by 4 spaces or 1 tab:</p>
 
     With multiple paragraphs.
 
-*   Another item in the list.
-</code></pre>
+*   Another item in the list.</code></pre>
 
 <p>Output:</p>
 
@@ -178,8 +167,7 @@ the paragraphs by 4 spaces or 1 tab:</p>
 &lt;li&gt;&lt;p&gt;A list item.&lt;/p&gt;
 &lt;p&gt;With multiple paragraphs.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Another item in the list.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
+&lt;/ul&gt;</code></pre>
 
 <h3>Links</h3>
 
@@ -190,25 +178,21 @@ text you want to turn into a link.</p>
 <p>Inline-style links use parentheses immediately after the link text.
 For example:</p>
 
-<pre><code>This is an [example link](http://example.com/).
-</code></pre>
+<pre><code>This is an [example link](http://example.com/).</code></pre>
 
 <p>Output:</p>
 
 <pre><code>&lt;p&gt;This is an &lt;a href="http://example.com/"&gt;
-example link&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+example link&lt;/a&gt;.&lt;/p&gt;</code></pre>
 
 <p>Optionally, you may include a title attribute in the parentheses:</p>
 
-<pre><code>This is an [example link](http://example.com/ "With a Title").
-</code></pre>
+<pre><code>This is an [example link](http://example.com/ "With a Title").</code></pre>
 
 <p>Output:</p>
 
 <pre><code>&lt;p&gt;This is an &lt;a href="http://example.com/" title="With a Title"&gt;
-example link&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+example link&lt;/a&gt;.&lt;/p&gt;</code></pre>
 
 <p>Reference-style links allow you to refer to your links by names, which
 you define elsewhere in your document:</p>
@@ -218,16 +202,14 @@ you define elsewhere in your document:</p>
 
 [1]: http://google.com/        "Google"
 [2]: http://search.yahoo.com/  "Yahoo Search"
-[3]: http://search.msn.com/    "MSN Search"
-</code></pre>
+[3]: http://search.msn.com/    "MSN Search"</code></pre>
 
 <p>Output:</p>
 
 <pre><code>&lt;p&gt;I get 10 times more traffic from &lt;a href="http://google.com/"
 title="Google"&gt;Google&lt;/a&gt; than from &lt;a href="http://search.yahoo.com/"
 title="Yahoo Search"&gt;Yahoo&lt;/a&gt; or &lt;a href="http://search.msn.com/"
-title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;</code></pre>
 
 <p>The title attribute is optional. Link names may contain letters,
 numbers and spaces, but are <em>not</em> case sensitive:</p>
@@ -235,14 +217,12 @@ numbers and spaces, but are <em>not</em> case sensitive:</p>
 <pre><code>I start my morning with a cup of coffee and
 [The New York Times][NY Times].
 
-[ny times]: http://www.nytimes.com/
-</code></pre>
+[ny times]: http://www.nytimes.com/</code></pre>
 
 <p>Output:</p>
 
 <pre><code>&lt;p&gt;I start my morning with a cup of coffee and
-&lt;a href="http://www.nytimes.com/"&gt;The New York Times&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+&lt;a href="http://www.nytimes.com/"&gt;The New York Times&lt;/a&gt;.&lt;/p&gt;</code></pre>
 
 <h3>Images</h3>
 
@@ -250,20 +230,17 @@ numbers and spaces, but are <em>not</em> case sensitive:</p>
 
 <p>Inline (titles are optional):</p>
 
-<pre><code>![alt text](/path/to/img.jpg "Title")
-</code></pre>
+<pre><code>![alt text](/path/to/img.jpg "Title")</code></pre>
 
 <p>Reference-style:</p>
 
 <pre><code>![alt text][id]
 
-[id]: /path/to/img.jpg "Title"
-</code></pre>
+[id]: /path/to/img.jpg "Title"</code></pre>
 
 <p>Both of the above examples produce the same output:</p>
 
-<pre><code>&lt;img src="/path/to/img.jpg" alt="alt text" title="Title" /&gt;
-</code></pre>
+<pre><code>&lt;img src="/path/to/img.jpg" alt="alt text" title="Title" /&gt;</code></pre>
 
 <h3>Code</h3>
 
@@ -275,8 +252,7 @@ it easy to use Markdown to write about HTML example code:</p>
 <pre><code>I strongly recommend against using any `&lt;blink&gt;` tags.
 
 I wish SmartyPants used named entities like `&amp;mdash;`
-instead of decimal-encoded entites like `&amp;#8212;`.
-</code></pre>
+instead of decimal-encoded entites like `&amp;#8212;`.</code></pre>
 
 <p>Output:</p>
 
@@ -285,8 +261,7 @@ instead of decimal-encoded entites like `&amp;#8212;`.
 
 &lt;p&gt;I wish SmartyPants used named entities like
 &lt;code&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded
-entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
-</code></pre>
+entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;</code></pre>
 
 <p>To specify an entire block of pre-formatted code, indent every line of
 the block by 4 spaces or 1 tab. Just like with code spans, <code>&amp;</code>, <code>&lt;</code>,
@@ -299,8 +274,7 @@ you've got to put paragraph tags in your blockquotes:
 
     &lt;blockquote&gt;
         &lt;p&gt;For example.&lt;/p&gt;
-    &lt;/blockquote&gt;
-</code></pre>
+    &lt;/blockquote&gt;</code></pre>
 
 <p>Output:</p>
 
@@ -310,5 +284,4 @@ you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;blockquote&amp;gt;
     &amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;
 &amp;lt;/blockquote&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;</code></pre>

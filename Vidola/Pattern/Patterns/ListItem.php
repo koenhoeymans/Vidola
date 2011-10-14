@@ -19,7 +19,7 @@ class ListItem implements Pattern
 			(
 			((\t|\ )*)					# can be indented
 			([*+#-]|[0-9]+\.|\#\.)		# markers
-			\ 							# a space
+			[ ]+						# a space
 			)
 			(?<content>
 			.+							# text of first line
@@ -32,7 +32,7 @@ class ListItem implements Pattern
 			@x',
 			function($match)
 			{
-				return '{{li}}' . $match['content'] . '{{/li}}';
+				return '{{li}}' . preg_replace("@(^|\n)[ ]{1,4}@", "\${1}", $match['content']) . '{{/li}}';
 			},
 			$text
 		);

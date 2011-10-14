@@ -114,7 +114,7 @@ class Vidola_Pattern_Patterns_ListItemTest extends PHPUnit_Framework_TestCase
 	public function itemsCanContainWhiteLines()
 	{
 		$text = "\n\n * an item\n\n item continues\n * other item\n\n";
-		$html = "\n\n{{li}}an item\n\n item continues{{/li}}\n{{li}}other item{{/li}}\n\n";
+		$html = "\n\n{{li}}an item\n\nitem continues{{/li}}\n{{li}}other item{{/li}}\n\n";
 		$this->assertEquals(
 			$html, $this->list->replace($text)
 		);

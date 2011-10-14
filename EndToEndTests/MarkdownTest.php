@@ -183,4 +183,24 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('LiteralQuotesInTitles');
 	}
+
+	/**
+	 * @test
+	 * 
+	 * Added two header id's to expected output.
+	 */
+	public function markdownDocumentationBasics()
+	{
+		$this->createTestFor('MarkdownDocumentationBasics');
+	}
+
+	/**
+	 * @test
+	 * 
+	 * Removed some empty lines in text. Changed some tabs to spaces.
+	 */
+	public function markdownDocumentationSyntax()
+	{
+		$this->createTestFor('MarkdownDocumentationSyntax');
+	}
 }

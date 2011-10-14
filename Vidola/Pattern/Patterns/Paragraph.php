@@ -39,7 +39,11 @@ class Paragraph implements Pattern
 				(?(?=<)								# if first line starts with <
 					<
 					(?!
-					(/?(hr|div|pre|p|li|dl|blockquote|table)[a-z0-9 \"\'=]*/?>	# make sure it is not a block level tag
+					h[1-6]
+					|
+					p[ ]
+					|
+					(/?(hr|div|pre|p|li|dl|blockquote|table)[a-z0-9 \"\'=]*/?>
 					|
 					!--(.|\n)*?-->)						# nor a comment
 					)
