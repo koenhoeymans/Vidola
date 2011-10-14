@@ -159,4 +159,12 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('LinksInlineStyle');
 	}
+
+	/**
+	 * @test
+	 */
+	public function linksReferenceStyle()
+	{
+		$this->createTestFor('LinksReferenceStyle');
+	}
 }

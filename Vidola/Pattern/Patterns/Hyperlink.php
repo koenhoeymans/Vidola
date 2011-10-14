@@ -51,10 +51,21 @@ class Hyperlink implements Pattern
 			array($this, 'replaceLink'),
 			$text
 		);
+
 		$replaced = preg_replace_callback(
 			'@
-			\[(?<anchor>.+?)\]\ ?\[(?<id>.*?)\]
-			@x',
+			\[(?<anchor>
+				(
+					[^[]
+					|
+					(?R)
+				)+?
+			)\]
+			(
+				\s*
+				\[(?<id>.*?)\]
+			)?
+			@xs',
 			array($this, 'replaceLinkDefinition'),
 			$replaced
 		);
@@ -72,16 +83,19 @@ class Hyperlink implements Pattern
 
 	private function replaceLinkDefinition($regexMatch)
 	{
-		if ($regexMatch['id'] === '')
+		if (!isset($regexMatch['id']) || ($regexMatch['id'] === ''))
 		{
 			$regexMatch['id'] = $regexMatch['anchor'];
 		}
+
+		$regexMatch['id'] = preg_replace("@ *\n *@", " ", $regexMatch['id']);
 
 		$linkDef = $this->linkDefinitions->get($regexMatch['id']);
 
 		if (!$linkDef)
 		{
-			return $regexMatch[0];
+			# handles cases where link is inside brackets: [this is [a link]]
+			return '[' . $this->replace(substr($regexMatch[0], 1, -1)) . ']';
 		}
 
 		$title = $linkDef->getTitle();

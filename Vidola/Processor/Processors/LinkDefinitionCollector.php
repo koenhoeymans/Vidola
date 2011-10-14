@@ -18,7 +18,7 @@ class LinkDefinitionCollector implements Processor
 	{
 		return preg_replace_callback(
 			'@
-			(^|\n)[ ]{0,3}							# new line, 0-3 spaces
+			(^|\n+)[ ]{0,3}							# new line, 0-3 spaces
 			(\[(?<id>.+)\]):[ ]+ 					# id:space 
 			(<(?<url1>\S+)>|(?<url2>\S+))			# url or <url>
 			(										# "title"|\'title\'|(title)

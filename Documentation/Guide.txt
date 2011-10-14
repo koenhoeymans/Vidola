@@ -169,11 +169,15 @@ Actually, what is after those three tildes doesn't matter, so you could just as 
 This type of code doesn't need to be indented. When you need to write three tildes as code
 you'll have to indent it though:
 
+	A short paragraph.
+
 	~~~ code ~~~
 		~~~
 		meta code example
 		~~~
 	~~~~~~~~~~~~
+
+	Another Short paragraph.
 
 Inline code is also possible with backticks:
 
@@ -361,7 +365,7 @@ Newlines
 
 Newlines can be inserted by adding a double space at the end of the line. This
 follows Markdown convention. Writing documentation is a different context from
-writing forum o blog posts. I think there are less cases in documentation where
+writing forum or blog posts. I think there are less cases in documentation where
 having a hard line break would be beneficial. More technically oriented users
 will also have less problem adoption this, although admittedly it is
 counterintuitive.

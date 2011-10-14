@@ -28,11 +28,11 @@ class Paragraph implements Pattern
 		return preg_replace_callback(
 			'@
 			(										# before
-			^\n?(?=[ ]{0,3}[^\s])
+			^\n?(?=[ ]{0,3}\S)
 			|
-			\n\n\n(?=[ \t]*[^\s])
+			\n\n\n(?=[ \t]*\S)
 			|
-			\n\n(?=[ ]{0,3}[^\s])
+			\n\n(?=[ ]{0,3}\S)
 			)
 			(?<indentation>[ \t]{0,})					# indentation
 			(?<contents>
@@ -52,7 +52,7 @@ class Paragraph implements Pattern
 				(?(?=<)
 				<(?!\S[a-z0-9]*[a-z0-9 ]*>\n).*
 				|
-				[^\s].*)
+				\S.*)
 				)*
 			)
 			(?=\n\n|\n$|$)							# after

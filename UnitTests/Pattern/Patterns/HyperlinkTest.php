@@ -128,12 +128,32 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue(
 		new \Vidola\Pattern\Patterns\LinkDefinition('my site', 'http://example.com')));
 		$text = "Visit [my site] [] for info.\n\n"
-		. "paragraph\n\n";
+			. "paragraph\n\n";
 		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-		. "paragraph\n\n";
+			. "paragraph\n\n";
 	
 		$this->assertEquals(
-		$html, $this->hyperlink->replace($text)
+			$html, $this->hyperlink->replace($text)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function onlyALinkDefinitionMayBeUsed()
+	{
+		$this->linkDefinitions
+			->expects($this->once())
+			->method('get')->with('my site')
+			->will($this->returnValue(
+		new \Vidola\Pattern\Patterns\LinkDefinition('my site', 'http://example.com')));
+		$text = "Visit [my site] for info.\n\n"
+			. "paragraph\n\n";
+		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
+			. "paragraph\n\n";
+		
+		$this->assertEquals(
+			$html, $this->hyperlink->replace($text)
 		);
 	}
 
