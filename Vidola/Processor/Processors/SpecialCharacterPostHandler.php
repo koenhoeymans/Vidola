@@ -19,7 +19,7 @@ class SpecialCharacterPostHandler implements Processor
 		$text = $this->restoreTags($text);
 		$text = $this->encodeSpecialCharsInCode($text);
 		$text = $this->encodeSpecialCharsInRegularText($text);
-		$text = $this->encodeSpecialCharsInUrls($text);
+		$text = $this->encodeSpecialCharsInLinks($text);
 		$text = $this->restoreCodeTagsInCode($text);
 
 		return $text;
@@ -114,19 +114,19 @@ class SpecialCharacterPostHandler implements Processor
 		);
 	}
 
-	private function encodeSpecialCharsInUrls($text)
+	private function encodeSpecialCharsInLinks($text)
 	{
 		return preg_replace_callback(
 			array(
-				'@(<a[ ].*href=.)(.+)((\'|").*>)@iU',
-				'@(<a[ ].*title=.)(.+)((\'|").*>)@iU',
-				'@(<img[ ].*src.)(.+)((\'|").*>)@iU'
+				'@(<a[ ].*href=.)(.+)((\'|")([ ][a-z]+=.+)*>)@iU',
+				'@(<a[ ].*title=.)(.+)((\'|")([ ][a-z]+=.+)*>)@iU',
+				'@(<img[ ].*src=.)(.+)((\'|")([ ][a-z]+=.+)*>)@iU'
 			),
 			function ($match)
 			{
 				return
 					$match[1]
-					. htmlspecialchars($match[2], ENT_NOQUOTES, 'UTF-8', false)
+					. htmlspecialchars($match[2], ENT_COMPAT, 'UTF-8', false)
 					. $match[3];
 			},
 			$text

@@ -167,4 +167,20 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('LinksReferenceStyle');
 	}
+
+	/**
+	 * @test
+	 */
+	public function linksShortcutReferences()
+	{
+		$this->createTestFor('LinksShortcutReferences');
+	}
+
+	/**
+	 * @test
+	 */
+	public function literalQuotesInTitles()
+	{
+		$this->createTestFor('LiteralQuotesInTitles');
+	}
 }
