@@ -13,27 +13,25 @@ use Vidola\Pattern\Pattern;
 class TextualList implements Pattern
 {
 	public function replace($text)
-	{var_dump($text);
+	{
 		return preg_replace_callback(
 			'@
 			(?<start>
 			^								# start of text
 			|
-			^\n(?=([ ]{0,3})[^\s])
+			\n+\n(?=([ ]{0,3})\S)			# indented with max 3 spaces
 			|
-			\n+\n(?=([ ]{0,3})[^\s])		# indented with max 3 spaces
-			|
-			\n+\n\n(?=[ \t]+)				# indented more if at least 2 blank lines 
+			\n(?=[ ]{1,3}\S)				# new line and indented 1-3 spaces 
 			)
 
 			(?<list>
-			(?<indentation>[ \t]*)			# indentation
+			(?<indentation>[ ]*)			# indentation
 			(
 				(?<ul>[*+-])				# unordered list markers
-				[ ]+[^\s].*						# space and text
+				[ ]+\S.*						# space and text
 				(\n								# continuation of list: newline
 				(\n\g{indentation}				# or two lines for paragraph
-				([ ]+|[*+-])\ )?					# or new item 
+				([ ]+|[*+-])[ ])?					# or new item 
 				.+)*
 			|
 				(?<ol>([0-9]+|\#)\.)		# ordered list markers

@@ -197,7 +197,9 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * 
-	 * Removed some empty lines in text. Changed some tabs to spaces.
+	 * Removed some empty lines in text. Changed some tabs to spaces. Most notable
+	 * change though is that an extra space is added for nested lists that have no
+	 * blank line before it.
 	 */
 	public function markdownDocumentationSyntax()
 	{

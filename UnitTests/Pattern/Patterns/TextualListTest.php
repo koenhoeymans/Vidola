@@ -24,6 +24,16 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function noBlankLineBeforeNecessaryWhenIndented()
+	{
+		$text = "paragraph\n * an item\n * other item\n\nparagraph";
+		$html = "paragraph\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\nparagraph";
+		$this->assertEquals($html, $this->list->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
 	public function canBeUnindented()
 	{
 		$text = "\n\n* an item\n* other item\n\n";
@@ -38,16 +48,6 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "\n\n * an item\n * other item\n\n";
 		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
-		$this->assertEquals($html, $this->list->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function indetationDoesntMatterIfPrecededByMoreThanOneBlankLine()
-	{
-		$text = "paragraph\n\n\n\t\t* an item\n\t\t* other item";
-		$html = "paragraph\n\n{{ul}}\n* an item\n* other item\n{{/ul}}";
 		$this->assertEquals($html, $this->list->replace($text));
 	}
 

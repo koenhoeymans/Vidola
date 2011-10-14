@@ -243,8 +243,14 @@ use the hash sign followed by a dot (inspired by [[Pandoc http://johnmacfarlane.
 	#. First item
 	#. Second item
 
-A list needs a blank line before and after it. Nested lists are possible if you
-follow this rule.
+A list needs a blank line before and after it if the list item starts unindented. If you
+use one to three spaces a blank line is not necessary.
+
+	A paragraph.
+	 * a list item indented one space
+
+Nested lists are possible if you follow the rule of either a blank
+line or space indentation.
 
 	* item
 	* item with a sublist
