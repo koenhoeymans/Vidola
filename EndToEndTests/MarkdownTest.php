@@ -205,4 +205,14 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('MarkdownDocumentationSyntax');
 	}
+
+	/**
+	 * @test
+	 * 
+	 * Removed indentation within the blockquote.
+	 */
+	public function nestedBlockquotes()
+	{
+		$this->createTestFor('NestedBlockquotes');
+	}
 }
