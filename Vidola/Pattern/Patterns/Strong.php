@@ -15,7 +15,7 @@ class Strong implements Pattern
 	public function replace($text)
 	{
 		return preg_replace(
-			"#(?<=^|\s)\*\*(?![0-9]| )(\S+|.+?)(?<! )\*\*(?!\w)#",
+			"#(?<=^|\s)\*\*(?![0-9]| )(\S+|.+?(\*)*)(?<! )\*\*(?!\w)#",
 			"{{strong}}\${1}{{/strong}}",
 			$text
 		);

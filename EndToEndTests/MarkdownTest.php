@@ -239,4 +239,14 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('OrderedAndUnorderedLists');
 	}
+
+	/**
+	 * @test
+	 * 
+	 * Removed the underscore tests since I use a different implementation.
+	 */
+	public function strongAndEmTogether()
+	{
+		$this->createTestFor('StrongAndEmTogether');
+	}
 }

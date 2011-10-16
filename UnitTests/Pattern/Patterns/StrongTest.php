@@ -79,4 +79,14 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 		$text = "This is not a sentence with**strong** text.";
 		$this->assertEquals($text, $this->pattern->replace($text));
 	}
+
+	/**
+	 * @test
+	 */
+	public function usesMostOutwardAsterisksIfMoreThanTwo()
+	{
+		$text = "This is a sentence with ***strong text***.";
+		$html = "This is a sentence with {{strong}}*strong text*{{/strong}}.";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
 }

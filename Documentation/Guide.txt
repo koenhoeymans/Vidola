@@ -365,6 +365,10 @@ Important text is achieved by putting words between double asterisks:
 !Note: Importance is chosen instead of strong importance to reflect the change coming with HTML5. See
 the [[section on changed elements http://www.w3.org/TR/html5-diff/#changed-elements]].
 
+There is a difference between this implementation and that of Markdown. Italicized text doesn't
+exist there. The syntax I use for it (`_underscore_`) produces emphasized text. Double underscore
+produces important text in Markdown (`__important__`), but it's absent here.
+
 
 Newlines
 ========

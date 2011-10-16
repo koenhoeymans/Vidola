@@ -19,9 +19,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "This is a sentence with *emphasized* text.";
 		$html = "This is a sentence with {{em}}emphasized{{/em}} text.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -31,9 +29,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "This is a sentence with *emphasized text*.";
 		$html = "This is a sentence with {{em}}emphasized text{{/em}}.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -43,9 +39,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "This is *a sentence* with *emphasized text*.";
 		$html = "This is {{em}}a sentence{{/em}} with {{em}}emphasized text{{/em}}.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -54,10 +48,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	public function aWordCannotContainEmphasizedParts()
 	{
 		$text = "This is not a b*ol*d word.";
-		$html = "This is not a b*ol*d word.";;
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($text, $this->pattern->replace($text));
 	}
 
 	/**
@@ -67,9 +58,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "The result of 5*6, or 6 * 5 is 35, or *thirtyfive* in letters.";
 		$html = "The result of 5*6, or 6 * 5 is 35, or {{em}}thirtyfive{{/em}} in letters.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 
 	/**
@@ -78,10 +67,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	public function firstAsteriskCannotHaveSpaceBehindIt()
 	{
 		$text = "This is not a sentence with * emphasized* text.";
-		$html = "This is not a sentence with * emphasized* text.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($text, $this->pattern->replace($text));
 	}
 
 	/**
@@ -90,10 +76,7 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	public function lastAsteriskCannotHaveSpaceBeforeIt()
 	{
 		$text = "This is not a sentence with *emphasized * text.";
-		$html = "This is not a sentence with *emphasized * text.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($text, $this->pattern->replace($text));
 	}
 
 	/**
@@ -102,9 +85,16 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	public function firstAsteriskMustBePrecededBySpace()
 	{
 		$text = "This is not a sentence with*emphasized* text.";
-		$html = "This is not a sentence with*emphasized* text.";
-		$this->assertEquals(
-		$html, $this->pattern->replace($text)
-		);
+		$this->assertEquals($text, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function canBeStartOfText()
+	{
+		$text = "*emphasized* text.";
+		$html = "{{em}}emphasized{{/em}} text.";
+		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 }
