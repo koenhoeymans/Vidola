@@ -249,4 +249,29 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('StrongAndEmTogether');
 	}
+
+	/**
+	 * @test
+	 * 
+	 * Changed transformed tabs back to spaces in html.
+	 * 
+	 * Changed:
+	 * +	this is a list item
+	 *		indented with spaces
+	 * From spaces to tabs as in the first list item.
+	 */
+	public function tabs()
+	{
+		$this->createTestFor('Tabs');
+	}
+
+	/**
+	 * @test
+	 * 
+	 * Added space before <ul> as expected outcome.
+	 */
+	public function tidyness()
+	{
+		$this->createTestFor('Tidyness');
+	}
 }
