@@ -21,38 +21,48 @@ class TextualList implements Pattern
 			|
 			\n+\n(?=([ ]{0,3})\S)			# indented with max 3 spaces
 			|
-			\n(?=[ ]{1,3}\S)				# new line and indented 1-3 spaces 
+			\n(?=[ ]{1,3}\S)				# new line and indented 1-3 spaces
+			|
+			(^|\n)\S.*\n(?=\t\S)			# tabbed, after unindented non-blank line 
 			)
 
 			(?<list>
-			(?<indentation>[ ]*)			# indentation
+			(?<indentation>[ \t]*)			# indentation
 			(
 				(?<ul>[*+-])				# unordered list markers
-				[ ]+\S.*						# space and text
+				(?<a>[ \t]+)\S.*						# space and text
 				(\n								# continuation of list: newline
-				(\n\g{indentation}				# or two lines for paragraph
-				([ ]+|[*+-])[ ])?					# or new item 
+				(\n\g{indentation}[*+-]?\g{a})?				# or two lines for paragraph
+ 
 				.+)*
 			|
 				(?<ol>([0-9]+|\#)\.)		# ordered list markers
-				[ ]+[^\s].*						# space and text
+				(?<b>[ \t]+)\S.*					# space and text
 				(\n								# continuation of list: newline
-				(\n\g{indentation}				# or two lines for paragraph
-				([ ]+|[0-9]+|\#)\.)?				# or new item 
+				(\n\g{indentation}(([0-9]+|\#)\.)?\g{b})?				# or two lines for paragraph
+ 
 				.+)*
 			)
 			)
-			(?=\n\n|$)
+			(?<end>\n\n|$)
 			@x',
 			function($match)
 			{
-				$list = isset($match['ol']) ? 'ol' : 'ul';
+				$list = (isset($match['ol']) && ($match['ol'] !== '')) ? 'ol' : 'ul';
 				$start = preg_replace("#^(\n\n?)\n*#", "\${1}", $match['start']);
 				$items = preg_replace(
 					"#(\n|^)" . $match['indentation'] . "#", "\${1}", $match['list']
 				);
 
-				return $start . "{{" . $list . "}}\n" . $items . "\n{{/" . $list . "}}";
+				$list = $start
+					. "{{" . $list . "}}\n" . $items . "\n{{/" . $list . "}}"
+					. $match['end'];
+				# creates extra line between list and preceding non-empty line
+				$list = preg_replace(
+					"@([^\n]+)(\n{{(ol|ul)}}.+)\n\n$@s", "\${1}\n\${2}\n\n", $list
+				);
+				
+				return $list;
 			},
 			$text
 		);

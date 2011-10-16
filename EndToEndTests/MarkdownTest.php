@@ -215,4 +215,28 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('NestedBlockquotes');
 	}
+
+	/**
+	 * @test
+	 * 
+	 * Changed:
+	 * *	Tab
+	 *		*	Tab
+	 *	 		*	Tab
+	 * to:
+	 * *	Tab
+	 * 		 *	Tab and space
+	 * 			 * Tab and space
+	 * 
+	 * This follows the difference with Markdown that list can be placed after text
+	 * if it is indented, regardless of the list level. With Markdown indentation
+	 * is not necessary in nested lists, but the first level must have a blank line.
+	 * In my implementation there must not be a blank line in the first level, but
+	 * all levels must have indentation if there is no blank line (indentation not
+	 * necessary if there is a blank line).
+	 */
+	public function orderedAndUnorderedLists()
+	{
+		$this->createTestFor('OrderedAndUnorderedLists');
+	}
 }

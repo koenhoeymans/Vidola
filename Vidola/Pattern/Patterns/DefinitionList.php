@@ -37,7 +37,7 @@ class DefinitionList implements Pattern
 			(?<start>
 			^								# start of text
 			|
-			\n*\n\n(?=([ ]{1,3})?[^\s])		# max 3 spaces
+			\n*\n\n(?=([ ]{1,3})?\S)		# max 3 spaces
 			| 
 			\n+\n\n(?=[ \t]+)				# more indentation if at least 2 blank lines 
 			)

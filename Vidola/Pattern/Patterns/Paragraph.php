@@ -18,23 +18,27 @@ class Paragraph implements Pattern
 	public function replace($text)
 	{
 		# Cannot both be start and end of text.
-		# This is to avoid that eg simple list items
-		# are regarded as parameters.
-		if (!preg_match("#^\n|\n\n#",$text))
+		# This is to avoid that the contents of
+		# eg simple list items are regarded as
+		# paragraphs.
+		if (!(preg_match("#^\n#",$text) && preg_match("#\n$#",$text))
+			&& !preg_match("#\n\n#",$text))
 		{
 			return $text;
 		}
 
 		return preg_replace_callback(
 			'@
-			(										# before
-			^\n?(?=[ ]{0,3}\S)
+			(?<before>								# before
+			^(?=[ ]{0,3}\S)
 			|
-			\n\n\n(?=[ \t]*\S)
+			^\n(?=[ ]{0,3}\S)
 			|
 			\n\n(?=[ ]{0,3}\S)
+			|
+			\n\n\n(?=[ \t]*\S)
 			)
-			(?<indentation>[ \t]{0,})					# indentation
+			(?<indentation>[ \t]*)					# indentation
 			(?<contents>
 				(?(?=<)								# if first line starts with <
 					<
@@ -53,19 +57,19 @@ class Paragraph implements Pattern
 				)
 
 				(\n\g{indentation}?					# next lines
-				(?(?=<)
-				<(?!\S[a-z0-9]*[a-z0-9 ]*>\n).*
-				|
-				\S.*)
+					(?(?=<)
+					<(?!\S[a-z0-9]*[a-z0-9 ]*>\n).*
+					|
+					\S.*)
 				)*
 			)
 			(?=\n\n|\n$|$)							# after
-			@x',
+			@xi',
 			function ($match)
 			{
 				# unindent
 				$paragraph = preg_replace("#(^|\n)[ \t]+#", "\${1}", $match['contents']);
-				$before = preg_replace("#\n\n\n*#", "\n\n", $match[1]);
+				$before = preg_replace("#\n\n\n*#", "\n\n", $match['before']);
 
 				return $before . "{{p}}" . $paragraph . "{{/p}}";
 			},

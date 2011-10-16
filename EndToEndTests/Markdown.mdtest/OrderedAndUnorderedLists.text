@@ -6,7 +6,6 @@ Asterisks tight:
 *	asterisk 2
 *	asterisk 3
 
-
 Asterisks loose:
 
 *	asterisk 1
@@ -98,8 +97,8 @@ Multiple paragraphs:
 ## Nested
 
 *	Tab
-	*	Tab
-		*	Tab
+	 *	Tab
+		 *	Tab
 
 Here's another:
 
@@ -120,7 +119,6 @@ Same thing but with paragraphs:
 	* Foe
 
 3. Third
-
 
 This was an error in Markdown 1.0.1:
 

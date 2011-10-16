@@ -56,7 +56,12 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function noListWhenBlankLineAndTabIndented()
 	{
-		$text = "!note\n\n\t* an item\n\t* other item";
+		$text =
+"!note
+
+	* an item
+	* other item";
+
 		$this->assertEquals($text, $this->list->replace($text));
 	}
 

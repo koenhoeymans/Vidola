@@ -43,6 +43,9 @@ class Vidola
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostHandler')
 		);
+		$htmlBuilder->addPostProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\HtmlPrettifier')
+		);
 
 		// set the source directory or file
 		// --------------------------------

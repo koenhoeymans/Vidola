@@ -12,27 +12,64 @@ use Vidola\Pattern\Pattern;
  */
 class ListItem implements Pattern
 {
+	protected $markers = "([*+#-]|[0-9]+\.|\#\.)";
+
 	public function replace($text)
 	{
+		$markers = $this->markers;
 		return preg_replace_callback(
 			'@
+			(?<=(?<para_before>\n\n)|^|\n)
+
+			# setting the structure for the list items
+			# ----------------------------------------
 			(
-			((\t|\ )*)					# can be indented
-			([*+#-]|[0-9]+\.|\#\.)		# markers
-			[ ]+						# a space
+			(?<marker_indent>[ \t]*)	# indentation of the list marker
+			' . $this->markers . '		# markers
+			(?<text_indent>[ \t]+)		# spaces/tabs
 			)
+
+			# the list item content
+			# ---------------------
 			(?<content>
-			.+							# text of first line
-			(							# optionally
-			\n(?!\\2([*+#-]|[0-9]+\.|\#\.)).+	# continues on next line unindented
-			|
-			\n\n?\\2(?![*+#-]|[0-9]+\.|\#\.).+	# or indented
-			)*
+			\S.*						# text of first line
+				(						# optionally more lines
+				\n							# continue on next line unindented
+					(?!
+						\g{marker_indent}
+						' . $this->markers . '
+					)
+				.+
+				|							# or indented
+				\n\n?\g{marker_indent}
+					(?!' . $this->markers . ')
+				.+
+				)*
+			)
+
+			(?=
+				(?<para_after>\n\n\g{marker_indent}' . $this->markers . '.+)
+				|
+				\n
+				|
+				$
 			)
 			@x',
-			function($match)
+			function($match) use($markers)
 			{
-				return '{{li}}' . preg_replace("@(^|\n)[ ]{1,4}@", "\${1}", $match['content']) . '{{/li}}';
+				$paragraph = (($match['para_before'] != "") || isset($match['para_after']))
+					? "\n\n" : "";
+				$content = preg_replace(
+					array("@(^|\n)" . $match['marker_indent'] . "[ ]?" . $match['text_indent'] . "?@"),
+					"\${1}",
+					$match['content']
+				);
+
+				return
+					'{{li}}'
+					. $content
+					. $paragraph
+					. '{{/li}}';
 			},
 			$text
 		);
