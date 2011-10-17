@@ -16,13 +16,10 @@ class CodeIndented extends Code
 	{
 		return preg_replace_callback(
 			'@
-			(?<pre_code>
-			(?<indentation>[ \t]*)
-			.*\n\n
-			)
+			(?<=^|\n\n)
 			(?<code>
-			\g{indentation}(\t|[ ]{4}).*
-			(\n+\g{indentation}(\t|[ ]{4}).*)*
+			(\t|[ ]{4}).*
+			(\n+(\t|[ ]{4}).*)*
 			)
 			(?=\n\n|$)
 			@x',
@@ -34,6 +31,6 @@ class CodeIndented extends Code
 	protected function replaceCode($match)
 	{
 		$code = preg_replace("#(\n|^)(\t|    )#", "\${1}", $match['code']);
-		return $match['pre_code'] . $this->createCodeInHtml($code);
+		return $this->createCodeInHtml($code);
 	}
 }

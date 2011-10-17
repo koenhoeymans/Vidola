@@ -26,13 +26,13 @@ class ListItem implements Pattern
 			(
 			(?<marker_indent>[ \t]*)	# indentation of the list marker
 			' . $this->markers . '		# markers
-			(?<text_indent>[ \t]+)		# spaces/tabs
+			(?<text_indent>[ ]{1,3}|\t)	# spaces/tabs
 			)
 
 			# the list item content
 			# ---------------------
 			(?<content>
-			\S.*						# text of first line
+			.*						# text of first line
 				(						# optionally more lines
 				\n							# continue on next line unindented
 					(?!
@@ -60,8 +60,11 @@ class ListItem implements Pattern
 				$paragraph = (($match['para_before'] != "") || isset($match['para_after']))
 					? "\n\n" : "";
 				$content = preg_replace(
-					array("@(^|\n)" . $match['marker_indent'] . "[ ]?" . $match['text_indent'] . "?@"),
-					"\${1}",
+					array(
+						"@\n" . $match['marker_indent'] .  "[ ]?" . $match['text_indent'] . "?@",
+						//"@(^|\n)" . $match['marker_indent'] . "[ ]?" . $match['text_indent'] . "?@",
+					),
+					"\n",
 					$match['content']
 				);
 
