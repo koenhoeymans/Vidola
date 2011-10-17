@@ -16,12 +16,12 @@ class CodeIndented extends Code
 	{
 		return preg_replace_callback(
 			'@
-			(?<=^|\n\n)
+			(?<=^|^\n|\n\n)
 			(?<code>
 			(\t|[ ]{4}).*
 			(\n+(\t|[ ]{4}).*)*
 			)
-			(?=\n\n|$)
+			(?=\n\n|\n$|$)
 			@x',
 			array($this, 'replacecode'),
 			$text

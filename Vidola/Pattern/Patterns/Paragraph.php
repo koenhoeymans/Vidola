@@ -34,9 +34,7 @@ class Paragraph implements Pattern
 			|
 			^\n(?=[ ]{0,3}\S)
 			|
-			\n\n(?=[ ]{0,3}\S)
-			|
-			\n\n\n(?=[ \t]*\S)
+			\n\n+(?=[ ]{0,3}\S)
 			)
 			(?<indentation>[ \t]*)					# indentation
 			(?<contents>

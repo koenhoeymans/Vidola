@@ -111,16 +111,6 @@ class Vidola_Pattern_Patterns_ParagraphTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function afterTwoBlankLinesIndentationOfFirstLineDoesntMatter()
-	{
-		$text = "\n\n\n\t\tparagraph\n\n";
-		$html = "\n\n{{p}}paragraph{{/p}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
 	public function followingLinesCanBeIndentedTheSame()
 	{
 		$text =
