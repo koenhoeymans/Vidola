@@ -80,4 +80,12 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('CodeBlockOnSecondLine');
 	}
+
+	/**
+	 * @test
+	 */
+	public function codeSpans()
+	{
+		$this->createTestFor('CodeSpans');
+	}
 }
