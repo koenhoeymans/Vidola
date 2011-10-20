@@ -34,7 +34,7 @@ class Header implements Pattern
 			(?<pre>[-=+*^\#]{3,})?
 			\n?[ ]{0,3}(?<text>.+)\n[ ]{0,3}
 			(?<post>(?<!\n\n)[-=+*^\#]{3,})
-			(?=\n)
+			(?=\n\n|(?<no_blank_after>\n))
 			@x',
 			array($this, 'createSetextHeaders'),
 			$text
@@ -49,18 +49,20 @@ class Header implements Pattern
 			(?<level>[#]{1,6})
 			\ ?(?<text>.+?)
 			(\ ?[#]+)?
-			(?=\n)
+			(?=\n\n|(?<no_blank_after>\n))
 			@x',
 			function ($match)
 			{
 				$level = strlen($match['level']);
 				$level = ($level > 5) ? 6 : $level;
 				$start = ($match['start'] == '') ? '' : "\n\n";
+				$end = (isset($match['no_blank_after'])) ? "\n" : ""; 
 
 				return $start
 					. '{{h' . $level . '}}'
 					. $match['text']
-					. '{{/h' . $level . '}}';
+					. '{{/h' . $level . '}}'
+					. $end;
 			},
 			$text
 		);
@@ -85,7 +87,8 @@ class Header implements Pattern
 
 		$id = str_replace(' ', '_', $match['text']);
 		$start = ($match['start'] == '') ? '' : "\n\n";
+		$end = (isset($match['no_blank_after'])) ? "\n" : "";
 
-		return $start . "{{h$level id=\"$id\"}}" . $match['text'] . "{{/h$level}}";
+		return $start . "{{h$level id=\"$id\"}}" . $match['text'] . "{{/h$level}}" . $end;
 	}
 }

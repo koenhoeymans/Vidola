@@ -88,4 +88,70 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('CodeSpans');
 	}
+
+	/**
+	 * @test
+	 */
+	public function emailAutoLinks()
+	{
+		$this->createTestFor('EmailAutoLinks');
+	}
+
+	/**
+	 * @test
+	 */
+	public function emphasis()
+	{
+		$this->createTestFor('Emphasis');
+	}
+
+	/**
+	 * @test
+	 */
+	public function emptyListItem()
+	{
+		$this->createTestFor('EmptyListItem');
+	}
+
+	/**
+	 * @test
+	 */
+	public function headers()
+	{
+		$this->createTestFor('Headers');
+	}
+
+	/**
+	 * @test
+	 */
+	public function horizontalRules()
+	{
+		$this->createTestFor('HorizontalRules');
+	}
+
+	/**
+	 * @test
+	 * 
+	 * Changed transformation to spaces to tabs (as in text).
+	 */
+	public function inlineHTMLSimple()
+	{
+		$this->createTestFor('InlineHTMLSimple');
+	}
+
+	/**
+	 * @test
+	 */
+	public function inlineHTMLSpan()
+	{
+		$this->createTestFor('InlineHTMLSpan');
+	}
+
+	/**
+	 * @test
+	 */
+	public function inlineHTMLComments()
+	{
+		$this->createTestFor('InlineHTMLComments');
+	}
 }
