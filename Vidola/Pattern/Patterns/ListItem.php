@@ -21,12 +21,12 @@ class ListItem implements Pattern
 			'@
 			(?<=(?<para_before>\n\n)|^|\n)
 
-			# setting the structure for the list items
+			# setting the structure for the list item
 			# ----------------------------------------
 			(
 			(?<marker_indent>[ \t]*)	# indentation of the list marker
 			' . $this->markers . '		# markers
-			(?<text_indent>[ ]{1,3}|\t)	# spaces/tabs
+			(?<text_indent>[ ]{1,3}|\t|(?=\n))	# spaces/tabs
 			)
 
 			# the list item content
@@ -55,15 +55,12 @@ class ListItem implements Pattern
 				$
 			)
 			@x',
-			function($match) use($markers)
+			function($match)
 			{
 				$paragraph = (($match['para_before'] != "") || isset($match['para_after']))
 					? "\n\n" : "";
 				$content = preg_replace(
-					array(
-						"@\n" . $match['marker_indent'] .  "[ ]?" . $match['text_indent'] . "?@",
-						//"@(^|\n)" . $match['marker_indent'] . "[ ]?" . $match['text_indent'] . "?@",
-					),
+					"@\n" . $match['marker_indent'] .  "[ ]?" . $match['text_indent'] . "?@",
 					"\n",
 					$match['content']
 				);

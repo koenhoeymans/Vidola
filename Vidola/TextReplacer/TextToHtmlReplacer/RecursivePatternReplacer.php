@@ -28,7 +28,7 @@ class RecursivePatternReplacer
 		(?<before_element>.*)
 			(?<element>
 				{{(.(?![ ]/))+}}	# opening tag
-				((?(?={){[^{]|.)|(?R))+
+				(()|(?(?={){[^{]|.)|(?R))+
 				{{/.+}}				# closing tag
 				|
 				{{br[ ]/}}
