@@ -189,4 +189,20 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('MixedOLsAndULs');
 	}
+
+	/**
+	 * @test
+	 */
+	public function nesting()
+	{
+		$this->createTestFor('Nesting');
+	}
+
+	/**
+	 * @test
+	 */
+	public function parensInURL()
+	{
+		$this->createTestFor('ParensInURL');
+	}
 }

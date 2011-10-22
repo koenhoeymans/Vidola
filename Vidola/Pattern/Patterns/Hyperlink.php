@@ -120,9 +120,6 @@ class Hyperlink implements Pattern
 		{
 			$url = $this->relativeUrlBuilder->buildUrl($url);
 		}
-		$url = str_replace('&', '&amp;', $url);
-		$url = str_replace('<', '&lt;', $url);
-		$url = str_replace('"', '&quot;', $url);
 
 		return '{{a href="' . $url . '"' . $titleAttr . '}}' . $anchorText . '{{/a}}';
 	}

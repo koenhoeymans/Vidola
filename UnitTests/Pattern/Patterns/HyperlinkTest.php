@@ -174,7 +174,7 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function squareBracketsInLinksAreOk()
 	{
-		$text = "Visit [my website](http://example.com?x=[y]&foo=[bar]) for info.";
+		$text = "Visit [my website](http://example.com?x=[y]&amp;foo=[bar]) for info.";
 		$html = "Visit {{a href=\"http://example.com?x=[y]&amp;foo=[bar]\"}}my website{{/a}} for info.";
 		$this->assertEquals(
 			$html, $this->hyperlink->replace($text)

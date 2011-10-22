@@ -46,7 +46,7 @@ class SpecialCharacterPostHandler implements Processor
 			@xU',
 			function ($match)
 			{
-			# http://stackoverflow.com/questions/3005116/how-to-convert-all-characters-to-their-html-entity-equivalent-using-php/
+				# http://stackoverflow.com/questions/3005116/how-to-convert-all-characters-to-their-html-entity-equivalent-using-php/
 				$convmap = array(0x0, 0xffff, 0, 0xffff);
 				$decoded = mb_decode_numericentity($match[1], $convmap, 'UTF-8');
 							return $decoded;
