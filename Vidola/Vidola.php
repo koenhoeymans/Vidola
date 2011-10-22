@@ -32,6 +32,9 @@ class Vidola
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LineEndingsStandardizer')
 		);
 		$htmlBuilder->addPreProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\HeaderFiller')
+		);
+		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
 		);
 		$htmlBuilder->addPreProcessor(

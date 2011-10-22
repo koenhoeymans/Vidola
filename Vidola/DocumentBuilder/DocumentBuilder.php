@@ -62,8 +62,6 @@ class DocumentBuilder
 
 		$textToTransform = $this->docFileRetriever->retrieveContent($fileName);
 
-		$this->headers->replace($textToTransform); // fill headers before toc but replace nothing
-
 		$replacedText = $this->textReplacer->replace($textToTransform);
 
 		$this->outputBuilder->setFileName($fileName);
