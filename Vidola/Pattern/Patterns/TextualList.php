@@ -44,23 +44,30 @@ class TextualList implements Pattern
 				.+)*
 			)
 			)
-			(?<end>\n\n|$)
+			(?=(?<blank_line_after>\n\n)|$)
 			@x',
 			function($match)
 			{
 				$list = (isset($match['ol']) && ($match['ol'] !== '')) ? 'ol' : 'ul';
+
+				# multiple blank lines before the list are reduced to one blank line
 				$start = preg_replace("#^(\n\n?)\n*#", "\${1}", $match['start']);
+
+				# list is unindented
 				$items = preg_replace(
 					"#(\n|^)" . $match['indentation'] . "#", "\${1}", $match['list']
 				);
 
 				$list = $start
-					. "{{" . $list . "}}\n" . $items . "\n{{/" . $list . "}}"
-					. $match['end'];
+					. "{{" . $list . "}}\n" . $items . "\n{{/" . $list . "}}";
+
 				# creates extra line between list and preceding non-empty line
-				$list = preg_replace(
-					"@([^\n]+)(\n{{(ol|ul)}}.+)\n\n$@s", "\${1}\n\${2}\n\n", $list
-				);
+				if(isset($match['blank_line_after']))
+				{
+					$list = preg_replace(
+						"@([^\n]+)(\n{{(ol|ul)}}.+)$@s", "\${1}\n\${2}", $list
+					);
+				}
 				
 				return $list;
 			},

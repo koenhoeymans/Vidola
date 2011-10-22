@@ -99,6 +99,9 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
+	 * 
+	 * Removed middle word emphasis: not supported.
+	 * Removed incorrect nesting: not supported.
 	 */
 	public function emphasis()
 	{
@@ -153,5 +156,37 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	public function inlineHTMLComments()
 	{
 		$this->createTestFor('InlineHTMLComments');
+	}
+
+	/**
+	 * @test
+	 */
+	public function insAndDel()
+	{
+		$this->createTestFor('InsAndDel');
+	}
+
+	/**
+	 * @test
+	 */
+	public function linksInlineStyle()
+	{
+		$this->createTestFor('LinksInlineStyle');
+	}
+
+	/**
+	 * @test
+	 */
+	public function mD5Hashes()
+	{
+		$this->createTestFor('MD5Hashes');
+	}
+
+	/**
+	 * @test
+	 */
+	public function mixedOLsAndULs()
+	{
+		$this->createTestFor('MixedOLsAndULs');
 	}
 }
