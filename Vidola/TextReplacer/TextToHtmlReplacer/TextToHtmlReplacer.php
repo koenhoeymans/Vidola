@@ -57,10 +57,7 @@ class TextToHtmlReplacer implements TextReplacer
 	{
 		$text = "\n\n" . $text;
 
-		foreach ($this->preProcessors as $processor)
-		{
-			$text = $processor->process($text);
-		}
+		$text = $this->preProcess($text);
 
 		foreach( $this->patternList->getRootPatterns() as $pattern)
 		{
@@ -69,11 +66,28 @@ class TextToHtmlReplacer implements TextReplacer
 			);
 		}
 
+		$text = $this->postProcess($text);
+
+		return trim($text);
+	}
+
+	private function preProcess($text)
+	{
+		foreach ($this->preProcessors as $processor)
+		{
+			$text = $processor->process($text);
+		}
+
+		return $text;
+	}
+
+	private function postProcess($text)
+	{
 		foreach ($this->postProcessors as $processor)
 		{
 			$text = $processor->process($text);
 		}
 
-		return trim($text);
+		return $text;
 	}
 }
