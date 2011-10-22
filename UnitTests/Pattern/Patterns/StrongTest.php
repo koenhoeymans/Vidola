@@ -89,4 +89,14 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 		$html = "This is a sentence with {{strong}}*strong text*{{/strong}}.";
 		$this->assertEquals($html, $this->pattern->replace($text));
 	}
+
+	/**
+	 * @test
+	 */
+	public function canContainMultiplication()
+	{
+		$text = "The **result of 5*6 is thirtyfive**.";
+		$html = "The {{strong}}result of 5*6 is thirtyfive{{/strong}}.";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
 }

@@ -205,4 +205,39 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	{
 		$this->createTestFor('ParensInURL');
 	}
+
+	/**
+	 * @test
+	 * 
+	 * Changed expected outcome: we allow all characters to be escaped: \\
+	 * will become \, \" will become " etc.
+	 * 
+	 * Also we don't do tabs to spaces conversion: code will keep these therefor
+	 * readded tabs to expected outcome.
+	 */
+	public function PHPSpecificBugs()
+	{
+		$this->createTestFor('PHPSpecificBugs');
+	}
+
+	/**
+	 * @test
+	 * 
+	 * Changed attribute order.
+	 */
+	public function quotesInAttributes()
+	{
+		$this->createTestFor('QuotesInAttributes');
+	}
+
+	/**
+	 * @test
+	 * 
+	 * Removed paragraph and spaces part. We allow this to be a list
+	 * (as MD also does within a nested list).
+	 */
+	public function tightBlocks()
+	{
+		$this->createTestFor('TightBlocks');
+	}
 }

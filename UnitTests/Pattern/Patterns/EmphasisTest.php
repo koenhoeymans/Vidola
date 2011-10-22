@@ -64,6 +64,16 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function canContainMultiplication()
+	{
+		$text = "The *result of 5*6 is thirtyfive*.";
+		$html = "The {{em}}result of 5*6 is thirtyfive{{/em}}.";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
 	public function firstAsteriskCannotHaveSpaceBehindIt()
 	{
 		$text = "This is not a sentence with * emphasized* text.";
@@ -95,6 +105,36 @@ class Vidola_Pattern_Patterns_EmphasisTest extends PHPUnit_Framework_TestCase
 	{
 		$text = "*emphasized* text.";
 		$html = "{{em}}emphasized{{/em}} text.";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function canContainStrongText()
+	{
+		$text = "*emphasized with **strong*** text.";
+		$html = "{{em}}emphasized with **strong**{{/em}} text.";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function canContainStrongText2()
+	{
+		$text = "***emphasized** with strong* text.";
+		$html = "{{em}}**emphasized** with strong{{/em}} text.";
+		$this->assertEquals($html, $this->pattern->replace($text));
+	}
+
+	/**
+	 * @test
+	 */
+	public function canContainStrongText3()
+	{
+		$text = "*also **emphasized** with strong* text.";
+		$html = "{{em}}also **emphasized** with strong{{/em}} text.";
 		$this->assertEquals($html, $this->pattern->replace($text));
 	}
 }
