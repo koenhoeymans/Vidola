@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_DefinitionTermTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_DefinitionTermTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->dt = new \Vidola\Pattern\Patterns\DefinitionTerm();
+	}
+
+	public function getPattern()
+	{
+		return $this->dt;
 	}
 
 	/**
@@ -18,15 +23,15 @@ class Vidola_Pattern_Patterns_DefinitionTermTest extends PHPUnit_Framework_TestC
 	public function aTermCanBeFollowedByADefinition()
 	{
 		$text =
-'term a:
-	~explanation
-';
-		$transformation =
-'{{dt}}term a{{/dt}}
-	~explanation
-';
+'para
 
-		$this->assertEquals($transformation, $this->dt->replace($text));		
+term a
+:	explanation
+
+para';
+
+		$dom = new \DOMElement('dt', 'term a');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -35,17 +40,16 @@ class Vidola_Pattern_Patterns_DefinitionTermTest extends PHPUnit_Framework_TestC
 	public function aTermCanBeFollowedByAnotherTermSharingTheSameDefinition()
 	{
 				$text =
-'term a:
-term b:
-	~explanation
-';
-		$transformation =
-'{{dt}}term a{{/dt}}
-{{dt}}term b{{/dt}}
-	~explanation
-';
+'para
 
-		$this->assertEquals($transformation, $this->dt->replace($text));
+term a
+term b
+:	explanation
+
+para';
+
+		$dom = new \DOMElement('dt', 'term a');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -54,17 +58,16 @@ term b:
 	public function termsCanHaveMoreThanOneDefinition()
 	{
 				$text =
-'term a:
-	~explanation
-	~explanation
-';
-		$transformation =
-'{{dt}}term a{{/dt}}
-	~explanation
-	~explanation
-';
+'para
 
-		$this->assertEquals($transformation, $this->dt->replace($text));
+term a
+:	explanation x
+:	explanation y
+
+para';
+
+		$dom = new \DOMElement('dt', 'term a');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -73,19 +76,17 @@ term b:
 	public function moreThanOneTermCanShareMoreThanOneDefinition()
 	{
 		$text =
-'term a:
-term b:
-	~explanation
-	~explanation
-';
-		$transformation =
-'{{dt}}term a{{/dt}}
-{{dt}}term b{{/dt}}
-	~explanation
-	~explanation
-';
+'para
 
-		$this->assertEquals($transformation, $this->dt->replace($text));
+term a
+term b
+:	explanation
+:	explanation
+
+para';
+
+		$dom = new \DOMElement('dt', 'term a');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -94,18 +95,16 @@ term b:
 	public function definitionListCanContainMoreThanOneTermWithoutNewlineBetweenPreviousDescriptionAndNewTerm()
 	{
 		$text =
-'term a:
-	explanation
-term b:
-	explanation
-';
-		$transformation =
-'{{dt}}term a{{/dt}}
-	explanation
-{{dt}}term b{{/dt}}
-	explanation
-';
+'para
 
-		$this->assertEquals($transformation, $this->dt->replace($text));
+term a
+:	explanation
+term b
+:	explanation
+
+para';
+
+		$dom = new \DOMElement('dt', 'term a');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 }

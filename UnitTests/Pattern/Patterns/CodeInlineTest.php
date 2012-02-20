@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_CodeInlineTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->codeInline = new \Vidola\Pattern\Patterns\CodeInline();
+	}
+
+	public function getPattern()
+	{
+		return $this->codeInline;
 	}
 
 	/**
@@ -17,10 +22,9 @@ class Vidola_Pattern_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
 	 */
 	public function transformsCodeBetweenBackticks()
 	{
-		$this->assertEquals(
-			'Text with {{code}}code{{/code}} in between.',
-			$this->codeInline->replace('Text with `code` in between.')
-		);
+		$text = 'Text with `code` in between.';
+		$dom = new \DOMElement('code', 'code');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -28,10 +32,9 @@ class Vidola_Pattern_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
 	 */
 	public function canStartAndEndWithMultipleBackticks()
 	{
-		$this->assertEquals(
-			'Text with {{code}}code{{/code}} in between.',
-			$this->codeInline->replace('Text with ``code`` in between.')
-		);
+		$text = 'Text with ``code`` in between.';
+		$dom = new \DOMElement('code', 'code');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -39,9 +42,8 @@ class Vidola_Pattern_Patterns_CodeInlineTest extends PHPUnit_Framework_TestCase
 	 */
 	public function backtickCanBePlacedWithinMultipleBackticks()
 	{
-		$this->assertEquals(
-			'Text with {{code}}co`de{{/code}} in between.',
-			$this->codeInline->replace('Text with ``co`de`` in between.')
-		);
+		$text = 'Text with ``co`de`` in between.';
+		$dom = new \DOMElement('code', 'co`de');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 }

@@ -10,16 +10,24 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-abstract class Code implements Pattern
+abstract class Code extends Pattern
 {
-	protected function createCodeInHtml($code, $pre = true)
+	protected function createCodeReplacement($code, $pre = true, \DOMNode $parentNode)
 	{
-		$code = '{{code}}' . $code . '{{/code}}';
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$codeDom = $ownerDocument->createElement('code');
+		$codeDom->appendChild($ownerDocument->createTextNode($code));
 
 		if ($pre)
 		{
-			return '{{pre}}' . $code . '{{/pre}}';
+			$preDom = $ownerDocument->createElement('pre');
+			$preDom->appendChild($codeDom);
+
+			return $preDom;
 		}
-		return $code;
+		else
+		{
+			return $codeDom;
+		}
 	}
 }

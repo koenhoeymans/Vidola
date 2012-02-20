@@ -10,60 +10,47 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class DefinitionList implements Pattern
+class DefinitionList extends Pattern
 {
-	/**
-	 * term a:
-	 * term b:
-	 * 		-explanation
-	 * 
-	 * 		may contain multiple paragraphs
-	 * 
-	 * 		~may contain multiple descriptions (defintion description knows about tilde)
-	 * 
-	 * other:
-	 * 		~definition
-	 * 
-	 * OR
-	 * 
-	 * term a
-	 * term b
-	 * 		description
-	 */
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace_callback(
+		return
 			'@
-			(?<start>
-			^								# start of text
-			|
-			\n*\n\n(?=([ ]{1,3})?\S)		# max 3 spaces
-			| 
-			\n+\n\n(?=[ \t]+)				# more indentation if at least 2 blank lines 
+			(?<=\n\n|^\n|^)
+			(?<list>
+				(
+					[ ]{0,3}.+(\n[ ]{0,3}.+)*		# dt
+					
+					(\n\n?[ ]{0,3}:([ ]|\t)*.+		# dd
+						(
+							\n(?![ ]{0,3}:\s).+
+							|
+							\n\n([ ]{4}|\t).+
+						)*
+					)+
+				)
+				(
+					\n\n?
+					[ ]{0,3}.+(\n[ ]{0,3}.+)*		# dt
+					
+					(\n\n?[ ]{0,3}:([ ]|\t)*.+		# dd
+						(
+							\n(?![ ]{0,3}:\s).+
+							|
+							\n\n([ ]{4}|\t).+
+						)*
+					)+
+				)*
 			)
+			@x';
+	}
 
-			((
-			(?<t_indent>[ \t]*)				# indentation
-			.+:								# term
-			(\n\g{t_indent}.+:)*			# other terms with same description
-			\n								# description on new line
-			(?<d_indent>\g{t_indent}[ \t]+).+		# indented, text
-			(\n(\n\g{d_indent})?.+)*		# following lines: text on next line or
-											# blank line and text indented
-			(?<end>\n\n|$))+)
-			@x',
-			function ($match)
-			{
-				# unindent
-				$contents = preg_replace("#(\n|^)" . $match['t_indent'] . "#", "\${1}", "$match[3]");
-				# trim last newlines so </dl> is placed right behind matching text
-				$contents = rtrim($contents);
-				# only one blank line even when there are more
-				$start = ($match['start'] === '') ? '' : "\n\n";
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$dl = $ownerDocument->createElement('dl');
+		$dl->appendChild($ownerDocument->createTextNode($match['list']));
 
-				return $start . "{{dl}}\n$contents\n{{/dl}}" . $match['end'];
-			},
-			$text
-		);
+		return $dl;
 	}
 }

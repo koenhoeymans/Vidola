@@ -6,11 +6,12 @@
 namespace Vidola\Pattern\Patterns;
 
 use Vidola\Pattern\Pattern;
+use Vidola\Document\Element;
 
 /**
  * @package Vidola
  */
-class Header implements Pattern
+class Header extends Pattern
 {
 	private $headerList = array(
 		1 => array('before' => null, 'after' => null),
@@ -21,54 +22,42 @@ class Header implements Pattern
 		6 => array('before' => null, 'after' => null)
 	);
 
-	public function replace($text)
+	public function getRegex()
 	{
-		return $this->replaceAtx($this->replaceSetext($text));
+		return
+		'@
+		(?<=^|\n)
+		(?<setext>
+			([ ]{0,3}(?<pre>[-=+*^#]{3,})\n)?
+			[ ]{0,3}(?<text>\S.*)\n
+			[ ]{0,3}(?<post>[-=+*^#]{3,})
+		)
+		(?=\n|$)
+
+		|
+
+		(?<=^|\n\n)
+		(?<atx>(?J)
+			[ ]{0,3}(?<level>[#]{1,6})[ ]?(?<text>[^\n]+?)([ ]?[#]*)
+		)
+		(?=\n|$)
+		@x';
 	}
 
-	private function replaceSetext($text)
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
 	{
-		return preg_replace_callback(
-			'@
-			(?<start>(\n+|^)[ ]{0,3})
-			(?<pre>[-=+*^\#]{3,})?
-			\n?[ ]{0,3}(?<text>.+)\n[ ]{0,3}
-			(?<post>(?<!\n\n)[-=+*^\#]{3,})
-			(?=\n\n|(?<no_blank_after>\n))
-			@x',
-			array($this, 'createSetextHeaders'),
-			$text
-		);
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		if (isset($match['atx']))
+		{
+			return $this->createAtxHeaders($match, $ownerDocument);
+		}
+		else
+		{
+			return $this->createSetextHeaders($match, $ownerDocument);
+		}
 	}
 
-	private function replaceAtx($text)
-	{
-		return preg_replace_callback(
-			'@
-			(?<start>(\n+|^)[ ]{0,3})
-			(?<level>[#]{1,6})
-			\ ?(?<text>.+?)
-			(\ ?[#]+)?
-			(?=\n\n|(?<no_blank_after>\n))
-			@x',
-			function ($match)
-			{
-				$level = strlen($match['level']);
-				$level = ($level > 5) ? 6 : $level;
-				$start = ($match['start'] == '') ? '' : "\n\n";
-				$end = (isset($match['no_blank_after'])) ? "\n" : ""; 
-
-				return $start
-					. '{{h' . $level . '}}'
-					. $match['text']
-					. '{{/h' . $level . '}}'
-					. $end;
-			},
-			$text
-		);
-	}
-
-	private function createSetextHeaders($match)
+	private function createSetextHeaders(array $match, \DOMDocument $domDoc)
 	{
 		foreach ($this->headerList as $level => $header)
 		{
@@ -85,10 +74,21 @@ class Header implements Pattern
 			}
 		}
 
-		$id = str_replace(' ', '_', $match['text']);
-		$start = ($match['start'] == '') ? '' : "\n\n";
-		$end = (isset($match['no_blank_after'])) ? "\n" : "";
+		$h = $domDoc->createElement('h' . $level);
+		$h->appendChild($domDoc->createTextNode($match['text']));
 
-		return $start . "{{h$level id=\"$id\"}}" . $match['text'] . "{{/h$level}}" . $end;
+		return $h;
+	}
+
+	private function createAtxHeaders(array $match, \DOMDocument $domDoc)
+	{
+		
+		$level = strlen($match['level']);
+		$level = ($level > 5) ? 6 : $level;
+
+		$h = $domDoc->createElement('h' . $level);
+		$h->appendChild($domDoc->createTextNode($match['text']));
+		
+		return $h;
 	}
 }

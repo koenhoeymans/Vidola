@@ -5,11 +5,26 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_CodeWithTildesTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_CodeWithTildesTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\CodeWithTildes();
+	}
+
+	public function getPattern()
+	{
+		return $this->pattern;
+	}
+
+	public function createDomFromText($text)
+	{
+		$domDoc = new \DOMDocument();
+		$domElementCode = new \DOMElement('code', $text);
+		$domElementPre = new \DOMElement('pre');
+		$domDoc->appendChild($domElementPre);
+		$domElementPre->appendChild($domElementCode);
+		return $domElementPre;
 	}
 
 	/**
@@ -17,9 +32,8 @@ class Vidola_Pattern_Patterns_CodeWithTildesTest extends PHPUnit_Framework_TestC
 	 */
 	public function codeCanBeSurroundedByTwoLinesOfAtLeastThreeTildes()
 	{
-		$code = "\n\n~~~\nthe code\n~~~\n\n";
-		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n~~~\nthe code\n~~~\n\n";
+		$this->assertCreatesDomFromText($this->createDomFromText('the code'), $text);
 	}
 
 	/**
@@ -27,7 +41,7 @@ class Vidola_Pattern_Patterns_CodeWithTildesTest extends PHPUnit_Framework_TestC
 	 */
 	public function tildeBlockCanContainRowOfTildesIfTheyAreIndented()
 	{
-		$code = "
+		$text = "
 
 ~~~
 	example
@@ -41,18 +55,17 @@ class Vidola_Pattern_Patterns_CodeWithTildesTest extends PHPUnit_Framework_TestC
 ~~~
 
 ";
-		$html = "
 
-{{pre}}{{code}}example
+		$codeText =
+"example
 
 ~~~
 
 code
 
-~~~{{/code}}{{/pre}}
+~~~";
 
-";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$this->assertCreatesDomFromText($this->createDomFromText($codeText), $text);
 	}
 
 	/**
@@ -60,9 +73,8 @@ code
 	 */
 	public function afterThreeTildesCanBeAnyText()
 	{
-		$code = "\n\n~~~ code ~~~\nthe code\n~~~~~~~~\n\n";
-		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n~~~ code ~~~\nthe code\n~~~~~~~~\n\n";
+		$this->assertCreatesDomFromText($this->createDomFromText('the code'), $text);
 	}
 
 	/**
@@ -70,9 +82,10 @@ code
 	 */
 	public function firstCharacterDeterminesIndentation()
 	{
-		$code = "\n\n~~~\n\tindented\n\t\tdoubleindented\n~~~\n\n";
-		$html = "\n\n{{pre}}{{code}}indented\n\tdoubleindented{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n~~~\n\tindented\n\t\tdoubleindented\n~~~\n\n";
+		$this->assertCreatesDomFromText(
+			$this->createDomFromText("indented\n\tdoubleindented"), $text
+		);
 	}
 
 	/**
@@ -80,9 +93,8 @@ code
 	 */
 	public function wholeTildeCodeBlockCanBeIndented()
 	{
-		$code = "\n\n\t~~~\n\tthe code\n\t~~~\n\n";
-		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n\t~~~\n\tthe code\n\t~~~\n\n";
+		$this->assertCreatesDomFromText($this->createDomFromText('the code'), $text);
 	}
 
 	/**
@@ -90,8 +102,7 @@ code
 	 */
 	public function tildeCodeBlockIsNonGreedy()
 	{
-		$code = "\n\n~~~\nthe code\n~~~\n\nparagraph\n\n~~~\ncode\n~~~\n\n";
-		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\nparagraph\n\n{{pre}}{{code}}code{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n~~~\nthe code\n~~~\n\nparagraph\n\n~~~\ncode\n~~~\n\n";
+		$this->assertCreatesDomFromText($this->createDomFromText('the code'), $text);
 	}
 }

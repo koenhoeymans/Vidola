@@ -4,8 +4,17 @@ require_once('TestHelper.php');
 
 /**
  * These are the PHPMarkdown tests as found in the test suite of PHPMarkdown.
+ * 
+ * Removed all newlines before ending code tag:
+ * 
+ * code
+ * </code>
+ * 
+ * becomes
+ * 
+ * code</code>
  */
-class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
+class Vidola_EndToEndTests_PhpMarkdownTest extends \Vidola\EndToEndTests\Support\Tidy
 {
 	public function createTestFor($name)
 	{
@@ -26,15 +35,15 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 		\Vidola\Vidola::run();
 		
 		$this->assertEquals(
-			file_get_contents(
+			$this->tidy(file_get_contents(
 				__DIR__
 				. DIRECTORY_SEPARATOR . 'PhpMarkdown.mdtest'
 				. DIRECTORY_SEPARATOR . $name . '.html'
-				),
-			file_get_contents(
+				)),
+			$this->tidy(file_get_contents(
 				$_SERVER['argv']['target.dir']
 				. DIRECTORY_SEPARATOR . $name . '.html'
-			)
+			))
 		);
 
 		if (file_exists($dir . $name . '.html'))
@@ -45,6 +54,8 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
+	 * 
+	 * Changed expected outcome for the email to an encoded one (cfr text emailautolinks)
 	 */
 	public function autoLinks()
 	{
@@ -61,12 +72,6 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * 
-	 * Changed some whitespace expectations.
-	 * 
-	 * Changed *	    code block
-	 * 					as first element of a list item
-	 * to using a tab instead of the first four spaces, as in the first list item.
 	 */
 	public function codeBlockInAListItem()
 	{
@@ -100,8 +105,50 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * 
-	 * Removed middle word emphasis: not supported.
-	 * Removed incorrect nesting: not supported.
+	 * Changed expected outcome for emphasis within words:
+	 * Eg my_precious_text won't have emphasis. Neither will
+	 * _a_b.
+	 * 
+	 * * * *
+	 * 
+	 * Also changed expected outcome for underscores. We treat
+	 * them as converting to <i> instead of <em>.
+	 * 
+	 * * * *
+	 * 
+	 * *test  **test*  test**
+	 * becomes
+	 * <em>text **test</em> test**
+	 * instead of
+	 * *test  <strong>test*  test</strong>
+	 * 
+	 * _test  __test_  test__
+	 * becomes
+	 * <i>test  __test</i>  test__
+	 * instead of
+	 * _test  <strong>test_  test</strong>
+	 * 
+	 * * * *
+	 * 
+	 * Removed:
+	 * ## Overlong emphasis
+	 * Name: ____________  
+	 * Organization: ____
+	 * Region/Country: __
+	 * _____Cut here_____
+	 * ____Cut here____
+	 * 
+	 * * * *
+	 * 
+	 * Incorrect nesting; Changed expected outcome for:
+	 * _test   _test_  test_
+	 * __test __test__ test__
+	 * **test **test** test**
+	 * to
+	 * <i>test   <i>test</i>  test</i>
+	 * <strong>test <strong>test</strong> test</strong>
+	 * <strong>test <strong>test</strong> test</strong>
+	 * (because it is an example of correct, not incorrect, nesting)
 	 */
 	public function emphasis()
 	{
@@ -118,6 +165,14 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
+	 * 
+	 * A header after a paragraph needs to be preceded by a blank line. Eg:
+	 * 
+	 * Let's talk about track
+	 * #8. It's the best on the cd.
+	 * 
+	 * This is a paragraph. There's no a header on the second starting
+	 * with #8. I've changed the expected outcome to reflect this.
 	 */
 	public function headers()
 	{
@@ -134,8 +189,6 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * 
-	 * Changed transformation to spaces to tabs (as in text).
 	 */
 	public function inlineHTMLSimple()
 	{
@@ -209,11 +262,8 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * 
-	 * Changed expected outcome: we allow all characters to be escaped: \\
-	 * will become \, \" will become " etc.
-	 * 
-	 * Also we don't do tabs to spaces conversion: code will keep these therefor
-	 * readded tabs to expected outcome.
+	 * Changed expected outcome: we allow all characters to be escaped: '\\'
+	 * will become '\', '\"' will become '"' etc.
 	 */
 	public function PHPSpecificBugs()
 	{
@@ -233,8 +283,13 @@ class Vidola_EndToEndTests_PhpMarkdownTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * 
-	 * Removed paragraph and spaces part. We allow this to be a list
-	 * (as MD also does within a nested list).
+	 * Changed:
+	 * -expected outcome of blockquote following paragraph to one paragraph.
+	 * -removed header as expected outcome
+	 * since a paragraph ends with a blank line or an indented block. 
+	 * 
+	 * Same for the indented list: a list immediately following a paragraph
+	 * without a blank line must be indented.
 	 */
 	public function tightBlocks()
 	{

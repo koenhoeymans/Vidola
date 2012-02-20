@@ -8,11 +8,12 @@ namespace Vidola\Pattern\Patterns;
 use Vidola\Util\DocFileRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use Vidola\Pattern\Pattern;
+use Vidola\Document\Element;
 
 /**
  * @package Vidola
  */
-class TableOfContents implements Pattern
+class TableOfContents extends Pattern
 {
 	private $headerFinder;
 
@@ -45,7 +46,7 @@ class TableOfContents implements Pattern
 		return $list;
 	}
 
-	private function getRegex()
+	public function getRegex()
 	{
 		return
 			'@
@@ -63,21 +64,16 @@ class TableOfContents implements Pattern
 					(\n(\t+|[ ]{4,}).+)+
 				)?
 			)
-			(?=\n\n|$)
-			(?<text>(\n|.)+|$)
+			(?=\n\n(?<text>(\n|.)+)$|$)
 			@x';
 	}
 
-	public function replace($text)
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
 	{
-		return preg_replace_callback(
-			$this->getRegex(),
-			array($this, 'buildReplacement'),
-			$text
-		);
+		return $this->buildReplacement($match, $parentNode);
 	}
 
-	private function buildReplacement($regexmatch)
+	private function buildReplacement(array $regexmatch, \DOMNode $parentNode)
 	{
 		$options = $this->getOptions($regexmatch['options']);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
@@ -85,9 +81,7 @@ class TableOfContents implements Pattern
 		$fileList = $this->recursivelyGetFilesToInclude($regexmatch['pages']);
 		$textAfterToc = $regexmatch['text'];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
-		$toc = $this->buildToc($headerList, $maxDepth);
-
-		return $toc . $textAfterToc;
+		return $this->buildToc($headerList, $maxDepth, $parentNode);
 	}
 
 	/**
@@ -154,7 +148,7 @@ class TableOfContents implements Pattern
 		return $inclusionList;
 	}
 
-	private function buildToc(array $headers, $maxDepth = null)
+	private function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
 	{
 		if (empty($headers))
 		{
@@ -171,11 +165,12 @@ class TableOfContents implements Pattern
 		{
 			if ($depth > $maxDepth)
 			{
-				return '';
+				return null;
 			}
 		}
 
-		$list = "{{ul}}";
+		$ul = $this->getOwnerDocument($parentNode)->createElement('ul');
+
 		$listLevel = null;
 
 		foreach ($headers as $key => $header)
@@ -200,28 +195,29 @@ class TableOfContents implements Pattern
 			}
 
 			$ref = str_replace(' ', '_', $title);
-			$list .= "\n\t{{li}}\n\t\t{{a href=\"$file#$ref\"}}$title{{/a}}";
+
+			$li = $this->getOwnerDocument($parentNode)->createElement('li');
+			$ul->appendChild($li);
+			$a = $this->getOwnerDocument($parentNode)->createElement('a', $title);
+			$li->appendChild($a);
+			$a->setAttribute('href', $file . '#' . $ref);
 
 			if (isset($headers[$key+1]))
 			{
 				if ($headers[$key+1]['level'] > $level)
 				{
 					$depth++;
-					$sublist = $this->buildToc($headers, $maxDepth);
-					if ($sublist !== '')
+					$subUl = $this->buildToc($headers, $maxDepth, $li);
+					if ($subUl)
 					{
-						$list .= "\n$sublist";
+						$li->appendChild($subUl);
 					}
 					$depth--;
 				}
 			}
-
-			$list .= "\n\t{{/li}}";
 		}
 
-		$list .= "\n{{/ul}}";
-
-		return $list;
+		return $ul;
 	}
 
 	private function getOptions($text)

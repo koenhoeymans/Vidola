@@ -10,23 +10,45 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class Strong implements Pattern
+class Strong extends Pattern
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace(
-			"@
-				(?<=\s|^)
-			(?<marker>\*\*|__)
-				(?=\S)
-				(?!\g{marker}+\B)
-			(\S+|.+?(\*|_)?(\g{marker})*)
-				(?<!\s)
+		return
+			'@
+			(?<=\s|^)
+
+			(?<marker>[_*])
+			\g{marker}(?=\S)
+			(?<content>
+				(
+					(?!\g{marker}).
+				|
+					\g{marker}(?=\S)
+					.+
+					\g{marker}(?<=\S)(?![a-zA-Z0-9])
+				|
+					\s\g{marker}\s						# five * three or 5 * 3
+				|
+					[a-zA-Z0-9]\g{marker}[a-zA-Z0-9]	# five*three or 5*3
+				|
+					(?!\g{marker}).*\g{marker}(?!\g{marker}).*
+				)+
+			)
+			(?<=\S)
 			\g{marker}
-				(?!\w)
-			@x",
-			"{{strong}}\${2}{{/strong}}",
-			$text
-		);
+			\g{marker}
+
+			(?![a-zA-Z0-9])
+			@xU';
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$strong = $ownerDocument->createElement('strong');
+		$strong->appendChild($ownerDocument->createTextNode($match['content']));
+
+		return $strong;
 	}
 }

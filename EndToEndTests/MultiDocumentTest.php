@@ -2,7 +2,7 @@
 
 require_once('TestHelper.php');
 
-class Vidola_EndToEndTests_MultiDocumentTest extends PHPUnit_Framework_TestCase
+class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Support\Tidy
 {
 	public function setup()
 	{
@@ -49,27 +49,27 @@ class Vidola_EndToEndTests_MultiDocumentTest extends PHPUnit_Framework_TestCase
 
 		// then
 		$this->assertEquals(
-			file_get_contents(
+			$this->tidy(file_get_contents(
 				__DIR__
 				. DIRECTORY_SEPARATOR . 'Support'
 				. DIRECTORY_SEPARATOR . 'ParentDocument.html'
-			),
-			file_get_contents(
+			)),
+			$this->tidy(file_get_contents(
 				$_SERVER['argv']['target.dir']
 				. DIRECTORY_SEPARATOR . 'ParentDocument.html'
-			)
+			))
 		);
 
 		$this->assertEquals(
-			file_get_contents(
+			$this->tidy(file_get_contents(
 				__DIR__
 				. DIRECTORY_SEPARATOR . 'Support'
 				. DIRECTORY_SEPARATOR . 'SubDocument.html'
-			),
-			file_get_contents(
+			)),
+			$this->tidy(file_get_contents(
 				$_SERVER['argv']['target.dir']
 				. DIRECTORY_SEPARATOR . 'SubDocument.html'
-			)
+			))
 		);
 	}
 
@@ -89,15 +89,15 @@ class Vidola_EndToEndTests_MultiDocumentTest extends PHPUnit_Framework_TestCase
 
 		// then
 		$this->assertEquals(
-			file_get_contents(
+			$this->tidy(file_get_contents(
 				__DIR__
 				. DIRECTORY_SEPARATOR . 'Support'
 				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
-			),
-			file_get_contents(
+			)),
+			$this->tidy(file_get_contents(
 				$_SERVER['argv']['target.dir']
 				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
-			)
+			))
 		);
 	}
 }

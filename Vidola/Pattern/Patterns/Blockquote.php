@@ -10,35 +10,30 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class Blockquote implements Pattern
+class Blockquote extends Pattern
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace_callback(
+		return
 			'@
-			(?<start>
-			^								# start of text
-			|
-			\n*\n(?=([ ]{0,3})?[^\s])		# max 3 spaces
-			| 
-			\n+\n\n(?=[ \t]+)				# more indentation if at least 2 blank lines 
-			)
-
+			(?<=^|\n\n)
 			(?<quote>
-				(?<indentation>[ \t]*)		# indentation
-				>.+							# followed by space and the quoted text
-				(\n\g{indentation}.+)*		# following text on following line, < not
-											# required anymore
+				[ ]{0,3}			# indentation
+				>.+					# followed by > and the quoted text
+				(\n.+)*				# following text on following line, < not
+									# required anymore
 			)
 			(?=\n\n|$)
-			@x',
-			function ($match)
-			{
-				$text = preg_replace("#(^|\n)> ?#", "\${1}", $match['quote']);
-				$start = ($match['start'] === '') ? '' : "\n\n";
-				return $start . "{{blockquote}}\n" . $text . "\n{{/blockquote}}";
-			},
-			$text
-		);
+			@x';
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$text = preg_replace("#(^|\n)> ?#", "\${1}", $match['quote']);
+		$blockquote = $ownerDocument->createElement('blockquote');
+		$blockquote->appendChild($ownerDocument->createTextNode($text . "\n\n"));
+
+		return $blockquote;
 	}
 }

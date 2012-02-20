@@ -10,23 +10,24 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class ListItem implements Pattern
+class ListItem extends Pattern
 {
-	protected $markers = "([*+#-]|[0-9]+\.|\#\.)";
+	protected $markers = "(\#\.|[*+#-]|[0-9]+\.)";
 
-	public function replace($text)
+	public function getRegex()
 	{
-		$markers = $this->markers;
-		return preg_replace_callback(
+		// @todo make tab width variable
+		// @todo marker indent was removed by list?
+		return
 			'@
 			(?<=(?<para_before>\n\n)|^|\n)
 
-			# setting the structure for the list item
-			# ----------------------------------------
+			# the structure of the list item
+			# ------------------------------
 			(
-			(?<marker_indent>[ \t]*)	# indentation of the list marker
+			(?<marker_indent>[ ]{0,3})	# indentation of the list marker
 			' . $this->markers . '		# markers
-			(?<text_indent>[ ]{1,3}|\t|(?=\n))	# spaces/tabs
+			(?<text_indent>[ ]{0,3}|\t|(?=\n))	# spaces/tabs
 			)
 
 			# the list item content
@@ -34,44 +35,40 @@ class ListItem implements Pattern
 			(?<content>
 			.*						# text of first line
 				(						# optionally more lines
-				\n							# continue on next line unindented
+					\n							# continue on next line unindented
 					(?!
 						\g{marker_indent}
 						' . $this->markers . '
 					)
-				.+
-				|							# or indented
-				\n\n?\g{marker_indent}
-					(?!' . $this->markers . ')
-				.+
+					.+
+					|							# or indented
+					\n\n\g{marker_indent}
+						(?!' . $this->markers . ')
+					.+
 				)*
 			)
+			(?=(?<para_after>\n\n|\n$)?)
+			@x';
+	}
 
-			(?=
-				(?<para_after>\n\n\g{marker_indent}' . $this->markers . '.+)
-				|
-				\n
-				|
-				$
-			)
-			@x',
-			function($match)
-			{
-				$paragraph = (($match['para_before'] != "") || isset($match['para_after']))
-					? "\n\n" : "";
-				$content = preg_replace(
-					"@\n" . $match['marker_indent'] .  "[ ]?" . $match['text_indent'] . "?@",
-					"\n",
-					$match['content']
-				);
-
-				return
-					'{{li}}'
-					. $content
-					. $paragraph
-					. '{{/li}}';
-			},
-			$text
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$paragraph = (($match['para_before'] == "\n\n") || isset($match['para_after']))
+			? "\n\n" : "";
+		$content = preg_replace(
+			"@\n" . $match['marker_indent'] . "[ ]" . $match['text_indent'] . "@",
+			"\n",
+			$match['content']
 		);
+
+		$li = $ownerDocument->createElement('li');
+
+		if ($paragraph !== '' || $content !== '')
+		{
+			$li->appendChild($ownerDocument->createTextNode($content . $paragraph));
+		}
+
+		return $li;
 	}
 }

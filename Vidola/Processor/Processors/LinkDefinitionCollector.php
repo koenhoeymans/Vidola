@@ -5,12 +5,12 @@
  */
 namespace Vidola\Processor\Processors;
 
-use Vidola\Processor\Processor;
+use Vidola\Processor\TextProcessor;
 
 /**
  * @package Vidola
  */
-class LinkDefinitionCollector implements Processor
+class LinkDefinitionCollector implements TextProcessor
 {
 	private $linkDefinitions = array();
 

@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_NoteTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_NoteTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->note = new \Vidola\Pattern\Patterns\Note();
+	}
+
+	public function getPattern()
+	{
+		return $this->note;
 	}
 
 	/**
@@ -25,17 +30,10 @@ class Vidola_Pattern_Patterns_NoteTest extends PHPUnit_Framework_TestCase
 
 Another paragraph.";
 
-		$html =
-"This is a paragraph.
-
-{{div class=\"note\"}}
-This is a note.
-{{/div}}
-
-Another paragraph.";
-
-		$this->assertEquals(
-			$html, $this->note->replace($text)
-		);
+		$domDocument = new \DOMDocument();
+		$domElement = $domDocument->createElement('div', 'This is a note.');
+		$domElement->setAttribute('class', 'note');
+		$domDocument->appendChild($domElement);
+		$this->assertCreatesDomFromText($domElement, $text);
 	}
 }

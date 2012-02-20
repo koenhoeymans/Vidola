@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_HorizontalRuleTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\HorizontalRule();
+	}
+
+	protected function getPattern()
+	{
+		return $this->pattern;
 	}
 
 	/**
@@ -18,8 +23,9 @@ class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestC
 	public function atLeastThreeHyphensOnARuleByThemselvesProduceAHorizontalRule()
 	{
 		$text = "\n---\n";
-		$html = "\n{{hr /}}\n";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('hr');
+
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -28,8 +34,9 @@ class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestC
 	public function atLeastThreeAsteriskOnARuleByThemselvesProduceAHorizontalRule()
 	{
 		$text = "\n***\n";
-		$html = "\n{{hr /}}\n";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('hr');
+		
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -38,8 +45,9 @@ class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestC
 	public function atLeastThreeUnderscoresOnARuleByThemselvesProduceAHorizontalRule()
 	{
 		$text = "\n___\n";
-		$html = "\n{{hr /}}\n";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('hr');
+		
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -48,8 +56,9 @@ class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestC
 	public function spacingIsAllowed()
 	{
 		$text = "\n * * *\n";
-		$html = "\n{{hr /}}\n";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('hr');
+		
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -58,8 +67,9 @@ class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestC
 	public function moreCharactersAreAllowed()
 	{
 		$text = "\n------------\n";
-		$html = "\n{{hr /}}\n";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('hr');
+		
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -68,6 +78,7 @@ class Vidola_Pattern_Patterns_HorizontalRuleTest extends PHPUnit_Framework_TestC
 	public function sameCharacterMustBeUsed()
 	{
 		$text = "\n-*-\n";
-		$this->assertEquals($text, $this->pattern->replace($text));
+		
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 }

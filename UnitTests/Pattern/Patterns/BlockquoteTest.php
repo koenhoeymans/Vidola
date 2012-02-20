@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_BlockquoteTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_BlockquoteTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\Blockquote();
+	}
+
+	protected function getPattern()
+	{
+		return $this->pattern;
 	}
 
 	/**
@@ -17,7 +22,7 @@ class Vidola_Pattern_Patterns_BlockquoteTest extends PHPUnit_Framework_TestCase
 	 */
 	public function blockquotesArePrecededByGreaterThanSignsOnEveryLine()
 	{
-		$code =
+		$text =
 "paragraph
 
 > quote
@@ -25,17 +30,8 @@ class Vidola_Pattern_Patterns_BlockquoteTest extends PHPUnit_Framework_TestCase
 
 paragraph";
 
-		$html =
-"paragraph
-
-{{blockquote}}
-quote
-continued
-{{/blockquote}}
-
-paragraph";
-
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$dom = new \DOMElement('blockquote', "quote\ncontinued\n\n");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -43,7 +39,7 @@ paragraph";
 	 */
 	public function greaterThanSignIsOnlyNecessaryOnFirstLine()
 	{
-		$code =
+		$text =
 "paragraph
 
 > quote
@@ -51,17 +47,8 @@ continued
 
 paragraph";
 
-		$html =
-"paragraph
-
-{{blockquote}}
-quote
-continued
-{{/blockquote}}
-
-paragraph";
-		
-		$this->assertEquals($html, $this->pattern->replace($code));		
+		$dom = new \DOMElement('blockquote', "quote\ncontinued\n\n");
+		$this->assertCreatesDomFromText($dom, $text);		
 	}
 
 	/**
@@ -69,7 +56,7 @@ paragraph";
 	 */
 	public function canContainABlockquote()
 	{
-		$code =
+		$text =
 "paragraph
 
 > quote
@@ -80,19 +67,7 @@ paragraph";
 
 paragraph";
 
-		$html =
-"paragraph
-
-{{blockquote}}
-quote
-
-> subquote
-
-quote continued
-{{/blockquote}}
-
-paragraph";
-		
-		$this->assertEquals($html, $this->pattern->replace($code));		
+		$dom = new \DOMElement('blockquote', "quote\n\n&gt; subquote\n\nquote continued\n\n");
+		$this->assertCreatesDomFromText($dom, $text);		
 	}
 }

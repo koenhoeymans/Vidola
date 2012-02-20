@@ -12,25 +12,22 @@ use Vidola\Pattern\Pattern;
  */
 class CodeInline extends Code
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace_callback(
+		return
 			'@
 			[`](?<extra_backticks>([`])*)
 			(?<code>.+?)
 			\g{extra_backticks}[`]
-			@x',
-			array($this, 'replaceCode'),
-			$text
-		);
+			@x';
 	}
 
-	protected function replaceCode($match)
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
 	{
 		# if code between backticks starts or ends with code between
 		# backticks: remove the spacing
 		$code = preg_replace("#^\s*(.+?)\s*$#", "\${1}", $match['code']);
-
-		return $this->createCodeInHtml($code, false);
+		
+		return $this->createCodeReplacement($code, false, $parentNode);
 	}
 }

@@ -12,18 +12,14 @@ use Vidola\Pattern\Pattern;
  */
 class CodeWordCode extends Code
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace_callback(
-			"#(?<=\n\n)(\s+)CODE:\n+(\\1\s+)(.+(\n*\\1\s+.+)*)(?=\n\n|$)#i",
-			array($this, 'replaceCode'),
-			$text
-		);
+		return "#(?<=\n\n)(\s+)CODE:\n+(\\1\s+)(.+(\n*\\1\s+.+)*)(?=\n\n|$)#i";
 	}
 
-	protected function replaceCode($match)
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
 	{
 		$code = preg_replace("#\n$match[2](\s*.+)#", "\n\${1}", $match[3]);
-		return $this->createCodeInHtml($code);
+		return $this->createCodeReplacement($code, true, $parentNode);
 	}
 }

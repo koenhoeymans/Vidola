@@ -2,7 +2,7 @@
 
 require_once('TestHelper.php');
 
-class Vidola_EndToEndTests_SpecialCharacterTest extends PHPUnit_Framework_TestCase
+class Vidola_EndToEndTests_SpecialCharacterTest extends \Vidola\EndToEndTests\Support\Tidy
 {
 	public function setup()
 	{
@@ -37,15 +37,15 @@ class Vidola_EndToEndTests_SpecialCharacterTest extends PHPUnit_Framework_TestCa
 	
 		// then
 		$this->assertEquals(
-		file_get_contents(
-		__DIR__
-		. DIRECTORY_SEPARATOR . 'Support'
-		. DIRECTORY_SEPARATOR . 'SpecialCharacterTest.html'
-		),
-		file_get_contents(
-		$_SERVER['argv']['target.dir']
-		. DIRECTORY_SEPARATOR . 'SpecialCharacterTest.html'
-		)
+			$this->tidy(file_get_contents(
+				__DIR__
+				. DIRECTORY_SEPARATOR . 'Support'
+				. DIRECTORY_SEPARATOR . 'SpecialCharacterTest.html'
+			)),
+			$this->tidy(file_get_contents(
+				$_SERVER['argv']['target.dir']
+				. DIRECTORY_SEPARATOR . 'SpecialCharacterTest.html'
+			))
 		);
 	}
 }

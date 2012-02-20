@@ -10,13 +10,13 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class SpecialSection implements Pattern
+class SpecialSection extends Pattern
 {
-	private $identifier;
+	protected $identifier;
 
-	private $elementName;
+	protected $elementName;
 
-	private $className;
+	protected $className;
 
 	/**
 	 * @param string $identifier
@@ -29,39 +29,44 @@ class SpecialSection implements Pattern
 		$this->className = $className;
 	}
 
-	public function replace($text)
+	public function getRegex()
 	{
-		$elementName = $this->elementName;
-		$className = $this->className;
-
-		return preg_replace_callback(
+		return
 			'@
-			(							# relative to previous text:
-			\n\n+(?=[^\s]|[ ]{1,3})		# at least a blank line when not indented or
-			|							# indented with max 1-3 spaces 
-			\n\n\n+(?=[\s]+)			# at least two blank lines when indented more 
-			)
-			(\s*)						# ${2}
-			' . $this->identifier . '
-			\n							# text on new line
-			(\\2\t|\\2[ ]{4})			# ${3}, extra indented tab or four lines
-			(.+)						# ${4}, followed by text
-			(							# ${5}
-			((\n|\n\n\\3).+)*			# text can continue on next line or 
-			)							# blank line and indented
-			(?=\n\n|$)
-			@ix',
-			function($match) use ($elementName, $className)
-			{
-				$classAttr = ($className !== null) ? ' class="' . $className . '"' : '';
-				$contents = preg_replace("$\n$match[3]$", "\n", $match[4] . $match[5]);
+			(?<=^|\n\n)
 
-				return
-					"\n\n{{" . $elementName . $classAttr . "}}\n"
-					. $contents
-					. "\n{{/" . $elementName . "}}";
-			},
-			$text
-		);
+			[ ]{0,3}
+			' . $this->identifier . '
+			\n(?<blank_line_before>\n?)
+			(?<text>
+				(?<indentation>([ ]{4}|\t)).+
+				(
+					(?s).*?
+				)?
+			)
+
+			(?=\n\n(?!\g{indentation})|$)
+			@ix';
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$text = preg_replace("@(^|\n)" . $match['indentation'] . "@", "\${1}", $match['text']);
+
+		if ($match['blank_line_before'] != '')
+		{
+			$text = $text . "\n\n";
+		}
+
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$node = $ownerDocument->createElement($this->elementName);
+		$node->appendChild($ownerDocument->createTextNode($text));
+
+		if ($this->className)
+		{
+			$node->setAttribute('class', $this->className);
+		}
+
+		return $node;
 	}
 }

@@ -5,7 +5,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
@@ -20,16 +20,33 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
+	public function getPattern()
+	{
+		return $this->hyperlink;
+	}
+
+	public function createDomForLink($url, $text, $title = null)
+	{
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->createElement('a', $text);
+		$domEl->setAttribute('href', $url);
+		$domDoc->appendChild($domEl);
+		if ($title)
+		{
+			$domEl->setAttribute('title', $title);
+		}
+
+		return $domEl;
+	}
+
 	/**
 	 * @test
 	 */
 	public function anUrlHasAnchoTextInSquareBracketsFollowedByTheLinkInParentheses()
 	{
 		$text = "Visit [my site](http://example.com) for info.";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.";
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -38,10 +55,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	public function aLinkTitleCanBeSpecifiedAfterTheUrlInDoubleQuotes()
 	{
 		$text = "Visit [my site](http://example.com \"title\") for info.";
-		$html = "Visit {{a href=\"http://example.com\" title=\"title\"}}my site{{/a}} for info.";
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site', 'title');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -50,10 +65,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	public function aLinkTitleCanBeSpecifiedAfterTheUrlBetweenSingleQuotes()
 	{
 		$text = "Visit [my site](http://example.com 'title') for info.";
-		$html = "Visit {{a href=\"http://example.com\" title=\"title\"}}my site{{/a}} for info.";
-		$this->assertEquals(
-		$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site', 'title');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 
@@ -69,12 +82,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('1', 'http://example.com')));
 		$text = "Visit [my site][1] for info.\n\n"
 			. "paragraph\n\n";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n";
-
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -89,12 +98,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('1', 'http://example.com', 'title')));
 		$text = "Visit [my site][1] for info.\n\n"
 			. "paragraph\n\n";
-		$html = "Visit {{a href=\"http://example.com\" title=\"title\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n";
-
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site', 'title');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -109,12 +114,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('1', 'http://example.com')));
 		$text = "Visit [my site] [1] for info.\n\n"
 			. "paragraph\n\n";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n";
-
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -129,12 +130,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 		new \Vidola\Pattern\Patterns\LinkDefinition('my site', 'http://example.com')));
 		$text = "Visit [my site] [] for info.\n\n"
 			. "paragraph\n\n";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n";
-	
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -149,12 +146,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 		new \Vidola\Pattern\Patterns\LinkDefinition('my site', 'http://example.com')));
 		$text = "Visit [my site] for info.\n\n"
 			. "paragraph\n\n";
-		$html = "Visit {{a href=\"http://example.com\"}}my site{{/a}} for info.\n\n"
-			. "paragraph\n\n";
-		
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com', 'my site');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -163,10 +156,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	public function anchorTextCanContainATextLink()
 	{
 		$text = "Visit [site http://x.com](http://y.com \"title\") for info.";
-		$html = "Visit {{a href=\"http://y.com\" title=\"title\"}}site http://x.com{{/a}} for info.";
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://y.com', 'site http://x.com', 'title');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -175,10 +166,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	public function squareBracketsInLinksAreOk()
 	{
 		$text = "Visit [my website](http://example.com?x=[y]&amp;foo=[bar]) for info.";
-		$html = "Visit {{a href=\"http://example.com?x=[y]&amp;foo=[bar]\"}}my website{{/a}} for info.";
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('http://example.com?x=[y]&amp;foo=[bar]', 'my website');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -191,10 +180,8 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 			->method('buildUrl')->with('x')
 			->will($this->returnValue('x.html'));
 		$text = "See page [x](x) for info.";
-		$html = "See page {{a href=\"x.html\"}}x{{/a}} for info.";
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('x.html', 'x');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -203,7 +190,7 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends PHPUnit_Framework_TestCase
 	public function linkIsRelativeIfItContainsOnlyAlphaNumForwardSlashesBeforeAnOptionalNumberSign()
 	{
 $this->markTestIncomplete();
-// should be more like: if not pointing to (http://)xxx.yyy
+//should be more like: if not pointing to (http://)xxx.yyy
 		$this->relativeUrlBuilder
 			->expects($this->once())
 			->method('buildUrl')->with('x/6/f4#f')

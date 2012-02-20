@@ -8,7 +8,7 @@ A regular paragraph with *emphasized* and _italic_ text in. It is followed by a 
 
 !note
 	A note can span
-multiple lines. It can contain a [[http://link]]. Let's create a note in a note:
+multiple lines. Let's create a note in a note:
 
 	!note
 		a subnote with a list
@@ -47,18 +47,18 @@ Code inline uses `backticks` but...
 
 Let's try a short definition list:
 
-term A:
-	First paragraph of explanation of term.
+term A
+:	First paragraph of explanation of term.
 
 	Second paragraph of explanation of term.
 
-term B:
-	explanation of term
+term B
+:	explanation of term
 
 	* listitem in term B
 	* other listitem
 
-This is another paragraph with an email link <mail@example.com>. It uses AT&T as in the  
+This is another paragraph with an email link <mail@example.com>. It uses AT&T as in the
 Markdown manual. The ampersand is translated in http://url.com?a=1&b=2 but not in &copy;. Another special
 character is < and >: 4<5 or 4 < 5 should use entities.  
 Previous line had two spaces for a line break.

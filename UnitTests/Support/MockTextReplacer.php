@@ -2,7 +2,7 @@
 
 namespace Vidola\UnitTests\Support;
 
-Use \Vidola\Processor\Processor;
+Use \Vidola\Processor\TextProcessor;
 
 abstract class MockTextReplacer implements \Vidola\TextReplacer\TextReplacer
 {
@@ -11,9 +11,9 @@ abstract class MockTextReplacer implements \Vidola\TextReplacer\TextReplacer
 		return 'html';
 	}
 
-	public function addPreProcessor(Processor $processor)
+	public function addPreProcessor(TextProcessor $processor)
 	{}
 
-	public function addPostProcessor(Processor $processor)
+	public function addPostProcessor(TextProcessor $processor)
 	{}
 }

@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_sectionTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_sectionTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\SpecialSection('section:', 'section');
+	}
+
+	protected function getPattern()
+	{
+		return $this->pattern;
 	}
 
 	/**
@@ -25,118 +30,8 @@ section:
 
 Another paragraph.";
 
-		$html =
-"A paragraph.
-
-{{section}}
-some text
-{{/section}}
-
-Another paragraph.";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function sectionsCanAlsoStartWithTwoBlankLinesAndWhateverIndentation()
-	{
-		$text =
-"A paragraph.
-
-
-	section:
-		some text
-
-Another paragraph.";
-
-	$html =
-"A paragraph.
-
-{{section}}
-some text
-{{/section}}
-
-Another paragraph.";
-	
-		$this->assertEquals($html, $this->pattern->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function aBlankLineIsNotSufficientToStartAsectionIfPrecedingTextIsLessIndented()
-	{
-		$text =
-"A paragraph.
-
-	section:
-		some text
-
-Another paragraph.";
-
-	$html =
-"A paragraph.
-
-	section:
-		some text
-
-Another paragraph.";
-	
-		$this->assertEquals($html, $this->pattern->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function sectionsAreEndedByABlankLineFollowedByTextEquallyIndented()
-	{
-		$text =
-"	A paragraph.
-
-
-	section:
-		some text
-
-	Another paragraph.";
-
-		$html =
-"	A paragraph.
-
-{{section}}
-some text
-{{/section}}
-
-	Another paragraph.";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function sectionsAreEndedByABlankLineFollowedByTextLessIndented()
-	{
-		$text =
-"	A paragraph.
-
-
-	section:
-		some text
-
-Another paragraph.";
-
-		$html =
-"	A paragraph.
-
-{{section}}
-some text
-{{/section}}
-
-Another paragraph.";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('section', 'some text');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -148,21 +43,13 @@ Another paragraph.";
 "A paragraph.
 
 
-	section:
-			some text
+section:
+		some text
 
 Another paragraph.";
 	
-		$html =
-"A paragraph.
-
-{{section}}
-	some text
-{{/section}}
-
-Another paragraph.";
-	
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('section', "\tsome text");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -179,17 +66,8 @@ section:
 
 Another paragraph.";
 
-		$html =
-"A paragraph.
-
-{{section}}
-some text
-continued on another line
-{{/section}}
-
-Another paragraph.";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('section', "some text\ncontinued on another line");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -206,48 +84,8 @@ continued on another line
 
 Another paragraph.";
 
-		$html =
-"A paragraph.
-
-{{section}}
-some text
-continued on another line
-{{/section}}
-
-Another paragraph.";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function asectionWithinAsectionIsLeftAsIs()
-	{
-		$text =
-"A paragraph.
-
-section:
-	a section
-
-	section:
-		deeper nested section
-
-another paragraph";
-
-		$html =
-"A paragraph.
-
-{{section}}
-a section
-
-section:
-	deeper nested section
-{{/section}}
-
-another paragraph";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('section', "some text\ncontinued on another line");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -270,23 +108,8 @@ section:
 
 another paragraph";
 
-		$html =
-"A paragraph.
-
-{{section}}
-a section
-
-section continued
-
-section:
-	deeper nested section
-
-section continued
-{{/section}}
-
-another paragraph";
-
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('section', "a section\n\nsection continued\n\nsection:\n\tdeeper nested section\n\nsection continued");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -294,7 +117,7 @@ another paragraph";
 	 */
 	public function aClassNameCanBeSpecifified()
 	{
-		$section = new \Vidola\Pattern\Patterns\SpecialSection('section:', 'section', 'section');
+		$this->pattern = new \Vidola\Pattern\Patterns\SpecialSection('section:', 'section', 'class');
 		
 		$text =
 "A paragraph.
@@ -304,15 +127,48 @@ section:
 
 another paragraph";
 
-		$html =
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->appendChild($domDoc->createElement('section', 'a section'));
+		$domEl->setAttribute('class', 'class');
+		$this->assertCreatesDomFromText($domEl, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function canBeEndOfText()
+	{
+		$this->pattern = new \Vidola\Pattern\Patterns\SpecialSection('section:', 'section');
+	
+		$text =
 "A paragraph.
 
-{{section class=\"section\"}}
-a section
-{{/section}}
+section:
+	a section";
+	
+		$dom = new \DOMElement('section', 'a section');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function aBlankLineCanBeInsertedBeforeStartOfText()
+	{
+		$this->pattern = new \Vidola\Pattern\Patterns\SpecialSection('section:', 'section', 'class');
+		
+		$text =
+"A paragraph.
+
+section:
+
+	a section
 
 another paragraph";
-
-		$this->assertEquals($html, $section->replace($text));
+		
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->appendChild($domDoc->createElement('section', "a section\n\n"));
+		$domEl->setAttribute('class', 'class');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
-}
+} 

@@ -10,16 +10,15 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class NewLine implements Pattern
+class NewLine extends Pattern
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		$doubleSpace = preg_replace(
-			"#[ ]{2,}\n#",
-			"{{br /}}\n",
-			$text
-		);
+		return "@[ ][ ](?=\n)@";
+	}
 
-		return $doubleSpace;
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		return $this->getOwnerDocument($parentNode)->createElement('br');
 	}
 }

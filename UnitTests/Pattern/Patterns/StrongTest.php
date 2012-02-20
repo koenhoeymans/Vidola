@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_StrongTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\Strong();
+	}
+
+	protected function getPattern()
+	{
+		return $this->pattern;
 	}
 
 	/**
@@ -18,8 +23,8 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function strongTextIsPlacedBetweenDoubleAsterisks()
 	{
 		$text = "This is a sentence with **strong** text.";
-		$html = "This is a sentence with {{strong}}strong{{/strong}} text.";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('strong', 'strong');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -28,8 +33,8 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function strongTextCanSpanMultipleWords()
 	{
 		$text = "This is a sentence with **strong text**.";
-		$html = "This is a sentence with {{strong}}strong text{{/strong}}.";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('strong', 'strong text');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -37,11 +42,9 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	 */
 	public function textCanContainMultipleStrongSections()
 	{
-		$text = "This is **a sentence** with **strong text**.";
-		$html = "This is {{strong}}a sentence{{/strong}} with {{strong}}strong text{{/strong}}.";
-		$this->assertEquals(
-			$html, $this->pattern->replace($text)
-		);
+		$text = "This is __a sentence__ with __strong text__.";
+		$dom = new \DOMElement('strong', 'a sentence');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -50,7 +53,7 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function aWordCannotContainStrongParts()
 	{
 		$text = "This is not a st**ro**ng word.";
-		$this->assertEquals($text, $this->pattern->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -59,7 +62,7 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function firstDoubleAsterisksCannotHaveSpaceBehindIt()
 	{
 		$text = "This is not a sentence with ** strong** text.";
-		$this->assertEquals($text, $this->pattern->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -68,7 +71,7 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function lastDoubleAsterisksCannotHaveSpaceBeforeIt()
 	{
 		$text = "This is not a sentence with **strong ** text.";
-		$this->assertEquals($text, $this->pattern->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -77,17 +80,26 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function firstAsteriskMustBePrecededBySpace()
 	{
 		$text = "This is not a sentence with**strong** text.";
-		$this->assertEquals($text, $this->pattern->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
 	 * @test
 	 */
-	public function usesMostOutwardAsterisksIfMoreThanTwo()
+	public function usesMostOutwardAsterisksOnConsequtive()
 	{
 		$text = "This is a sentence with ***strong text***.";
-		$html = "This is a sentence with {{strong}}*strong text*{{/strong}}.";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('strong', '*strong text*');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function knowsWhenEmphasisShouldBeFirst()
+	{
+		$text = "a ***test** test*.";
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -96,7 +108,29 @@ class Vidola_Pattern_Patterns_StrongTest extends PHPUnit_Framework_TestCase
 	public function canContainMultiplication()
 	{
 		$text = "The **result of 5*6 is thirtyfive**.";
-		$html = "The {{strong}}result of 5*6 is thirtyfive{{/strong}}.";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$dom = new \DOMElement('strong', 'result of 5*6 is thirtyfive');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function incorrectNesting()
+	{
+		$text = "**test  *test** test*";
+		$dom = new \DOMElement('strong', 'test  *test');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 * 
+	 * was failing PHPMarkdown test
+	 */
+	public function canBeSingleListItemContentContainingFullyItalicizedText()
+	{
+		$text = "___test test___";
+		$dom = new \DOMElement('strong', '_test test_');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 }

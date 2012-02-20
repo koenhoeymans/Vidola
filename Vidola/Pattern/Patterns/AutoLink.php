@@ -10,39 +10,53 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class AutoLink implements Pattern
+class AutoLink extends Pattern
 {
-	/**
-	 * http://www.regular-expressions.info/email.html
-	 */
-	public function replace($text)
+	public function getRegex()
 	{
-		$email = preg_replace_callback(
+		return
 			'@
-			<([A-Z0-9._%+-]+\@[A-Z0-9.-]+\.[A-Z]{2,4})>
-			@xi',
-			function ($match)
-			{
-				return '{{a href="mailto:' . $match[1] . '"}}' . $match[1] . '{{/a}}';
-			},
-			$text
-		);
 
-		$url = preg_replace_callback(
-			'@
-			<(
+			<(?<mail>	# copied from PHPMarkdown
+				(?:
+					[-!#$%&\'*+/=?^_`.{|}~\w\x80-\xFF]+
+				|
+					".*?"
+				)
+				\@
+				(?:
+					[-a-z0-9\x80-\xFF]+(\.[-a-z0-9\x80-\xFF]+)*\.[a-z]+
+				|
+					\[[\d.a-fA-F:]+\]	# IPv4 & IPv6
+				)
+			)>
+
+			|
+
+			<(?<url>
 			http://
 			[A-Z0-9.-]+\.[A-Z]{2,4}
 			(\S+)?
 			)>
-			@xi',
-			function ($match)
-			{
-				return '{{a href="' . $match[1] . '"}}' . $match[1] . '{{/a}}';
-			},
-			$email
-		);
 
-		return $url;
+			@xi';
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$a = $ownerDocument->createElement('a');
+		if (isset($match['url']))
+		{
+			$a->appendChild($ownerDocument->createTextNode($match['url']));
+			$a->setAttribute('href', $match['url']);
+		}
+		else
+		{
+			$a->appendChild($ownerDocument->createTextNode($match['mail']));
+			$a->setAttribute('href', 'mailto:' . $match['mail']);
+		}
+
+		return $a;
 	}
 }

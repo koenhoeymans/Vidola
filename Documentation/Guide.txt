@@ -127,6 +127,22 @@ A paragraph is formed by text preceded and followed by a blank line.
 
 Indentation can be used to make the document more readable.
 
+In Markdown a paragraph can be immediately followed by a header or blockquote:
+
+	This is a paragraph.
+	# header
+
+In my implementation this is not possible. A paragraph is only ended with a blank line
+or indented text:
+
+	This is a paragraph.
+	  # header indented
+
+One reason is that this makes it less easy to create unexpected headers:
+
+	My favorite track on the cd is track
+	#8.
+
 
 Code
 ====
@@ -354,20 +370,32 @@ in words are left as is. Underscores that span more than one word are allowed.
 
 	A couple of _italicized words_.
 
+Becomes
+
+	A couple of <i>italicized words</i>.
+
 Emphasized text is placed between asterisks:
 
 	Emphasized text is placed *between* asterisks.
+
+Becomes
+
+	Emphasized text is placed <em>between</em> asterisks.
 
 Important text is achieved by putting words between double asterisks:
 
 	A sentence with **important** text.
 
+Becomes
+
+	A sentence with <strong>important</strong> text.
+
 !Note: Importance is chosen instead of strong importance to reflect the change coming with HTML5. See
 the [[section on changed elements http://www.w3.org/TR/html5-diff/#changed-elements]].
 
 There is a difference between this implementation and that of Markdown. Italicized text doesn't
-exist there. The syntax I use for it (`_underscore_`) produces emphasized text. Double underscore
-produces important text in Markdown (`__important__`), but it's absent here.
+exist in Markdown. The syntax I use for emphasized text in Markdown (`_underscore_`) produces
+italicized text.
 
 
 Newlines

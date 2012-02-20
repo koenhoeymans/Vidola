@@ -10,23 +10,34 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class Emphasis implements Pattern
+class Emphasis extends Pattern
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace(
-			"@
-				(?<=\s|^)
+		return
+			'@
+			(?<=\s|^)
 			\*
-				(?=\S)
-				(?!\*+($|[ ]))
-			(\S+|.+?(\*\*)?)
-				(?<!\s)
+				(?![ ])
+				(?<text>
+					(?(?=\*)
+						(\*\*|\*(?<=\S)(?=\S)|\*(?<=\s)(?=\s))
+						|
+						.
+					)*?
+				)
+			(?<=\S)
 			\*
-				(?!\w)
-			@x",
-			"{{em}}\${2}{{/em}}",
-			$text
-		);
+			(?!\w|\*)
+			@x';
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$em = $ownerDocument->createElement('em');
+		$em->appendChild($ownerDocument->createTextNode($match['text']));
+
+		return $em;
 	}
 }

@@ -5,7 +5,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_ImageTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
@@ -15,14 +15,33 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 		$this->image = new \Vidola\Pattern\Patterns\Image($this->linkDefinitions);
 	}
 
+	public function getPattern()
+	{
+		return $this->image;
+	}
+
+	public function createImgDom($alt, $title = null, $url)
+	{
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->appendChild(new \DOMElement('img'));
+		$domEl->setAttribute('alt', $alt);
+		if ($title)
+		{
+			$domEl->setAttribute('title', $title);
+		}
+		$domEl->setAttribute('src', $url);
+
+		return $domEl;
+	}
+
 	/**
 	 * @test
 	 */
 	public function anInlineImageStartsWithAnExclamationMarkAndHasAltTextBetweenSquareBracketsFollowedByPathToImgBetweenRoundBrackets()
 	{
 		$text = "Image is ![alt text](http://example.com/image.jpg) in between.";
-		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\" /}} in between.";
-		$this->assertEquals($html, $this->image->replace($text));
+		$domEl = $this->createImgDom('alt text', null, 'http://example.com/image.jpg');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 
 	/**
@@ -31,8 +50,8 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 	public function titleTextIsOptionalInSingleQuotes()
 	{
 		$text = "Image is ![alt text](http://example.com/image.jpg 'title text') in between.";
-		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\" /}} in between.";
-		$this->assertEquals($html, $this->image->replace($text));
+		$domEl = $this->createImgDom('alt text', 'title text', 'http://example.com/image.jpg');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 
 	/**
@@ -41,8 +60,8 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 	public function titleTextIsOptionalInDoubleQuotes()
 	{
 		$text = "Image is ![alt text](http://example.com/image.jpg \"title text\") in between.";
-		$html = "Image is {{img alt=\"alt text\" title=\"title text\" src=\"http://example.com/image.jpg\" /}} in between.";
-		$this->assertEquals($html, $this->image->replace($text));
+		$domEl = $this->createImgDom('alt text', 'title text', 'http://example.com/image.jpg');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 
 	/**
@@ -57,8 +76,8 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('id', 'http://example.com/image.jpg')));
 
 		$text = "Image is ![alt text][id] in between.";
-		$html = "Image is {{img alt=\"alt text\" src=\"http://example.com/image.jpg\" /}} in between.";
-		$this->assertEquals($html, $this->image->replace($text));
+		$domEl = $this->createImgDom('alt text', null, 'http://example.com/image.jpg');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 
 	/**
@@ -73,7 +92,7 @@ class Vidola_Pattern_Patterns_ImageTest extends PHPUnit_Framework_TestCase
 				new \Vidola\Pattern\Patterns\LinkDefinition('id', 'http://example.com/image.jpg', 'title')));
 
 		$text = "Image is ![alt text][id] in between.";
-		$html = "Image is {{img alt=\"alt text\" title=\"title\" src=\"http://example.com/image.jpg\" /}} in between.";
-		$this->assertEquals($html, $this->image->replace($text));
+		$domEl = $this->createImgDom('alt text', 'title', 'http://example.com/image.jpg');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 }

@@ -5,11 +5,26 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_CodeIndentedTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_CodeIndentedTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\CodeIndented();
+	}
+
+	public function getPattern()
+	{
+		return $this->pattern;
+	}
+
+	public function createDomFromText($text)
+	{
+		$domDoc = new \DOMDocument();
+		$domElementCode = new \DOMElement('code', $text);
+		$domElementPre = new \DOMElement('pre');
+		$domDoc->appendChild($domElementPre);
+		$domElementPre->appendChild($domElementCode);
+		return $domElementPre;
 	}
 
 	/**
@@ -17,21 +32,14 @@ class Vidola_Pattern_Patterns_CodeIndentedTest extends PHPUnit_Framework_TestCas
 	 */
 	public function indentedTextIsAlsoCode()
 	{
-		$code =
+		$text =
 "paragraph
 
 	code
 
 paragraph";
 
-		$html =
-"paragraph
-
-{{pre}}{{code}}code{{/code}}{{/pre}}
-
-paragraph";
-
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$this->assertCreatesDomFromText($this->createDomFromText('code'), $text);
 	}
 
 	/**
@@ -39,7 +47,7 @@ paragraph";
 	 */
 	public function variableIndentationIsPossibleWithinCode()
 	{
-		$code =
+		$text =
 "paragraph
 
 		a
@@ -48,16 +56,12 @@ paragraph";
 
 paragraph";
 		
-		$html =
-"paragraph
-
-{{pre}}{{code}}	a
+		$codeText =
+"	a
 b
-	c{{/code}}{{/pre}}
-
-paragraph";
+	c";
 		
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$this->assertCreatesDomFromText($this->createDomFromText($codeText), $text);
 	}
 
 	/**
@@ -65,20 +69,30 @@ paragraph";
 	 */
 	public function onlyBlankLinesBeforeAndAfterInStringAreSufficient()
 	{
-		$code =
+		$text =
 "
 
 	code
 
 ";
 		
-		$html =
-"
+		$this->assertCreatesDomFromText($this->createDomFromText('code'), $text);		
+	}
 
-{{pre}}{{code}}code{{/code}}{{/pre}}
+	/**
+	 * @test
+	 */
+	public function codeCanContainBlankLines()
+	{
+		$text =
+"paragraph
 
-";
-		
-		$this->assertEquals($html, $this->pattern->replace($code));		
+	code
+
+	continued
+
+paragraph";
+
+		$this->assertCreatesDomFromText($this->createDomFromText("code\n\ncontinued"), $text);
 	}
 }

@@ -2,14 +2,31 @@
 
 namespace Vidola\UnitTests\Support;
 
-class MockPattern implements \Vidola\Pattern\Pattern
+use \Vidola\Pattern\Pattern;
+
+class MockPattern extends \Vidola\Pattern\Pattern
 {
-	public function replace($text)
+	private $regex;
+
+	private $elementName;
+
+	private $textInElement;
+
+	public function __construct($regex, $elementName, $textInElement)
 	{
-		return preg_replace(
-			"#mockpattern#",
-			"<mock>mockpattern</mock>",
-			$text
-		);
+		$this->regex = $regex;
+		$this->elementName = $elementName;
+		$this->textInElement = $textInElement;
+	}
+
+	public function getRegex()
+	{
+		return $this->regex;
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		return $ownerDocument->createElement($this->elementName, $this->textInElement);
 	}
 }

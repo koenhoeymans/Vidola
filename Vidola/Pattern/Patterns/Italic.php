@@ -10,23 +10,38 @@ use Vidola\Pattern\Pattern;
 /**
  * @package Vidola
  */
-class Italic implements Pattern
+class Italic extends Pattern
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace(
+		return
 			"@
 				(?<=\s|^)
 			_
 				(?=\S)
-				(?!_+\B)
-			(.+)
+			(
+				(
+					(?!_).
+				|
+					_(?=\S)
+					.*[^_].*
+					_(?<=\S)(?!\w)
+				|
+					(?!_).*_(?!_).*
+				)+
+			)
 				(?<!\s)
 			_
 				(?!\w)
-			@xU",
-			"{{i}}\${1}{{/i}}",
-			$text
-		);
+			@xU";
+	}
+
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$i = $ownerDocument->createElement('i');
+		$i->appendChild($ownerDocument->createTextNode($match[1]));
+
+		return $i;
 	}
 }

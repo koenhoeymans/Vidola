@@ -36,6 +36,13 @@ class CommandLineConfig implements Config
 			if (is_int($key) && substr($value, 0, 2) === '--')
 			{
 				$keyValue = explode('=', $value);
+
+				# avoid phpunit --debug
+				if ($keyValue[0] == '--debug')
+				{
+					continue;
+				}
+
 				$options[substr($keyValue[0], 2)] = $keyValue[1];
 			}
 			else

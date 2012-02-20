@@ -10,29 +10,35 @@ use Vidola\Pattern\Pattern;
 /**
  * @package
  */
-class DefinitionTerm implements Pattern
+class DefinitionTerm extends Pattern
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		// note that we already know we're in a definition list
-		$firstTermOfDefinitionReplaced = preg_replace_callback(
-			"#(?<=^|\n)(([\ \t]*)(.+)):((\n\\2.+)*?(\n\\2[\ \t]+))#",
-			function ($match)
-			{
-				return "$match[2]{{dt}}$match[3]{{/dt}}$match[4]";
-			},
-			$text
-		);
+		return
+			'@
+			(?<=\n\n|\n|^)
 
-		$otherTermsOfDefinitionReplaced = preg_replace_callback(
-			"#(?<={{/dt}}\n)([^\ \t].*):(?=\n)#",
-			function ($match)
-			{
-				return "{{dt}}$match[1]{{/dt}}";
-			},
-			$firstTermOfDefinitionReplaced
-		);
+			(?<term>[ ]{0,3}[^:\n].+)
+			
+			(?=
+			(\n[ ]{0,3}.+)*					# other dt
+			(\n\n?[ ]{0,3}:([ ]|\t)*.+		# dd
+				(
+					\n(?![ ]{0,3}:\s).+
+					|
+					\n\n([ ]{4}|\t).+
+				)*
+			)+
+			)
+			@x';
+	}
 
-		return $otherTermsOfDefinitionReplaced;
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
+	{
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		$dt = $ownerDocument->createElement('dt');
+		$dt->appendChild($ownerDocument->createTextNode($match['term']));
+
+		return $dt;
 	}
 }

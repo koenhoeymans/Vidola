@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_TextualListTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->list = new \Vidola\Pattern\Patterns\TextualList();
+	}
+
+	protected function getPattern()
+	{
+		return $this->list;
 	}
 
 	/**
@@ -17,8 +22,14 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function blankLineNecessaryBefore()
 	{
-		$text = "not a paragraph\n* an item\n* other item\n\nparagraph";
-		$this->assertEquals($text, $this->list->replace($text));
+		$text =
+"paragraph
+* an item
+* other item
+
+paragraph";
+
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -26,19 +37,30 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function noBlankLineBeforeNecessaryWhenIndented()
 	{
-		$text = "paragraph\n * an item\n * other item\n\nparagraph";
-		$html = "paragraph\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\nparagraph";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+"paragraph
+ * an item
+ * other item
+
+paragraph";
+		$dom = new \DOMElement('ul', "* an item\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
 	 * @test
 	 */
-	public function canBeUnindented()
+	public function canBeUnindentedAfterBlankLine()
 	{
-		$text = "\n\n* an item\n* other item\n\n";
-		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+"
+
+* an item
+* other item
+
+";
+		$dom = new \DOMElement('ul', "* an item\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -46,32 +68,62 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function canBeIndented()
 	{
-		$text = "\n\n * an item\n * other item\n\n";
-		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+"
+
+ * an item
+ * other item
+
+";
+
+		$dom = new \DOMElement('ul', "* an item\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
 	 * @test
+	 * Note: Another list item would trigger a list, but in end
+	 * to end situations code would have triggered a match first.
 	 */
 	public function noListWhenBlankLineAndTabIndented()
 	{
 		$text =
-"!note
+"paragraph
 
-	* an item
-	* other item";
+	* an item";
 
-		$this->assertEquals($text, $this->list->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
 	 * @test
 	 */
-	public function noListWhenBlankLineAndMoreThanThreeSpacesIndented()
+	public function listWhenTabIndentedAfterParagraphWithoutBlankLine()
 	{
-		$text = "!note\n\n    * an item\n    * other item";
-		$this->assertEquals($text, $this->list->replace($text));
+		$text =
+"paragraph
+	* an item
+	* other item
+
+paragraph
+";
+
+		$dom = new \DOMElement('ul', "* an item\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);		
+	}
+
+	/**
+	 * @test
+	 * Note: See note above.
+	 */
+	public function noListWhenMoreThanThreeSpacesIndented()
+	{
+		$text =
+"paragraph
+
+    * an item";
+
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -79,9 +131,13 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function canBeStartOfFile()
 	{
-		$text = " * an item\n * other item\n\n";
-		$html = "{{ul}}\n* an item\n* other item\n{{/ul}}\n\n";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+" * an item
+ * other item
+
+";
+		$dom = new \DOMElement('ul', "* an item\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -89,9 +145,12 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function canBeEndOfFile()
 	{
-		$text = "\n\n * an item\n * other item";
-		$html = "\n\n{{ul}}\n* an item\n* other item\n{{/ul}}";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text = "
+
+ * an item
+ * other item";
+		$dom = new \DOMElement('ul', "* an item\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -110,20 +169,8 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 
 ";
 
-		$html =
-"
-
-{{ul}}
-* an item
-
-  item continues
-
-* other item
-{{/ul}}
-
-";
-
-		$this->assertEquals($html, $this->list->replace($text));
+		$dom = new \DOMElement('ul', "* an item\n\n  item continues\n\n* other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -131,47 +178,14 @@ class Vidola_Pattern_Patterns_TextualListTest extends PHPUnit_Framework_TestCase
 	 */
 	public function afterBlankLineItemMustBeIndentedOnFirstLine()
 	{
-		$text = "\n\n * an item\n\nitem continues\n\n";
-		$html = "\n\n{{ul}}\n* an item\n{{/ul}}\n\nitem continues\n\n";
-		$this->assertEquals($html, $this->list->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function textCanContainMultipleLists()
-	{
-		$text =
-"paragraph
-
+		$text = "
  * an item
- * other item
 
-paragraph
+item continues ...  not
 
- * an item
- * other item
-
-paragraph";
-
-		$html =
-"paragraph
-
-{{ul}}
-* an item
-* other item
-{{/ul}}
-
-paragraph
-
-{{ul}}
-* an item
-* other item
-{{/ul}}
-
-paragraph";
-
-		$this->assertEquals($html, $this->list->replace($text));
+";
+		$dom = new \DOMElement('ul', "* an item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -179,9 +193,15 @@ paragraph";
 	 */
 	public function orderedListsAreCreatedByNumberFollowedByDotAsListMarker()
 	{
-		$text = "not a paragraph\n\n1. an item\n2. other item\n\nparagraph";
-		$html = "not a paragraph\n\n{{ol}}\n1. an item\n2. other item\n{{/ol}}\n\nparagraph";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+"not a paragraph
+
+1. an item
+2. other item
+
+paragraph";
+		$dom = new \DOMElement('ol', "1. an item\n2. other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -189,9 +209,15 @@ paragraph";
 	 */
 	public function orderedListsCanAlsoBeCreatedByHashSignFollowedByDot()
 	{
-		$text = "not a paragraph\n\n#. an item\n#. other item\n\nparagraph";
-		$html = "not a paragraph\n\n{{ol}}\n#. an item\n#. other item\n{{/ol}}\n\nparagraph";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+"a paragraph
+
+#. an item
+#. other item
+
+paragraph";
+		$dom = new \DOMElement('ol', "#. an item\n#. other item");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -199,8 +225,37 @@ paragraph";
 	 */
 	public function actualNumberDoesNotNeedToBeOneTwoThreeEtc()
 	{
-		$text = "not a paragraph\n\n15. an item\n52. other item\n\nparagraph";
-		$html = "not a paragraph\n\n{{ol}}\n15. an item\n52. other item\n{{/ol}}\n\nparagraph";
-		$this->assertEquals($html, $this->list->replace($text));
+		$text =
+"paragraph
+
+15. an item
+52. other item
+
+paragraph";
+		$dom = new \DOMElement('ol', "15. an item\n52. other item");
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function codeBlockInList()
+	{
+		$text =
+"paragraph
+
+*	an item
+
+		code
+
+	item continued
+
+paragraph";
+		$dom = new \DOMElement('ul', "*	an item
+
+		code
+
+	item continued");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 }

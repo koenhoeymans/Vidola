@@ -12,25 +12,30 @@ use Vidola\Pattern\Pattern;
  */
 class CodeIndented extends Code
 {
-	public function replace($text)
+	public function getRegex()
 	{
-		return preg_replace_callback(
+		return
 			'@
-			(?<=^|^\n|\n\n)
+			(?<=^|\n\n|(?<newline>^\n))
 			(?<code>
 			(\t|[ ]{4}).*
 			(\n+(\t|[ ]{4}).*)*
 			)
 			(?=\n\n|\n$|$)
-			@x',
-			array($this, 'replacecode'),
-			$text
-		);
+			@x';
 	}
 
-	protected function replaceCode($match)
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
 	{
-		$code = preg_replace("#(\n|^)(\t|    )#", "\${1}", $match['code']);
-		return $this->createCodeInHtml($code);
+		if ($parentPattern && $match['newline'] === "\n")
+		{
+			if ($parentPattern instanceof \Vidola\Pattern\Patterns\ManualHtml)
+			{
+				return false;
+			}
+		}
+
+		$code = preg_replace("#(\n|^)(\t|[ ]{4})#", "\${1}", $match['code']);
+		return $this->createCodeReplacement($code, true, $parentNode);
 	}
 }

@@ -17,8 +17,8 @@ class Vidola_Pattern_PatternListTest extends PHPUnit_Framework_TestCase
 	public function keepsListOfAllSpecifiedPatterns()
 	{
 		// given
-		$patternA = new \Vidola\UnitTests\Support\MockPattern();
-		$patternB = new \Vidola\UnitTests\Support\MockPattern();
+		$patternA = new \Vidola\UnitTests\Support\MockPattern('@x@', 'a', 'b');
+		$patternB = new \Vidola\UnitTests\Support\MockPattern('@x@', 'a', 'b');
 
 		// when
 		$this->patternList->addRootPattern($patternA);
@@ -27,7 +27,7 @@ class Vidola_Pattern_PatternListTest extends PHPUnit_Framework_TestCase
 		// then
 		$this->assertEquals(
 			array($patternA, $patternB),
-			$this->patternList->getRootPatterns()
+			$this->patternList->getPatterns()
 		);
 	}
 
@@ -37,9 +37,9 @@ class Vidola_Pattern_PatternListTest extends PHPUnit_Framework_TestCase
 	public function keepsListOfSpecifiedSubpatterns()
 	{
 		// given
-		$patternA = new \Vidola\UnitTests\Support\MockPattern();
-		$patternB = new \Vidola\UnitTests\Support\MockPattern();
-		$patternC = new \Vidola\UnitTests\Support\MockPattern();
+		$patternA = new \Vidola\UnitTests\Support\MockPattern('@x@', 'a', 'b');
+		$patternB = new \Vidola\UnitTests\Support\MockPattern('@x@', 'a', 'b');
+		$patternC = new \Vidola\UnitTests\Support\MockPattern('@x@', 'a', 'b');
 
 		// when
 		$this->patternList->addRootPattern($patternA);

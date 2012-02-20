@@ -11,7 +11,7 @@ use Vidola\Processor\Processors\LinkDefinitionCollector;
 /**
  * @package Vidola
  */
-class Image implements Pattern
+class Image extends Pattern
 {
 	private $linkDefinitions;
 
@@ -20,90 +20,89 @@ class Image implements Pattern
 		$this->linkDefinitions = $linkDefinitionCollector;
 	}
 
-	public function replace($text)
+	public function getRegex()
 	{
-		return $this->replaceReference($this->replaceInline($text));
+		return
+			'@
+
+			(?<inline>(?J)
+				!\[(?<alt>.*)\]							# ![alternate text]
+				\(										# (
+					(?<path>							# path|<path>
+						<(\S+?)?>
+						|
+						(\S+?)?
+					)
+					([ ]+("|\')(?<title>.+)("|\')[ ]*)?	# "optional title"
+				\)										# )
+			)
+
+			|
+
+			(?<reference>(?J)
+				(?<begin>^|[ ]+)
+				!\[(?<alt>.+)\]					# ![alternate text]
+				\[(?<id>.+)\]					# [id]
+				(?<end>[ ]+|$)
+			)
+	
+			@xU';
 	}
 
-	private function replaceInline($text)
+	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
 	{
-		return preg_replace_callback(
-			'@
-			!\[(?<alt>.*)\]							# ![alternate text]
-			\(										# (
-				(?<path>							# path|<path>
-				<(\S+?)?>
-				|
-				(\S+?)?
-				)
-				([ ]+("|\')(?<title>.+)("|\')[ ]*)?	# "optional title"
-			\)										# )
-			@xU',
-		function($match)
+		$ownerDocument = $this->getOwnerDocument($parentNode);
+		if (isset($match['reference']))
 		{
-			$title = isset($match['title']) ? 'title="' . $match['title'] . '" ' : '';
-			$path = str_replace('"', '&quot;', $match['path']);
-			if (isset($path[0]) && $path[0] === '<')
-			{
-				$path = substr($path, 1, -1);
-			}
+			return $this->replaceReference($match, $ownerDocument);
+		}
+		else
+		{
+			return $this->replaceInline($match, $ownerDocument);
+		}
+	}
 
-			return
-			'{{img '
-			. 'alt="' . $match['alt'] . '" '
-			. $title
-			. 'src="' . $path . '"'
-			. ' /}}';
-		},
-		$text
-		);
+	private function replaceInline(array $match, \DOMDocument $domDoc)
+	{
+		$path = str_replace('"', '&quot;', $match['path']);
+		if (isset($path[0]) && $path[0] === '<')
+		{
+			$path = substr($path, 1, -1);
+		}
+
+		$img = $domDoc->createElement('img');
+		$img->setAttribute('alt', $match['alt']);
+		if (isset($match['title']))
+		{
+			$img->setAttribute('title', $match['title']);
+		}
+		$img->setAttribute('src', $path);
+
+		return $img;
 	}
 
 	/**
 	 * @todo replace circular handling
 	 */
-	private function replaceReference($text)
+	private function replaceReference(array $match, \DOMDocument $domDoc)
 	{
-		$linkDefinitions = $this->linkDefinitions;
-
-		return preg_replace_callback(
-			'@
-			(?<begin>^|[ ]+)
-			!\[(?<alt>.+)\]					# ![alternate text]
-			\[(?<id>.+)\]					# [id]
-			(?<end>[ ]+|$)
-			@xU',
-		function($match) use ($linkDefinitions)
+		$linkDefinition = $this->linkDefinitions->get($match['id']);
+		if (!$linkDefinition)
 		{
-			$linkDefinition = $linkDefinitions->get($match['id']);
+			throw new \Exception('Following link definition not found: "['
+			. $regexMatch['id'] . ']"'
+			);
+		}
+		$title = $linkDefinition->getTitle();
+			
+		$img = $domDoc->createElement('img');
+		$img->setAttribute('alt', $match['alt']);
+		if ($title)
+		{
+			$img->setAttribute('title', $title);
+		}
+		$img->setAttribute('src', $linkDefinition->getUrl());
 
-			if (!$linkDefinition)
-			{
-				throw new \Exception('Following link definition not found: "['
-				. $regexMatch['id'] . ']"'
-				);
-			}
-
-			$title = $linkDefinition->getTitle();
-			if ($title)
-			{
-				$title = 'title="' . $title . '" ';
-			}
-			else
-			{
-				$title = '';
-			}
-				
-			return
-			$match['begin']
-			. '{{img '
-			. 'alt="' . $match['alt'] . '" '
-			. $title
-			. 'src="' . $linkDefinition->getUrl() . '"'
-			. ' /}}'
-			. $match['end'];
-		},
-		$text
-		);
+		return $img;
 	}
 }

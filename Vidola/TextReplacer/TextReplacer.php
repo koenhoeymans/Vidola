@@ -5,7 +5,7 @@
  */
 namespace Vidola\TextReplacer;
 
-use \Vidola\Processor\Processor;
+use \Vidola\Processor\TextProcessor;
 
 /**
  * @package vidola
@@ -24,12 +24,12 @@ interface TextReplacer
 	/**
 	 * @param Processor $processor
 	 */
-	public function addPreProcessor(Processor $processor);
+	public function addPreProcessor(TextProcessor $processor);
 
 	/**
 	 * @param Processor $processor
 	 */
-	public function addPostProcessor(Processor $processor);
+	public function addPostProcessor(TextProcessor $processor);
 
 	/**
 	 * @param string $text

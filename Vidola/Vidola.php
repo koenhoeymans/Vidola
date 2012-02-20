@@ -6,6 +6,9 @@ class Vidola
 {
 	public static function run()
 	{
+		ini_set('pcre.backtrack_limit', 10000000);
+		ini_set("pcre.recursion_limit", "524");
+
 		// configuration
 		// -----------------
 		$config = new Config\CommandLineConfig($_SERVER['argv']);
@@ -13,7 +16,7 @@ class Vidola
 		// setting up the object graph constructor
 		// ---------------------------------------
 		$ogc = new \Vidola\Util\ObjectGraphConstructor();
-		$ogc->willUse('Vidola\\TextReplacer\\TextToHtmlReplacer\\TextToHtmlReplacer');
+		$ogc->willUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
 		$ogc->willUse('Vidola\\OutputBuilder\\TemplateOutputBuilder');
 
 		// filling the pattern list with the patterns
@@ -24,21 +27,21 @@ class Vidola
 
 		// adding processors
 		// -----------------
-		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextToHtmlReplacer\\TextToHtmlReplacer');
+		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextReplacer');
 		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\EmptyLineFixer')
 		);
 		$htmlBuilder->addPreProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\LineEndingsStandardizer')
-		);
-		$htmlBuilder->addPreProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\HeaderFiller')
+			$ogc->getInstance('Vidola\\Processor\\Processors\\NewLineStandardizer')
 		);
 		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
 		);
 		$htmlBuilder->addPreProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
+		);
+		$htmlBuilder->addPostDomProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler')
 		);
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')

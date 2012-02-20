@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
-	public function header()
+	public function setup()
 	{
-		return new \Vidola\Pattern\Patterns\Header();
+		$this->pattern = new \Vidola\Pattern\Patterns\Header();
+	}
+
+	protected function getPattern()
+	{
+		return $this->pattern;
 	}
 
 	// ------------ Setext style ------------
@@ -20,18 +25,17 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function headerIsFollowedByLineOfAtLeastThreeCharacters()
 	{
 		$text = "\n\nheader\n---\n\n";
-		$html = "\n\n{{h1 id=\"header\"}}header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
 	 * @test
 	 */
-	public function theLineOfAtLeastThreeCharactersMustNotBePrecededByABlankLine()
+	public function theLineOfAtLeastThreeCharactersMayNotBePrecededByABlankLine()
 	{
 		$text = "\n\nno header\n\n---\n\n";
-		$html = "\n\nno header\n\n---\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -40,8 +44,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function headerIsOptionallyPrecededByLineOfCharacters()
 	{
 		$text = "\n\n---\na header\n---\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -50,8 +54,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function characterLinesCanBeMoreThanThreeCharacters()
 	{
 		$text = "\n\n-----\na header\n-----\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -59,9 +63,9 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function onlyTheFirstThreeCharactersCount()
 	{
-		$text = "\n\na header\n-----\n\nanother header\n---\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n{{h1 id=\"another_header\"}}another header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "\n\na header\n---###\n\n";
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -69,9 +73,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function characterLinesCannotBeLessThanThreeCharacters()
 	{
-		$text = "\n\n--\nthis is a header\n--\n\n";
-		$html = "\n\n--\nthis is a header\n--\n\n";;
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "\n\n--\nthis is no header\n--\n\n";
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -80,8 +83,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineCharactersMayContainDashSigns()
 	{
 		$text = "\n\n---\na header\n---\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -90,8 +93,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineCharactersMayContainEqualSigns()
 	{
 		$text = "\n\n===\na header\n===\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -100,8 +103,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineCharactersMayContainPlusSigns()
 	{
 		$text = "\n\n+++\na header\n+++\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -110,8 +113,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineCharactersMayContainStarSigns()
 	{
 		$text = "\n\n***\na header\n***\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -120,8 +123,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineCharactersMayContainCaretSigns()
 	{
 		$text = "\n\n^^^\na header\n^^^\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -130,8 +133,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineCharactersMayContainNumberSignSigns()
 	{
 		$text = "\n\n###\na header\n###\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -140,8 +143,8 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function lineOfStartingAndEndingCharactersMustNotBeSame()
 	{
 		$text = "\n\n=-=\na header\n=-=\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'a header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -150,8 +153,28 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	public function levelOfHeadersIsAssignedByOrderOfAppearance()
 	{
 		$text = "\n\nfirst\n---\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$html = "\n\n{{h1 id=\"first\"}}first{{/h1}}\n\n{{h2 id=\"second\"}}second{{/h2}}\n\n{{h3 id=\"third\"}}third{{/h3}}\n\n{{h4 id=\"fourth\"}}fourth{{/h4}}\n\n{{h5 id=\"fifth\"}}fifth{{/h5}}\n\n{{h6 id=\"sixth\"}}sixth{{/h6}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$dom = new \DOMElement('h1', 'first');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h2', 'second');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h3', 'third');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h4', 'fourth');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\nfifth\n^^^\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h5', 'fifth');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h6', 'sixth');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -159,9 +182,17 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function levelOfHeadersIsRemembered()
 	{
-		$text = "\n\nfirst\n---\n\nsecond\n===\n\nthird\n+++\n\nsecond\n===\n\nthird\n+++\n\n";
-		$html = "\n\n{{h1 id=\"first\"}}first{{/h1}}\n\n{{h2 id=\"second\"}}second{{/h2}}\n\n{{h3 id=\"third\"}}third{{/h3}}\n\n{{h2 id=\"second\"}}second{{/h2}}\n\n{{h3 id=\"third\"}}third{{/h3}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "\n\nfirst\n---\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h1', 'first');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
+		$dom = new \DOMElement('h2', 'second');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "para\n\nother second\n===\n\npara";
+		$dom = new \DOMElement('h2', 'other second');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -169,9 +200,19 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function headerCanBeStartOfDocument()
 	{
-		$text = "a header\n---\n\n";
-		$html = "{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "header\n---\n\n";
+		$dom = new \DOMElement('h1', 'header');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function headerCanFollowStartPlusNewline()
+	{
+		$text = "\nheader\n---\n\n";
+		$dom = new \DOMElement('h1', 'header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -179,9 +220,19 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function headerMustNotFollowABlankLine()
 	{
-		$text = "some text\na header\n---\n\n";
-		$html = "some text\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "para\nheader\n---\n\n";
+		$dom = new \DOMElement('h1', 'header');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function headerMustNotBeFollowedByBlankLine()
+	{
+		$text = "\n\nheader\n---\nparagarph\n\n";
+		$dom = new \DOMElement('h1', 'header');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -189,53 +240,32 @@ class Vidola_Pattern_Patterns_HeaderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function canBeIndentedByUptoThreeSpaces()
 	{
-		$text = "\n\n   a header\n   ---\n\n";
-		$html = "\n\n{{h1 id=\"a_header\"}}a header{{/h1}}\n\n";
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "\n\n   header preceded by 3 spaces\n---\n\n";
+		$dom = new \DOMElement('h1', 'header preceded by 3 spaces');
+		$this->assertCreatesDomFromText($dom, $text);
+
+		$text = "\n\n    header preceded by 4 spaces\n---\n\n";
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
-	// ------------ atx style ------------
+	//	------------ atx style ------------
 
 	/**
 	 * @test
 	 */
 	public function oneToSixHashesBeforeHeaderDeterminesHeaderLevel()
 	{
-		$text =
-"paragraph
+		$text = "paragraph\n\n# level 1\n\nparagraph";
+		$dom = new \DOMElement('h1', 'level 1');
+		$this->assertCreatesDomFromText($dom, $text);
 
-# level 1
+		$text = "paragraph\n\n## level 2\n\nparagraph";
+		$dom = new \DOMElement('h2', 'level 2');
+		$this->assertCreatesDomFromText($dom, $text);
 
-## level 2
-
-### level 3
-
-#### level 4
-
-##### level 5
-
-###### level 6
-
-paragraph";
-
-		$html =
-"paragraph
-
-{{h1}}level 1{{/h1}}
-
-{{h2}}level 2{{/h2}}
-
-{{h3}}level 3{{/h3}}
-
-{{h4}}level 4{{/h4}}
-
-{{h5}}level 5{{/h5}}
-
-{{h6}}level 6{{/h6}}
-
-paragraph";
-
-		$this->assertEquals($html, $this->header()->replace($text));
+		$text = "paragraph\n\n###### level 6\n\nparagraph";
+		$dom = new \DOMElement('h6', 'level 6');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -243,20 +273,29 @@ paragraph";
 	 */
 	public function closingHashesAreOptional()
 	{
-		$text =
-"paragraph
+		$text = "paragraph\n\n## level 2 #####\n\nparagraph";
+		$dom = new \DOMElement('h2', 'level 2');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
 
-## level 2 #####
+	/**
+	 * @test
+	 */
+	public function headerMustNotBeFollowedByBlankLine_2()
+	{
+		$text = "\n\n# header\nparagarph\n\n";
+		$dom = new \DOMElement('h1', 'header');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
 
-paragraph";
-
-		$html =
-"paragraph
-
-{{h2}}level 2{{/h2}}
-
-paragraph";
-
-		$this->assertEquals($html, $this->header()->replace($text));
+	/**
+	 * @test
+	 * 
+	 * Note difference with Setext style
+	 */
+	public function headerMustBePrecededByBlankLine()
+	{
+		$text = "paragraph\n# header\n\n";
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 }

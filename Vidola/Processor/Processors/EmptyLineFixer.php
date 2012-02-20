@@ -5,15 +5,15 @@
  */
 namespace Vidola\Processor\Processors;
 
-use Vidola\Processor\Processor;
+use Vidola\Processor\TextProcessor;
 
 /**
  * @package Vidola
  */
-class EmptyLineFixer implements Processor
+class EmptyLineFixer implements TextProcessor
 {
 	public function process($text)
 	{
-		return preg_replace("#\n(\t| )+\n#", "\n\n", $text);
+		return preg_replace("#\n[\t ]+\n#", "\n\n", $text);
 	}
 }

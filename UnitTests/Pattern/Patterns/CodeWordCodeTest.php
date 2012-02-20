@@ -5,21 +5,35 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_CodeWordCodeTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\CodeWordCode();
 	}
 
+	public function getPattern()
+	{
+		return $this->pattern;
+	}
+
+	public function createDomFromText($text)
+	{
+		$domDoc = new \DOMDocument();
+		$domElementCode = new \DOMElement('code', $text);
+		$domElementPre = new \DOMElement('pre');
+		$domDoc->appendChild($domElementPre);
+		$domElementPre->appendChild($domElementCode);
+		return $domElementPre;
+	}
+
 	/**
-	* @test
-	*/
+	 * @test
+	 */
 	public function codeBlockIsWordCodeCapitalisedAndIndentedFollowedByColon()
 	{
-		$code = "\n\n\tCODE:\n\t\tthe code\n\n";
-		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n\tCODE:\n\t\tthe code\n\n";
+		$this->assertCreatesDomFromText($this->createDomFromText('the code'), $text);
 	}
 
 	/**
@@ -27,9 +41,8 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	 */
 	public function codeBlocksKeepIndentationAsOutlined()
 	{
-		$code = "\n\n\tCODE:\n\t\tThis is code.\n\n\t\tThis is also code.\n\t\t\t\tThis line is indented.";
-		$html = "\n\n{{pre}}{{code}}This is code.\n\nThis is also code.\n\t\tThis line is indented.{{/code}}{{/pre}}";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n\tCODE:\n\t\tThis is code.\n\n\t\tThis is also code.\n\t\t\t\tThis line is indented.";
+		$this->assertCreatesDomFromText($this->createDomFromText("This is code.\n\nThis is also code.\n\t\tThis line is indented."), $text);
 	}
 
 	/**
@@ -37,9 +50,8 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	 */
 	public function codeShouldBeIndentedAfterCodeWord()
 	{
-		$code = "\n\n\tCODE:\n\tthe code\n\n";
-		$html = "\n\n\tCODE:\n\tthe code\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n\tCODE:\n\tthe code\n\n";
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -47,7 +59,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	 */
 	public function codeBlockStopsAfterBlanklineWithTextEquallyIndentedWithCodeWord()
 	{
-		$code =
+		$text =
 "
 
 	CODE:
@@ -55,14 +67,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 
 	This line is not code.";
 	
-		$html =
-"
-
-{{pre}}{{code}}This is code.{{/code}}{{/pre}}
-
-	This line is not code.";
-	
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$this->assertCreatesDomFromText($this->createDomFromText('This is code.'), $text);
 	}
 
 	/**
@@ -70,8 +75,7 @@ class Vidola_Pattern_Patterns_CodeWordCodeTest extends PHPUnit_Framework_TestCas
 	 */
 	public function theCodeWordIsCaseInsensitive()
 	{
-		$code = "\n\n\tcoDe:\n\t\tthe code\n\n";
-		$html = "\n\n{{pre}}{{code}}the code{{/code}}{{/pre}}\n\n";
-		$this->assertEquals($html, $this->pattern->replace($code));
+		$text = "\n\n\tcoDe:\n\t\tthe code\n\n";
+		$this->assertCreatesDomFromText($this->createDomFromText('the code'), $text);
 	}
 }

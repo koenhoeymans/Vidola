@@ -10,7 +10,19 @@ namespace Vidola\Pattern;
  * 
  * When a text matches its pattern it transforms it.
  */
-interface Pattern
+abstract class Pattern
 {
-	public function replace($text);
+	abstract public function getRegex();
+
+	abstract public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null);
+
+	protected function getOwnerDocument(\DOMNode $node)
+	{
+		return ($node->ownerDocument) ?: $node;
+	}
+
+	public function unindent($text)
+	{
+		// @todo implement
+	}
 }

@@ -2,15 +2,7 @@
 
 require_once('TestHelper.php');
 
-/**
- * These are the Markdown tests as found in the test suite of PHPMarkdown.
- * Some formatting was changed:
- *  * removed blank lines before closing code tag
- *  * removed empty line at the end of the tests
- * 
- * Other changes have been documented before each test.
- */
-class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
+class Vidola_EndToEndTests_MarkdownTest extends \Vidola\EndToEndTests\Support\Tidy
 {
 	public function createTestFor($name)
 	{
@@ -31,15 +23,15 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 		\Vidola\Vidola::run();
 		
 		$this->assertEquals(
-			file_get_contents(
+			$this->tidy(file_get_contents(
 				__DIR__
 				. DIRECTORY_SEPARATOR . 'Markdown.mdtest'
 				. DIRECTORY_SEPARATOR . $name . '.html'
-				),
-			file_get_contents(
+				)),
+			$this->tidy(file_get_contents(
 				$_SERVER['argv']['target.dir']
 				. DIRECTORY_SEPARATOR . $name . '.html'
-			)
+			))
 		);
 
 		if (file_exists($dir . $name . '.html'))
@@ -68,6 +60,13 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
+	 * changed
+	 * <span attr='`ticks`'>
+	 * <span attr='\\backslashes\\'>
+	 * to
+	 * <span attr="`ticks`">
+	 * <span attr="\\backslashes\\">
+	 * as expected outcome
 	 */
 	public function backslashEscapes()
 	{
@@ -92,10 +91,11 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * 
-	 * Changed expected outcome of `<test a="` content of attribute `">`
-	 * from <p><code>&lt;test a="</code> content of attribute <code>"&gt;</cde></p>
-	 * to <p><code>&lt;test a="` content of attribute `"&gt;</code></p>
+	 * changed
+	 * <span attr='`ticks`'>
+	 * to
+	 * <span attr="`ticks`">
+	 * as expected outcome
 	 */
 	public function codeSpans()
 	{
@@ -187,7 +187,6 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * 
-	 * Added two header id's to expected output.
 	 */
 	public function markdownDocumentationBasics()
 	{
@@ -197,9 +196,6 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * 
-	 * Removed some empty lines in text. Changed some tabs to spaces. Most notable
-	 * change though is that an extra space is added for nested lists that have no
-	 * blank line before it.
 	 */
 	public function markdownDocumentationSyntax()
 	{
@@ -252,13 +248,6 @@ class Vidola_EndToEndTests_MarkdownTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * 
-	 * Changed transformed tabs back to spaces in html.
-	 * 
-	 * Changed:
-	 * +	this is a list item
-	 *		indented with spaces
-	 * From spaces to tabs as in the first list item.
 	 */
 	public function tabs()
 	{

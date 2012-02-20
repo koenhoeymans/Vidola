@@ -5,37 +5,33 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_DefinitionListTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_DefinitionListTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->dl = new \Vidola\Pattern\Patterns\DefinitionList();
 	}
 
+	public function getPattern()
+	{
+		return $this->dl;
+	}
+
 	/**
 	 * @test
 	 */
-	public function aDlConsistsOfTermFollowedByIndentedDescriptionOnNewLine()
+	public function aDlConsistsOfTermFollowedOnNewLineByColonAndDescription()
 	{
 		$text =
 'paragraph
 
-term:
-	explanation
+a term
+:	explanation
 
 paragraph';
 
-		$transformation =
-'paragraph
-
-{{dl}}
-term:
-	explanation
-{{/dl}}
-
-paragraph';
-
-		$this->assertEquals($transformation, $this->dl->replace($text));
+		$dom = new \DOMElement('dl', "a term\n:	explanation");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -44,20 +40,13 @@ paragraph';
 	public function canBeStartOfInputString()
 	{
 				$text =
-'term:
-	explanation
+'term
+:	explanation
 
 paragraph';
 
-		$transformation =
-'{{dl}}
-term:
-	explanation
-{{/dl}}
-
-paragraph';
-
-		$this->assertEquals($transformation, $this->dl->replace($text));
+		$dom = new \DOMElement('dl', "term\n:	explanation");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -65,72 +54,32 @@ paragraph';
 	 */
 	public function canBeEndOfInputString()
 	{
-				$text =
+		$text =
 'paragraph
 
-term:
-	explanation';
+term
+:	explanation';
 
-		$transformation =
-'paragraph
-
-{{dl}}
-term:
-	explanation
-{{/dl}}';
-
-		$this->assertEquals($transformation, $this->dl->replace($text));
+		$dom = new \DOMElement('dl', "term\n:	explanation");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
 	 * @test
 	 */
-	public function indentationDoesntMatterWhenPrecededByTwoBlankLines()
+	public function thereCanBeMultipleDescriptions()
 	{
 		$text =
 'paragraph
 
-
-	term:
-		explanation
-
-paragraph';
-
-		$transformation =
-'paragraph
-
-{{dl}}
-term:
-	explanation
-{{/dl}}
+term c
+:	explanation x
+:	explanation y
 
 paragraph';
 
-		$this->assertEquals($transformation, $this->dl->replace($text));
-	}
-
-	/**
-	 * @test
-	 */
-	public function whenOnlyOneBlankLineNoDefintionListWhenIndentedMoreThan3Spaces()
-	{
-		$text =
-'paragraph
-
-	term:
-		explanation
-
-paragraph';
-
-		$transformation =
-'paragraph
-
-	term:
-		explanation
-
-paragraph';
-
-		$this->assertEquals($transformation, $this->dl->replace($text));		
+		$dom = new \DOMElement('dl', "term c\n:	explanation x\n:	explanation y");
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -138,41 +87,40 @@ paragraph';
 	 */
 	public function thereCanBeMultipleTermsAndDescriptionsWithParagraphs()
 	{
-				$text =
+		$text =
 'paragraph
 
-term a:
-term b:
-term c:
-	~explanation x
+term a
+term b
+term c
+:	explanation x
 
 	Continuation of explanation.
 
-	~explanation y
+:	explanation y
 
 	Continuation of explanation.
+
+		code
 
 paragraph';
 
-		$transformation =
-'paragraph
-
-{{dl}}
-term a:
-term b:
-term c:
-	~explanation x
+		$listText =
+'term a
+term b
+term c
+:	explanation x
 
 	Continuation of explanation.
 
-	~explanation y
+:	explanation y
 
 	Continuation of explanation.
-{{/dl}}
 
-paragraph';
+		code';
 
-		$this->assertEquals($transformation, $this->dl->replace($text));
+		$dom = new \DOMElement('dl', $listText);
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
@@ -183,43 +131,38 @@ paragraph';
 		$text =
 'paragraph
 
-term:
-	explanation
+term
+:	term explanation
 
-other term:
-	explanation
-
-paragraph';
-
-		$transformation =
-'paragraph
-
-{{dl}}
-term:
-	explanation
-
-other term:
-	explanation
-{{/dl}}
+other term
+:	other term explanation
 
 paragraph';
 
-		$this->assertEquals($transformation, $this->dl->replace($text));
+		$listText =
+'term
+:	term explanation
+
+other term
+:	other term explanation';
+
+		$dom = new \DOMElement('dl', $listText);
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 
 	/**
 	 * @test
 	 */
-	public function aParagraphEndingWithSemicolonShouldNotBeMistakenForDefinition()
+	public function codeShouldNotBeMistakenForDefinition()
 	{
 		$text = "
 
 This paragraph is followed by:
 
-	code
+	: dd
 
 ";
 
-		$this->assertEquals($text, $this->dl->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 }

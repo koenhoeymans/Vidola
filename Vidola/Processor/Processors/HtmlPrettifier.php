@@ -5,12 +5,12 @@
  */
 namespace Vidola\Processor\Processors;
 
-use Vidola\Processor\Processor;
+use Vidola\Processor\TextProcessor;
 
 /**
  * @package Vidola
  */
-class HtmlPrettifier implements Processor
+class HtmlPrettifier implements TextProcessor
 {
 	public function process($text)
 	{

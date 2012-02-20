@@ -5,11 +5,16 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_AutoLinkTest extends PHPUnit_Framework_TestCase
+class Vidola_Pattern_Patterns_AutoLinkTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
 		$this->pattern = new \Vidola\Pattern\Patterns\AutoLink();
+	}
+
+	public function getPattern()
+	{
+		return $this->pattern;
 	}
 
 	/**
@@ -18,8 +23,10 @@ class Vidola_Pattern_Patterns_AutoLinkTest extends PHPUnit_Framework_TestCase
 	public function anEmailAddressIsLinkedWhenPlacedBetweenALesserThanAndGreaterThanSign()
 	{
 		$text = "Mail to <me@xmpl.com>.";
-		$html = "Mail to {{a href=\"mailto:me@xmpl.com\"}}me@xmpl.com{{/a}}.";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->appendChild(new \DOMElement('a', 'me@xmpl.com'));
+		$domEl->setAttribute('href', 'mailto:me@xmpl.com');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 
 	/**
@@ -28,7 +35,7 @@ class Vidola_Pattern_Patterns_AutoLinkTest extends PHPUnit_Framework_TestCase
 	public function withoutAngledBracketsNoMailLinkIsCreated()
 	{
 		$text = "Mail to me@example.com, it's an email address link.";
-		$this->assertEquals($text, $this->pattern->replace($text));
+		$this->assertDoesNotCreateDomFromText($text);
 	}
 
 	/**
@@ -37,7 +44,21 @@ class Vidola_Pattern_Patterns_AutoLinkTest extends PHPUnit_Framework_TestCase
 	public function anUrlBetweenLesserThanAndreaterThanSignIsAutolinked()
 	{
 		$text = "Visit <http://example.com>.";
-		$html = "Visit {{a href=\"http://example.com\"}}http://example.com{{/a}}.";
-		$this->assertEquals($html, $this->pattern->replace($text));
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->appendChild(new \DOMElement('a', 'http://example.com'));
+		$domEl->setAttribute('href', 'http://example.com');
+		$this->assertCreatesDomFromText($domEl, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function handlesInternationalDomainNames()
+	{
+		$text = "Visit <http://example.com>.";
+		$domDoc = new \DOMDocument();
+		$domEl = $domDoc->appendChild(new \DOMElement('a', 'http://example.com'));
+		$domEl->setAttribute('href', 'http://example.com');
+		$this->assertCreatesDomFromText($domEl, $text);
 	}
 }

@@ -33,7 +33,11 @@ class Vidola_TextReplacer_TextToHtmlReplacer_RecursiveReplacerTest extends PHPUn
 			->expects($this->atLeastOnce())
 			->method('getPatterns')
 			->will($this->returnValue(array()));
+<<<<<<< HEAD
 		$preProcessor = $this->getMock('\\Vidola\\Processor\\Processor');
+=======
+		$preProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
+>>>>>>> tryout
 		$preProcessor
 			->expects($this->atLeastOnce())
 			->method('process')
@@ -52,7 +56,11 @@ class Vidola_TextReplacer_TextToHtmlReplacer_RecursiveReplacerTest extends PHPUn
 			->expects($this->atLeastOnce())
 			->method('getPatterns')
 			->will($this->returnValue(array()));
+<<<<<<< HEAD
 		$postProcessor = $this->getMock('\\Vidola\\Processor\\Processor');
+=======
+		$postProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
+>>>>>>> tryout
 		$postProcessor
 			->expects($this->atLeastOnce())
 			->method('process')

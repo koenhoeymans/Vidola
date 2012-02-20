@@ -5,6 +5,8 @@
  */
 namespace Vidola\Pattern\Patterns\TableOfContents;
 
+use \Vidola\Pattern\Patterns\Header;
+
 /**
  * @package Vidola
  */
@@ -12,7 +14,7 @@ class HeaderFinder
 {
 	private $header;
 
-	public function __construct(\Vidola\Pattern\Patterns\Header $header)
+	public function __construct(Header $header)
 	{
 		$this->header = $header;
 	}
@@ -22,16 +24,18 @@ class HeaderFinder
 		$headers = array();
 
 		preg_match_all(
-			"#({{h[123456]( .+?)?}}.+?{{/h[123456]}})#",
-			$this->header->replace($text),
-			$taggedHeaders
+			$this->header->getRegex(),
+			$text,
+			$headerMatches,
+			PREG_SET_ORDER
 		);
 
-		foreach ($taggedHeaders[0] as $header)
+		foreach ($headerMatches as $headerMatch)
 		{
+			$headerNode = $this->header->handleMatch($headerMatch, new \DOMDocument());
 			$headers[] = array(
-				'title' => substr($header, strpos($header, '}') + 2, -7),
-				'level' => $header[3]
+				'title' => $headerNode->nodeValue,
+				'level' => substr($headerNode->nodeName, 1)
 			);
 		}
 
