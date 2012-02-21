@@ -7,7 +7,11 @@ class Vidola
 	public static function run()
 	{
 		ini_set('pcre.backtrack_limit', 10000000);
-		ini_set("pcre.recursion_limit", "524");
+		ini_set('pcre.recursion_limit', "524");
+		if (ini_get('xdebug.max_nesting_level'))
+		{
+			ini_set('xdebug.max_nesting_level', 0);
+		}
 
 		// configuration
 		// -----------------
@@ -48,6 +52,9 @@ class Vidola
 		);
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostHandler')
+		);
+		$htmlBuilder->addPostProcessor(
+			$ogc->getInstance('Vidola\\Processor\\Processors\\XmlDeclarationRemover')
 		);
 		$htmlBuilder->addPostProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\HtmlPrettifier')
