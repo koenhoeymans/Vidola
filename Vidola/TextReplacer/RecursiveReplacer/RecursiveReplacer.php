@@ -19,11 +19,13 @@ class RecursiveReplacer implements TextReplacer
 {
 	private $patternList;
 
-	private $preProcessors = array();
+	private $preTextProcessors = array();
+
+	private $postTextProcessors = array();
+
+	private $preDomProcessors = array();
 
 	private $postDomProcessors = array();
-
-	private $postProcessors = array();
 
 	public function __construct(PatternList $patternList)
 	{
@@ -41,22 +43,33 @@ class RecursiveReplacer implements TextReplacer
 	/**
 	 * @see Vidola\TextReplacer.TextReplacer::addPreProcessor()
 	 */
-	public function addPreProcessor(TextProcessor $processor)
+	public function addPreTextProcessor(TextProcessor $processor)
 	{
-		$this->preProcessors[] = $processor;
-	}
-
-	public function addPostDomProcessor(DomProcessor $domProcessor)
-	{
-		$this->postDomProcessors[] = $domProcessor;
+		$this->preTextProcessors[] = $processor;
 	}
 
 	/**
 	 * @see Vidola\TextReplacer.TextReplacer::addPostProcessor()
 	 */
-	public function addPostProcessor(TextProcessor $processor)
+	public function addPostTextProcessor(TextProcessor $processor)
 	{
-		$this->postProcessors[] = $processor;
+		$this->postTextProcessors[] = $processor;
+	}
+
+	/**
+	 * @see Vidola\TextReplacer.TextReplacer::addPreDomProcessor()
+	 */
+	public function addPreDomProcessor(DomProcessor $domProcessor)
+	{
+		$this->preDomProcessors[] = $domProcessor;
+	}
+
+	/**
+	 * @see Vidola\TextReplacer.TextReplacer::addPostDomProcessor()
+	 */
+	public function addPostDomProcessor(DomProcessor $domProcessor)
+	{
+		$this->postDomProcessors[] = $domProcessor;
 	}
 
 	/**
@@ -73,6 +86,8 @@ class RecursiveReplacer implements TextReplacer
 		$domDoc->appendChild($document);
 		$document->appendChild($textNode);
 
+		$this->preProcessDom($domDoc);
+
 		$this->applyPatterns($textNode);
 
 		$this->postProcessDom($domDoc);
@@ -86,12 +101,30 @@ class RecursiveReplacer implements TextReplacer
 
 	private function preProcess($text)
 	{
-		foreach ($this->preProcessors as $processor)
+		foreach ($this->preTextProcessors as $processor)
 		{
 			$text = $processor->process($text);
 		}
 
 		return $text;
+	}
+
+	private function postProcess($text)
+	{
+		foreach ($this->postTextProcessors as $processor)
+		{
+			$text = $processor->process($text);
+		}
+
+		return $text;
+	}
+
+	private function preProcessDom(\DOMDocument $document)
+	{
+		foreach ($this->preDomProcessors as $processor)
+		{
+			$processor->process($document);
+		}
 	}
 
 	private function postProcessDom(\DOMDocument $document)
@@ -100,16 +133,6 @@ class RecursiveReplacer implements TextReplacer
 		{
 			$processor->process($document);
 		}
-	}
-
-	private function postProcess($text)
-	{
-		foreach ($this->postProcessors as $processor)
-		{
-			$text = $processor->process($text);
-		}
-
-		return $text;
 	}
 
 	private function applyPatterns(\DOMText $node, Pattern $parentPattern = null)

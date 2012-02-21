@@ -27,7 +27,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_RecursiveReplacerTest extends PHPUn
 	/**
 	 * @test
 	 */
-	public function beforeProcessingPreProcessorsAreCalled()
+	public function beforeProcessingPreTextProcessorsAreCalled()
 	{
 		$this->patternList
 			->expects($this->atLeastOnce())
@@ -39,14 +39,14 @@ class Vidola_TextReplacer_TextToHtmlReplacer_RecursiveReplacerTest extends PHPUn
 			->method('process')
 			->with('text
 ');
-		$this->replacer->addPreProcessor($preProcessor);
+		$this->replacer->addPreTextProcessor($preProcessor);
 		$this->replacer->replace('text');
 	}
 
 	/**
 	 * @test
 	 */
-	public function afterProcessingPostProcessorsAreCalled()
+	public function afterProcessingPostTextProcessorsAreCalled()
 	{
 		$this->patternList
 			->expects($this->atLeastOnce())
@@ -58,7 +58,7 @@ class Vidola_TextReplacer_TextToHtmlReplacer_RecursiveReplacerTest extends PHPUn
 			->method('process')
 			->with('<doc>text
 </doc>');
-		$this->replacer->addPostProcessor($postProcessor);
+		$this->replacer->addPostTextProcessor($postProcessor);
 		$this->replacer->replace('text');
 	}
 

@@ -32,31 +32,31 @@ class Vidola
 		// adding processors
 		// -----------------
 		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextReplacer');
-		$htmlBuilder->addPreProcessor(
+		$htmlBuilder->addPreTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\EmptyLineFixer')
 		);
-		$htmlBuilder->addPreProcessor(
+		$htmlBuilder->addPreTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\NewLineStandardizer')
 		);
-		$htmlBuilder->addPreProcessor(
+		$htmlBuilder->addPreTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
 		);
-		$htmlBuilder->addPreProcessor(
+		$htmlBuilder->addPreTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
 		);
 		$htmlBuilder->addPostDomProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler')
 		);
-		$htmlBuilder->addPostProcessor(
+		$htmlBuilder->addPostTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
 		);
-		$htmlBuilder->addPostProcessor(
+		$htmlBuilder->addPostTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostHandler')
 		);
-		$htmlBuilder->addPostProcessor(
+		$htmlBuilder->addPostTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\XmlDeclarationRemover')
 		);
-		$htmlBuilder->addPostProcessor(
+		$htmlBuilder->addPostTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\HtmlPrettifier')
 		);
 
