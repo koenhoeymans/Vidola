@@ -42,7 +42,7 @@ class Vidola
 			$ogc->getInstance('Vidola\\Processor\\Processors\\NewLineStandardizer')
 		);
 		$htmlBuilder->addPreTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreHandler')
+			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler')
 		);
 		$htmlBuilder->addPreTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')

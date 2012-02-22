@@ -13,7 +13,7 @@ use Vidola\Processor\TextProcessor;
  * Works in combination with EscapeRemover to hide the special meaning
  * of escaped characters.
  */
-class SpecialCharacterPreHandler implements TextProcessor
+class SpecialCharacterPreTextHandler implements TextProcessor
 {
 	/**
 	 * @see Vidola\Processor.Processor::process()
