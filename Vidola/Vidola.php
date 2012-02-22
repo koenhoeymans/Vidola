@@ -54,7 +54,7 @@ class Vidola
 			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
 		);
 		$htmlBuilder->addPostTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostHandler')
+			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler')
 		);
 		$htmlBuilder->addPostTextProcessor(
 			$ogc->getInstance('Vidola\\Processor\\Processors\\XmlDeclarationRemover')
