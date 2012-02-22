@@ -13,6 +13,8 @@ use Vidola\Util\DocFileRetriever;
 
 /**
  * @package Vidola
+ * 
+ * Responsible for building the document.
  */
 class DocumentBuilder
 {
@@ -28,13 +30,11 @@ class DocumentBuilder
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
 		OutputBuilder $outputBuilder,
-		Header $header,
 		DocFileRetriever $docFileRetriever
 	) {
 		$this->documentStructure = $documentStructure;
 		$this->textReplacer = $textReplacer;
 		$this->outputBuilder = $outputBuilder;
-		$this->headers = $header;
 		$this->docFileRetriever = $docFileRetriever;
 	}
 

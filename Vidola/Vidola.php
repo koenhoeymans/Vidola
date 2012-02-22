@@ -2,6 +2,9 @@
 
 namespace Vidola;
 
+/**
+ * Sets up the necessary components before building the documents.
+ */
 class Vidola
 {
 	public static function run()

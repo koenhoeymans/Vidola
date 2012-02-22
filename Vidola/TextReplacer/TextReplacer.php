@@ -23,6 +23,12 @@ interface TextReplacer
 	public function getExtension();
 
 	/**
+	 * @param string $text
+	 * @return string The replaced text.
+	 */
+	public function replace($text);
+
+	/**
 	 * @param Processor $processor
 	 */
 	public function addPreTextProcessor(TextProcessor $processor);
@@ -41,10 +47,4 @@ interface TextReplacer
 	 * @param DomProcessor $processor
 	 */
 	public function addPostDomProcessor(DomProcessor $processor);
-
-	/**
-	 * @param string $text
-	 * @return string The replaced text.
-	 */
-	public function replace($text);
 }

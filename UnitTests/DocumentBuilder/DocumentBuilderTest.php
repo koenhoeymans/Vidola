@@ -15,14 +15,12 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			'\\Vidola\\UnitTests\\Support\\MockTextReplacer', array('replace')
 		);
 		$this->outputBuilder = $this->getMock('\\Vidola\\OutputBuilder\\OutputBuilder');
-		$this->headers = $this->getMock('\\Vidola\\Pattern\\Patterns\\Header');
 		$this->fileRetriever = $this->getMock('\\Vidola\\Util\\DocFileRetriever');
 
 		$this->documentBuilder = new \Vidola\DocumentBuilder\DocumentBuilder(
 			$this->docStructure,
 			$this->textReplacer,
 			$this->outputBuilder,
-			$this->headers,
 			$this->fileRetriever
 		);
 	}
