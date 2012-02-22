@@ -20,9 +20,4 @@ abstract class Pattern
 	{
 		return ($node->ownerDocument) ?: $node;
 	}
-
-	public function unindent($text)
-	{
-		// @todo implement
-	}
 }
