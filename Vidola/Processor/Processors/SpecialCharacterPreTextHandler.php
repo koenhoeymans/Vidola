@@ -20,38 +20,7 @@ class SpecialCharacterPreTextHandler implements TextProcessor
 	 */
 	public function process($text)
 	{
-		$text = $this->detab($text);
-		$text = $this->neutralizeEscapedChars($text);
-
-		return $text;
-	}
-
-	// adapted from PHP Markdown
-	private function detab($text)
-	{
-		return preg_replace_callback(
-			"/^.*?(?<space_before>[ ]?)\t.*$/m",
-			function ($matches) {
-				$line = $matches[0];
-				$blocks = explode("\t", $line);
-				$line = $blocks[0];
-				unset($blocks[0]);
-				foreach ($blocks as $block) {
-					if ($matches['space_before'] === ' ')
-					{
-						$amount = 4;
-					}
-					else
-					{
-						// @todo set tab amount of spaces option
-						$amount = 4 - mb_strlen($line, 'UTF-8') % 4;
-					}
-					$line .= str_repeat(" ", $amount) . $block;
-				}
-				return $line;
-			},
-			$text
-		);
+		return $this->neutralizeEscapedChars($text);
 	}
 
 	private function neutralizeEscapedChars($text)
