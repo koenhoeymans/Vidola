@@ -64,7 +64,7 @@ class TableOfContents extends Pattern
 					(\n(\t+|[ ]{4,}).+)+
 				)?
 			)
-			(?=\n\n(?<text>(\n|.)+)$|$)
+			(?=\n\n(?<text>[\S\s]*))
 			@x';
 	}
 

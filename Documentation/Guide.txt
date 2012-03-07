@@ -1,3 +1,5 @@
+{table of contents}
+
 ---------------
 What is Vidola?
 ---------------
@@ -24,7 +26,7 @@ some extensions and some differences.
 Handling of special characters
 ==============================
 
-As in the [[Markdown http://daringfireball.net/projects/markdown/syntax]] implementation
+As in the [Markdown](http://daringfireball.net/projects/markdown/syntax) implementation
 the ampersand (&), greater than sign (>) and lesser than sign (>) are automatically converted to
 entities so you don't have to worry about that when you are writing. The ampersand is not replaced
 when it is part of an entity (except in code blocks).
@@ -38,9 +40,9 @@ Raw HTML
 ========
 
 Not everything is possible with the simple syntax rules Vidola uses. If you would need to
-you can add raw HTML to the text. Everything is allow but you have to keep one rule in
-mind: each pattern should still have the same form. Take a paragrap. It needs a blank line
-before and after its text. That means that you can add HTML like this
+you can add raw HTML to the text.
+
+A paragraph needs a blank line before and after. That means that you can add HTML like this
 
 	A short paragraph.
 
@@ -52,15 +54,7 @@ before and after its text. That means that you can add HTML like this
 
 	Note the blank lines.
 
-But not like this:
-
-	A short paragraph.
-
-	<div>
-	A paragraph withing manually added tags.
-	</div>
-
-	This won't work.
+The paragraph will be placed within the div element.
 
 If the pattern is indented, as when you are writing a paragraph in a list item, the tags that
 surround it should also be indented.
@@ -78,12 +72,12 @@ surround it should also be indented.
 Headers
 ========
 
-[[Atx http://www.aaronsw.com/2002/atx/intro]] style headers are headers preceded
+[Atx](http://www.aaronsw.com/2002/atx/intro) style headers are headers preceded
 by one or more dash signs. The number of them determines its level.
 
 	## level 2 header
 
-[[Setext http://docutils.sourceforge.net/mirror/setext.html]] style headers are
+[Setext](http://docutils.sourceforge.net/mirror/setext.html) style headers are
 supported too but are made a bit more powerful. They are assigned a level in order
 of appearance. The first used markup will be used as a level 1 header throughout
 the document.
@@ -149,8 +143,7 @@ Code
 
 Code is preceded by the word 'CODE:' with the actual code following on the second 
 line. Both are indented. The code block must be indented in respect to the previous
-lines. The actual code is indented after the 'code' word. The code block ends when
-a blank line is encountered with text that is equally or less indented as the 'code' word.
+lines.
 
 	This is a regular paragraph with samples of code blocks:
 
@@ -197,8 +190,15 @@ you'll have to indent it though:
 
 Inline code is also possible with backticks:
 
-	You could write ´$this->foo´ for example.
+	You could write `$this->foo` for example.
 
+The standard option is to write code by indenting text four spaces or a tab:
+
+	A paragraph.
+
+		This is code.
+
+	The next paragraph.
 
 Note
 ====
@@ -220,7 +220,7 @@ followed by text equally or less indented.
 blockquote
 ==========
 
-Blockquote are quoted text preceded by ´>´.
+Blockquote are quoted text preceded by `>`.
 
 	> this is a blockquote
 	> continues on the next line
@@ -254,7 +254,7 @@ For ordered lists use a number followed by a dot.
 	2. Second item
 
 The actual numbers used do not influence order. Instead of numbers you can also
-use the hash sign followed by a dot (inspired by [[Pandoc http://johnmacfarlane.net/pandoc/README.html#ordered-lists]].
+use the hash sign followed by a dot (inspired by [Pandoc](http://johnmacfarlane.net/pandoc/README.html#ordered-lists).
 
 	#. First item
 	#. Second item
@@ -295,23 +295,15 @@ All three will produce a horizontal rule.
 Links
 =====
 
-An url between double square brackets is automatically converted to a hyperlink. Thus
+An url between `<` and `>` is automatically converted to a hyperlink. Thus
 
-	[[http://www.mysite.com]]
+	<http://www.mysite.com>
 
 becomes
 
 	<a href="http://www.mysite.com">http://www.mysite.com</a>
 
-Optionally a title attribute can be specified:
-
-	[[http://example.com "title"]]
-
-Also optionally anchor text is written before the link:
-
-	This is a [[link http://example.com]] in text.
-
-Standard [Markdown link syntax][1] is also available.
+Full links:
 
 	(anchor text)[url "title text"]
 
@@ -331,7 +323,7 @@ single brackets are used. The link definition can contain the title attribute:
 Images
 ======
 
-The syntax for images follows the [[Markdown implementation http://daringfireball.net/projects/markdown/syntax#link]].
+The syntax for images follows the [Markdownimplementation](http://daringfireball.net/projects/markdown/syntax#link).
 The two styles are inline and reference.
 
 Inline images are written as follows:
@@ -391,7 +383,7 @@ Becomes
 	A sentence with <strong>important</strong> text.
 
 !Note: Importance is chosen instead of strong importance to reflect the change coming with HTML5. See
-the [[section on changed elements http://www.w3.org/TR/html5-diff/#changed-elements]].
+the [section on changed elements](http://www.w3.org/TR/html5-diff/#changed-elements).
 
 There is a difference between this implementation and that of Markdown. Italicized text doesn't
 exist in Markdown. The syntax I use for emphasized text in Markdown (`_underscore_`) produces
@@ -408,9 +400,9 @@ having a hard line break would be beneficial. More technically oriented users
 will also have less problem adoption this, although admittedly it is
 counterintuitive.
 
-I've considered adopting the [[suggestion http://michelf.com/weblog/2009/markdown-sustainability/]]
-here in the comments of allowing hard line breaks in top-level paragraphs. But
-it adds complexity.
+I've considered adopting the [suggestion](http://michelf.com/weblog/2009/markdown-sustainability/)
+in the comments of allowing hard line breaks in top-level paragraphs. But
+it adds complexity in the rules.
 
 Readability should be the prime goal and I believe that for writing documentation
 using two spaces has the most benefits in that regard.
@@ -422,7 +414,7 @@ Table of contents
 You can create a table of contents and have it filled automatically with
 the headers that follow. It takes all headers and displays a nested list
 stopping at the end of the document or when it encounters a header at a
-higher level of the first one encounterd. Optionally you can specify the
+higher level of the first one encountered. Optionally you can specify the
 depth.
 
 		{table of contents}
