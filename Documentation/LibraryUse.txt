@@ -1,0 +1,23 @@
+-----------
+Library use
+-----------
+
+command line use
+================
+
+Run Vidola with `php RunVidola.php`. The following options are present:
+
+--template
+	Path to a template file. If not specified the default template is used.
+
+	Example: --template=/home/Koen/Vidola/Templates/Default.php
+
+--source
+	Source file to convert.
+
+	Example: --source=/home/Koen/MyProject/Docs/Index.txt
+
+--target.dir:
+	The directory where the documentation files should be placed.
+
+	Example: --source=/home/Koen/MyProject/Docs/HTML/

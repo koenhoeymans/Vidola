@@ -1,0 +1,9 @@
+---------------
+What is Vidola?
+---------------
+
+Vidola is a documentation markup language. It is designed to make end-user documentation 
+as natural as possible. The reason for yet another markup language 
+is that none of the others satisfied how I wanted to document. Eg DocBook has 
+a lot of options but writing documentation for the web with it is unnatural. Markdown 
+is more intuitive and natural but has limitations for creating multi-page documents.
