@@ -5,6 +5,12 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+/**
+ * @todo Tests would be more readable with:
+ * 
+ * 	$this->element('h1', 'header')->withAttr('id', 'header');
+ *
+ */
 class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
@@ -25,8 +31,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerIsFollowedByLineOfAtLeastThreeCharacters()
 	{
 		$text = "\n\nheader\n---\n\n";
-		$dom = new \DOMElement('h1', 'header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -44,8 +53,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerIsOptionallyPrecededByLineOfCharacters()
 	{
 		$text = "\n\n---\na header\n---\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -54,8 +66,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function characterLinesCanBeMoreThanThreeCharacters()
 	{
 		$text = "\n\n-----\na header\n-----\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -64,8 +79,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function onlyTheFirstThreeCharactersCount()
 	{
 		$text = "\n\na header\n---###\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -83,8 +101,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineCharactersMayContainDashSigns()
 	{
 		$text = "\n\n---\na header\n---\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -93,8 +114,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineCharactersMayContainEqualSigns()
 	{
 		$text = "\n\n===\na header\n===\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -103,8 +127,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineCharactersMayContainPlusSigns()
 	{
 		$text = "\n\n+++\na header\n+++\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -113,8 +140,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineCharactersMayContainStarSigns()
 	{
 		$text = "\n\n***\na header\n***\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -123,8 +153,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineCharactersMayContainCaretSigns()
 	{
 		$text = "\n\n^^^\na header\n^^^\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -133,8 +166,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineCharactersMayContainNumberSignSigns()
 	{
 		$text = "\n\n###\na header\n###\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -143,8 +179,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function lineOfStartingAndEndingCharactersMustNotBeSame()
 	{
 		$text = "\n\n=-=\na header\n=-=\n\n";
-		$dom = new \DOMElement('h1', 'a header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'a header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'a-header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -153,28 +192,46 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function levelOfHeadersIsAssignedByOrderOfAppearance()
 	{
 		$text = "\n\nfirst\n---\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h1', 'first');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'first');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'first');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h2', 'second');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h2', 'second');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'second');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h3', 'third');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h3', 'third');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'third');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h4', 'fourth');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h4', 'fourth');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'fourth');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h5', 'fifth');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h5', 'fifth');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'fifth');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h6', 'sixth');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h6', 'sixth');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'sixth');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -183,16 +240,25 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function levelOfHeadersIsRemembered()
 	{
 		$text = "\n\nfirst\n---\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h1', 'first');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'first');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'first');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\nsecond\n===\n\nthird\n+++\n\nfourth\n***\n\nfifth\n^^^\n\nsixth\n###\n\n";
-		$dom = new \DOMElement('h2', 'second');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h2', 'second');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'second');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "para\n\nother second\n===\n\npara";
-		$dom = new \DOMElement('h2', 'other second');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h2', 'other second');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'other-second');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -201,8 +267,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerCanBeStartOfDocument()
 	{
 		$text = "header\n---\n\n";
-		$dom = new \DOMElement('h1', 'header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -211,8 +280,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerCanFollowStartPlusNewline()
 	{
 		$text = "\nheader\n---\n\n";
-		$dom = new \DOMElement('h1', 'header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -221,8 +293,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerMustNotFollowABlankLine()
 	{
 		$text = "para\nheader\n---\n\n";
-		$dom = new \DOMElement('h1', 'header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -231,8 +306,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerMustNotBeFollowedByBlankLine()
 	{
 		$text = "\n\nheader\n---\nparagarph\n\n";
-		$dom = new \DOMElement('h1', 'header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -241,8 +319,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function canBeIndentedByUptoThreeSpaces()
 	{
 		$text = "\n\n   header preceded by 3 spaces\n---\n\n";
-		$dom = new \DOMElement('h1', 'header preceded by 3 spaces');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header preceded by 3 spaces');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header-preceded-by-3-spaces');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "\n\n    header preceded by 4 spaces\n---\n\n";
 		$this->assertDoesNotCreateDomFromText($text);
@@ -256,16 +337,25 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function oneToSixHashesBeforeHeaderDeterminesHeaderLevel()
 	{
 		$text = "paragraph\n\n# level 1\n\nparagraph";
-		$dom = new \DOMElement('h1', 'level 1');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'level 1');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'level-1');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "paragraph\n\n## level 2\n\nparagraph";
-		$dom = new \DOMElement('h2', 'level 2');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h2', 'level 2');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'level-2');
+		$this->assertCreatesDomFromText($el, $text);
 
 		$text = "paragraph\n\n###### level 6\n\nparagraph";
-		$dom = new \DOMElement('h6', 'level 6');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h6', 'level 6');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'level-6');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -274,8 +364,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function closingHashesAreOptional()
 	{
 		$text = "paragraph\n\n## level 2 #####\n\nparagraph";
-		$dom = new \DOMElement('h2', 'level 2');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h2', 'level 2');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'level-2');
+		$this->assertCreatesDomFromText($el, $text);
 	}
 
 	/**
@@ -284,8 +377,11 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	public function headerMustNotBeFollowedByBlankLine_2()
 	{
 		$text = "\n\n# header\nparagarph\n\n";
-		$dom = new \DOMElement('h1', 'header');
-		$this->assertCreatesDomFromText($dom, $text);
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', 'header');
+		$doc->appendChild($el);
+		$el->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($doc, $text);
 	}
 
 	/**

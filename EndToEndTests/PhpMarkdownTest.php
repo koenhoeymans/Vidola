@@ -7,12 +7,14 @@ require_once('TestHelper.php');
  * 
  * Removed all newlines before ending code tag:
  * 
- * code
- * </code>
+ * 	code
+ * 	</code>
  * 
  * becomes
  * 
- * code</code>
+ * 	code</code>
+ * 
+ * Changed headers to headers with id's as expected outcome.
  */
 class Vidola_EndToEndTests_PhpMarkdownTest extends \Vidola\EndToEndTests\Support\Tidy
 {

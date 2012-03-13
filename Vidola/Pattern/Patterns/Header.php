@@ -76,6 +76,7 @@ class Header extends Pattern
 
 		$h = $domDoc->createElement('h' . $level);
 		$h->appendChild($domDoc->createTextNode($match['text']));
+		$h->setAttribute('id', $this->createId($match['text']));
 
 		return $h;
 	}
@@ -88,7 +89,14 @@ class Header extends Pattern
 
 		$h = $domDoc->createElement('h' . $level);
 		$h->appendChild($domDoc->createTextNode($match['text']));
+		$h->setAttribute('id', $this->createId($match['text']));
 		
 		return $h;
+	}
+
+	private function createId($text)
+	{
+		$text = strtolower($text);
+		return preg_replace('@[^a-z0-9]@', '-', $text);
 	}
 }

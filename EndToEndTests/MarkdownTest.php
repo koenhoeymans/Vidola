@@ -2,6 +2,9 @@
 
 require_once('TestHelper.php');
 
+/**
+ * Changed expected outcome for headers, adding id's.
+ */
 class Vidola_EndToEndTests_MarkdownTest extends \Vidola\EndToEndTests\Support\Tidy
 {
 	public function createTestFor($name)
