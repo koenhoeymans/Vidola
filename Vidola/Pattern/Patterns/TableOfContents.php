@@ -179,6 +179,7 @@ class TableOfContents extends Pattern
 
 			$level = $header['level'];
 			$title = $header['title'];
+			$ref = $header['id'];
 			$file = isset($header['file']) ? $header['file'] : '';
 
 			if (!$listLevel)
@@ -193,8 +194,6 @@ class TableOfContents extends Pattern
 			{
 				continue;
 			}
-
-			$ref = str_replace(' ', '_', $title);
 
 			$li = $this->getOwnerDocument($parentNode)->createElement('li');
 			$ul->appendChild($li);

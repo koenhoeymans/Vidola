@@ -44,7 +44,7 @@ paragraph";
 			->expects($this->any())
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'header', 'level' => 1))
+				array('title' => 'header', 'level' => 1, 'id' => 'header'))
 			));
 
 		$doc = new \DOMDocument();
@@ -75,8 +75,8 @@ paragraph";
 			->expects($this->any())
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'header', 'level' => 1),
-				array('title' => 'subheader', 'level' => 2)
+				array('title' => 'header', 'level' => 1, 'id' => 'header'),
+				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
 		$doc = new \DOMDocument();
@@ -115,10 +115,10 @@ paragraph";
 			->expects($this->any())
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'header1a', 'level' => 1),
-				array('title' => 'header2a', 'level' => 2),
-				array('title' => 'header2b', 'level' => 2),
-				array('title' => 'header1b', 'level' => 1)
+				array('title' => 'header1a', 'level' => 1, 'id' => 'header1a'),
+				array('title' => 'header2a', 'level' => 2, 'id' => 'header2a'),
+				array('title' => 'header2b', 'level' => 2, 'id' => 'header2b'),
+				array('title' => 'header1b', 'level' => 1, 'id' => 'header1b')
 			)));
 
 		$doc = new \DOMDocument();
@@ -177,7 +177,7 @@ paragraph";
 			->expects($this->any())
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'subheader', 'level' => 2)
+				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
 		$doc = new \DOMDocument();
@@ -219,8 +219,8 @@ paragraph";
 			->expects($this->any())
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'subheader', 'level' => 2),
-				array('title' => 'other header', 'level' => 1)
+				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader'),
+				array('title' => 'other header', 'level' => 1, 'id' => 'other-header')
 			)));
 
 				$doc = new \DOMDocument();
@@ -259,8 +259,8 @@ paragraph";
 			->expects($this->any())
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'header', 'level' => 1),
-				array('title' => 'subheader', 'level' => 2)
+				array('title' => 'header', 'level' => 1, 'id' => 'header'),
+				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
 		$doc = new \DOMDocument();
@@ -295,13 +295,13 @@ paragraph";
 			->expects($this->at(0))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'header', 'level' => 1)
+				array('title' => 'header', 'level' => 1, 'id' => 'header')
 			)));
 		$this->headerFinder
 			->expects($this->at(1))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'included header', 'level' => 1)
+				array('title' => 'included header', 'level' => 1, 'id' => 'included-header')
 			)));
 		$this->docFileRetriever
 			->expects($this->any())
@@ -328,7 +328,7 @@ some text"
 		$ul1->appendChild($li2);
 		$a2 = $doc->createElement('a', 'included header');
 		$li2->appendChild($a2);
-		$a2->setAttribute('href', 'Includedfile.html#included_header');
+		$a2->setAttribute('href', 'Includedfile.html#included-header');
 
 		$this->assertCreatesDomFromText($doc, $text);
 	}
@@ -355,13 +355,13 @@ paragraph";
 			->expects($this->at(0))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'level2', 'level' => 2)
+				array('title' => 'level2', 'level' => 2, 'id' => 'level2')
 			)));
 		$this->headerFinder
 			->expects($this->at(1))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'level3', 'level' => 3)
+				array('title' => 'level3', 'level' => 3, 'id' => 'level3')
 			)));
 		$this->docFileRetriever
 			->expects($this->any())
@@ -417,13 +417,13 @@ paragraph";
 			->expects($this->at(1))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'level1a', 'level' => 1)
+				array('title' => 'level1a', 'level' => 1, 'id' => 'level1a')
 			)));
 		$this->headerFinder
 			->expects($this->at(2))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'level1b', 'level' => 1)
+				array('title' => 'level1b', 'level' => 1, 'id' => 'level1b')
 			)));
 		$this->docFileRetriever
 			->expects($this->at(0))
@@ -489,7 +489,7 @@ paragraph";
 			->expects($this->at(2))
 			->method('getHeadersSequentially')
 			->will($this->returnValue(array(
-				array('title' => 'header', 'level' => 1)
+				array('title' => 'header', 'level' => 1, 'id' => 'header')
 			)));
 		$this->docFileRetriever
 			->expects($this->at(0))
@@ -522,6 +522,37 @@ some text"
 		$a1 = $doc->createElement('a', 'header');
 		$li1->appendChild($a1);
 		$a1->setAttribute('href', 'Subincludedfile.html#header');
+
+		$this->assertCreatesDomFromText($doc, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function addsLinkToHeaderUsingHeaderId()
+	{
+		$text = "{table of contents}
+
+header
+----
+
+paragraph";
+
+		$this->headerFinder
+			->expects($this->any())
+			->method('getHeadersSequentially')
+			->will($this->returnValue(array(
+				array('title' => 'header', 'level' => 1, 'id' => 'xyz'))
+			));
+
+		$doc = new \DOMDocument();
+		$ul = $doc->createElement('ul');
+		$doc->appendChild($ul);
+		$li = $doc->createElement('li');
+		$ul->appendChild($li);
+		$a = $doc->createElement('a', 'header');
+		$li->appendChild($a);
+		$a->setAttribute('href', '#xyz');
 
 		$this->assertCreatesDomFromText($doc, $text);
 	}

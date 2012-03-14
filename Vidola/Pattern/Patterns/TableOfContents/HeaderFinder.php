@@ -35,7 +35,8 @@ class HeaderFinder
 			$headerNode = $this->header->handleMatch($headerMatch, new \DOMDocument());
 			$headers[] = array(
 				'title' => $headerNode->nodeValue,
-				'level' => substr($headerNode->nodeName, 1)
+				'level' => substr($headerNode->nodeName, 1),
+				'id'	=> $headerNode->getAttribute('id')
 			);
 		}
 

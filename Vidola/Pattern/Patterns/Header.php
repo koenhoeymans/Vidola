@@ -90,7 +90,7 @@ class Header extends Pattern
 		$h = $domDoc->createElement('h' . $level);
 		$h->appendChild($domDoc->createTextNode($match['text']));
 		$h->setAttribute('id', $this->createId($match['text']));
-		
+
 		return $h;
 	}
 
