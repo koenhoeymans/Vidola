@@ -189,16 +189,12 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\Pa
 	 */
 	public function linkIsRelativeIfItContainsOnlyAlphaNumForwardSlashesBeforeAnOptionalNumberSign()
 	{
-$this->markTestIncomplete();
-//should be more like: if not pointing to (http://)xxx.yyy
 		$this->relativeUrlBuilder
 			->expects($this->once())
 			->method('buildUrl')->with('x/6/f4#f')
 			->will($this->returnValue('x.html'));
 		$text = "See page [x/6/f4#f](x/6/f4#f) for info.";
-		$html = "See page {{a href=\"x.html\"}}x/6/f4#f{{/a}} for info.";
-		$this->assertEquals(
-			$html, $this->hyperlink->replace($text)
-		);
+		$dom = $this->createDomForLink('x.html', 'x/6/f4#f');
+		$this->assertCreatesDomFromText($dom, $text);
 	}
 }
