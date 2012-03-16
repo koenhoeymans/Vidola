@@ -19,12 +19,7 @@ class CommandLineConfig implements Config
 
 	public function get($name)
 	{
-		if (isset($this->settings[$name]))
-		{
-			return $this->settings[$name];
-		}
-
-		return null;
+		return isset($this->settings[$name]) ? $this->settings[$name] : null;
 	}
 
 	private function parseArgv(array $argv)
@@ -38,9 +33,9 @@ class CommandLineConfig implements Config
 				$keyValue = explode('=', $value);
 
 				# avoid phpunit --debug
-				if ($keyValue[0] == '--debug')
+				if (!isset($keyValue[1]))
 				{
-					continue;
+					$keyValue[1] = null;
 				}
 
 				$options[substr($keyValue[0], 2)] = $keyValue[1];
