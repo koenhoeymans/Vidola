@@ -19,8 +19,6 @@ class DocFileRetriever
 
 	public function retrieveContent($file)
 	{
-		$file = ucfirst($file);
-
 		if (file_exists($file . '.txt'))
 		{
 			return file_get_contents($file. '.txt');
@@ -43,6 +41,12 @@ class DocFileRetriever
 			return file_get_contents(
 			$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.text'
 			);
+		}
+
+		$ucFile = ucfirst($file);
+		if (ucFile !== $file)
+		{
+			return $this->retrieveContent($ucFile);
 		}
 
 		throw new \Exception('DocFileRetriever::retrieveContent() couldn\'t find ' . $file);
