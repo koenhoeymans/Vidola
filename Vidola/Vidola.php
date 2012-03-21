@@ -5,6 +5,7 @@ namespace Vidola;
 /**
  * Sets up the necessary components before building the documents.
  */
+
 class Vidola
 {
 	public static function run()
@@ -66,31 +67,50 @@ class Vidola
 			$ogc->getInstance('Vidola\\Processor\\Processors\\HtmlPrettifier')
 		);
 
-		// set the source directory or file
+		// command line options
 		// --------------------------------
-		$docFileRetriever = $ogc->getInstance('Vidola\\Util\\DocFileRetriever');
-		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
-
-		// set the output directory
-		// ------------------------
-		$writer = $ogc->getInstance('Vidola\\Util\\Writer');
-		$writer->setOutputDir(self::getOutputDir($config->get('target.dir')));
-		$writer->setExtension('.html');
-
-		// choose the template
-		// -------------------
-		$template = $config->get('template') ?:
-						__DIR__
-						. DIRECTORY_SEPARATOR . 'Templates'
-						. DIRECTORY_SEPARATOR . 'Default'
-						. DIRECTORY_SEPARATOR . 'Index.php';
-		$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
-		$templateBuilder->setTemplate($template);
+		self::setCommandLineOptions($config, $ogc);
 
 		// build the document(s)
 		// ---------------------
 		$documentBuilder = $ogc->getInstance('Vidola\\DocumentBuilder\\DocumentBuilder');
 		$documentBuilder->build($config->get('source'));
+	}
+
+	private static function setCommandLineOptions(
+		\Vidola\Config\Config $config, \Vidola\Util\ObjectGraphConstructor $ogc
+	) {
+		// set the source directory or file
+		// --source=
+		// --------------------------------
+		$docFileRetriever = $ogc->getInstance('Vidola\\Util\\DocFileRetriever');
+		if ($config->get('source') === null)
+		{
+			throw new \Exception('what is the source?');
+		}
+		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
+		
+		// set the output directory
+		// --target.dir=
+		// ------------------------
+		$writer = $ogc->getInstance('Vidola\\Util\\Writer');
+		if ($config->get('target.dir') === null)
+		{
+			throw new \Exception('target directory not set: target.dir');
+		}
+		$writer->setOutputDir(self::getOutputDir($config->get('target.dir')));
+		$writer->setExtension('.html');
+		
+		// set the template
+		// --template=
+		// -------------------
+		$template = $config->get('template') ?:
+			__DIR__
+			. DIRECTORY_SEPARATOR . 'Templates'
+			. DIRECTORY_SEPARATOR . 'Default'
+			. DIRECTORY_SEPARATOR . 'Index.php';
+		$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
+		$templateBuilder->setTemplate($template);
 	}
 
 	private static function getSourceDir($source)
