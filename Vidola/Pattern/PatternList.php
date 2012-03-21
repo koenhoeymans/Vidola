@@ -5,8 +5,6 @@
  */
 namespace Vidola\Pattern;
 
-use Vidola\Util\config;
-
 /**
  * @package vidola
  * 

@@ -7,7 +7,6 @@ namespace Vidola\Util;
 
 use Vidola\Pattern\PatternList;
 use Vidola\Util\ObjectGraphConstructor;
-use Vidola\Config\Config;
 
 /**
  * @package Vidola
@@ -24,10 +23,11 @@ class PatternListFiller
 	}
 
 	/**
-	 * Fill PatternList based on patterns in config.
+	 * Fill PatternList based on patterns in config (ini) file.
 	 * 
 	 * @param PatternList $patternList
-	 * @param Config $config
+	 * @param string $iniFile
+	 * 
 	 * @return PatternList
 	 */
 	public function fill(PatternList $patternList, $iniFile)
