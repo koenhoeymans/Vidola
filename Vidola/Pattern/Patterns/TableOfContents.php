@@ -30,7 +30,7 @@ class TableOfContents extends Pattern
 	/**
 	 * Recursively lists all subfiles contained in the table of contents.
 	 * 
-	 * @param unknown_type $text
+	 * @param string $text
 	 */
 	public function recursivelyGetListOfIncludedFiles($text)
 	{
