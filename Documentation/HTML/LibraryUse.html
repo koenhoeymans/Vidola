@@ -11,20 +11,31 @@
 
 <p>Run Vidola with <code>php RunVidola.php</code>. The following options are present:</p>
 
-<p>--template</p>
-<pre><code>Path to a template file. If not specified the default template is used.
+<ul><li><p><code>--template=&lt;template path&gt;</code></p>
 
-Example: --template=/home/Koen/Vidola/Templates/Default.php</code></pre>
+<p>Path to a template file. If not specified the default template is used.
+Example:</p>
 
-<p>--source</p>
-<pre><code>Source file to convert.
+<pre><code> --template=/home/Koen/Vidola/Templates/Default.php</code></pre>
 
-Example: --source=/home/Koen/MyProject/Docs/Index.txt</code></pre>
+</li>
+<li><p><code>--source=&lt;source file&gt;</code></p>
 
-<p>--target.dir:</p>
-<pre><code>The directory where the documentation files should be placed.
+<p>Source file to convert.
+Example:</p>
 
-Example: --source=/home/Koen/MyProject/Docs/HTML/</code></pre>
+<pre><code>--source=/home/Koen/MyProject/Docs/Index.txt</code></pre>
+
+</li>
+<li><p>--target.dir=&lt;output directory&gt;</p>
+
+<p>The directory where the documentation files should be placed. This directory
+must exist and must be writable.
+Example:</p>
+
+<pre><code>--source=/home/Koen/MyProject/Docs/HTML/</code></pre>
+
+</li></ul>
 </doc>
 
 </body>

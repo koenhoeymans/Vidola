@@ -86,7 +86,7 @@ class Vidola
 		$docFileRetriever = $ogc->getInstance('Vidola\\Util\\DocFileRetriever');
 		if ($config->get('source') === null)
 		{
-			throw new \Exception('what is the source?');
+			throw new \Exception('what is the source? --source=<source>');
 		}
 		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
 		
@@ -94,13 +94,13 @@ class Vidola
 		// --target.dir=
 		// ------------------------
 		$writer = $ogc->getInstance('Vidola\\Util\\Writer');
-		if ($config->get('target.dir') === null)
+		if (!$config->get('target.dir'))
 		{
-			throw new \Exception('target directory not set: target.dir');
+			throw new \Exception('target directory not set: --target.dir=<dir>');
 		}
-		$writer->setOutputDir(self::getOutputDir($config->get('target.dir')));
+		$writer->setOutputDir($config->get('target.dir'));
 		$writer->setExtension('.html');
-		
+
 		// set the template
 		// --template=
 		// -------------------
@@ -121,11 +121,6 @@ class Vidola
 		}
 
 		return realpath($source);
-	}
-
-	private static function getOutputDir($output)
-	{
-		return realpath($output);
 	}
 }
 

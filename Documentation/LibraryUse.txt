@@ -7,17 +7,24 @@ command line use
 
 Run Vidola with `php RunVidola.php`. The following options are present:
 
---template
+*	`--template=<template path>`
+
 	Path to a template file. If not specified the default template is used.
+	Example:
+ 
+ 		--template=/home/Koen/Vidola/Templates/Default.php
 
-	Example: --template=/home/Koen/Vidola/Templates/Default.php
+*	`--source=<source file>`
 
---source
 	Source file to convert.
+	Example:
 
-	Example: --source=/home/Koen/MyProject/Docs/Index.txt
+		--source=/home/Koen/MyProject/Docs/Index.txt
 
---target.dir:
-	The directory where the documentation files should be placed.
+*	--target.dir=<output directory>
 
-	Example: --source=/home/Koen/MyProject/Docs/HTML/
+	The directory where the documentation files should be placed. This directory
+	must exist and must be writable.
+	Example:
+
+		--source=/home/Koen/MyProject/Docs/HTML/

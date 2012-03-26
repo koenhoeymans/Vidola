@@ -26,13 +26,7 @@ class Writer
 	 */
 	public function setOutputDir($dir)
 	{
-		$realpath = realpath($dir);
-		if (!$realpath)
-		{
-			$realpath = realpath(getcwd() . $dir);
-		}
-
-		$this->outputDir = $realpath;
+		$this->outputDir = $dir;
 	}
 
 	/**
@@ -44,12 +38,15 @@ class Writer
 	 */
 	public function write($text, $fileName)
 	{
-		$file = $this->outputDir . DIRECTORY_SEPARATOR . $fileName . $this->extension;
-		$dir = dirname($file);
-		if (!is_dir($dir))
+		$dir = realpath($this->outputDir);
+
+		if (!$dir)
 		{
-		    mkdir($dir, 0755, true);
+			throw new \Exception('Directory ' . $this->outputDir . ' not found.');
 		}
+
+		$file = $dir . DIRECTORY_SEPARATOR . $fileName . $this->extension;
+
 		$fileHandle = fopen($file, 'w');
 
 		if (!$fileHandle)

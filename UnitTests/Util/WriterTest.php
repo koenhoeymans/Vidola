@@ -53,13 +53,14 @@ class Vidola_Util_WriterTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function targetDirCanBeRelative()
+	public function targetDirMustExist()
 	{
 		chdir('/');
-		$this->writer->setOutputDir('tmp');
-		$this->writer->write('text', 'fileName');
-		$this->assertTrue(
-			file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'fileName')
-		);
+		$this->writer->setOutputDir('tmp/nonExistentDirectory');
+		try {
+			$this->writer->write('text', 'fileName');
+		} catch (\Exception $e) {
+			return;
+		}
 	}
 }
