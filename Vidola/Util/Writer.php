@@ -33,16 +33,19 @@ class Writer
 	 * Writes text to a specified file.
 	 * 
 	 * @param string $text
-	 * @param string $fileName
+	 * @param string $fileName Relative to output directory.
 	 * @throws \Exception
 	 */
 	public function write($text, $fileName)
 	{
-		$dir = realpath($this->outputDir);
+		$dir = $this->outputDir . DIRECTORY_SEPARATOR . substr(
+			$fileName, 0, strrpos($fileName, DIRECTORY_SEPARATOR)
+		);
+		$fileName = substr($fileName, strrpos($fileName, DIRECTORY_SEPARATOR));
 
-		if (!$dir)
+		if (!is_dir($dir))
 		{
-			throw new \Exception('Directory ' . $this->outputDir . ' not found.');
+			mkdir($dir);
 		}
 
 		$file = $dir . DIRECTORY_SEPARATOR . $fileName . $this->extension;
