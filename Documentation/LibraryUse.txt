@@ -23,8 +23,8 @@ Run Vidola with `php RunVidola.php`. The following options are present:
 
 *	--target.dir=<output directory>
 
-	The directory where the documentation files should be placed. This directory
-	must exist and must be writable.
+	The directory where the documentation files should be placed. Vidola tries to create
+	it if it doesn't exist.
 	Example:
 
 		--source=/home/Koen/MyProject/Docs/HTML/
