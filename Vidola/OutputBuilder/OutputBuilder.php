@@ -16,5 +16,9 @@ interface OutputBuilder
 
 	public function setTitle($title);
 
+	public function setPreviousDoc($previous);
+
+	public function setNextDoc($next);
+
 	public function build();
 }

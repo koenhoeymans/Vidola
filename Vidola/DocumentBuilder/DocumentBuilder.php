@@ -67,6 +67,11 @@ class DocumentBuilder
 		$this->outputBuilder->setFileName($fileName);
 		$this->outputBuilder->setContent($replacedText);
 		$this->outputBuilder->setTitle($this->createTitle($fileName));
+		$previousDoc = $this->documentStructure->getPreviousFile($fileName);
+		$this->outputBuilder->setPreviousDoc($previousDoc);
+		$nextDoc = $this->documentStructure->getNextFile($fileName);
+		$this->outputBuilder->setNextDoc($nextDoc);
+
 		$this->outputBuilder->build();
 
 		foreach ($this->documentStructure->getSubFiles($fileName) as $subfile)

@@ -22,6 +22,10 @@ class TemplateOutputBuilder implements OutputBuilder
 
 	private $title = '';
 
+	private $previousDoc;
+
+	private $nextDoc;
+
 	public function __construct(Writer $writer)
 	{
 		$this->writer = $writer;
@@ -71,5 +75,29 @@ class TemplateOutputBuilder implements OutputBuilder
 	public function setTitle($title)
 	{
 		$this->title = $title;
+	}
+
+	/**
+	 * @see Vidola\OutputBuilder.OutputBuilder::setPreviousDoc()
+	 */
+	public function setPreviousDoc($previous)
+	{
+		if ($previous)
+		{
+			$previous = $previous . '.html';
+		}
+		$this->previousDoc = $previous;
+	}
+
+	/**
+	 * @see Vidola\OutputBuilder.OutputBuilder::setNextDoc()
+	 */
+	public function setNextDoc($next)
+	{
+		if ($next)
+		{
+			$next = $next . '.html';
+		}
+		$this->nextDoc = $next;
 	}
 }

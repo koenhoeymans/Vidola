@@ -65,28 +65,29 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 		$this->fileRetriever
 			->expects($this->at(0))
 			->method('retrieveContent')
-			->with('fileName')
-			->will($this->returnValue(file_get_contents($file)));
+			->with('foo')
+			->will($this->returnValue('not much text'));
 		$this->fileRetriever
 			->expects($this->at(1))
 			->method('retrieveContent')
-			->with('subfile');
+			->with('bar')
+			->will($this->returnValue('also not much text'));
 		$this->textReplacer
 			->expects($this->any())
 			->method('replace')
 			->will($this->returnValue('output'));
 		$this->docStructure
-			->expects($this->at(0))
+			->expects($this->at(2))
 			->method('getSubFiles')
-			->with('fileName')
-			->will($this->returnValue(array('subfile')));
+			->with('foo')
+			->will($this->returnValue(array('bar')));
 		$this->docStructure
-			->expects($this->at(1))
+			->expects($this->at(5))
 			->method('getSubFiles')
-			->with('subfile')
+			->with('bar')
 			->will($this->returnValue(array()));
 
-		$this->documentBuilder->build('fileName');
+		$this->documentBuilder->build('foo');
 	}
 
 	/**

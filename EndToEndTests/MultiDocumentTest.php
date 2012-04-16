@@ -83,6 +83,9 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.txt';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		$_SERVER['argv']['template'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
 		\Vidola\Vidola::run();
@@ -97,6 +100,43 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 			$this->tidy(file_get_contents(
 				$_SERVER['argv']['target.dir']
 				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
+			))
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function linksToPreviousAndNextDocumentsAreAvailable()
+	{
+		// given
+		// note: using default template
+		$_SERVER['argv']['source'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'ParentDocument.txt';
+		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		
+		// when
+		\Vidola\Vidola::run();
+
+		// then
+		$this->assertTrue(
+			is_string(strstr(
+				file_get_contents(
+					$_SERVER['argv']['target.dir']
+					. DIRECTORY_SEPARATOR . 'ParentDocument.html'
+				),
+				'next'
+			))
+		);
+
+		$this->assertTrue(
+			is_string(strstr(
+				file_get_contents(
+					$_SERVER['argv']['target.dir']
+					. DIRECTORY_SEPARATOR . 'SubDocument.html'
+				),
+				'previous'
 			))
 		);
 	}
