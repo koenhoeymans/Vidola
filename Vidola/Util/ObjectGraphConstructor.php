@@ -74,17 +74,7 @@ class ObjectGraphConstructor
 
 		$obj = $this->instantiate($className);
 
-		if (isset($this->bindValues[$className]))
-		{
-			foreach ($this->bindValues[$className] as $method => $args)
-			{
-				if ($method === '__construct') # been there, done that while constructing
-				{
-					continue;
-				}
-				call_user_func_array(array($obj, $method), $args);
-			}
-		}
+		$this->injectMethods($obj, $className);
 
 		return $obj;
 	}
@@ -105,49 +95,68 @@ class ObjectGraphConstructor
 	private function instantiate($className)
 	{
 		$reflectionClass = new \ReflectionClass($className);
-		$dependencies = array();
-		
-		if ($reflectionClass->hasMethod('__construct'))
+
+		if (!$reflectionClass->hasMethod('__construct'))
 		{
-			## first check if any values have been given using 'bind'
-			if (isset($this->bindValues[$className]['__construct']))
+			return $reflectionClass->newInstanceArgs();
+		}
+
+		$dependencies = array();
+
+		## first check if any values have been given using 'bind'
+		if (isset($this->bindValues[$className]['__construct']))
+		{
+			$dependencies = $this->bindValues[$className]['__construct'];
+		}
+	
+		## try to find other values (eg set by 'willUse' or matching is available)
+		$dependencies = $this->findMissingDependencies(
+			$reflectionClass, '__construct', $dependencies
+		);
+
+		return $reflectionClass->newInstanceArgs($dependencies);
+	}
+
+	private function findMissingDependencies(
+		\ReflectionClass $reflectionClass, $method, array $dependencies
+	) {
+		$argumentPosition = 0;
+		$reflectionMethod = $reflectionClass->getMethod($method);
+		foreach ($reflectionMethod->getParameters() as $reflectionParameter)
+		{
+			if (isset($dependencies[$argumentPosition]))
 			{
-				$dependencies = $this->bindValues[$className]['__construct'];
+				continue;
 			}
-		
-			## try to find other values (eg set by 'willUse' or matching is available)
-			$argumentPosition = 0;
-			$reflectionMethod = $reflectionClass->getMethod('__construct');
-			foreach ($reflectionMethod->getParameters() as $reflectionParameter)
+			$paramReflectionClass = $reflectionParameter->getClass();
+			if (!$paramReflectionClass)
 			{
-				if (isset($dependencies[$argumentPosition]))
+				throw new \Exception(
+					'No dependency specified for '
+					. $className . ' on position ' . $argumentPosition
+				);
+			}
+			$paramClassName = $paramReflectionClass->getName();
+			$paramObj = $this->getInstance($paramClassName);
+		
+			$dependencies[$argumentPosition] = $paramObj;
+		}
+
+		return $dependencies;
+	}
+
+	private function injectMethods($obj, $className)
+	{
+		if (isset($this->bindValues[$className]))
+		{
+			foreach ($this->bindValues[$className] as $method => $args)
+			{
+				if ($method === '__construct') # been there, done that while constructing
 				{
 					continue;
 				}
-				$paramReflectionClass = $reflectionParameter->getClass();
-				if (!$paramReflectionClass)
-				{
-					throw new \Exception(
-					'No dependency specified for '
-					. $className . ' on position ' . $argumentPosition
-					);
-				}
-				$paramClassName = $paramReflectionClass->getName();
-				$paramObj = $this->getInstance($paramClassName);
-		
-				$dependencies[$argumentPosition] = $paramObj;
+				call_user_func_array(array($obj, $method), $args);
 			}
 		}
-		
-		if (empty($dependencies))
-		{
-			$obj = $reflectionClass->newInstanceArgs();
-		}
-		else
-		{
-			$obj = $reflectionClass->newInstanceArgs($dependencies);
-		}
-
-		return $obj;
 	}
 }
