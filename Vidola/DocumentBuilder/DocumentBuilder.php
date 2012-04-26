@@ -5,11 +5,12 @@
  */
 namespace Vidola\DocumentBuilder;
 
-use Vidola\OutputBuilder\OutputBuilder;
 use Vidola\Pattern\Patterns\Header;
 use	Vidola\TextReplacer\TextReplacer;
 use Vidola\Util\DocumentStructure;
 use Vidola\Util\DocFileRetriever;
+use Vidola\View\View;
+use Vidola\TemplateApi\PageApiFactory;
 
 /**
  * @package Vidola
@@ -22,20 +23,24 @@ class DocumentBuilder
 
 	private $textReplacer;
 
-	private $outputBuilder;
+	private $view;
 
 	private $docFileRetriever;
+
+	private $pageApiFactory;
 
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
-		OutputBuilder $outputBuilder,
-		DocFileRetriever $docFileRetriever
+		View $view,
+		DocFileRetriever $docFileRetriever,
+		PageApiFactory $pageApiFactory
 	) {
 		$this->documentStructure = $documentStructure;
 		$this->textReplacer = $textReplacer;
-		$this->outputBuilder = $outputBuilder;
+		$this->view = $view;
 		$this->docFileRetriever = $docFileRetriever;
+		$this->pageApiFactory = $pageApiFactory;
 	}
 
 	/**
@@ -53,24 +58,39 @@ class DocumentBuilder
 
 		if (file_exists($fileOrDirectory))
 		{
-			$fileName = pathinfo($fileOrDirectory, PATHINFO_FILENAME);
+			$filename = pathinfo($fileOrDirectory, PATHINFO_FILENAME);
 		}
 		else
 		{
-			$fileName = $fileOrDirectory;
+			$filename = $fileOrDirectory;
 		}
 
 		$textToTransform = $this->docFileRetriever->retrieveContent($fileName);
 
 		$replacedText = $this->textReplacer->replace($textToTransform);
 
-		$this->outputBuilder->setFileName($fileName);
-		$this->outputBuilder->setContent($replacedText);
-		$this->outputBuilder->setTitle($this->createTitle($fileName));
-		$previousDoc = $this->documentStructure->getPreviousFile($fileName);
-		$this->outputBuilder->setPreviousDoc($previousDoc);
-		$nextDoc = $this->documentStructure->getNextFile($fileName);
-		$this->outputBuilder->setNextDoc($nextDoc);
+$page = new \Vidola\Document\SimplePage();
+
+$page->setTitle($this->createTitle($fileName));
+$page->setContent($replacedText);
+$page->setFilename($filename);
+$page->setNextPageName($this->documentStructure->getNextFile($filename));
+$page->setPreviousPageName($this->documentStructure->getPreviousFile($fileName));
+
+$pageApi = $this->pageApiFactory->createWith($page);
+$this->view->addApi($pageApi);
+$output = $this->view->render();
+
+var_dump($output);
+die();
+
+//$this->outputBuilder->setFileName($fileName);
+//$this->outputBuilder->setContent($replacedText);
+//$this->outputBuilder->setTitle($this->createTitle($fileName));
+//$previousDoc = $this->documentStructure->getPreviousFile($fileName);
+//$this->outputBuilder->setPreviousDoc($previousDoc);
+//$nextDoc = $this->documentStructure->getNextFile($fileName);
+//$this->outputBuilder->setNextDoc($nextDoc);
 
 		$this->outputBuilder->build();
 

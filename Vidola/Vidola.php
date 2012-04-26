@@ -25,7 +25,7 @@ class Vidola
 		// ---------------------------------------
 		$ogc = new \Vidola\Util\ObjectGraphConstructor();
 		$ogc->willUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
-		$ogc->willUse('Vidola\\OutputBuilder\\TemplateOutputBuilder');
+		$ogc->willUse('Vidola\\View\\TemplateBasedView\\TemplateBasedView');
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
@@ -109,8 +109,8 @@ class Vidola
 			. DIRECTORY_SEPARATOR . 'Templates'
 			. DIRECTORY_SEPARATOR . 'Default'
 			. DIRECTORY_SEPARATOR . 'Index.php';
-		$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
-		$templateBuilder->setTemplate($template);
+//$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
+//$templateBuilder->setTemplate($template);
 	}
 
 	private static function getSourceDir($source)
