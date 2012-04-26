@@ -24,9 +24,8 @@ class Vidola_Util_ObjectGraphConstructorTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @todo this should be configurable
 	 */
-	public function theSameInstanceIsReturned()
+	public function theSameInstanceIsReturnedByGetInstance()
 	{
 		$this->assertSame(
 			$this->ogc->getInstance('\\Vidola\\UnitTests\\Support\\ClassWithoutDependencies'),
