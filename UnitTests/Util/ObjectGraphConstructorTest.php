@@ -14,7 +14,7 @@ class Vidola_Util_ObjectGraphConstructorTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function createsInstanceForRequestedClass()
+	public function createsInstanceFromClassName()
 	{
 		$this->assertEquals(
 			new \Vidola\UnitTests\Support\ClassWithoutDependencies(),
@@ -24,6 +24,7 @@ class Vidola_Util_ObjectGraphConstructorTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
+	 * @todo this should be configurable
 	 */
 	public function theSameInstanceIsReturned()
 	{
@@ -66,7 +67,7 @@ class Vidola_Util_ObjectGraphConstructorTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function anInterfaceDependencyIsLoadedDependingOnSpecifiedClass()
+	public function anInterfaceDependencyIsLoadedDependingOnSpecifiedImplementation()
 	{
 		$this->ogc->willUse('\\Vidola\\UnitTests\\Support\\ClassImplementingAnInterface');
 
@@ -83,7 +84,7 @@ class Vidola_Util_ObjectGraphConstructorTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function instantiatedClassImplementingSpecifiedInterfaceDependencyIsUsed()
+	public function usesAlreadyInstantiatedClassImplementingSpecifiedInterfaceDependency()
 	{
 		$this->ogc->willUse('\\Vidola\\UnitTests\\Support\\ClassImplementingAnInterface');
 		$this->ogc->getInstance('\\Vidola\\UnitTests\\Support\\Class2ImplementingAnInterface');
@@ -96,5 +97,44 @@ class Vidola_Util_ObjectGraphConstructorTest extends PHPUnit_Framework_TestCase
 				'\\Vidola\\UnitTests\\Support\\ClassWithInterfaceDependency'
 			)
 		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function primitiveValuesCanBeGivenForConstructors()
+	{
+		$this->ogc->bind(
+			array('5'),
+			'__construct',
+			'\\Vidola\\UnitTests\\Support\\ClassWithConstructorId'
+		);
+		$obj = $this->ogc->getInstance(
+			'\\Vidola\\UnitTests\\Support\\ClassWithConstructorId'
+		);
+
+		$this->assertEquals('5', $obj->getId());
+	}
+
+	/**
+	 * @test
+	 */
+	public function primitiveValuesCanBeGivenForMethods()
+	{
+		$this->ogc->bind(
+			array('5'),
+			'__construct',
+			'\\Vidola\\UnitTests\\Support\\ClassWithConstructorId'
+		);
+		$this->ogc->bind(
+			array('6'),
+			'setId',
+			'\\Vidola\\UnitTests\\Support\\ClassWithConstructorId'
+		);
+		$obj = $this->ogc->getInstance(
+			'\\Vidola\\UnitTests\\Support\\ClassWithConstructorId'
+		);
+
+		$this->assertEquals('6', $obj->getId());
 	}
 }
