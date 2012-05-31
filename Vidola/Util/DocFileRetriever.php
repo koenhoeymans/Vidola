@@ -44,7 +44,7 @@ class DocFileRetriever
 		}
 
 		$ucFile = ucfirst($file);
-		if (ucFile !== $file)
+		if ($ucFile !== $file)
 		{
 			return $this->retrieveContent($ucFile);
 		}

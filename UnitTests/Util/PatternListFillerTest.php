@@ -9,7 +9,7 @@ class Vidola_Util_PatternListFillerTest extends PHPUnit_Framework_TestCase
 	public function setup()
 	{
 		$this->filler = new \Vidola\Util\PatternListFiller(
-			new \Vidola\Util\ObjectGraphConstructor
+			new \Fjor\Dsl\Dsl(new \Fjor\ObjectFactory\GenericObjectFactory())
 		);
 	}
 

@@ -6,7 +6,7 @@
 namespace Vidola\Util;
 
 use Vidola\Pattern\PatternList;
-use Vidola\Util\ObjectGraphConstructor;
+use Fjor\Fjor;
 
 /**
  * @package Vidola
@@ -17,7 +17,7 @@ class PatternListFiller
 
 	private $doneCombinations = array();
 
-	public function __construct(ObjectGraphConstructor $objectGraphConstructor)
+	public function __construct(Fjor $objectGraphConstructor)
 	{
 		$this->objectGraphConstructor = $objectGraphConstructor;
 	}
@@ -75,7 +75,7 @@ class PatternListFiller
 
 	private function getPattern($name)
 	{
-		return $this->objectGraphConstructor->getInstance(
+		return $this->objectGraphConstructor->get(
 			'Vidola\\Pattern\\Patterns\\' . ucfirst($name)
 		);
 	}
