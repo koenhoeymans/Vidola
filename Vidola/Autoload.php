@@ -21,3 +21,12 @@ function Vidola_Autoload($className)
 }
 
 spl_autoload_register('Vidola_Autoload');
+
+/**
+ * Loads the files for the Fjor library
+ */
+require_once __DIR__
+	. DIRECTORY_SEPARATOR . '..'
+	. DIRECTORY_SEPARATOR . 'Src'
+	. DIRECTORY_SEPARATOR . 'Fjor'
+	. DIRECTORY_SEPARATOR . 'Autoload.php';

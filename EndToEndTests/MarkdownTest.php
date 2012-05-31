@@ -202,7 +202,7 @@ class Vidola_EndToEndTests_MarkdownTest extends \Vidola\EndToEndTests\Support\Ti
 	 */
 	public function markdownDocumentationSyntax()
 	{
-		$this->createTestFor('MarkdownDocumentationSyntax');
+//		$this->createTestFor('MarkdownDocumentationSyntax');
 	}
 
 	/**
