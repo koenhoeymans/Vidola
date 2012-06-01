@@ -6,6 +6,7 @@
 namespace Vidola\View\TemplateBasedView;
 
 use Vidola\View\View;
+use Vidola\View\ViewApi;
 
 /**
  * @package Vidola
@@ -23,7 +24,7 @@ class TemplateBasedView implements View
 		$this->template = $pathToTemplate;
 	}
 
-	public function addApi(TemplateApi $api)
+	public function addApi(ViewApi $api)
 	{
 		$this->api[$api->getName()] = $api;
 	}

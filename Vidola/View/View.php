@@ -13,4 +13,6 @@ namespace Vidola\View;
 interface View
 {
 	public function render();
+
+	public function addApi(ViewApi $api);
 }

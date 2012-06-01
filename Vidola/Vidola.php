@@ -23,67 +23,82 @@ class Vidola
 
 		// setting up the object graph constructor
 		// ---------------------------------------
-		$ogc = new \Vidola\Util\ObjectGraphConstructor();
-		$ogc->willUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
-		$ogc->willUse('Vidola\\View\\TemplateBasedView\\TemplateBasedView');
+		$fjor = new \Fjor\Dsl\Dsl(new \Fjor\ObjectFactory\GenericObjectFactory());
+		$fjor->given('Fjor\\Fjor')->thenUse($fjor);
+
+		$fjor->setSingleton('Vidola\\DocumentBuilder\\DocumentBuilder');
+		$fjor->setSingleton('Vidola\\Util\\DocFileRetriever');
+		$fjor->setSingleton('Vidola\\Util\\Writer');
+		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
+		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
+		$fjor->setSingleton('Vidola\\Patterns\\Pattern\\Header');
+		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
+		$fjor
+			->given('Vidola\\TextReplacer\\TextReplacer')
+			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+			->inSingletonScope();
+		$fjor
+			->given('Vidola\\OutputBuilder\\OutputBuilder')
+			->thenUse('Vidola\\OutputBuilder\\TemplateOutputBuilder')
+			->inSingletonScope();
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
-		$patternListFiller = $ogc->getInstance('Vidola\\Util\\PatternListFiller');
-		$patternList = $ogc->getInstance('Vidola\\Pattern\\PatternList');
+		$patternListFiller = $fjor->get('Vidola\\Util\\PatternListFiller');
+		$patternList = $fjor->get('Vidola\\Pattern\\PatternList');
 		$patternListFiller->fill($patternList, __DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini');
 
 		// adding processors
 		// -----------------
-		$htmlBuilder = $ogc->getInstance('Vidola\\TextReplacer\\TextReplacer');
+		$htmlBuilder = $fjor->get('Vidola\\TextReplacer\\TextReplacer');
 		$htmlBuilder->addPreTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\EmptyLineFixer')
+			$fjor->get('Vidola\\Processor\\Processors\\EmptyLineFixer')
 		);
 		$htmlBuilder->addPreTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\NewLineStandardizer')
+			$fjor->get('Vidola\\Processor\\Processors\\NewLineStandardizer')
 		);
 		$htmlBuilder->addPreTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\Detab')
+			$fjor->get('Vidola\\Processor\\Processors\\Detab')
 		);
 		$htmlBuilder->addPreTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler')
+			$fjor->get('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler')
 		);
 		$htmlBuilder->addPreTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
+			$fjor->get('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
 		);
 		$htmlBuilder->addPostDomProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler')
+			$fjor->get('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler')
 		);
 		$htmlBuilder->addPostTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
+			$fjor->get('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
 		);
 		$htmlBuilder->addPostTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler')
+			$fjor->get('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler')
 		);
 		$htmlBuilder->addPostTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\XmlDeclarationRemover')
+			$fjor->get('Vidola\\Processor\\Processors\\XmlDeclarationRemover')
 		);
 		$htmlBuilder->addPostTextProcessor(
-			$ogc->getInstance('Vidola\\Processor\\Processors\\HtmlPrettifier')
+			$fjor->get('Vidola\\Processor\\Processors\\HtmlPrettifier')
 		);
 
 		// command line options
 		// --------------------------------
-		self::setCommandLineOptions($config, $ogc);
+		self::setCommandLineOptions($config, $fjor);
 
 		// build the document(s)
 		// ---------------------
-		$documentBuilder = $ogc->getInstance('Vidola\\DocumentBuilder\\DocumentBuilder');
+		$documentBuilder = $fjor->get('Vidola\\DocumentBuilder\\DocumentBuilder');
 		$documentBuilder->build($config->get('source'));
 	}
 
 	private static function setCommandLineOptions(
-		\Vidola\Config\Config $config, \Vidola\Util\ObjectGraphConstructor $ogc
+		\Vidola\Config\Config $config, \Fjor\Fjor $fjor
 	) {
 		// set the source directory or file
 		// --source=
 		// --------------------------------
-		$docFileRetriever = $ogc->getInstance('Vidola\\Util\\DocFileRetriever');
+		$docFileRetriever = $fjor->get('Vidola\\Util\\DocFileRetriever');
 		if ($config->get('source') === null)
 		{
 			throw new \Exception('what is the source? --source=<source>');
@@ -93,7 +108,7 @@ class Vidola
 		// set the output directory
 		// --target.dir=
 		// ------------------------
-		$writer = $ogc->getInstance('Vidola\\Util\\Writer');
+		$writer = $fjor->get('Vidola\\Util\\Writer');
 		if (!$config->get('target.dir'))
 		{
 			throw new \Exception('target directory not set: --target.dir=<dir>');
@@ -109,8 +124,8 @@ class Vidola
 			. DIRECTORY_SEPARATOR . 'Templates'
 			. DIRECTORY_SEPARATOR . 'Default'
 			. DIRECTORY_SEPARATOR . 'Index.php';
-//$templateBuilder = $ogc->getInstance('Vidola\\OutputBuilder\\OutputBuilder');
-//$templateBuilder->setTemplate($template);
+		$templateBuilder = $fjor->get('Vidola\\OutputBuilder\\OutputBuilder');
+		$templateBuilder->setTemplate($template);
 	}
 
 	private static function getSourceDir($source)
