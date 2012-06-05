@@ -59,7 +59,7 @@ class Vidola_TemplateApi_PageApiTest extends PHPUnit_Framework_TestCase
 		$document = $this->getMockBuilder('\\Vidola\\Document\\Page')->getMock();
 		$document
 			->expects($this->any())
-			->method('getNextPage')
+			->method('getNextPageName')
 			->will($this->returnValue('foo'));
 		$api = new \Vidola\TemplateApi\PageApi($document);
 	
@@ -74,7 +74,7 @@ class Vidola_TemplateApi_PageApiTest extends PHPUnit_Framework_TestCase
 		$document = $this->getMockBuilder('\\Vidola\\Document\\Page')->getMock();
 		$document
 			->expects($this->any())
-			->method('getPreviousPage')
+			->method('getPreviousPageName')
 			->will($this->returnValue('foo'));
 		$api = new \Vidola\TemplateApi\PageApi($document);
 	

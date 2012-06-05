@@ -9,7 +9,8 @@ use Vidola\Pattern\Patterns\Header;
 use	Vidola\TextReplacer\TextReplacer;
 use Vidola\Util\DocumentStructure;
 use Vidola\Util\DocFileRetriever;
-use Vidola\View\View;
+use Vidola\Util\Writer;
+use Vidola\View\TemplateBasedView;
 use Vidola\TemplateApi\PageApiFactory;
 
 /**
@@ -29,10 +30,12 @@ class DocumentBuilder
 
 	private $pageApiFactory;
 
+	private $template;
+
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
-		View $view,
+		TemplateBasedView $view,
 		DocFileRetriever $docFileRetriever,
 		PageApiFactory $pageApiFactory
 	) {
@@ -41,6 +44,25 @@ class DocumentBuilder
 		$this->view = $view;
 		$this->docFileRetriever = $docFileRetriever;
 		$this->pageApiFactory = $pageApiFactory;
+	}
+
+	public function setTemplate($path)
+	{
+//@todo move this to view ??
+		$this->template = $path;
+	}
+
+	private function getTemplate()
+	{
+		if (isset($this->template))
+		{
+			return $this->template;
+		}
+		return __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Templates'
+			. DIRECTORY_SEPARATOR . 'Default'
+			. DIRECTORY_SEPARATOR . 'Index.php';
 	}
 
 	/**
@@ -65,43 +87,31 @@ class DocumentBuilder
 			$filename = $fileOrDirectory;
 		}
 
-		$textToTransform = $this->docFileRetriever->retrieveContent($fileName);
+		$textToTransform = $this->docFileRetriever->retrieveContent($filename);
 
 		$replacedText = $this->textReplacer->replace($textToTransform);
 
-$page = new \Vidola\Document\SimplePage();
+		// @todo remove need for new
+		$page = new \Vidola\Document\SimplePage();
 
-$page->setTitle($this->createTitle($fileName));
-$page->setContent($replacedText);
-$page->setFilename($filename);
-$page->setNextPageName($this->documentStructure->getNextFile($filename));
-$page->setPreviousPageName($this->documentStructure->getPreviousFile($fileName));
+		$page->setTitle($this->createTitle($filename));
+		$page->setContent($replacedText);
+		$page->setFilename($filename);
+		$page->setNextPageName($this->documentStructure->getNextFile($filename));
+		$page->setPreviousPageName($this->documentStructure->getPreviousFile($filename));
 
-$pageApi = $this->pageApiFactory->createWith($page);
-$this->view->addApi($pageApi);
-$output = $this->view->render();
+		$pageApi = $this->pageApiFactory->createWith($page);
+		$this->view->addApi($pageApi);
+		$this->view->render($this->getTemplate());
 
-var_dump($output);
-die();
-
-//$this->outputBuilder->setFileName($fileName);
-//$this->outputBuilder->setContent($replacedText);
-//$this->outputBuilder->setTitle($this->createTitle($fileName));
-//$previousDoc = $this->documentStructure->getPreviousFile($fileName);
-//$this->outputBuilder->setPreviousDoc($previousDoc);
-//$nextDoc = $this->documentStructure->getNextFile($fileName);
-//$this->outputBuilder->setNextDoc($nextDoc);
-
-		$this->outputBuilder->build();
-
-		foreach ($this->documentStructure->getSubFiles($fileName) as $subfile)
+		foreach ($this->documentStructure->getSubFiles($filename) as $subfile)
 		{
 			$this->build($subfile);
 		}
 	}
 
-	private function createTitle($fileName)
+	private function createTitle($filename)
 	{
-		return str_replace(DIRECTORY_SEPARATOR, ' ', $fileName);
+		return str_replace(DIRECTORY_SEPARATOR, ' ', $filename);
 	}
 }

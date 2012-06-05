@@ -14,14 +14,15 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 		$this->textReplacer = $this->getMock(
 			'\\Vidola\\UnitTests\\Support\\MockTextReplacer', array('replace')
 		);
-		$this->outputBuilder = $this->getMock('\\Vidola\\OutputBuilder\\OutputBuilder');
 		$this->fileRetriever = $this->getMock('\\Vidola\\Util\\DocFileRetriever');
+		$this->pageApi = $this->getMock('\\Vidola\\TemplateApi\\PageApiFactory');
 
 		$this->documentBuilder = new \Vidola\DocumentBuilder\DocumentBuilder(
 			$this->docStructure,
 			$this->textReplacer,
-			$this->outputBuilder,
-			$this->fileRetriever
+			$this->getMock('\\Vidola\\View\\View'),
+			$this->fileRetriever,
+			$this->pageApi
 		);
 	}
 
@@ -48,6 +49,10 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->expects($this->once())
 			->method('getSubFiles')
 			->will($this->returnValue(array()));
+		$this->pageApi
+			->expects($this->any())
+			->method('createWith')
+			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 
 		$this->documentBuilder->build('fileName');
 	}
@@ -86,6 +91,10 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->method('getSubFiles')
 			->with('bar')
 			->will($this->returnValue(array()));
+		$this->pageApi
+			->expects($this->any())
+			->method('createWith')
+			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 
 		$this->documentBuilder->build('foo');
 	}
@@ -115,9 +124,10 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->method('getSubFiles')
 			->with('fileName')
 			->will($this->returnValue(array()));
-		$this->outputBuilder
+		$this->pageApi
 			->expects($this->any())
-			->method('build');
+			->method('createWith')
+			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 
 		$this->documentBuilder->build('fileName');
 	}
@@ -141,6 +151,10 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->method('getSubFiles')
 			->with('Index')
 			->will($this->returnValue(array()));
+		$this->pageApi
+			->expects($this->any())
+			->method('createWith')
+			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 
 		$this->documentBuilder->build($dir);
 	}
@@ -154,13 +168,14 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->expects($this->once())
 			->method('replace')
 			->will($this->returnValue('some text'));
-		$this->outputBuilder
-			->expects($this->once())
-			->method('build');
 		$this->docStructure
 			->expects($this->any())
 			->method('getSubFiles')
 			->will($this->returnValue(array()));
+		$this->pageApi
+			->expects($this->any())
+			->method('createWith')
+			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 
 		$this->documentBuilder->build('sample');
 	}

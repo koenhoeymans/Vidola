@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><?php echo $this->title; ?></title>
+	<title><?php echo $page->title(); ?></title>
 	<style type="text/css">
 body {
 	font: 100% arial;
@@ -43,14 +43,14 @@ a {
 </head>
 <body>
 
-<?php echo $this->content; ?>
+<?php echo $page->content(); ?>
 
-<?php if ($this->previousDoc) { ?>
-	<a href="<?php echo $this->previousDoc; ?>">previous</a>
+<?php if ($page->previousPageName()) { ?>
+	<a href="<?php echo $page->previousPageName(); ?>">previous</a>
 <?php } ?>
 
-<?php if ($this->nextDoc) { ?>
-	<a href="<?php echo $this->nextDoc; ?>">next</a>
+<?php if ($page->previousPageName()) { ?>
+	<a href="<?php echo $page->previousPageName(); ?>">next</a>
 <?php } ?>
 
 </body>

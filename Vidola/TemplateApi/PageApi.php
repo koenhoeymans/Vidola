@@ -7,11 +7,12 @@ namespace Vidola\TemplateApi;
 
 use Vidola\View\TemplateBasedView\TemplateApi;
 use Vidola\Document\Page;
+use Vidola\View\ViewApi;
 
 /**
  * @package Vidola
  */
-class PageApi extends TemplateApi
+class PageApi extends ViewApi
 {
 	private $page;
 
@@ -42,11 +43,11 @@ class PageApi extends TemplateApi
 
 	public function nextPageName()
 	{
-		return $this->page->getNextPage();
+		return $this->page->getNextPageName();
 	}
 
 	public function previousPageName()
 	{
-		return $this->page->getPreviousPage();
+		return $this->page->getPreviousPageName();
 	}
 }

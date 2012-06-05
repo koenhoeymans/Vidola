@@ -41,6 +41,9 @@ class Vidola
 			->given('Vidola\\OutputBuilder\\OutputBuilder')
 			->thenUse('Vidola\\OutputBuilder\\TemplateOutputBuilder')
 			->inSingletonScope();
+		$fjor
+			->given('Vidola\\View\\TemplateBasedView')
+			->thenUse('Vidola\\View\\FileView\\FileView');
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
@@ -124,8 +127,8 @@ class Vidola
 			. DIRECTORY_SEPARATOR . 'Templates'
 			. DIRECTORY_SEPARATOR . 'Default'
 			. DIRECTORY_SEPARATOR . 'Index.php';
-		$templateBuilder = $fjor->get('Vidola\\OutputBuilder\\OutputBuilder');
-		$templateBuilder->setTemplate($template);
+		$documentBuilder = $fjor->get('Vidola\\DocumentBuilder\\DocumentBuilder');;
+		$documentBuilder->setTemplate($template);
 	}
 
 	private static function getSourceDir($source)

@@ -8,11 +8,11 @@ namespace Vidola\View;
 /**
  * @package Vidola
  * 
- * Renders content.
+ * Renders representation of domain.
  */
-interface View
+interface TemplateBasedView
 {
-	public function render();
+	public function render($template);
 
 	public function addApi(ViewApi $api);
 }
