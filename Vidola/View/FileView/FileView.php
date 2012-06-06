@@ -20,6 +20,8 @@ class FileView implements TemplateBasedView
 
 	private $writer;
 
+	private $template;
+
 	public function __construct(Writer $writer)
 	{
 		$this->writer = $writer;
@@ -30,13 +32,32 @@ class FileView implements TemplateBasedView
 		$this->api[$api->getName()] = $api;
 	}
 
-	public function render($template)
+	public function render()
  	{
 		extract($this->api);
 		ob_start();
-		require($template);
+		require($this->getTemplate());
 		$output = ob_get_clean();
 
 		$this->writer->write($output, $page->filename());
+	}
+
+	public function setTemplate($template)
+	{
+		$this->template = $template;
+	}
+
+	private function getTemplate()
+	{
+		if (isset($this->template))
+		{
+			return $this->template;
+		}
+		return __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Templates'
+			. DIRECTORY_SEPARATOR . 'Default'
+			. DIRECTORY_SEPARATOR . 'Index.php';
 	}
 }

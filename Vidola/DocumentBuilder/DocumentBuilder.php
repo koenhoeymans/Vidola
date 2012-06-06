@@ -46,25 +46,6 @@ class DocumentBuilder
 		$this->pageApiFactory = $pageApiFactory;
 	}
 
-	public function setTemplate($path)
-	{
-//@todo move this to view ??
-		$this->template = $path;
-	}
-
-	private function getTemplate()
-	{
-		if (isset($this->template))
-		{
-			return $this->template;
-		}
-		return __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Templates'
-			. DIRECTORY_SEPARATOR . 'Default'
-			. DIRECTORY_SEPARATOR . 'Index.php';
-	}
-
 	/**
 	 * Builds a document from a source file or directory and puts it in the destination
 	 * directory.
@@ -102,7 +83,7 @@ class DocumentBuilder
 
 		$pageApi = $this->pageApiFactory->createWith($page);
 		$this->view->addApi($pageApi);
-		$this->view->render($this->getTemplate());
+		$this->view->render();
 
 		foreach ($this->documentStructure->getSubFiles($filename) as $subfile)
 		{

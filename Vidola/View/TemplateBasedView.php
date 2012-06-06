@@ -12,7 +12,9 @@ namespace Vidola\View;
  */
 interface TemplateBasedView
 {
-	public function render($template);
+	public function setTemplate($template);
+
+	public function render();
 
 	public function addApi(ViewApi $api);
 }
