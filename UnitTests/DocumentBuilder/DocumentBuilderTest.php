@@ -20,7 +20,7 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 		$this->documentBuilder = new \Vidola\DocumentBuilder\DocumentBuilder(
 			$this->docStructure,
 			$this->textReplacer,
-			$this->getMock('\\Vidola\\TemplateBasedView\\TemplateBasedView'),
+			$this->getMock('\\Vidola\\View\\TemplateBasedView'),
 			$this->fileRetriever,
 			$this->pageApi
 		);
