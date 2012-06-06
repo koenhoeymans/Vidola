@@ -28,7 +28,6 @@ class Vidola
 
 		$fjor->setSingleton('Vidola\\DocumentBuilder\\DocumentBuilder');
 		$fjor->setSingleton('Vidola\\Util\\DocFileRetriever');
-		$fjor->setSingleton('Vidola\\Util\\Writer');
 		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
 		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
 		$fjor->setSingleton('Vidola\\Patterns\\Pattern\\Header');
@@ -112,13 +111,13 @@ class Vidola
 		// set the output directory
 		// --target.dir=
 		// ------------------------
-		$writer = $fjor->get('Vidola\\Util\\Writer');
+		$view = $fjor->get('Vidola\\View\\FileView\\FileView');
 		if (!$config->get('target.dir'))
 		{
 			throw new \Exception('target directory not set: --target.dir=<dir>');
 		}
-		$writer->setOutputDir($config->get('target.dir'));
-		$writer->setExtension('.html');
+		$view->setOutputDir($config->get('target.dir'));
+		$view->setExtension('.html');
 
 		// set the template
 		// --template=
@@ -128,7 +127,6 @@ class Vidola
 			. DIRECTORY_SEPARATOR . 'Templates'
 			. DIRECTORY_SEPARATOR . 'Default'
 			. DIRECTORY_SEPARATOR . 'Index.php';
-		$view = $fjor->get('Vidola\\View\\FileView\\FileView');;
 		$view->setTemplate($template);
 	}
 

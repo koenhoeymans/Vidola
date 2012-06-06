@@ -7,7 +7,6 @@ namespace Vidola\View\FileView;
 
 use Vidola\View\TemplateBasedView;
 use Vidola\View\ViewApi;
-use Vidola\Util\Writer;
 
 /**
  * @package Vidola
@@ -18,13 +17,51 @@ class FileView implements TemplateBasedView
 {
 	private $api = array();
 
-	private $writer;
+	private $extension = '';
+
+	private $outputDir;
 
 	private $template;
 
-	public function __construct(Writer $writer)
+	private $filename;
+
+	/**
+	 * The extension for the file that will be written.
+	 * 
+	 * @param string $ext
+	 */
+	public function setExtension($ext)
 	{
-		$this->writer = $writer;
+		$this->extension = $ext;
+	}
+
+	/**
+	 * Set output directory to write files to.
+	 *
+	 * @param string $dir
+	 */
+	public function setOutputDir($dir)
+	{
+		$this->outputDir = $dir;
+	}
+
+	private function getOutputDir()
+	{
+		if (isset($this->outputDir))
+		{
+			return $this->outputDir; 
+		}
+		return sys_get_temp_dir();
+	}
+
+	/**
+	 * The name of the file, without directory and extension.
+	 * 
+	 * @param string $name
+	 */
+	public function setFilename($name)
+	{
+		$this->filename = $name;
 	}
 
 	public function addApi(ViewApi $api)
@@ -39,7 +76,7 @@ class FileView implements TemplateBasedView
 		require($this->getTemplate());
 		$output = ob_get_clean();
 
-		$this->writer->write($output, $page->filename());
+		$this->write($output, $this->filename);
 	}
 
 	public function setTemplate($template)
@@ -59,5 +96,41 @@ class FileView implements TemplateBasedView
 			. DIRECTORY_SEPARATOR . 'Templates'
 			. DIRECTORY_SEPARATOR . 'Default'
 			. DIRECTORY_SEPARATOR . 'Index.php';
+	}
+
+	/**
+	 * Writes text to a specified file.
+	 *
+	 * @param string $text
+	 * @param string $fileName Relative to output directory.
+	 * @throws \Exception
+	 */
+	private function write($text, $fileName)
+	{
+		$dir = $this->outputDir . DIRECTORY_SEPARATOR . substr(
+			$fileName, 0, strrpos($fileName, DIRECTORY_SEPARATOR)
+		);
+		$fileName = substr($fileName, strrpos($fileName, DIRECTORY_SEPARATOR));
+
+		if (!is_dir($dir))
+		{
+			mkdir($dir);
+		}
+
+		$file = $dir . DIRECTORY_SEPARATOR . $fileName . '.' . $this->extension;
+
+		$fileHandle = fopen($file, 'w');
+
+		if (!$fileHandle)
+		{
+			throw new \Exception('Writer::write() was unable to open ' . $file);
+		}
+
+		if(fwrite($fileHandle, $text) === false)
+		{
+			throw new \Exception('Writer::write() was unable to write to ' . $file);
+		}
+
+		fclose($fileHandle);
 	}
 }
