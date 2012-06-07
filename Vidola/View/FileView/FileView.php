@@ -26,17 +26,8 @@ class FileView implements TemplateBasedView
 	private $filename;
 
 	/**
-	 * The extension for the file that will be written.
-	 * 
-	 * @param string $ext
-	 */
-	public function setExtension($ext)
-	{
-		$this->extension = $ext;
-	}
-
-	/**
-	 * Set output directory to write files to.
+	 * Set output directory to write files to. The default value used is
+	 * the system temp dir.
 	 *
 	 * @param string $dir
 	 */
@@ -64,6 +55,25 @@ class FileView implements TemplateBasedView
 		$this->filename = $name;
 	}
 
+	private function getFilename()
+	{
+		if (isset($this->filename))
+		{
+			return $this->filename;
+		}
+		return 'index';
+	}
+
+	/**
+	 * The extension for the file that will be written.
+	 *
+	 * @param string $ext
+	 */
+	public function setExtension($ext)
+	{
+		$this->extension = $ext;
+	}
+
 	public function addApi(ViewApi $api)
 	{
 		$this->api[$api->getName()] = $api;
@@ -76,7 +86,7 @@ class FileView implements TemplateBasedView
 		require($this->getTemplate());
 		$output = ob_get_clean();
 
-		$this->write($output, $this->filename);
+		$this->write($output);
 	}
 
 	public function setTemplate($template)
@@ -105,19 +115,21 @@ class FileView implements TemplateBasedView
 	 * @param string $fileName Relative to output directory.
 	 * @throws \Exception
 	 */
-	private function write($text, $fileName)
+	private function write($text)
 	{
-		$dir = $this->outputDir . DIRECTORY_SEPARATOR . substr(
-			$fileName, 0, strrpos($fileName, DIRECTORY_SEPARATOR)
+		$filename = $this->getFilename();
+
+		$dir = $this->getOutputDir() . DIRECTORY_SEPARATOR . substr(
+			$filename, 0, strrpos($filename, DIRECTORY_SEPARATOR)
 		);
-		$fileName = substr($fileName, strrpos($fileName, DIRECTORY_SEPARATOR));
+		$filename = substr($filename, strrpos($filename, DIRECTORY_SEPARATOR));
 
 		if (!is_dir($dir))
 		{
 			mkdir($dir);
 		}
 
-		$file = $dir . DIRECTORY_SEPARATOR . $fileName . '.' . $this->extension;
+		$file = $dir . $filename . $this->extension;
 
 		$fileHandle = fopen($file, 'w');
 

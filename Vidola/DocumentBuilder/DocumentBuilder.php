@@ -9,8 +9,7 @@ use Vidola\Pattern\Patterns\Header;
 use	Vidola\TextReplacer\TextReplacer;
 use Vidola\Util\DocumentStructure;
 use Vidola\Util\DocFileRetriever;
-use Vidola\Util\Writer;
-use Vidola\View\TemplateBasedView;
+use Vidola\View\FileView\FileView;
 use Vidola\TemplateApi\PageApiFactory;
 
 /**
@@ -35,7 +34,7 @@ class DocumentBuilder
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
-		TemplateBasedView $view,
+		FileView $view,
 		DocFileRetriever $docFileRetriever,
 		PageApiFactory $pageApiFactory
 	) {
@@ -74,15 +73,14 @@ class DocumentBuilder
 
 		// @todo remove need for new
 		$page = new \Vidola\Document\SimplePage();
-
 		$page->setTitle($this->createTitle($filename));
 		$page->setContent($replacedText);
 		$page->setFilename($filename);
 		$page->setNextPageName($this->documentStructure->getNextFile($filename));
 		$page->setPreviousPageName($this->documentStructure->getPreviousFile($filename));
-
 		$pageApi = $this->pageApiFactory->createWith($page);
 		$this->view->addApi($pageApi);
+		$this->view->setFilename($filename);
 		$this->view->render();
 
 		foreach ($this->documentStructure->getSubFiles($filename) as $subfile)

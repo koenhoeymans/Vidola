@@ -12,6 +12,13 @@ class Vidola_View_FileViewTest extends PHPUnit_Framework_TestCase
 	 */
 	public function rendersGivenTemplate()
 	{
+		$target = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'foo.test';
+
+		if (file_exists($target))
+		{
+			unlink($target);
+		}
+
 		$api = new \Vidola\UnitTests\Support\TestApi();
 		$api->set('name', 'bar');
 
@@ -24,14 +31,39 @@ class Vidola_View_FileViewTest extends PHPUnit_Framework_TestCase
 		$view = new \Vidola\View\FileView\FileView();
 		$view->setTemplate($template);
 		$view->setFilename('foo');
-		$view->setExtension('test');
+		$view->setExtension('.test');
 		$view->setOutputDir(sys_get_temp_dir());
 		$view->addApi($api);
 
 		$view->render($template);
-		$this->assertEquals(
-			'foo bar',
-			file_get_contents(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'foo.test')
-		);
+
+		$this->assertEquals('foo bar', file_get_contents($target));
+	}
+
+	/**
+	 * @test
+	 */
+	public function targetDirMustExist()
+	{
+		$template = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'Template.html';
+		$api = new \Vidola\UnitTests\Support\TestApi();
+		$api->set('name', 'bar');
+
+		$view = new \Vidola\View\FileView\FileView();
+		$view->setTemplate($template);
+		$view->setFilename('foo');
+		$view->setExtension('test');
+		$view->setOutputDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'sfsdsdglkdjsdf');
+		$view->addApi($api);
+
+		try {
+			$view->render($template);
+		} catch (\Exception $e) {
+			return;
+		}
 	}
 }

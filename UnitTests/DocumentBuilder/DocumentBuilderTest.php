@@ -16,11 +16,12 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 		);
 		$this->fileRetriever = $this->getMock('\\Vidola\\Util\\DocFileRetriever');
 		$this->pageApi = $this->getMock('\\Vidola\\TemplateApi\\PageApiFactory');
+		$this->view = $this->getMock('\\Vidola\\View\\FileView\FileView');
 
 		$this->documentBuilder = new \Vidola\DocumentBuilder\DocumentBuilder(
 			$this->docStructure,
 			$this->textReplacer,
-			$this->getMock('\\Vidola\\View\\TemplateBasedView'),
+			$this->view,
 			$this->fileRetriever,
 			$this->pageApi
 		);
@@ -102,7 +103,7 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 	/**
 	 * @test
 	 */
-	public function asksWriterToWriteReplacedTextWithGivenFileName()
+	public function asksFileViewToRenderReplacedTextWithGivenFileName()
 	{
 		$file = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
@@ -125,9 +126,16 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->with('fileName')
 			->will($this->returnValue(array()));
 		$this->pageApi
-			->expects($this->any())
+			->expects($this->atLeastOnce())
 			->method('createWith')
 			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
+
+		$this->view
+			->expects($this->atLeastOnce())
+			->method('setFileName');
+		$this->view
+			->expects($this->atLeastOnce())
+			->method('render');
 
 		$this->documentBuilder->build('fileName');
 	}
@@ -157,26 +165,5 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 
 		$this->documentBuilder->build($dir);
-	}
-
-	/**
-	 * @test
-	 */
-	public function outputFilesHasSameNameAsInputFile()
-	{
-		$this->textReplacer
-			->expects($this->once())
-			->method('replace')
-			->will($this->returnValue('some text'));
-		$this->docStructure
-			->expects($this->any())
-			->method('getSubFiles')
-			->will($this->returnValue(array()));
-		$this->pageApi
-			->expects($this->any())
-			->method('createWith')
-			->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-
-		$this->documentBuilder->build('sample');
 	}
 }
