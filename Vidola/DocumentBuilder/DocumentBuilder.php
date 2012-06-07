@@ -78,8 +78,8 @@ class DocumentBuilder
 		$page->setFilename($filename);
 		$page->setNextPageName($this->documentStructure->getNextFile($filename));
 		$page->setPreviousPageName($this->documentStructure->getPreviousFile($filename));
-		$pageApi = $this->pageApiFactory->createWith($page);
-		$this->view->addApi($pageApi);
+
+		$this->view->addApi($this->pageApiFactory->createWith($page));
 		$this->view->setFilename($filename);
 		$this->view->render();
 
