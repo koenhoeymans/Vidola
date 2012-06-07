@@ -74,11 +74,19 @@ class FileView implements TemplateBasedView
 		$this->extension = $ext;
 	}
 
+	/**
+	 * Adds an API the view can use.
+	 * 
+	 * @param ViewApi $api
+	 */
 	public function addApi(ViewApi $api)
 	{
 		$this->api[$api->getName()] = $api;
 	}
 
+	/**
+	 * Render the view.
+	 */
 	public function render()
  	{
 		extract($this->api);
@@ -89,6 +97,11 @@ class FileView implements TemplateBasedView
 		$this->write($output);
 	}
 
+	/**
+	 * Set the template to use. Full path.
+	 * 
+	 * @param string $template
+	 */
 	public function setTemplate($template)
 	{
 		$this->template = $template;
@@ -108,13 +121,6 @@ class FileView implements TemplateBasedView
 			. DIRECTORY_SEPARATOR . 'Index.php';
 	}
 
-	/**
-	 * Writes text to a specified file.
-	 *
-	 * @param string $text
-	 * @param string $fileName Relative to output directory.
-	 * @throws \Exception
-	 */
 	private function write($text)
 	{
 		$filename = $this->getFilename();
