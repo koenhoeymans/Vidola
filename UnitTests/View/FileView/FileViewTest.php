@@ -62,6 +62,7 @@ class Vidola_View_FileViewTest extends PHPUnit_Framework_TestCase
 
 		try {
 			$view->render($template);
+			$this->fail();
 		} catch (\Exception $e) {
 			return;
 		}
