@@ -16,7 +16,7 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 		);
 		$this->fileRetriever = $this->getMock('\\Vidola\\Util\\DocFileRetriever');
 		$this->pageApi = $this->getMock('\\Vidola\\TemplateApi\\PageApiFactory');
-		$this->view = $this->getMock('\\Vidola\\View\\FileView\FileView');
+		$this->view = $this->getMock('\\Vidola\\View\\TemplatableFileView');
 
 		$this->documentBuilder = new \Vidola\DocumentBuilder\DocumentBuilder(
 			$this->docStructure,

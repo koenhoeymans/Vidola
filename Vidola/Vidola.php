@@ -41,8 +41,8 @@ class Vidola
 			->thenUse('Vidola\\OutputBuilder\\TemplateOutputBuilder')
 			->inSingletonScope();
 		$fjor
-			->given('Vidola\\View\\TemplateBasedView')
-			->thenUse('Vidola\\View\\FileView\\FileView')
+			->given('Vidola\\View\\TemplatableFileView')
+			->thenUse('Vidola\\View\\TemplatableHtmlFileView')
 			->inSingletonScope();
 
 		// filling the pattern list with the patterns
@@ -111,7 +111,7 @@ class Vidola
 		// set the output directory
 		// --target.dir=
 		// ------------------------
-		$view = $fjor->get('Vidola\\View\\FileView\\FileView');
+		$view = $fjor->get('Vidola\\View\\TemplatableFileView');
 		if (!$config->get('target.dir'))
 		{
 			throw new \Exception('target directory not set: --target.dir=<dir>');

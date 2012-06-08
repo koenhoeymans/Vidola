@@ -3,9 +3,9 @@
 /**
  * @package Vidola
  */
-namespace Vidola\View\FileView;
+namespace Vidola\View;
 
-use Vidola\View\TemplateBasedView;
+use Vidola\View\TemplatableFileView;
 use Vidola\View\ViewApi;
 
 /**
@@ -13,7 +13,7 @@ use Vidola\View\ViewApi;
  * 
  * Writes content of a template to a file.
  */
-class FileView implements TemplateBasedView
+class TemplatableHtmlFileView implements TemplatableFileView
 {
 	private $api = array();
 

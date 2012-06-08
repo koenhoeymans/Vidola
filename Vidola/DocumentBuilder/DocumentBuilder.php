@@ -9,7 +9,7 @@ use Vidola\Pattern\Patterns\Header;
 use	Vidola\TextReplacer\TextReplacer;
 use Vidola\Util\DocumentStructure;
 use Vidola\Util\DocFileRetriever;
-use Vidola\View\FileView\FileView;
+use Vidola\View\TemplatableFileView;
 use Vidola\TemplateApi\PageApiFactory;
 
 /**
@@ -34,7 +34,7 @@ class DocumentBuilder
 	public function __construct(
 		DocumentStructure $documentStructure,
 		TextReplacer $textReplacer,
-		FileView $view,
+		TemplatableFileView $view,
 		DocFileRetriever $docFileRetriever,
 		PageApiFactory $pageApiFactory
 	) {
