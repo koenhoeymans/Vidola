@@ -117,7 +117,6 @@ class Vidola
 			throw new \Exception('target directory not set: --target.dir=<dir>');
 		}
 		$view->setOutputDir($config->get('target.dir'));
-		$view->setExtension('.html');
 
 		// set the template
 		// --template=

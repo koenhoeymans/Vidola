@@ -17,8 +17,6 @@ class FileView implements TemplateBasedView
 {
 	private $api = array();
 
-	private $extension = '';
-
 	private $outputDir;
 
 	private $template;
@@ -62,16 +60,6 @@ class FileView implements TemplateBasedView
 			return $this->filename;
 		}
 		return 'index';
-	}
-
-	/**
-	 * The extension for the file that will be written.
-	 *
-	 * @param string $ext
-	 */
-	public function setExtension($ext)
-	{
-		$this->extension = $ext;
 	}
 
 	/**
@@ -135,7 +123,7 @@ class FileView implements TemplateBasedView
 			mkdir($dir);
 		}
 
-		$file = $dir . $filename . $this->extension;
+		$file = $dir . $filename . '.html';
 
 		$fileHandle = fopen($file, 'w');
 

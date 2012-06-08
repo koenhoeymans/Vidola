@@ -12,7 +12,7 @@ class Vidola_View_FileViewTest extends PHPUnit_Framework_TestCase
 	 */
 	public function rendersGivenTemplate()
 	{
-		$target = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'foo.test';
+		$target = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'foo.html';
 
 		if (file_exists($target))
 		{
@@ -31,7 +31,6 @@ class Vidola_View_FileViewTest extends PHPUnit_Framework_TestCase
 		$view = new \Vidola\View\FileView\FileView();
 		$view->setTemplate($template);
 		$view->setFilename('foo');
-		$view->setExtension('.test');
 		$view->setOutputDir(sys_get_temp_dir());
 		$view->addApi($api);
 
@@ -56,7 +55,6 @@ class Vidola_View_FileViewTest extends PHPUnit_Framework_TestCase
 		$view = new \Vidola\View\FileView\FileView();
 		$view->setTemplate($template);
 		$view->setFilename('foo');
-		$view->setExtension('test');
 		$view->setOutputDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'sfsdsdglkdjsdf');
 		$view->addApi($api);
 
