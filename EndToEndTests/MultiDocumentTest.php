@@ -115,7 +115,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'ParentDocument.txt';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-		
+
 		// when
 		\Vidola\Vidola::run();
 

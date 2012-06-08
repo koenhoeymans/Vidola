@@ -49,8 +49,8 @@ a {
 	<a href="<?php echo $page->previousPageName(); ?>">previous</a>
 <?php } ?>
 
-<?php if ($page->previousPageName()) { ?>
-	<a href="<?php echo $page->previousPageName(); ?>">next</a>
+<?php if ($page->nextPageName()) { ?>
+	<a href="<?php echo $page->nextPageName(); ?>">next</a>
 <?php } ?>
 
 </body>
