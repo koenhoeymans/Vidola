@@ -28,6 +28,9 @@ class Vidola_EndToEndTests_SampleTextTest extends \Vidola\EndToEndTests\Support\
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'SampleText.txt';
 		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		$_SERVER['argv']['template'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
 		\Vidola\Vidola::run();
