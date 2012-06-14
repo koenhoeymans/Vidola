@@ -4,7 +4,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..' 
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestCase
+class Vidola_MarkdownDocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
@@ -18,7 +18,7 @@ class Vidola_DocumentBuilder_DocumentBuilderTest extends PHPUnit_Framework_TestC
 		$this->pageApi = $this->getMock('\\Vidola\\TemplateApi\\PageApiFactory');
 		$this->view = $this->getMock('\\Vidola\\View\\TemplatableFileView');
 
-		$this->documentBuilder = new \Vidola\DocumentBuilder\DocumentBuilder(
+		$this->documentBuilder = new \Vidola\DocumentBuilder\MarkdownDocumentBuilder(
 			$this->docStructure,
 			$this->textReplacer,
 			$this->view,

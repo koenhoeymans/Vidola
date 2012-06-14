@@ -26,12 +26,15 @@ class Vidola
 		$fjor = new \Fjor\Dsl\Dsl(new \Fjor\ObjectFactory\GenericObjectFactory());
 		$fjor->given('Fjor\\Fjor')->thenUse($fjor);
 
-		$fjor->setSingleton('Vidola\\DocumentBuilder\\DocumentBuilder');
 		$fjor->setSingleton('Vidola\\Util\\DocFileRetriever');
 		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
 		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
 		$fjor->setSingleton('Vidola\\Patterns\\Pattern\\Header');
 		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
+		$fjor
+			->given('Vidola\\DocumentBuilder\\DocumentBuilder')
+			->thenUse('Vidola\\DocumentBuilder\\MarkdownDocumentBuilder')
+			->inSingletonScope();
 		$fjor
 			->given('Vidola\\TextReplacer\\TextReplacer')
 			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
