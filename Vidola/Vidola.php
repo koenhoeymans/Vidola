@@ -26,27 +26,38 @@ class Vidola
 		$fjor = new \Fjor\Dsl\Dsl(new \Fjor\ObjectFactory\GenericObjectFactory());
 		$fjor->given('Fjor\\Fjor')->thenUse($fjor);
 
-		$fjor->setSingleton('Vidola\\Util\\DocFileRetriever');
 		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
 		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
 		$fjor->setSingleton('Vidola\\Patterns\\Pattern\\Header');
 		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
 		$fjor
-			->given('Vidola\\DocumentBuilder\\DocumentBuilder')
-			->thenUse('Vidola\\DocumentBuilder\\MarkdownDocumentBuilder')
+			->given('Vidola\\Document\\DocumentApiBuilder')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocument')
+			->inSingletonScope();
+		$fjor
+			->given('Vidola\\Document\\DocumentStructure')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocument')
+			->inSingletonScope();
+		$fjor
+			->given('Vidola\\Util\\SubfileDetector')
+			->thenUse('Vidola\\Pattern\\Patterns\\TableOfContents')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\TextReplacer\\TextReplacer')
 			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
 			->inSingletonScope();
 		$fjor
-			->given('Vidola\\OutputBuilder\\OutputBuilder')
-			->thenUse('Vidola\\OutputBuilder\\TemplateOutputBuilder')
-			->inSingletonScope();
-		$fjor
 			->given('Vidola\\View\\TemplatableFileView')
 			->thenUse('Vidola\\View\\TemplatableHtmlFileView')
 			->inSingletonScope();
+		$fjor
+			->given('Vidola\\Util\\ContentRetriever')
+			->thenUse('Vidola\\Util\\DocFileRetriever')
+			->inSingletonScope();
+		// @todo move RecursiveReplacer to parser
+		$fjor
+			->given('Vidola\\Parser\\Parser')
+			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
@@ -94,8 +105,8 @@ class Vidola
 
 		// build the document(s)
 		// ---------------------
-		$documentBuilder = $fjor->get('Vidola\\DocumentBuilder\\DocumentBuilder');
-		$documentBuilder->build($config->get('source'));
+		$documentCreationController = $fjor->get('Vidola\\Controller\\DocumentCreationController');
+		$documentCreationController->createDocumentation();
 	}
 
 	private static function setCommandLineOptions(
@@ -110,6 +121,10 @@ class Vidola
 			throw new \Exception('what is the source? --source=<source>');
 		}
 		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
+
+		$fjor
+			->given('Vidola\\Document\\MarkdownBasedDocument')
+			->constructWith(array($config->get('source')));
 		
 		// set the output directory
 		// --target.dir=

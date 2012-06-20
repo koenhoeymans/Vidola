@@ -8,7 +8,7 @@ namespace Vidola\Util;
 /**
  * @package Vidola
  */
-class DocFileRetriever
+class DocFileRetriever implements ContentRetriever
 {
 	private $sourceDir = '';
 
@@ -17,8 +17,13 @@ class DocFileRetriever
 		$this->sourceDir = realpath($dir);
 	}
 
-	public function retrieveContent($file)
+	public function retrieve($file)
 	{
+		if (file_exists($file))
+		{
+			return file_get_contents($file);
+		}
+
 		if (file_exists($file . '.txt'))
 		{
 			return file_get_contents($file. '.txt');
@@ -46,9 +51,11 @@ class DocFileRetriever
 		$ucFile = ucfirst($file);
 		if ($ucFile !== $file)
 		{
-			return $this->retrieveContent($ucFile);
+			return $this->retrieve($ucFile);
 		}
 
-		throw new \Exception('DocFileRetriever::retrieveContent() couldn\'t find ' . $file);
+		throw new \Exception(
+			'DocFileRetriever::retrieveContent() couldn\'t find "' . $file . '"'
+		);
 	}
 }

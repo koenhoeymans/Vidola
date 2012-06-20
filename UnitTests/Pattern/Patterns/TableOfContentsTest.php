@@ -305,7 +305,7 @@ paragraph";
 			)));
 		$this->docFileRetriever
 			->expects($this->any())
-			->method('retrieveContent')
+			->method('retrieve')
 			->with('Includedfile')
 			->will($this->returnValue(
 "included header
@@ -365,7 +365,7 @@ paragraph";
 			)));
 		$this->docFileRetriever
 			->expects($this->any())
-			->method('retrieveContent')
+			->method('retrieve')
 			->with('Includedfile')
 			->will($this->returnValue(
 "level3
@@ -427,7 +427,7 @@ paragraph";
 			)));
 		$this->docFileRetriever
 			->expects($this->at(0))
-			->method('retrieveContent')
+			->method('retrieve')
 			->with('Includedfile1')
 			->will($this->returnValue(
 "level1a
@@ -437,7 +437,7 @@ some text"
 			));
 		$this->docFileRetriever
 			->expects($this->at(1))
-			->method('retrieveContent')
+			->method('retrieve')
 			->with('Includedfile2')
 			->will($this->returnValue(
 "level1b
@@ -493,7 +493,7 @@ paragraph";
 			)));
 		$this->docFileRetriever
 			->expects($this->at(0))
-			->method('retrieveContent')
+			->method('retrieve')
 			->with('Includedfile')
 			->will($this->returnValue(
 "{table of contents}
@@ -504,7 +504,7 @@ paragraph"
 			));
 		$this->docFileRetriever
 			->expects($this->at(1))
-			->method('retrieveContent')
+			->method('retrieve')
 			->with('Subincludedfile')
 			->will($this->returnValue(
 "header

@@ -8,10 +8,10 @@ namespace Vidola\View;
 /**
  * @package Vidola
  */
-abstract class ViewApi
+interface ViewApi
 {
 	/**
 	 * The name by which the API can be found in the view, eg $user for name 'user'.
 	 */
-	abstract public function getName();
+	public function getName();
 }

@@ -5,26 +5,27 @@
  */
 namespace Vidola\Pattern\Patterns;
 
-use Vidola\Util\DocFileRetriever;
+use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use Vidola\Pattern\Pattern;
 use Vidola\Document\Element;
+use Vidola\Util\SubfileDetector;
 
 /**
  * @package Vidola
  */
-class TableOfContents extends Pattern
+class TableOfContents extends Pattern implements SubfileDetector
 {
 	private $headerFinder;
 
-	private $docFileRetriever;
+	private $contentRetriever;
 
 	public function __construct(
 		HeaderFinder $headerFinder,
-		DocFileRetriever $docFileRetriever
+		ContentRetriever $contentRetriever
 	) {
 		$this->headerFinder = $headerFinder;
-		$this->docFileRetriever = $docFileRetriever;
+		$this->contentRetriever = $contentRetriever;
 	}
 
 	/**
@@ -36,14 +37,29 @@ class TableOfContents extends Pattern
 	{
 		$list = array();
 
-		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
-		foreach ($matches['pages'] as $regexPartWithIncludeList)
+		foreach ($this->getSubfiles($text) as $regexPartWithIncludeList)
 		{
 			$files = $this->recursivelyGetFilesToInclude($regexPartWithIncludeList);
 			$list = array_merge($list, array_keys($files));
 		}
 
 		return $list;
+	}
+
+	/**
+	 * @see Vidola\Util.SubfileDetector::getSubfiles()
+	 */
+	public function getSubfiles($text)
+	{
+		$pageList = array();
+		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
+		foreach ($matches['pages'] as $pages)
+		{
+			$matches = $this->getListFromVidolaText($pages);
+			$pageList = array_merge($pageList, $matches);
+		}
+
+		return $pageList;
 	}
 
 	public function getRegex()
@@ -84,9 +100,6 @@ class TableOfContents extends Pattern
 		return $this->buildToc($headerList, $maxDepth, $parentNode);
 	}
 
-	/**
-	 * Builds array fileName => contents
-	 */
 	private function recursivelyGetFilesToInclude($regexPartWithListOfFiles)
 	{
 		$fileList = array();
@@ -95,7 +108,7 @@ class TableOfContents extends Pattern
 
 		foreach ($namesFromCurrentList as $fileToInclude)
 		{
-			$textOfFile = $this->docFileRetriever->retrieveContent($fileToInclude);
+			$textOfFile = $this->contentRetriever->retrieve($fileToInclude);
 			$fileList[$fileToInclude] = $textOfFile;
 
 			preg_match_all(

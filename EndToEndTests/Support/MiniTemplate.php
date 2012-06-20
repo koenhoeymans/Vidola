@@ -1,1 +1,1 @@
-<?php echo $page->content(); ?>
+<?php echo $document->currentPageContent(); ?>

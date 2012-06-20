@@ -15,7 +15,8 @@ use Vidola\TextReplacer\TextReplacer;
 /**
  * @package vidola
  */
-class RecursiveReplacer implements TextReplacer
+// @todo move to \Vidola\Parser
+class RecursiveReplacer implements TextReplacer, \Vidola\Parser\Parser
 {
 	private $patternList;
 
@@ -30,6 +31,11 @@ class RecursiveReplacer implements TextReplacer
 	public function __construct(PatternList $patternList)
 	{
 		$this->patternList = $patternList;
+	}
+
+	public function parse($text)
+	{
+		return $this->replace($text);
 	}
 
 	/**

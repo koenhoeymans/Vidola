@@ -2,7 +2,7 @@
 
 namespace Vidola\UnitTests\Support;
 
-class TestApi extends \Vidola\View\ViewApi
+class TestApi implements \Vidola\View\ViewApi
 {
 	private $vars = array();
 

@@ -10,6 +10,7 @@ use Vidola\Util\DocFileRetriever;
 
 /**
  * @package Vidola
+ * @todo move to Vidola\Document
  */
 class DocumentStructure
 {
