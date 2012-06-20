@@ -29,39 +29,8 @@ class TableOfContents extends Pattern implements SubfileDetector
 	}
 
 	/**
-	 * Recursively lists all subfiles contained in the table of contents.
-	 * 
-	 * @param string $text
+	 * @see Vidola\Pattern.Pattern::getRegex()
 	 */
-	public function recursivelyGetListOfIncludedFiles($text)
-	{
-		$list = array();
-
-		foreach ($this->getSubfiles($text) as $regexPartWithIncludeList)
-		{
-			$files = $this->recursivelyGetFilesToInclude($regexPartWithIncludeList);
-			$list = array_merge($list, array_keys($files));
-		}
-
-		return $list;
-	}
-
-	/**
-	 * @see Vidola\Util.SubfileDetector::getSubfiles()
-	 */
-	public function getSubfiles($text)
-	{
-		$pageList = array();
-		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
-		foreach ($matches['pages'] as $pages)
-		{
-			$matches = $this->getListFromVidolaText($pages);
-			$pageList = array_merge($pageList, $matches);
-		}
-
-		return $pageList;
-	}
-
 	public function getRegex()
 	{
 		return
@@ -89,11 +58,27 @@ class TableOfContents extends Pattern implements SubfileDetector
 		return $this->buildReplacement($match, $parentNode);
 	}
 
+	/**
+	 * @see Vidola\Util.SubfileDetector::getSubfiles()
+	 */
+	public function getSubfiles($text)
+	{
+		$pageList = array();
+		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
+		foreach ($matches['pages'] as $pages)
+		{
+			$matches = $this->getListFromVidolaText($pages);
+			$pageList = array_merge($pageList, $matches);
+		}
+
+		return $pageList;
+	}
+
 	private function buildReplacement(array $regexmatch, \DOMNode $parentNode)
 	{
 		$options = $this->getOptions($regexmatch['options']);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
-
+	
 		$fileList = $this->recursivelyGetFilesToInclude($regexmatch['pages']);
 		$textAfterToc = $regexmatch['text'];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
