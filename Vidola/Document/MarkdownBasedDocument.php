@@ -8,6 +8,7 @@ namespace Vidola\Document;
 use Vidola\Util\ContentRetriever;
 use Vidola\Parser\Parser;
 use Vidola\Util\SubfileDetector;
+use Vidola\Util\InternalLinkBuilder;
 
 /**
  * @package Vidola
@@ -33,12 +34,14 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		$rootFile,
 		ContentRetriever $contentRetriever,
 		Parser $parser,
-		SubfileDetector $subfileDetector
+		SubfileDetector $subfileDetector,
+		InternalLinkBuilder $internalLinkBuilder
 	) {
 		$this->rootFile = $rootFile;
 		$this->contentRetriever = $contentRetriever;
 		$this->parser = $parser;
 		$this->subfileDetector = $subfileDetector;
+		$this->internalLinkBuilder = $internalLinkBuilder;
 	}
 
 	/**
@@ -106,7 +109,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		$fileKey = array_search($file, $fileList);
 		if ($fileKey !== 0)
 		{
-			return $fileList[$fileKey-1];
+			return $this->internalLinkBuilder->buildFrom($fileList[$fileKey-1]);
 		}
 		
 		return null;
@@ -124,7 +127,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		$fileKey++;
 		if ($fileKey !== count($fileList))
 		{
-			return $fileList[$fileKey];
+			return $this->internalLinkBuilder->buildFrom($fileList[$fileKey]);
 		}
 		
 		return null;

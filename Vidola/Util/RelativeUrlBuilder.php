@@ -7,6 +7,7 @@ namespace Vidola\Util;
 
 /**
  * @package Vidola
+ * @todo merge with InternalLinkBuilder
  */
 class RelativeUrlBuilder
 {

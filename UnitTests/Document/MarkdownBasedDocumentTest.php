@@ -11,11 +11,13 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 		$this->contentRetriever = $this->getMock('\\Vidola\\Util\\ContentRetriever');
 		$this->parser = $this->getMock('\\Vidola\\Parser\\Parser');
 		$this->subfileDetector = $this->getMock('\\Vidola\\Util\\SubfileDetector');
+		$this->internalLinkBuilder = $this->getMock('\\Vidola\\Util\\InternalLinkBuilder');
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocument(
 			'file',
 			$this->contentRetriever,
 			$this->parser,
-			$this->subfileDetector
+			$this->subfileDetector,
+			$this->internalLinkBuilder
 		);
 	}
 

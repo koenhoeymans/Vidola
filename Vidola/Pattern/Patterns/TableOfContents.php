@@ -7,6 +7,7 @@ namespace Vidola\Pattern\Patterns;
 
 use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
+use Vidola\Util\InternalLinkBuilder;
 use Vidola\Pattern\Pattern;
 use Vidola\Document\Element;
 use Vidola\Util\SubfileDetector;
@@ -20,12 +21,16 @@ class TableOfContents extends Pattern implements SubfileDetector
 
 	private $contentRetriever;
 
+	private $internalLinkBuilder;
+
 	public function __construct(
 		HeaderFinder $headerFinder,
-		ContentRetriever $contentRetriever
+		ContentRetriever $contentRetriever,
+		InternalLinkBuilder $internalLinkBuilder
 	) {
 		$this->headerFinder = $headerFinder;
 		$this->contentRetriever = $contentRetriever;
+		$this->internalLinkBuilder = $internalLinkBuilder;
 	}
 
 	/**
@@ -119,7 +124,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 			$subTextHeaders = $this->headerFinder->getHeadersSequentially($contents);
 			foreach ($subTextHeaders as $subTextHeader)
 			{
-				$subTextHeader['file'] = ucfirst($fileName) . '.html';
+				$subTextHeader['file'] = ucfirst($fileName);
 				$headers = array_merge(
 					$headers,
 					array($subTextHeader)
@@ -178,7 +183,9 @@ class TableOfContents extends Pattern implements SubfileDetector
 			$level = $header['level'];
 			$title = $header['title'];
 			$ref = $header['id'];
-			$file = isset($header['file']) ? $header['file'] : '';
+			$file = isset($header['file']) ?
+				$this->internalLinkBuilder->buildFrom($header['file']) :
+				'';
 
 			if (!$listLevel)
 			{

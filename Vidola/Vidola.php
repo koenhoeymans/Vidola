@@ -58,6 +58,9 @@ class Vidola
 		$fjor
 			->given('Vidola\\Parser\\Parser')
 			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
+		$fjor
+			->given('Vidola\\Util\\InternalLinkBuilder')
+			->thenUse('Vidola\\Util\\HtmlFileLinkBuilder');
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
