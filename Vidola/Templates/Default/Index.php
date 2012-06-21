@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><?php echo $document->title(); ?></title>
+	<title><?php echo $document->pageName(); ?></title>
 	<style type="text/css">
 body {
 	font: 100% arial;
@@ -45,12 +45,12 @@ a {
 
 <?php echo $document->currentPageContent(); ?>
 
-<?php if ($document->previousPageName()) { ?>
-	<a href="<?php echo $document->previousPageName(); ?>">previous</a>
+<?php if ($document->previousPageLink()) { ?>
+	<a href="<?php echo $document->previousPageLink(); ?>">previous: <?php echo $document->previousPageName(); ?></a>
 <?php } ?>
 
-<?php if ($document->nextPageName()) { ?>
-	<a href="<?php echo $document->nextPageName(); ?>">next</a>
+<?php if ($document->nextPageLink()) { ?>
+	<a href="<?php echo $document->nextPageLink(); ?>">next: <?php echo $document->nextPageName(); ?></a>
 <?php } ?>
 
 </body>

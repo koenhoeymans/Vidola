@@ -40,9 +40,19 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 		die('@todo');
 	}
 
+	public function previousPageLink()
+	{
+		return $this->doc->getPreviousPageLink($this->currentPage);
+	}
+
 	public function previousPageName()
 	{
 		return $this->doc->getPreviousPageName($this->currentPage);
+	}
+
+	public function nextPageLink()
+	{
+		return $this->doc->getNextPageLink($this->currentPage);
 	}
 
 	public function nextPageName()
@@ -50,8 +60,8 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 		return $this->doc->getNextPageName($this->currentPage);
 	}
 
-	public function title()
+	public function pageName()
 	{
-		return $this->doc->getTitle($this->currentPage);
+		return $this->doc->getPageName($this->currentPage);
 	}
 }

@@ -22,6 +22,13 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	private $subfileDetector;
 
+	/**
+	 * List of files in the project.
+	 * 
+	 * @var Array|null Null if not determined yet.
+	 */
+	private $fileList = null;
+
 	public function __construct(
 		$rootFile,
 		ContentRetriever $contentRetriever,
@@ -44,8 +51,16 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	public function getFileList()
 	{
+		if ($this->fileList)
+		{
+			return $this->fileList;
+		}
+
 		$subfiles = $this->getSubfilesRecursively($this->rootFile);
 		array_unshift($subfiles, $this->rootFile);
+
+		$this->fileList = $subfiles;
+
 		return $subfiles;
 	}
 
@@ -79,18 +94,44 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	}
 
 	// @todo create title in first place from top header
-	public function getTitle($file)
+	// fall back to page name but add space between camelcase?? => see other libs
+	public function getPageName($file)
 	{
 		return str_replace(DIRECTORY_SEPARATOR, ' ', $file);
 	}
 
+	public function getPreviousPageLink($file)
+	{
+		$fileList = $this->getFileList();
+		$fileKey = array_search($file, $fileList);
+		if ($fileKey !== 0)
+		{
+			return $fileList[$fileKey-1];
+		}
+		
+		return null;
+	}
+
 	public function getPreviousPageName($file)
 	{
-		return 'previous title';
+		return $this->getPageName($this->getPreviousPageLink($file));
+	}
+
+	public function getNextPageLink($file)
+	{
+		$fileList = $this->getFileList();
+		$fileKey = array_search($file, $fileList);
+		$fileKey++;
+		if ($fileKey !== count($fileList))
+		{
+			return $fileList[$fileKey];
+		}
+		
+		return null;
 	}
 
 	public function getNextPageName($file)
 	{
-		return 'next title';
+		return $this->getPageName($this->getNextPageLink($file));
 	}
 }
