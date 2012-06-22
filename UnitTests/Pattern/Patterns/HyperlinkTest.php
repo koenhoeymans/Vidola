@@ -12,11 +12,11 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\Pa
 		$this->linkDefinitions = $this->getMock(
 			'\\Vidola\\Processor\\Processors\\LinkDefinitionCollector'
 		);
-		$this->relativeUrlBuilder = $this->getMock(
-			'\\Vidola\\Util\\RelativeUrlBuilder'
+		$this->internalUrlBuilder = $this->getMock(
+			'\\Vidola\\Util\\InternalUrlBuilder'
 		);
 		$this->hyperlink = new \Vidola\Pattern\Patterns\Hyperlink(
-			$this->linkDefinitions, $this->relativeUrlBuilder
+			$this->linkDefinitions, $this->internalUrlBuilder
 		);
 	}
 
@@ -175,9 +175,9 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\Pa
 	 */
 	public function linksCanBeRelative()
 	{
-		$this->relativeUrlBuilder
+		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('buildUrl')->with('x')
+			->method('buildFrom')->with('x')
 			->will($this->returnValue('x.html'));
 		$text = "See page [x](x) for info.";
 		$dom = $this->createDomForLink('x.html', 'x');
@@ -189,9 +189,9 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\Pa
 	 */
 	public function linkIsRelativeIfItContainsOnlyAlphaNumForwardSlashesBeforeAnOptionalNumberSign()
 	{
-		$this->relativeUrlBuilder
+		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('buildUrl')->with('x/6/f4#f')
+			->method('buildFrom')->with('x/6/f4#f')
 			->will($this->returnValue('x.html'));
 		$text = "See page [x/6/f4#f](x/6/f4#f) for info.";
 		$dom = $this->createDomForLink('x.html', 'x/6/f4#f');

@@ -8,10 +8,10 @@ namespace Vidola\Util;
 /**
  * @package Vidola
  */
-class HtmlFileLinkBuilder implements InternalLinkBuilder
+class ExtensionlessUrlBuilder implements InternalUrlBuilder
 {
 	public function buildFrom($internalFile)
 	{
-		return $internalFile . '.html';
+		return $internalFile;
 	}
 }

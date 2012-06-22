@@ -7,7 +7,7 @@ namespace Vidola\Pattern\Patterns;
 
 use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
-use Vidola\Util\InternalLinkBuilder;
+use Vidola\Util\InternalUrlBuilder;
 use Vidola\Pattern\Pattern;
 use Vidola\Document\Element;
 use Vidola\Util\SubfileDetector;
@@ -21,16 +21,16 @@ class TableOfContents extends Pattern implements SubfileDetector
 
 	private $contentRetriever;
 
-	private $internalLinkBuilder;
+	private $internalUrlBuilder;
 
 	public function __construct(
 		HeaderFinder $headerFinder,
 		ContentRetriever $contentRetriever,
-		InternalLinkBuilder $internalLinkBuilder
+		InternalUrlBuilder $internalUrlBuilder
 	) {
 		$this->headerFinder = $headerFinder;
 		$this->contentRetriever = $contentRetriever;
-		$this->internalLinkBuilder = $internalLinkBuilder;
+		$this->internalUrlBuilder = $internalUrlBuilder;
 	}
 
 	/**
@@ -184,7 +184,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 			$title = $header['title'];
 			$ref = $header['id'];
 			$file = isset($header['file']) ?
-				$this->internalLinkBuilder->buildFrom($header['file']) :
+				$this->internalUrlBuilder->buildFrom($header['file']) :
 				'';
 
 			if (!$listLevel)

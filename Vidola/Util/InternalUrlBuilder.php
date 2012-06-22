@@ -5,7 +5,7 @@
  */
 namespace Vidola\Util;
 
-interface InternalLinkBuilder
+interface InternalUrlBuilder
 {
 	public function buildFrom($internalFile);
 }

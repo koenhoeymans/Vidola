@@ -5,7 +5,7 @@
  */
 namespace Vidola\Pattern\Patterns;
 
-use Vidola\Util\RelativeUrlBuilder;
+use Vidola\Util\InternalUrlBuilder;
 use Vidola\Processor\Processors\LinkDefinitionCollector;
 use Vidola\Pattern\Pattern;
 
@@ -16,14 +16,14 @@ class Hyperlink extends Pattern
 {
 	private $linkDefinitions;
 
-	private $relativeUrlBuilder;
+	private $internalUrlBuilder;
 
 	public function __construct(
 		LinkDefinitionCollector $linkDefinitionCollector,
-		RelativeUrlBuilder $relativeUrlBuilder
+		InternalUrlBuilder $internalUrlBuilder
 	) {
 		$this->linkDefinitions = $linkDefinitionCollector;
-		$this->relativeUrlBuilder = $relativeUrlBuilder;
+		$this->internalUrlBuilder = $internalUrlBuilder;
 	}
 
 	public function getRegex()
@@ -116,7 +116,7 @@ class Hyperlink extends Pattern
 	{
 		if ($this->isRelative($url))
 		{
-			$url = $this->relativeUrlBuilder->buildUrl($url);
+			$url = $this->internalUrlBuilder->buildFrom($url);
 		}
 
 		$ownerDocument = $this->getOwnerDocument($parentNode);

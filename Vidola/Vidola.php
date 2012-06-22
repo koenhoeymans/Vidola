@@ -58,9 +58,10 @@ class Vidola
 		$fjor
 			->given('Vidola\\Parser\\Parser')
 			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
-		$fjor
-			->given('Vidola\\Util\\InternalLinkBuilder')
-			->thenUse('Vidola\\Util\\HtmlFileLinkBuilder');
+
+		// command line options
+		// --------------------------------
+		self::setCommandLineOptions($config, $fjor);
 
 		// filling the pattern list with the patterns
 		// ------------------------------------------
@@ -102,10 +103,6 @@ class Vidola
 			$fjor->get('Vidola\\Processor\\Processors\\HtmlPrettifier')
 		);
 
-		// command line options
-		// --------------------------------
-		self::setCommandLineOptions($config, $fjor);
-
 		// build the document(s)
 		// ---------------------
 		$documentCreationController = $fjor->get('Vidola\\Controller\\DocumentCreationController');
@@ -115,6 +112,15 @@ class Vidola
 	private static function setCommandLineOptions(
 		\Vidola\Config\Config $config, \Fjor\Fjor $fjor
 	) {
+		// set type of internal url builder
+		// --internal.links=
+		// --------------------------------
+		$urlBuilder = $config->get('internal.links') ?:
+			'Vidola\\Util\\HtmlFileUrlBuilder';
+		$fjor
+			->given('Vidola\\Util\\InternalUrlBuilder')
+			->thenUse($urlBuilder);
+
 		// set the source directory or file
 		// --source=
 		// --------------------------------
@@ -141,7 +147,7 @@ class Vidola
 
 		// set the template
 		// --template=
-		// -------------------
+		// ----------------
 		$template = $config->get('template') ?:
 			__DIR__
 			. DIRECTORY_SEPARATOR . 'Templates'

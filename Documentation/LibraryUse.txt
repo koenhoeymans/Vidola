@@ -28,3 +28,10 @@ Run Vidola with `php RunVidola.php`. The following options are present:
 	Example:
 
 		--source=/home/Koen/MyProject/Docs/HTML/
+
+* --internal.links=<internal link builder>
+
+	Internal links to the generated documentation can follow specified formats. The
+	default one is that links have '.html' as extension added. Custom link builders
+	can be added by implementing `Vidola\Util\InternalUrlBuilder` and specifying the
+	class as an option here.

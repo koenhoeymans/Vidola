@@ -17,14 +17,14 @@ class Vidola_Pattern_Patterns_TableOfContentsTest extends \Vidola\UnitTests\Supp
 			$this->getMockBuilder('\\Vidola\\Util\\DocFileRetriever')
 					->disableOriginalConstructor()
 					->getMock();
-		$this->internalLinkBuilder =
-			$this->getMockBuilder('\\Vidola\\Util\\InternalLinkBuilder')
+		$this->internalUrlBuilder =
+			$this->getMockBuilder('\\Vidola\\Util\\InternalUrlBuilder')
 					->disableOriginalConstructor()
 					->getMock();
 		$this->toc = new \Vidola\Pattern\Patterns\TableOfContents(
 			$this->headerFinder,
 			$this->docFileRetriever,
-			$this->internalLinkBuilder
+			$this->internalUrlBuilder
 		);
 	}
 
@@ -319,7 +319,7 @@ paragraph";
 some text"
 			));
 
-		$this->internalLinkBuilder
+		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
 			->method('buildFrom')
 			->will($this->returnValue('Includedfile.html'));
@@ -384,7 +384,7 @@ paragraph";
 some text"
 			));
 
-		$this->internalLinkBuilder
+		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
 			->method('buildFrom')
 			->will($this->returnValue('Includedfile.html'));
@@ -461,11 +461,11 @@ some text"
 some text"
 			));
 
-		$this->internalLinkBuilder
+		$this->internalUrlBuilder
 			->expects($this->at(0))
 			->method('buildFrom')
 			->will($this->returnValue('Includedfile1.html'));
-		$this->internalLinkBuilder
+		$this->internalUrlBuilder
 			->expects($this->at(1))
 			->method('buildFrom')
 			->will($this->returnValue('Includedfile2.html'));
@@ -537,7 +537,7 @@ paragraph"
 some text"
 			));
 
-		$this->internalLinkBuilder
+		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
 			->method('buildFrom')
 			->will($this->returnValue('Subincludedfile.html'));

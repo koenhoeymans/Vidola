@@ -22,6 +22,7 @@ class Vidola_EndToEndTests_MarkdownTest extends \Vidola\EndToEndTests\Support\Ti
 		$_SERVER['argv']['template'] = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
+		$_SERVER['argv']['internal.links'] = 'Vidola\\Util\\ExtensionlessUrlBuilder';
 
 		\Vidola\Vidola::run();
 		
