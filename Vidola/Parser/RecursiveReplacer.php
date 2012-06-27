@@ -3,7 +3,7 @@
 /**
  * @package Vidola
  */
-namespace Vidola\TextReplacer\RecursiveReplacer;
+namespace Vidola\Parser;
 
 use Vidola\Pattern\Pattern;
 use Vidola\Pattern\PatternList;
@@ -15,8 +15,7 @@ use Vidola\TextReplacer\TextReplacer;
 /**
  * @package vidola
  */
-// @todo move to \Vidola\Parser
-class RecursiveReplacer implements TextReplacer, \Vidola\Parser\Parser
+class RecursiveReplacer implements Parser
 {
 	private $patternList;
 
@@ -33,55 +32,27 @@ class RecursiveReplacer implements TextReplacer, \Vidola\Parser\Parser
 		$this->patternList = $patternList;
 	}
 
-	public function parse($text)
-	{
-		return $this->replace($text);
-	}
-
-	/**
-	 * @see Vidola\TextReplacer.TextReplacer::getExtension()
-	 */
-	public function getExtension()
-	{
-		return 'html';
-	}
-
-	/**
-	 * @see Vidola\TextReplacer.TextReplacer::addPreProcessor()
-	 */
 	public function addPreTextProcessor(TextProcessor $processor)
 	{
 		$this->preTextProcessors[] = $processor;
 	}
 
-	/**
-	 * @see Vidola\TextReplacer.TextReplacer::addPostProcessor()
-	 */
 	public function addPostTextProcessor(TextProcessor $processor)
 	{
 		$this->postTextProcessors[] = $processor;
 	}
 
-	/**
-	 * @see Vidola\TextReplacer.TextReplacer::addPreDomProcessor()
-	 */
 	public function addPreDomProcessor(DomProcessor $domProcessor)
 	{
 		$this->preDomProcessors[] = $domProcessor;
 	}
 
-	/**
-	 * @see Vidola\TextReplacer.TextReplacer::addPostDomProcessor()
-	 */
 	public function addPostDomProcessor(DomProcessor $domProcessor)
 	{
 		$this->postDomProcessors[] = $domProcessor;
 	}
 
-	/**
-	 * @see Vidola\TextReplacer.TextReplacer::replace()
-	 */
-	public function replace($text)
+	public function parse($text)
 	{
 		# adding the \n for texts containing only a paragraph
 		$text = $this->preProcess($text . "\n");

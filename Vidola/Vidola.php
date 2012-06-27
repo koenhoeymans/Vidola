@@ -43,10 +43,6 @@ class Vidola
 			->thenUse('Vidola\\Pattern\\Patterns\\TableOfContents')
 			->inSingletonScope();
 		$fjor
-			->given('Vidola\\TextReplacer\\TextReplacer')
-			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
-			->inSingletonScope();
-		$fjor
 			->given('Vidola\\View\\TemplatableFileView')
 			->thenUse('Vidola\\View\\TemplatableHtmlFileView')
 			->inSingletonScope();
@@ -57,7 +53,7 @@ class Vidola
 		// @todo move RecursiveReplacer to parser
 		$fjor
 			->given('Vidola\\Parser\\Parser')
-			->thenUse('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer');
+			->thenUse('Vidola\\Parser\\RecursiveReplacer');
 
 		// command line options
 		// --------------------------------
@@ -71,17 +67,17 @@ class Vidola
 
 		// adding processors
 		// -----------------
-		$fjor->given('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
 			->andMethod('addPreTextProcessor')
 			->addParam(array('Vidola\\Processor\\Processors\\EmptyLineFixer'))
 			->addParam(array('Vidola\\Processor\\Processors\\NewLineStandardizer'))
 			->addParam(array('Vidola\\Processor\\Processors\\Detab'))
 			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler'))
 			->addParam(array('Vidola\\Processor\\Processors\\LinkDefinitionCollector'));
-		$fjor->given('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
 			->andMethod('addPostDomProcessor')
 			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler'));
-		$fjor->given('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
 			->andMethod('addPostTextProcessor')
 			->addParam(array('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags'))
 			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler'))
