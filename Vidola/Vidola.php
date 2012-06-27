@@ -71,37 +71,22 @@ class Vidola
 
 		// adding processors
 		// -----------------
-		$htmlBuilder = $fjor->get('Vidola\\TextReplacer\\TextReplacer');
-		$htmlBuilder->addPreTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\EmptyLineFixer')
-		);
-		$htmlBuilder->addPreTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\NewLineStandardizer')
-		);
-		$htmlBuilder->addPreTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\Detab')
-		);
-		$htmlBuilder->addPreTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler')
-		);
-		$htmlBuilder->addPreTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\LinkDefinitionCollector')
-		);
-		$htmlBuilder->addPostDomProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler')
-		);
-		$htmlBuilder->addPostTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags')
-		);
-		$htmlBuilder->addPostTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler')
-		);
-		$htmlBuilder->addPostTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\XmlDeclarationRemover')
-		);
-		$htmlBuilder->addPostTextProcessor(
-			$fjor->get('Vidola\\Processor\\Processors\\HtmlPrettifier')
-		);
+		$fjor->given('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+			->andMethod('addPreTextProcessor')
+			->addParam(array('Vidola\\Processor\\Processors\\EmptyLineFixer'))
+			->addParam(array('Vidola\\Processor\\Processors\\NewLineStandardizer'))
+			->addParam(array('Vidola\\Processor\\Processors\\Detab'))
+			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler'))
+			->addParam(array('Vidola\\Processor\\Processors\\LinkDefinitionCollector'));
+		$fjor->given('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+			->andMethod('addPostDomProcessor')
+			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler'));
+		$fjor->given('Vidola\\TextReplacer\\RecursiveReplacer\\RecursiveReplacer')
+			->andMethod('addPostTextProcessor')
+			->addParam(array('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags'))
+			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler'))
+			->addParam(array('Vidola\\Processor\\Processors\\XmlDeclarationRemover'))
+			->addParam(array('Vidola\\Processor\\Processors\\HtmlPrettifier'));
 
 		// build the document(s)
 		// ---------------------
