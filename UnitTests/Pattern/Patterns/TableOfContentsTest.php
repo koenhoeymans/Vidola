@@ -36,7 +36,7 @@ class Vidola_Pattern_Patterns_TableOfContentsTest extends \Vidola\UnitTests\Supp
 	/**
 	 * @test
 	 */
-	public function createsLocalToc()
+	public function createsLocalTocInDomFromMatch()
 	{
 		$text = "{table of contents}
 
@@ -584,5 +584,40 @@ paragraph";
 		$a->setAttribute('href', '#xyz');
 
 		$this->assertCreatesDomFromText($doc, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function createsTocFromText()
+	{
+		$this->headerFinder
+			->expects($this->any())
+			->method('getHeadersSequentially')
+			->will($this->returnValue(
+				array(array('title' => 'header', 'level' => 1, 'id' => 'foo'))
+		));
+
+		$text = 'text
+
+header
+======
+
+text';
+
+		$domDoc1 = new \DOMDocument();
+		$ul = $domDoc1->createElement('ul');
+		$domDoc1->appendChild($ul);
+		$li = $domDoc1->createElement('li');
+		$ul->appendChild($li);
+		$a = $domDoc1->createElement('a', 'header');
+		$li->appendChild($a);
+		$a->setAttribute('href', '#foo');
+
+		$domDoc2 = new \DomDocument();
+		$toc = $this->toc->createTocNode($text, $domDoc2);
+		$domDoc2->appendChild($toc);
+
+		$this->assertEquals($domDoc1->saveXML(), $domDoc2->saveXML());
 	}
 }

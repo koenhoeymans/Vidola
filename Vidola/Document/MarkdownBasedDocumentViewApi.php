@@ -64,4 +64,17 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 	{
 		return $this->doc->getPageName($this->currentPage);
 	}
+
+	public function toc()
+	{
+		$toc = $this->doc->getToc($this->currentPage);
+
+		if ($toc)
+		{
+			$toc->ownerDocument->appendChild($toc);
+			return $toc->ownerDocument->saveHtml();
+		}
+
+		return null;
+	}
 }

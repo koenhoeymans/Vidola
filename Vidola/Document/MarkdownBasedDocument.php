@@ -9,6 +9,7 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Parser\Parser;
 use Vidola\Util\SubfileDetector;
 use Vidola\Util\InternalUrlBuilder;
+use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
  * @package Vidola
@@ -35,13 +36,15 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		ContentRetriever $contentRetriever,
 		Parser $parser,
 		SubfileDetector $subfileDetector,
-		InternalUrlBuilder $internalUrlBuilder
+		InternalUrlBuilder $internalUrlBuilder,
+		TableOfContents $toc
 	) {
 		$this->rootFile = $rootFile;
 		$this->contentRetriever = $contentRetriever;
 		$this->parser = $parser;
 		$this->subfileDetector = $subfileDetector;
 		$this->internalUrlBuilder = $internalUrlBuilder;
+		$this->toc = $toc;
 	}
 
 	/**
@@ -89,6 +92,14 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	{
 		$fileParts = pathinfo($file);
 		return $fileParts['filename'];
+	}
+
+	public function getToc($file)
+	{
+		return $this->toc->createTocNode(
+			$this->contentRetriever->retrieve($file),
+			new \DOMDocument()
+		);
 	}
 
 	public function getContent($file)

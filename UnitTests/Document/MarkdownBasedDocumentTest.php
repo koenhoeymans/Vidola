@@ -12,12 +12,16 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 		$this->parser = $this->getMock('\\Vidola\\Parser\\Parser');
 		$this->subfileDetector = $this->getMock('\\Vidola\\Util\\SubfileDetector');
 		$this->internalUrlBuilder = $this->getMock('\\Vidola\\Util\\InternalUrlBuilder');
+		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocument(
 			'file',
 			$this->contentRetriever,
 			$this->parser,
 			$this->subfileDetector,
-			$this->internalUrlBuilder
+			$this->internalUrlBuilder,
+			$this->toc
 		);
 	}
 
@@ -102,6 +106,28 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 		$this->assertEquals(
 			array('file', 'subfile'),
 			$this->mdDoc->getFileList()
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function hasTocOfFile()
+	{
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('file')
+			->will($this->returnValue('text with header in'));
+		$this->toc
+			->expects($this->atLeastOnce())
+			->method('createTocNode')
+			->with('text with header in', new \DomDocument())
+			->will($this->returnValue('this should be a domNode'));
+
+		$this->assertEquals(
+			'this should be a domNode',
+			$this->mdDoc->getToc('file')
 		);
 	}
 }

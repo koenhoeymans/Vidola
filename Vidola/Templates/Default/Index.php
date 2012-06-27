@@ -43,6 +43,10 @@ a {
 </head>
 <body>
 
+<div id="toc">
+<?php echo $document->toc(); ?>
+</div>
+
 <?php echo $document->currentPageContent(); ?>
 
 <?php if ($document->previousPageLink()) { ?>

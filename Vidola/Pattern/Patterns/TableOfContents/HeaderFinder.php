@@ -19,6 +19,16 @@ class HeaderFinder
 		$this->header = $header;
 	}
 
+	/**
+	 * Creates array with arrays of headers in the order found in the text.
+	 * 
+	 * array(
+	 * 	array('first title' => 'foo', 'level' => 1, 'id' => 'bar')
+	 * );
+	 * 
+	 * @param string $text
+	 * @return array An array with headers, keys are 'title', 'level' and 'id'.
+	 */
 	public function getHeadersSequentially($text)
 	{
 		$headers = array();
