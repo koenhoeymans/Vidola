@@ -133,7 +133,7 @@ class Vidola
 
 		$fjor
 			->given('Vidola\\Document\\MarkdownBasedDocument')
-			->constructWith(array($config->get('source')));
+			->constructWith(array(self::getFile($config->get('source'))));
 		
 		// set the output directory
 		// --target.dir=
@@ -158,12 +158,19 @@ class Vidola
 
 	private static function getSourceDir($source)
 	{
-		if (is_file($source))
+		if (!is_file($source))
 		{
-			$source = substr($source, 0, strrpos($source, DIRECTORY_SEPARATOR));
+			throw new \Exception('Source is not a file.');
 		}
 
-		return realpath($source);
+		$fileParts = pathinfo($source);
+		return $fileParts['dirname'];
+	}
+
+	private static function getFile($source)
+	{
+		$fileParts = pathinfo($source);
+		return $fileParts['filename'];
 	}
 }
 
