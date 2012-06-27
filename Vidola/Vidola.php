@@ -50,7 +50,6 @@ class Vidola
 			->given('Vidola\\Util\\ContentRetriever')
 			->thenUse('Vidola\\Util\\DocFileRetriever')
 			->inSingletonScope();
-		// @todo move RecursiveReplacer to parser
 		$fjor
 			->given('Vidola\\Parser\\Parser')
 			->thenUse('Vidola\\Parser\\RecursiveReplacer');
