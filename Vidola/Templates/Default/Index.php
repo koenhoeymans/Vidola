@@ -1,61 +1,80 @@
-<html>
-<head>
-	<title><?php echo $document->pageName(); ?></title>
-	<style type="text/css">
-body {
-	font: 100% arial;
-	width: 750px;
-	margin: auto;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php echo $document->pageName(); ?></title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 10px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+  </head>
 
-pre {
-	margin: 10px 20px;
-	padding: 10px;
-	color: #fff;
-	background-color: #000;
-}
+  <body>
 
-h1, h2, h3, h4, h5, h6 {
-	font-family: georgia;
-}
-
-h1, h2 {
-	text-transform: uppercase;
-	color: #1080d0;
-}
-
-h1 {
-	font-size: 140%;
-}
-
-h2 {
-	font-size: 120%;
-}
-
-h3 {
-	font-size: 110%;
-}
-
-a {
-	color: red;
-}
-	</style>
-</head>
-<body>
-
-<div id="toc">
-<?php echo $document->toc(); ?>
-</div>
-
-<?php echo $document->currentPageContent(); ?>
-
+    <div class="container-fluid">
+    	<div class="navbar">
+            <div class="navbar-inner">
+            	<div class="container">
+            		<ul class="nav pull-right">
 <?php if ($document->previousPageLink()) { ?>
-	<a href="<?php echo $document->previousPageLink(); ?>">previous: <?php echo $document->previousPageName(); ?></a>
+            <li><a href="<?php echo $document->previousPageLink(); ?>">previous</a></li>
+  			<li class="divider-vertical"></li>
 <?php } ?>
 
 <?php if ($document->nextPageLink()) { ?>
-	<a href="<?php echo $document->nextPageLink(); ?>">next: <?php echo $document->nextPageName(); ?></a>
+            <li><a href="<?php echo $document->nextPageLink(); ?>">next</a></li>
+  			<li class="divider-vertical"></li>
 <?php } ?>
+            			<li><a href="">next</a></li>
+            			<li class="divider-vertical"></li>
+            			<li><a href="">index</a></li>
+            		</ul>
+            	</div>
+            </div>
+          </div>
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Table Of Contents</li>
+              <li><?php echo $document->toc(); ?></li>
+<?php if ($document->previousPageLink()) { ?>
+              <li class="nav-header">Previous Topic</li>
+              <li><a href="<?php echo $document->previousPageLink(); ?>"><?php echo $document->previousPageName(); ?></a></li>
+<?php } ?>
+<?php if ($document->nextPageLink()) { ?>
+              <li class="nav-header">Next Topic</li>
+              <li><a href="<?php echo $document->nextPageLink(); ?>"><?php echo $document->nextPageName(); ?></a></li>
+<?php } ?>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          <ul class="breadcrumb">
+        		<li><a href="">home</a><span class="divider">/</span></li>
+        		<li><a href="">page1</a></li>
+        	</ul>
+          <div class="row-fluid">
+            <div class="span12">
+              <?php echo $document->currentPageContent(); ?>
+            </div><!--/span-->
+          </div><!--/row-->
+        </div><!--/span-->
+      </div><!--/row-->
 
-</body>
+      <hr>
+
+      <footer>
+        <p class="pull-right">build with Twitter Bootstrap.</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+  </body>
 </html>
