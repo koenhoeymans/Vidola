@@ -40,8 +40,10 @@
         <div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
+<?php if ($document->pageHasToc()) { ?>
               <li class="nav-header">Table Of Contents</li>
               <li><?php echo $document->toc(); ?></li>
+<?php } ?>
 <?php if ($document->previousPageLink()) { ?>
               <li class="nav-header">Previous Topic</li>
               <li><a href="<?php echo $document->previousPageLink(); ?>"><?php echo $document->previousPageName(); ?></a></li>

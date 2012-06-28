@@ -24,6 +24,17 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	private $subfileDetector;
 
+	private $internalUrlBuilder;
+
+	private $toc;
+
+	/**
+	 * Keeps Toc in memory so we don't need to build it again.
+	 * 
+	 * @var array array($file => $toc);
+	 */
+	private $tocCache = array();
+
 	/**
 	 * List of files in the project.
 	 * 
@@ -96,10 +107,17 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	public function getToc($file)
 	{
-		return $this->toc->createTocNode(
+		if (isset($this->tocCache[$file]))
+		{
+			return $this->tocCache[$file];
+		}
+
+		$this->tocCache[$file] = $this->toc->createTocNode(
 			$this->contentRetriever->retrieve($file),
 			new \DOMDocument()
 		);
+
+		return $this->tocCache[$file];
 	}
 
 	public function getContent($file)
