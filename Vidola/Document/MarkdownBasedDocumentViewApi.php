@@ -77,4 +77,9 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 
 		return null;
 	}
+
+	public function startPageLink()
+	{
+		return $this->doc->getStartPageLink();
+	}
 }

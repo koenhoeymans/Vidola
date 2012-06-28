@@ -31,9 +31,7 @@
             <li><a href="<?php echo $document->nextPageLink(); ?>">next</a></li>
   			<li class="divider-vertical"></li>
 <?php } ?>
-            			<li><a href="">next</a></li>
-            			<li class="divider-vertical"></li>
-            			<li><a href="">index</a></li>
+            			<li><a href="<?php echo $document->startPageLink(); ?>">index</a></li>
             		</ul>
             	</div>
             </div>

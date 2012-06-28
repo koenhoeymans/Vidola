@@ -148,4 +148,9 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	{
 		return $this->getPageName($this->getNextPageLink($file));
 	}
+
+	public function getStartPageLink()
+	{
+		return $this->internalUrlBuilder->buildFrom($this->rootFile);
+	}
 }
