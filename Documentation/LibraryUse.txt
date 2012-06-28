@@ -21,7 +21,7 @@ Run Vidola with `php RunVidola.php`. The following options are present:
 
 		--source=/home/Koen/MyProject/Docs/Index.txt
 
-*	--target.dir=<output directory>
+*	`--target.dir=<output directory>`
 
 	The directory where the documentation files should be placed. Vidola tries to create
 	it if it doesn't exist.
@@ -29,7 +29,7 @@ Run Vidola with `php RunVidola.php`. The following options are present:
 
 		--source=/home/Koen/MyProject/Docs/HTML/
 
-* --internal.links=<internal link builder>
+*	`--internal.links=<internal link builder>`
 
 	Internal links to the generated documentation can follow specified formats. The
 	default one is that links have '.html' as extension added. Custom link builders
