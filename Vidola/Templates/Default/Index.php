@@ -44,11 +44,11 @@
               <li class="nav-header">Table Of Contents</li>
               <li><?php echo $document->toc(); ?></li>
 <?php } ?>
-<?php if ($document->previousPageLink()) { ?>
+<?php if ($document->previousPageName()) { ?>
               <li class="nav-header">Previous Topic</li>
               <li><a href="<?php echo $document->previousPageLink(); ?>"><?php echo $document->previousPageName(); ?></a></li>
 <?php } ?>
-<?php if ($document->nextPageLink()) { ?>
+<?php if ($document->nextPageName()) { ?>
               <li class="nav-header">Next Topic</li>
               <li><a href="<?php echo $document->nextPageLink(); ?>"><?php echo $document->nextPageName(); ?></a></li>
 <?php } ?>

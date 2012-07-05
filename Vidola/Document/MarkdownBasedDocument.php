@@ -9,6 +9,7 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Parser\Parser;
 use Vidola\Util\SubfileDetector;
 use Vidola\Util\InternalUrlBuilder;
+use Vidola\Util\NameCreator;
 use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
@@ -27,6 +28,8 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	private $internalUrlBuilder;
 
 	private $toc;
+
+	private $nameCreator;
 
 	/**
 	 * Keeps Toc in memory so we don't need to build it again.
@@ -48,7 +51,8 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		Parser $parser,
 		SubfileDetector $subfileDetector,
 		InternalUrlBuilder $internalUrlBuilder,
-		TableOfContents $toc
+		TableOfContents $toc,
+		NameCreator $nameCreator
 	) {
 		$this->rootFile = $rootFile;
 		$this->contentRetriever = $contentRetriever;
@@ -56,6 +60,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		$this->subfileDetector = $subfileDetector;
 		$this->internalUrlBuilder = $internalUrlBuilder;
 		$this->toc = $toc;
+		$this->nameCreator = $nameCreator;
 	}
 
 	/**
@@ -125,20 +130,58 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		return $this->parser->parse($this->contentRetriever->retrieve($file));
 	}
 
-	// @todo create title in first place from top header
-	// fall back to page name but add space between camelcase?? => see other libs
-	public function getPageName($file)
+	/**
+	 * Get the previous page as written in the original document.
+	 *
+	 * @param string $page The page as in the original document.
+	 */
+	private function getPreviousPage($page)
 	{
-		return str_replace(DIRECTORY_SEPARATOR, ' ', $file);
+		$pageList = $this->getFileList();
+		$pageKey = array_search($page, $pageList);
+		if ($pageKey !== 0)
+		{
+			return $pageList[$pageKey-1];
+		}
+	
+		return null;
 	}
 
-	public function getPreviousPageLink($file)
+	/**
+	 * Get the next page as written in the original document.
+	 * 
+	 * @param string $page The page as in the original document.
+	 */
+	private function getNextPage($page)
 	{
-		$fileList = $this->getFileList();
-		$fileKey = array_search($file, $fileList);
-		if ($fileKey !== 0)
+		$pageList = $this->getFileList();
+		$pageKey = array_search($page, $pageList);
+		$pageKey++;
+		if ($pageKey !== count($pageList))
 		{
-			return $this->internalUrlBuilder->buildFrom($fileList[$fileKey-1]);
+			return $pageList[$pageKey];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the name of a page from a given filename.
+	 * 
+	 * @param string $file
+	 */
+	public function getPageName($file)
+	{
+		return $this->nameCreator->getName($this->contentRetriever->retrieve($file));
+	}
+
+	public function getPreviousPageLink($page)
+	{
+		$nextPage = $this->getPreviousPage($page);
+
+		if ($nextPage)
+		{
+			return $this->internalUrlBuilder->buildFrom($nextPage);
 		}
 
 		return null;
@@ -146,25 +189,38 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	public function getPreviousPageName($file)
 	{
-		return $this->getPageName($this->getPreviousPageLink($file));
-	}
+		$previousPage = $this->getPreviousPage($file);
 
-	public function getNextPageLink($file)
-	{
-		$fileList = $this->getFileList();
-		$fileKey = array_search($file, $fileList);
-		$fileKey++;
-		if ($fileKey !== count($fileList))
+		if ($previousPage)
 		{
-			return $this->internalUrlBuilder->buildFrom($fileList[$fileKey]);
+			return $this->getPageName($previousPage);
 		}
 
 		return null;
 	}
 
+	public function getNextPageLink($file)
+	{
+		$nextPage = $this->getNextPage($file);
+		
+		if ($nextPage)
+		{
+			return $this->internalUrlBuilder->buildFrom($nextPage);
+		}
+		
+		return null;
+	}
+
 	public function getNextPageName($file)
 	{
-		return $this->getPageName($this->getNextPageLink($file));
+		$nextPage = $this->getNextPage($file);
+
+		if ($nextPage)
+		{
+			return $this->getPageName($this->getNextPage($file));
+		}
+
+		return null;
 	}
 
 	public function getStartPageLink()

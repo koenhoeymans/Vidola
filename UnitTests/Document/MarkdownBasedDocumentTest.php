@@ -15,13 +15,16 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
 			->disableOriginalConstructor()
 			->getMock();
+		$this->nameCreator = $this->getMockBuilder('\\Vidola\\Util\\NameCreator')
+			->getMock();
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocument(
 			'file',
 			$this->contentRetriever,
 			$this->parser,
 			$this->subfileDetector,
 			$this->internalUrlBuilder,
-			$this->toc
+			$this->toc,
+			$this->nameCreator
 		);
 	}
 
@@ -72,9 +75,20 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 	/**
 	 * @test
 	 */
-	public function createsFilename()
+	public function asksNameCreatorForPageName()
 	{
-		$this->assertEquals('File', $this->mdDoc->getFilename('/tmp/File.html'));
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('file')
+			->will($this->returnValue('text'));
+		$this->nameCreator
+			->expects($this->atLeastOnce())
+			->method('getName')
+			->with('text')
+			->will($this->returnValue('title'));
+
+		$this->assertEquals('title', $this->mdDoc->getPageName('file'));
 	}
 
 	/**
