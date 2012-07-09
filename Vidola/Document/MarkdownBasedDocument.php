@@ -45,6 +45,9 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	 */
 	private $fileList = null;
 
+	/**
+	 * @todo refactor
+	 */
 	public function __construct(
 		$rootFile,
 		ContentRetriever $contentRetriever,
@@ -226,5 +229,45 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	public function getStartPageLink()
 	{
 		return $this->internalUrlBuilder->buildFrom($this->rootFile);
+	}
+
+	public function getLink($page)
+	{
+		return $this->internalUrlBuilder->buildFrom($page);
+	}
+
+	/**
+	 * @todo consider refactoring using documentStructure
+	 * 
+	 * A list of the pages that lead to `$page` as subpage.
+	 * 
+	 * @param string $page
+	 * @return array
+	 */
+	public function getBreadCrumbs($page)
+	{
+		$breadCrumbs = $this->getPagesThatLeadTo($this->rootFile, $page);
+		array_unshift($breadCrumbs, $this->rootFile);
+
+		return $breadCrumbs;
+	}
+
+	private function getPagesThatLeadTo($startPage, $endPage)
+	{
+		$inBetweenPages = array();
+
+		$subpages = $this->getSubfiles($startPage);
+		foreach ($subpages as $subpage)
+		{
+			if ($subpage === $endPage)
+			{
+				$inBetweenPages[] = $subpage;
+				break;
+			}
+
+			array_merge($inBetweenPages, $this->getPagesThatLeadTo($subpage, $endPage));
+		}
+
+		return $inBetweenPages;
 	}
 }

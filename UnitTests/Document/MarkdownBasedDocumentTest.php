@@ -144,4 +144,26 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			$this->mdDoc->getToc('file')
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function providesBreadCrumbsAsListOfPages()
+	{
+		$this->contentRetriever
+			->expects($this->at(0))
+			->method('retrieve')
+			->with('file')
+			->will($this->returnValue('some text'));
+		$this->subfileDetector
+			->expects($this->at(0))
+			->method('getSubfiles')
+			->with('some text')
+			->will($this->returnValue(array('subfile')));
+
+		$this->assertEquals(
+			array('file', 'subfile'),
+			$this->mdDoc->getBreadCrumbs('subfile')
+		);
+	}
 }

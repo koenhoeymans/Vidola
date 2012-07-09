@@ -87,4 +87,19 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 	{
 		return $this->doc->getStartPageLink();
 	}
+
+	public function getPageLink($page)
+	{
+		return $this->doc->getLink($page);
+	}
+
+	public function getPageName($page)
+	{
+		return $this->doc->getPageName($page);
+	}
+
+	public function getBreadCrumbs()
+	{
+		return $this->doc->getBreadCrumbs($this->currentPage);
+	}
 }

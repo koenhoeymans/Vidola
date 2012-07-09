@@ -7,9 +7,6 @@ to use for such documents. The markup follows mostly regular Markdown markup wit
 some extensions and some differences.
 
 
-{table of contents}
-
-
 Handling of special characters
 ==============================
 

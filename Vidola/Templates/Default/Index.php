@@ -12,6 +12,11 @@
       .sidebar-nav {
         padding: 9px 0;
       }
+      h1, h2, h3 {
+      	margin-bottom: 25px;
+      	margin-top: 25px;
+      	border-bottom: 1px solid #ddd;
+      }
     </style>
   </head>
 
@@ -31,7 +36,7 @@
             <li><a href="<?php echo $document->nextPageLink(); ?>">next</a></li>
   			<li class="divider-vertical"></li>
 <?php } ?>
-            			<li><a href="<?php echo $document->startPageLink(); ?>">index</a></li>
+            			<li><a href="<?php echo $document->startPageLink(); ?>">start</a></li>
             		</ul>
             	</div>
             </div>
@@ -57,8 +62,10 @@
         </div><!--/span-->
         <div class="span9">
           <ul class="breadcrumb">
-        		<li><a href="">home</a><span class="divider">/</span></li>
-        		<li><a href="">page1</a></li>
+          		<?php foreach ($document->getBreadCrumbs() as $page) { ?>
+        		<li><a href="<?php echo $document->getPageLink($page); ?>"><?php echo $document->getPageName($page); ?></a>
+        			<span class="divider">&raquo;</span></li>
+        		<?php } ?>
         	</ul>
           <div class="row-fluid">
             <div class="span12">
