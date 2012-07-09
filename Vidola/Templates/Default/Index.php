@@ -78,7 +78,7 @@
       <hr>
 
       <footer>
-        <p class="pull-right">build with Twitter Bootstrap.</p>
+        <p class="pull-right">build with Vidola, Twitter Bootstrap.</p>
       </footer>
 
     </div><!--/.fluid-container-->
