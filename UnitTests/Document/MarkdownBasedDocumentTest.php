@@ -75,7 +75,7 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 	/**
 	 * @test
 	 */
-	public function asksNameCreatorForFileName()
+	public function asksNameCreatorForFileTitle()
 	{
 		$this->contentRetriever
 			->expects($this->atLeastOnce())
