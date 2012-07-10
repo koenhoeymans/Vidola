@@ -75,7 +75,7 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 	/**
 	 * @test
 	 */
-	public function asksNameCreatorForPageName()
+	public function asksNameCreatorForFileName()
 	{
 		$this->contentRetriever
 			->expects($this->atLeastOnce())
@@ -84,11 +84,11 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			->will($this->returnValue('text'));
 		$this->nameCreator
 			->expects($this->atLeastOnce())
-			->method('getName')
+			->method('getTitle')
 			->with('text')
 			->will($this->returnValue('title'));
 
-		$this->assertEquals('title', $this->mdDoc->getPageName('file'));
+		$this->assertEquals('title', $this->mdDoc->getFileTitle('file'));
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 	/**
 	 * @test
 	 */
-	public function providesBreadCrumbsAsListOfPages()
+	public function providesBreadCrumbsAsListOfFiles()
 	{
 		$this->contentRetriever
 			->expects($this->at(0))

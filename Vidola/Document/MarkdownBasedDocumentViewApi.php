@@ -34,35 +34,29 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 		return $this->doc->getContent($this->currentPage);
 	}
 
-	public function currentFilename()
-	{
-		// @todo
-		die('@todo');
-	}
-
 	public function previousPageLink()
 	{
-		return $this->doc->getPreviousPageLink($this->currentPage);
+		return $this->doc->getPreviousFileLink($this->currentPage);
 	}
 
-	public function previousPageName()
+	public function previousPageTitle()
 	{
-		return $this->doc->getPreviousPageName($this->currentPage);
+		return $this->doc->getPreviousFileTitle($this->currentPage);
 	}
 
 	public function nextPageLink()
 	{
-		return $this->doc->getNextPageLink($this->currentPage);
+		return $this->doc->getNextFileLink($this->currentPage);
 	}
 
-	public function nextPageName()
+	public function nextPageTitle()
 	{
-		return $this->doc->getNextPageName($this->currentPage);
+		return $this->doc->getNextFileTitle($this->currentPage);
 	}
 
-	public function pageName()
+	public function pageTitle()
 	{
-		return $this->doc->getPageName($this->currentPage);
+		return $this->doc->getFileTitle($this->currentPage);
 	}
 
 	public function pageHasToc()
@@ -85,7 +79,7 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 
 	public function startPageLink()
 	{
-		return $this->doc->getStartPageLink();
+		return $this->doc->getStartFileLink();
 	}
 
 	public function getPageLink($page)
@@ -93,9 +87,9 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 		return $this->doc->getLink($page);
 	}
 
-	public function getPageName($page)
+	public function getPageTitle($page)
 	{
-		return $this->doc->getPageName($page);
+		return $this->doc->getFileTitle($page);
 	}
 
 	public function getBreadCrumbs()

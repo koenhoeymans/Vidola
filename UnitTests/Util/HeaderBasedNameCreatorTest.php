@@ -25,6 +25,6 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 			->with('text')
 			->will($this->returnValue(array(array('title'=>'header'))));
 
-		$this->assertEquals('header', $this->nameCreator->getName('text'));
+		$this->assertEquals('header', $this->nameCreator->getTitle('text'));
 	}
 }

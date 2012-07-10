@@ -19,7 +19,7 @@ class HeaderBasedNameCreator implements NameCreator
 		$this->headerFinder = $headerFinder;
 	}
 
-	public function getName($text)
+	public function getTitle($text)
 	{
 		$headers = $this->headerFinder->getHeadersSequentially($text);
 

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $document->pageName(); ?></title>
+    <title><?php echo $document->pageTitle(); ?></title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -49,13 +49,13 @@
               <li class="nav-header">Table Of Contents</li>
               <li><?php echo $document->toc(); ?></li>
 <?php } ?>
-<?php if ($document->previousPageName()) { ?>
+<?php if ($document->previousPageTitle()) { ?>
               <li class="nav-header">Previous Topic</li>
-              <li><a href="<?php echo $document->previousPageLink(); ?>"><?php echo $document->previousPageName(); ?></a></li>
+              <li><a href="<?php echo $document->previousPageLink(); ?>"><?php echo $document->previousPageTitle(); ?></a></li>
 <?php } ?>
-<?php if ($document->nextPageName()) { ?>
+<?php if ($document->nextPageTitle()) { ?>
               <li class="nav-header">Next Topic</li>
-              <li><a href="<?php echo $document->nextPageLink(); ?>"><?php echo $document->nextPageName(); ?></a></li>
+              <li><a href="<?php echo $document->nextPageLink(); ?>"><?php echo $document->nextPageTitle(); ?></a></li>
 <?php } ?>
             </ul>
           </div><!--/.well -->
@@ -63,7 +63,7 @@
         <div class="span9">
           <ul class="breadcrumb">
           		<?php foreach ($document->getBreadCrumbs() as $page) { ?>
-        		<li><a href="<?php echo $document->getPageLink($page); ?>"><?php echo $document->getPageName($page); ?></a>
+        		<li><a href="<?php echo $document->getPageLink($page); ?>"><?php echo $document->getPageTitle($page); ?></a>
         			<span class="divider">&raquo;</span></li>
         		<?php } ?>
         	</ul>

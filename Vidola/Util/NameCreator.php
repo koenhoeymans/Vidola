@@ -11,9 +11,9 @@ namespace Vidola\Util;
 interface NameCreator
 {
 	/**
-	 * Detects what the name is based on a given text.
+	 * Detects what the title is based on a given text.
 	 * 
 	 * @param string $text
 	 */
-	public function getName($text);
+	public function getTitle($text);
 }

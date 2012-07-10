@@ -107,7 +107,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		return $this->subfileDetector->getSubfiles($text);
 	}
 
-	public function getFilename($file)
+	public function getFileName($file)
 	{
 		$fileParts = pathinfo($file);
 		return $fileParts['filename'];
@@ -134,140 +134,140 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	}
 
 	/**
-	 * Get the previous page as written in the original document.
+	 * Get the previous file as written in the original document.
 	 *
-	 * @param string $page The page as in the original document.
+	 * @param string $file The file reference as in the original document.
 	 */
-	private function getPreviousPage($page)
+	private function getPreviousFileName($file)
 	{
-		$pageList = $this->getFileList();
-		$pageKey = array_search($page, $pageList);
-		if ($pageKey !== 0)
+		$fileList = $this->getFileList();
+		$fileKey = array_search($file, $fileList);
+		if ($fileKey !== 0)
 		{
-			return $pageList[$pageKey-1];
+			return $fileList[$fileKey-1];
 		}
 	
 		return null;
 	}
 
 	/**
-	 * Get the next page as written in the original document.
+	 * Get the next file as written in the original document.
 	 * 
-	 * @param string $page The page as in the original document.
+	 * @param string $file The file as in the original document.
 	 */
-	private function getNextPage($page)
+	private function getNextFileName($file)
 	{
-		$pageList = $this->getFileList();
-		$pageKey = array_search($page, $pageList);
-		$pageKey++;
-		if ($pageKey !== count($pageList))
+		$fileList = $this->getFileList();
+		$fileKey = array_search($file, $fileList);
+		$fileKey++;
+		if ($fileKey !== count($fileList))
 		{
-			return $pageList[$pageKey];
+			return $fileList[$fileKey];
 		}
 
 		return null;
 	}
 
 	/**
-	 * Get the name of a page from a given filename.
+	 * Get the name of a file from a given filename.
 	 * 
 	 * @param string $file
 	 */
-	public function getPageName($file)
+	public function getFileTitle($file)
 	{
-		return $this->nameCreator->getName($this->contentRetriever->retrieve($file));
+		return $this->nameCreator->getTitle($this->contentRetriever->retrieve($file));
 	}
 
-	public function getPreviousPageLink($page)
+	public function getPreviousFileLink($file)
 	{
-		$nextPage = $this->getPreviousPage($page);
+		$nextFile = $this->getPreviousFileName($file);
 
-		if ($nextPage)
+		if ($nextFile)
 		{
-			return $this->internalUrlBuilder->buildFrom($nextPage);
+			return $this->internalUrlBuilder->buildFrom($nextFile);
 		}
 
 		return null;
 	}
 
-	public function getPreviousPageName($file)
+	public function getPreviousFileTitle($file)
 	{
-		$previousPage = $this->getPreviousPage($file);
+		$previousFile = $this->getPreviousFileName($file);
 
-		if ($previousPage)
+		if ($previousFile)
 		{
-			return $this->getPageName($previousPage);
+			return $this->getFileTitle($previousFile);
 		}
 
 		return null;
 	}
 
-	public function getNextPageLink($file)
+	public function getNextFileLink($file)
 	{
-		$nextPage = $this->getNextPage($file);
+		$nextFile = $this->getNextFileName($file);
 		
-		if ($nextPage)
+		if ($nextFile)
 		{
-			return $this->internalUrlBuilder->buildFrom($nextPage);
+			return $this->internalUrlBuilder->buildFrom($nextFile);
 		}
 		
 		return null;
 	}
 
-	public function getNextPageName($file)
+	public function getNextFileTitle($file)
 	{
-		$nextPage = $this->getNextPage($file);
+		$nextFile = $this->getNextFileName($file);
 
-		if ($nextPage)
+		if ($nextFile)
 		{
-			return $this->getPageName($this->getNextPage($file));
+			return $this->getFileTitle($nextFile);
 		}
 
 		return null;
 	}
 
-	public function getStartPageLink()
+	public function getStartFileLink()
 	{
 		return $this->internalUrlBuilder->buildFrom($this->rootFile);
 	}
 
-	public function getLink($page)
+	public function getLink($file)
 	{
-		return $this->internalUrlBuilder->buildFrom($page);
+		return $this->internalUrlBuilder->buildFrom($file);
 	}
 
 	/**
 	 * @todo consider refactoring using documentStructure
 	 * 
-	 * A list of the pages that lead to `$page` as subpage.
+	 * A list of the files that lead to `$file` as subfile.
 	 * 
-	 * @param string $page
+	 * @param string $file
 	 * @return array
 	 */
-	public function getBreadCrumbs($page)
+	public function getBreadCrumbs($file)
 	{
-		$breadCrumbs = $this->getPagesThatLeadTo($this->rootFile, $page);
+		$breadCrumbs = $this->getFilesThatLeadTo($this->rootFile, $file);
 		array_unshift($breadCrumbs, $this->rootFile);
 
 		return $breadCrumbs;
 	}
 
-	private function getPagesThatLeadTo($startPage, $endPage)
+	private function getFilesThatLeadTo($startFile, $endFile)
 	{
-		$inBetweenPages = array();
+		$inBetweenFiles = array();
 
-		$subpages = $this->getSubfiles($startPage);
-		foreach ($subpages as $subpage)
+		$subfiles = $this->getSubfiles($startFile);
+		foreach ($subfiles as $subfile)
 		{
-			if ($subpage === $endPage)
+			if ($subfile === $endFile)
 			{
-				$inBetweenPages[] = $subpage;
+				$inBetweenFiles[] = $subfile;
 				break;
 			}
 
-			array_merge($inBetweenPages, $this->getPagesThatLeadTo($subpage, $endPage));
+			array_merge($inBetweenFiles, $this->getFilesThatLeadTo($subfile, $endFile));
 		}
 
-		return $inBetweenPages;
+		return $inBetweenFiles;
 	}
 }
