@@ -102,6 +102,20 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
 			))
 		);
+
+		$this->assertEquals(
+			$this->tidy(file_get_contents(
+				__DIR__
+				. DIRECTORY_SEPARATOR . 'Support'
+				. DIRECTORY_SEPARATOR . 'Subfolder'
+				. DIRECTORY_SEPARATOR . 'Subdocument.html'
+			)),
+			$this->tidy(file_get_contents(
+				$_SERVER['argv']['target.dir']
+				. DIRECTORY_SEPARATOR . 'Subfolder'
+				. DIRECTORY_SEPARATOR . 'Subdocument.html'
+			))
+		);
 	}
 
 	/**

@@ -166,4 +166,12 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			$this->mdDoc->getBreadCrumbs('subfile')
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function givesFileNameTakenSubfolderIntoAccount()
+	{
+		$this->assertEquals('subfolder/index', $this->mdDoc->getFileName('subfolder/index.txt'));
+	}
 }

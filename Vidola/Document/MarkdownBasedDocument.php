@@ -107,10 +107,16 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		return $this->subfileDetector->getSubfiles($text);
 	}
 
+	/**
+	 * Return name of file without extension and relative to the rootfile. Eg if
+	 * the rootfile is 'index' then a fileName could be 'subfolder/subfile'.
+	 * 
+	 * @param string $file
+	 */
 	public function getFileName($file)
 	{
 		$fileParts = pathinfo($file);
-		return $fileParts['filename'];
+		return $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'];
 	}
 
 	public function getToc($file)
