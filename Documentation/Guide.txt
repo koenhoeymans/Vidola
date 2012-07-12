@@ -6,4 +6,5 @@ Guide
 
 	AboutVidola
 	VidolaSyntax
+	Templating
 	LibraryUse

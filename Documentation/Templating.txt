@@ -1,0 +1,60 @@
+----------
+Templating
+----------
+
+You can write your own templates or adapt the existing default one. Use the
+command line option `--template=<template path>` to point Vidola to your
+custom template.
+
+In your template the variable `$document` is available. Here we'll discuss
+the available methods. You can use them in your template as follows:
+
+	$document->previousPageTitle();
+
+
+Available methods
+=================
+
+ *	`currentPageContent()`
+ 
+ 	The parsed content of the current page in the documentation.
+ 
+ *	`pageTitle()`
+ 
+ 	The title of the current page. It is based on the first header that is
+ 	found.
+ 
+ *	`previousPageLink()` and `nextPageLink()`
+
+	The url pointing the the previous and next page. If there is no previous page this
+	will return null.
+
+ *	`previousPageTitle()` and `nextPageTitle()`
+ 
+ 	The title of the previous and next page.
+
+ * `startPageLink()`
+
+	The url pointing to the page in your documentation that is the starting point.
+
+ *	`getPageLink($page)`
+
+	Get the url pointing to a specified page. Eg the `getBreadCrumbs` method described
+	below provides a list of pages. For each page this method can give you the url.
+
+ *	`getPageTitle($page)`
+ 
+ 	Same as above but provides the title of a specified page.
+ 
+ *	`pageHasToc()`
+ 
+ 	If a page has a table of contents this method will return `true`.
+
+ *	`toc()`
+ 
+ 	The table of contents for the current page. If there is no table of contents this 
+ 	will return `null`. If there is a table of contents it will return it as a HTML list.
+ 
+ *	`getBreadCrumbs()`
+ 
+ 	A list of pages that have led to the current page.
