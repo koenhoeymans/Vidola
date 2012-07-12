@@ -19,7 +19,7 @@ Available methods
  
  	The parsed content of the current page in the documentation.
  
- *	`pageTitle()`
+ *	`currentPageTitle()`
  
  	The title of the current page. It is based on the first header that is
  	found.

@@ -87,7 +87,7 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 	/**
 	 * The title of the current page.
 	 */
-	public function pageTitle()
+	public function currentPageTitle()
 	{
 		return $this->doc->getFileTitle($this->currentPage);
 	}

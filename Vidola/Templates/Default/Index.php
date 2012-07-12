@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $document->pageTitle(); ?></title>
+    <title><?php echo $document->currentPageTitle(); ?></title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
