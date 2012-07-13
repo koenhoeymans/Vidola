@@ -1,6 +1,9 @@
----------------
+------------
+About Vidola
+------------
+
 What is Vidola?
----------------
+===============
 
 Vidola is
 
@@ -14,3 +17,49 @@ Vidola is
 
 The above combination makes writing documentation for your projects feel
 more natural.
+
+Why use Vidola
+==============
+
+Why would someone use Vidola to create documentation when one can do this
+directly in HTML?
+
+ *	Writing about code means using a lot of characters that HTML can't handle
+ 	directly. Eg every `<` needs to be written as `&lt;`. With Vidola you
+ 	don't need to worry about that. With Vidola you can write
+
+ 		Use `<?php echo $a; ?>` in your template.
+ 	
+ 	whereas with HTML this would be
+ 	
+ 		Use <code>&lt;?php echo $a; ?&gt;</code>
+ 	
+ *	Writing lists in HTML is annoying. Writing lists with Vidola makes you
+ 	happy and sing Disney songs. Compare a nested list in HTML
+
+		<ul>
+			<li>an item</li>
+			<li>other item</li>
+			<li>oh no a sublist
+				<ul>
+					<li>a sublist item</li>
+				</ul>
+			</li>
+		</ul>
+
+	versus one created with Vidola
+
+		* already a list item
+		* another one because it's so easy
+		* let's create a sublist with favorite Muppet Show characters
+		
+			* Kermit
+			* Gonzo the Great
+			* Beauregard
+			* Rizzo
+			* just can't stop writing lists with Vidola
+
+ *	Vidola is much more readable in raw format. Look at the lists above for
+ 	an example.
+ *	Makes you focus on the content. No worrying about tags or having them in
+ 	your way when rereading your sentence. Just the content.
