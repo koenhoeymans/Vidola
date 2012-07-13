@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>What is Vidola?</title>
+    <title>About Vidola</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -42,7 +42,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Table Of Contents</li>
-              <li><ul><li><a href="#what-is-vidola-">What is Vidola?</a></li></ul>
+              <li><ul><li><a href="#about-vidola">About Vidola</a><ul><li><a href="#what-is-vidola-">What is Vidola?</a></li><li><a href="#why-use-vidola">Why use Vidola</a></li></ul></li></ul>
 </li>
               <li class="nav-header">Previous Topic</li>
               <li><a href="Guide.html">Guide</a></li>
@@ -55,12 +55,14 @@
           <ul class="breadcrumb">
           		        		<li><a href="Guide.html">Guide</a>
         			<span class="divider">&raquo;</span></li>
-        		        		<li><a href="AboutVidola.html">What is Vidola?</a>
+        		        		<li><a href="AboutVidola.html">About Vidola</a>
         			<span class="divider">&raquo;</span></li>
         		        	</ul>
           <div class="row-fluid">
             <div class="span12">
-              <doc><h1 id="what-is-vidola-">What is Vidola?</h1>
+              <doc><h1 id="about-vidola">About Vidola</h1>
+
+<h2 id="what-is-vidola-">What is Vidola?</h2>
 
 <p>Vidola is</p>
 
@@ -74,6 +76,53 @@ to your liking.</li></ul>
 
 <p>The above combination makes writing documentation for your projects feel
 more natural.</p>
+
+<h2 id="why-use-vidola">Why use Vidola</h2>
+
+<p>Why would someone use Vidola to create documentation when one can do this
+directly in HTML?</p>
+
+<ul><li><p>Writing about code means using a lot of characters that HTML can't handle</p>
+<p>directly. Eg every <code>&lt;</code> needs to be written as <code>&amp;lt;</code>. With Vidola you
+don't need to worry about that. With Vidola you can write</p>
+
+<pre><code> Use `&lt;?php echo $a; ?&gt;` in your template.</code></pre>
+
+<p>whereas with HTML this would be</p>
+
+<pre><code> Use &lt;code&gt;&amp;lt;?php echo $a; ?&amp;gt;&lt;/code&gt;</code></pre>
+
+</li>
+<li><p>Writing lists in HTML is annoying. Writing lists with Vidola makes you</p>
+<p>happy and sing Disney songs. Compare a nested list in HTML</p>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;an item&lt;/li&gt;
+    &lt;li&gt;other item&lt;/li&gt;
+    &lt;li&gt;oh no a sublist
+        &lt;ul&gt;
+            &lt;li&gt;a sublist item&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+<p>versus one created with Vidola</p>
+
+<pre><code>* already a list item
+* another one because it's so easy
+* let's create a sublist with favorite Muppet Show characters
+
+    * Kermit
+    * Gonzo the Great
+    * Beauregard
+    * Rizzo
+    * just can't stop writing lists with Vidola</code></pre>
+
+</li>
+<li><p>Vidola is much more readable in raw format. Look at the lists above for</p>
+<p>an example.</p></li>
+<li>Makes you focus on the content. No worrying about tags or having them in
+ your way when rereading your sentence. Just the content.</li></ul>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
