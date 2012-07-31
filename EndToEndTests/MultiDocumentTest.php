@@ -154,4 +154,32 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 			))
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function subdocumentLinksToParentDocument()
+	{
+		// given
+		// note: using default template
+		$_SERVER['argv']['source'] = __DIR__
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html';
+		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+
+		// when
+		\Vidola\Vidola::run();
+
+		// then
+		$this->assertTrue(
+			is_string(strstr(
+				file_get_contents(
+					$_SERVER['argv']['target.dir']
+					. DIRECTORY_SEPARATOR . 'Subfolder'
+					. DIRECTORY_SEPARATOR . 'Subdocument.html'
+				),
+				'../ParentDocumentSubfolderSubdocument.html'
+			))
+		);
+	}
 }

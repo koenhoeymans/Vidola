@@ -186,11 +186,21 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	public function getPreviousFileLink($file)
 	{
-		$nextFile = $this->getPreviousFileName($file);
+		$prevFile = $this->getPreviousFileName($file);
 
-		if ($nextFile)
+		if ($prevFile)
 		{
-			return $this->internalUrlBuilder->buildFrom($nextFile);
+			$depthFile = count(explode(DIRECTORY_SEPARATOR, $file)) -1;
+			$depthPrevFile = count(explode(DIRECTORY_SEPARATOR, $prevFile)) -1;
+			$depthDifference = $depthPrevFile-$depthFile;
+
+			$prevFile = $this->internalUrlBuilder->buildFrom($prevFile);
+			for($depthDifference; $depthDifference<0; $depthDifference++)
+			{
+				$prevFile = '../' . $prevFile;
+			}
+
+			return $prevFile;
 		}
 
 		return null;

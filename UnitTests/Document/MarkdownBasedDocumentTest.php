@@ -174,4 +174,40 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 	{
 		$this->assertEquals('subfolder/index', $this->mdDoc->getFileName('subfolder/index.txt'));
 	}
+
+	/**
+	 * @test
+	 */
+	public function pointsToHigherDirectoryIfCurrentFileIsInSubdirectoryVersusPrevious()
+	{
+		$this->contentRetriever
+			->expects($this->at(0))
+			->method('retrieve')
+			->with('file')
+			->will($this->returnValue('some text'));
+		$this->contentRetriever
+			->expects($this->at(1))
+			->method('retrieve')
+			->with('subfolder/subdocument')
+			->will($this->returnValue('subtext'));
+		$this->subfileDetector
+			->expects($this->at(0))
+			->method('getSubfiles')
+			->with('some text')
+			->will($this->returnValue(array('subfolder/subdocument')));
+		$this->subfileDetector
+			->expects($this->at(1))
+			->method('getSubfiles')
+			->with('subtext')
+			->will($this->returnValue(array()));
+		$this->internalUrlBuilder
+			->expects($this->once())
+			->method('buildFrom')
+			->with('file')
+			->will($this->returnValue('file'));
+
+		$this->assertEquals(
+			'../file', $this->mdDoc->getPreviousFileLink('subfolder/subdocument')
+		);
+	}
 }
