@@ -210,4 +210,50 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			'../file', $this->mdDoc->getPreviousFileLink('subfolder/subdocument')
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function pointsToHigherDirectoryIfCurrentFileIsInSubdirectoryVersusNext()
+	{
+		$this->contentRetriever
+			->expects($this->at(0))
+			->method('retrieve')
+			->with('file')
+			->will($this->returnValue('some text'));
+		$this->contentRetriever
+			->expects($this->at(1))
+			->method('retrieve')
+			->with('subfolder/subdocument')
+			->will($this->returnValue('subtext'));
+		$this->contentRetriever
+			->expects($this->at(2))
+			->method('retrieve')
+			->with('nextfile')
+			->will($this->returnValue('nexttext'));
+		$this->subfileDetector
+			->expects($this->at(0))
+			->method('getSubfiles')
+			->with('some text')
+			->will($this->returnValue(array('subfolder/subdocument')));
+		$this->subfileDetector
+			->expects($this->at(1))
+			->method('getSubfiles')
+			->with('subtext')
+			->will($this->returnValue(array('nextfile')));
+			$this->subfileDetector
+			->expects($this->at(2))
+			->method('getSubfiles')
+			->with('nexttext')
+			->will($this->returnValue(array()));
+		$this->internalUrlBuilder
+			->expects($this->once())
+			->method('buildFrom')
+			->with('nextfile')
+			->will($this->returnValue('nextfile'));
+
+		$this->assertEquals(
+			'../nextfile', $this->mdDoc->getNextFileLink('subfolder/subdocument')
+		);
+	}
 }

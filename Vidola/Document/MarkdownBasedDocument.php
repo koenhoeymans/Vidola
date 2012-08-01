@@ -224,7 +224,17 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		
 		if ($nextFile)
 		{
-			return $this->internalUrlBuilder->buildFrom($nextFile);
+			$depthFile = count(explode(DIRECTORY_SEPARATOR, $file)) -1;
+			$depthNextFile = count(explode(DIRECTORY_SEPARATOR, $nextFile)) -1;
+			$depthDifference = $depthNextFile-$depthFile;
+			
+			$nextFile = $this->internalUrlBuilder->buildFrom($nextFile);
+			for($depthDifference; $depthDifference<0; $depthDifference++)
+			{
+			$nextFile = '../' . $nextFile;
+			}
+			
+			return $nextFile;
 		}
 		
 		return null;
