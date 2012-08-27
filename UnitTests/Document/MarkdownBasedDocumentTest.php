@@ -256,4 +256,20 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			'../nextfile', $this->mdDoc->getNextFileLink('subfolder/subdocument')
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function createsStartFileLinkRelativeToGivenFile()
+	{
+		$this->internalUrlBuilder
+			->expects($this->once())
+			->method('buildFrom')
+			->with('file')
+			->will($this->returnValue('file'));
+
+		$this->assertEquals(
+			'../file', $this->mdDoc->getStartFileLink('subfolder/subfile')
+		);
+	}
 }

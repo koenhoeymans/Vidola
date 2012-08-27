@@ -190,14 +190,12 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 		if ($prevFile)
 		{
-			$depthFile = count(explode(DIRECTORY_SEPARATOR, $file)) -1;
-			$depthPrevFile = count(explode(DIRECTORY_SEPARATOR, $prevFile)) -1;
-			$depthDifference = $depthPrevFile-$depthFile;
-
+			$depthDifference = $this->howManyLevelsUp($file, $prevFile);
 			$prevFile = $this->internalUrlBuilder->buildFrom($prevFile);
-			for($depthDifference; $depthDifference<0; $depthDifference++)
+			while ($depthDifference>0)
 			{
 				$prevFile = '../' . $prevFile;
+				$depthDifference--;
 			}
 
 			return $prevFile;
@@ -224,14 +222,12 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		
 		if ($nextFile)
 		{
-			$depthFile = count(explode(DIRECTORY_SEPARATOR, $file)) -1;
-			$depthNextFile = count(explode(DIRECTORY_SEPARATOR, $nextFile)) -1;
-			$depthDifference = $depthNextFile-$depthFile;
-			
+			$depthDifference = $this->howManyLevelsUp($file, $nextFile);
 			$nextFile = $this->internalUrlBuilder->buildFrom($nextFile);
-			for($depthDifference; $depthDifference<0; $depthDifference++)
+			while ($depthDifference>0)
 			{
-			$nextFile = '../' . $nextFile;
+				$nextFile = '../' . $nextFile;
+				$depthDifference--;
 			}
 			
 			return $nextFile;
@@ -252,9 +248,23 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		return null;
 	}
 
-	public function getStartFileLink()
+	/**
+	 * Get the relative URL to the start page of the documentation, relative
+	 * to a given file.
+	 * 
+	 * @param string $file
+	 */
+	public function getStartFileLink($file)
 	{
-		return $this->internalUrlBuilder->buildFrom($this->rootFile);
+		$rootFile = $this->internalUrlBuilder->buildFrom($this->rootFile);
+		$depthDifference = $this->howManyLevelsUp($file, $this->rootFile);
+		while ($depthDifference>0)
+		{
+			$rootFile = '../' . $rootFile;
+			$depthDifference--;
+		}
+
+		return $rootFile;
 	}
 
 	public function getLink($file)
@@ -295,5 +305,13 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		}
 
 		return $inBetweenFiles;
+	}
+
+	private function howManyLevelsUp($fromFirstFile, $toSecondFile)
+	{
+		$depthFirstFile = count(explode(DIRECTORY_SEPARATOR, $fromFirstFile)) -1;
+		$depthSecondFile = count(explode(DIRECTORY_SEPARATOR, $toSecondFile)) -1;
+
+		return $depthFirstFile-$depthSecondFile;
 	}
 }
