@@ -130,10 +130,7 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 	 */
 	public function startPageLink()
 	{
-/**
- * @todo is relative => getLinkRelativeFrom(thisPage)
- */
-return $this->doc->getStartFileLink();
+		return $this->doc->getStartFileLink($this->currentPage);
 	}
 
 	/**
