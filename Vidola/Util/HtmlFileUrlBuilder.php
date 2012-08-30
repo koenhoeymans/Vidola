@@ -10,21 +10,42 @@ namespace Vidola\Util;
  */
 class HtmlFileUrlBuilder implements InternalUrlBuilder
 {
-	public function buildFrom($internalFile)
+	/**
+	 * @see Vidola\Util.InternalUrlBuilder::createLink()
+	 */
+	public function createLink($to, $relativeTo = null)
 	{
-		$numberSignPos = strpos($internalFile, "#");
+		$numberSignPos = strpos($to, "#");
 
 		if ($numberSignPos === false)
 		{
-			$filePart = $internalFile;
+			$filePart = $to;
 			$relPart = '';
 		}
 		else
 		{
-			$filePart = substr($internalFile, 0, $numberSignPos);
-			$relPart = substr($internalFile, $numberSignPos);
+			$filePart = substr($to, 0, $numberSignPos);
+			$relPart = substr($to, $numberSignPos);
 		}
 
-		return $filePart . '.html' . $relPart;
+		$levelsUp = $this->howManyLevelsDeep($relativeTo);
+		while ($levelsUp>0)
+		{
+			$filePart = '../' . $filePart;
+			$levelsUp--;
+		}
+
+		$info = pathinfo($filePart);
+		if (!isset($info['extension']))
+		{
+			$filePart .= '.html';
+		}
+
+		return $filePart . $relPart;
+	}
+
+	private function howManyLevelsDeep($resource)
+	{
+		return count(explode(DIRECTORY_SEPARATOR, $resource)) -1;
 	}
 }

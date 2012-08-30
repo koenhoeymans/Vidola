@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title><?php echo $document->currentPageTitle(); ?></title>
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo $document->linkTo('css/bootstrap.css'); ?>" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 10px;

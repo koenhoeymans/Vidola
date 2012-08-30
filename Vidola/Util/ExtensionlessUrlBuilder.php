@@ -10,8 +10,12 @@ namespace Vidola\Util;
  */
 class ExtensionlessUrlBuilder implements InternalUrlBuilder
 {
-	public function buildFrom($internalFile)
+	/**
+	 * @todo take relative links into accout
+	 * @see Vidola\Util.InternalUrlBuilder::createLink()
+	 */
+	public function createLink($toResource, $from = null)
 	{
-		return $internalFile;
+		return $toResource;
 	}
 }

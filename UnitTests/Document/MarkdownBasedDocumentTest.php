@@ -202,12 +202,12 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			->will($this->returnValue(array()));
 		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('buildFrom')
-			->with('file')
+			->method('createLInk')
+			->with('file', 'subfolder/subdocument')
 			->will($this->returnValue('file'));
 
 		$this->assertEquals(
-			'../file', $this->mdDoc->getPreviousFileLink('subfolder/subdocument')
+			'file', $this->mdDoc->getPreviousFileLink('subfolder/subdocument')
 		);
 	}
 
@@ -248,12 +248,12 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 			->will($this->returnValue(array()));
 		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('buildFrom')
-			->with('nextfile')
-			->will($this->returnValue('nextfile'));
+			->method('createLInk')
+			->with('nextfile', 'subfolder/subdocument')
+			->will($this->returnValue('file'));
 
 		$this->assertEquals(
-			'../nextfile', $this->mdDoc->getNextFileLink('subfolder/subdocument')
+			'file', $this->mdDoc->getNextFileLink('subfolder/subdocument')
 		);
 	}
 
@@ -264,12 +264,12 @@ class Vidola_Document_MarkdownBasedDocumentTest extends PHPUnit_Framework_TestCa
 	{
 		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('buildFrom')
-			->with('file')
+			->method('createLInk')
+			->with('file', 'subfile')
 			->will($this->returnValue('file'));
 
 		$this->assertEquals(
-			'../file', $this->mdDoc->getStartFileLink('subfolder/subfile')
+			'file', $this->mdDoc->getStartFileLink('subfile')
 		);
 	}
 }

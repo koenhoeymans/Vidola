@@ -135,12 +135,23 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 
 	/**
 	 * The url pointing to a given page.
-	 * ...
+	 * 
 	 * @param string $page
+* @todo must be relative
 	 */
 	public function getPageLink($page)
 	{
 		return $this->doc->getLink($page);
+	}
+
+	/**
+	 * Point to the source relative to the current document.
+	 * 
+	 * @param string $source
+	 */
+	public function linkTo($source)
+	{
+		return $this->doc->getLink($source, $this->currentPage);
 	}
 
 	/**

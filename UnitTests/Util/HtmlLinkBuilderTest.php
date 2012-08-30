@@ -16,7 +16,7 @@ class Vidola_Util_HtmlFileUrlBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function buildsUrlWithGivenExtension()
 	{
-		$this->assertEquals('x.html', $this->linkBuilder->buildFrom('x'));
+		$this->assertEquals('x.html', $this->linkBuilder->createLink('x'));
 	}
 
 	/**
@@ -24,6 +24,6 @@ class Vidola_Util_HtmlFileUrlBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function extensionIsPlacedBeforeDoubleColon()
 	{
-		$this->assertEquals('x.html#y', $this->linkBuilder->buildFrom('x#y'));
+		$this->assertEquals('x.html#y', $this->linkBuilder->createLink('x#y'));
 	}
 }

@@ -197,7 +197,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 			$title = $header['title'];
 			$ref = $header['id'];
 			$file = isset($header['file']) ?
-				$this->internalUrlBuilder->buildFrom($header['file']) :
+				$this->internalUrlBuilder->createLink($header['file']) :
 				'';
 
 			if (!$listLevel)
