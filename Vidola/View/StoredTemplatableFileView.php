@@ -7,6 +7,7 @@ namespace Vidola\View;
 
 use Vidola\View\TemplatableFileView;
 use Vidola\View\ViewApi;
+use Vidola\Util\FileExtensionProvider;
 
 /**
  * @package Vidola
@@ -22,6 +23,11 @@ class StoredTemplatableFileView implements TemplatableFileView
 	private $template;
 
 	private $filename;
+
+	public function __construct(FileExtensionProvider $fileExtensionProvider)
+	{
+		$this->fileExtensionProvider = $fileExtensionProvider;
+	}
 
 	/**
 	 * Set output directory to write files to. The default value used is
@@ -123,7 +129,7 @@ class StoredTemplatableFileView implements TemplatableFileView
 			mkdir($dir);
 		}
 
-		$file = $dir . $filename . '.html';
+		$file = $this->fileExtensionProvider->addExtension($dir . $filename);
 
 		$fileHandle = fopen($file, 'w');
 

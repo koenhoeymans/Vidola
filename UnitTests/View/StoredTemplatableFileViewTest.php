@@ -6,6 +6,11 @@ require_once dirname(__FILE__)
 
 class Vidola_View_StoredTemplatableFileViewTest extends PHPUnit_Framework_TestCase
 {
+	public function setup()
+	{
+		$this->extensionProvider = $this->getMock('\\Vidola\\Util\\FileExtensionProvider');
+	}
+
 	/**
 	 * @test
 	 */
@@ -18,6 +23,12 @@ class Vidola_View_StoredTemplatableFileViewTest extends PHPUnit_Framework_TestCa
 			unlink($target);
 		}
 
+		$this->extensionProvider
+			->expects($this->any())
+			->method('addExtension')
+			->with('/tmp/foo')
+			->will($this->returnValue('/tmp/foo.html'));
+
 		$api = new \Vidola\UnitTests\Support\TestApi();
 		$api->set('name', 'bar');
 
@@ -26,7 +37,7 @@ class Vidola_View_StoredTemplatableFileViewTest extends PHPUnit_Framework_TestCa
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'Template.html';
  
-		$view = new \Vidola\View\StoredTemplatableFileView();
+		$view = new \Vidola\View\StoredTemplatableFileView($this->extensionProvider);
 		$view->setTemplate($template);
 		$view->setFilename('foo');
 		$view->setOutputDir(sys_get_temp_dir());
@@ -49,10 +60,10 @@ class Vidola_View_StoredTemplatableFileViewTest extends PHPUnit_Framework_TestCa
 		$api = new \Vidola\UnitTests\Support\TestApi();
 		$api->set('name', 'bar');
 
-		$view = new \Vidola\View\StoredTemplatableFileView();
+		$view = new \Vidola\View\StoredTemplatableFileView($this->extensionProvider);
 		$view->setTemplate($template);
 		$view->setFilename('foo');
-		$view->setOutputDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'sfsdsdglkdjsdf');
+		$view->setOutputDir('/doesnotexist');
 		$view->addApi($api);
 
 		try {

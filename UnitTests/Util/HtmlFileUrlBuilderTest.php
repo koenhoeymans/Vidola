@@ -67,4 +67,12 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 			$this->urlBuilder->createLink('foo', 'subdir/subsubdir/subfile')
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function addsHtmlExtensionWhenAskedToProvideExtension()
+	{
+		$this->assertEquals('file.html', $this->urlBuilder->addExtension('file'));
+	}
 }

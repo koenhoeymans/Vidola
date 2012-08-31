@@ -46,6 +46,9 @@ class Vidola
 			->thenUse('Vidola\\Pattern\\Patterns\\TableOfContents')
 			->inSingletonScope();
 		$fjor
+			->given('Vidola\\Util\\FileExtensionProvider')
+			->thenUse('Vidola\\Util\\HtmlFileUrlBuilder');
+		$fjor
 			->given('Vidola\\View\\TemplatableFileView')
 			->thenUse('Vidola\\View\\StoredTemplatableFileView')
 			->inSingletonScope();

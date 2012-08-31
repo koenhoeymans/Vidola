@@ -8,7 +8,7 @@ namespace Vidola\Util;
 /**
  * @package Vidola
  */
-class HtmlFileUrlBuilder implements InternalUrlBuilder
+class HtmlFileUrlBuilder implements InternalUrlBuilder, FileExtensionProvider
 {
 	/**
 	 * @see Vidola\Util.InternalUrlBuilder::createLink()
@@ -47,5 +47,15 @@ class HtmlFileUrlBuilder implements InternalUrlBuilder
 	private function howManyLevelsDeep($resource)
 	{
 		return count(explode(DIRECTORY_SEPARATOR, $resource)) -1;
+	}
+
+	/**
+	 * Adds '.html' as extension.
+	 * 
+	 * @param string $resource
+	 */
+	public function addExtension($resource)
+	{
+		return $resource . '.html';
 	}
 }
