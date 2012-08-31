@@ -4,7 +4,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..' 
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_View_TemplatableHtmlFileViewTest extends PHPUnit_Framework_TestCase
+class Vidola_View_StoredTemplatableFileViewTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @test
@@ -26,7 +26,7 @@ class Vidola_View_TemplatableHtmlFileViewTest extends PHPUnit_Framework_TestCase
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'Template.html';
  
-		$view = new \Vidola\View\TemplatableHtmlFileView();
+		$view = new \Vidola\View\StoredTemplatableFileView();
 		$view->setTemplate($template);
 		$view->setFilename('foo');
 		$view->setOutputDir(sys_get_temp_dir());
@@ -49,7 +49,7 @@ class Vidola_View_TemplatableHtmlFileViewTest extends PHPUnit_Framework_TestCase
 		$api = new \Vidola\UnitTests\Support\TestApi();
 		$api->set('name', 'bar');
 
-		$view = new \Vidola\View\TemplatableHtmlFileView();
+		$view = new \Vidola\View\StoredTemplatableFileView();
 		$view->setTemplate($template);
 		$view->setFilename('foo');
 		$view->setOutputDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'sfsdsdglkdjsdf');

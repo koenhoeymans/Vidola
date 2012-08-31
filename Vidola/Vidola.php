@@ -47,7 +47,7 @@ class Vidola
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\View\\TemplatableFileView')
-			->thenUse('Vidola\\View\\TemplatableHtmlFileView')
+			->thenUse('Vidola\\View\\StoredTemplatableFileView')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Util\\ContentRetriever')

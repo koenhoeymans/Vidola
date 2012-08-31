@@ -13,7 +13,7 @@ use Vidola\View\ViewApi;
  * 
  * Writes content of a template to a file.
  */
-class TemplatableHtmlFileView implements TemplatableFileView
+class StoredTemplatableFileView implements TemplatableFileView
 {
 	private $api = array();
 
