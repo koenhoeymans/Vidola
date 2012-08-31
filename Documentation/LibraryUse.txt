@@ -32,8 +32,8 @@ Run Vidola with `php RunVidola.php`. The following options are present:
 *	`--internal.links=<internal link builder>`
 
 	Internal links to the generated documentation can follow specified formats. The
-	can be added by implementing `Vidola\Util\InternalUrlBuilder` and specifying the
 	default one is that links have '.html' as extension added, unless an extension
 	was already specified. Eg a link to your internal page 'About' will become 'About.html'
 	but a link to 'style.css' will be kept 'style.css'. Custom link builders
+	can be added by implementing `Vidola\Util\InternalUrlBuilder` and specifying the
 	class as an option here.
