@@ -90,7 +90,9 @@ Example:</p>
 <li><p><code>--internal.links=&lt;internal link builder&gt;</code></p>
 
 <p>Internal links to the generated documentation can follow specified formats. The
-default one is that links have '.html' as extension added. Custom link builders
+default one is that links have '.html' as extension added, unless an extension
+was already specified. Eg a link to your internal page 'About' will become 'About.html'
+but a link to 'style.css' will be kept 'style.css'. Custom link builders
 can be added by implementing <code>Vidola\Util\InternalUrlBuilder</code> and specifying the
 class as an option here.</p></li></ul>
 </doc>            </div><!--/span-->
