@@ -11,7 +11,12 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 		$this->headerFinder = $this->getMockBuilder(
 			'\\Vidola\\Pattern\\Patterns\\TableOfContents\\HeaderFinder'
 		)->disableOriginalConstructor()->getMock();
-		$this->nameCreator = new \Vidola\Util\HeaderBasedNameCreator($this->headerFinder);
+		$this->toc = $this->getMockBuilder(
+			'\\Vidola\\Pattern\\Patterns\\TableOfContents'
+		)->disableOriginalConstructor()->getMock();
+		$this->nameCreator = new \Vidola\Util\HeaderBasedNameCreator(
+			$this->headerFinder, $this->toc
+		);
 	}
 
 	/**
@@ -25,6 +30,20 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 			->with('text')
 			->will($this->returnValue(array(array('title'=>'header'))));
 
-		$this->assertEquals('header', $this->nameCreator->getTitle('text'));
+		$this->assertEquals('header', $this->nameCreator->getTitle('text', 'file'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function ifTitleSpecifiedInTocThatIsUsedFirst()
+	{
+		$this->toc
+			->expects($this->atLeastOnce())
+			->method('getSpecifiedTitleForPage')
+			->with('page')
+			->will($this->returnValue('foo'));
+		
+		$this->assertEquals('foo', $this->nameCreator->getTitle('text', 'page'));
 	}
 }

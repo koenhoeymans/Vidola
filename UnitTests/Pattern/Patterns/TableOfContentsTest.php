@@ -620,4 +620,20 @@ text';
 
 		$this->assertEquals($domDoc1->saveXML(), $domDoc2->saveXML());
 	}
+
+	/**
+	 * @test
+	 */
+	public function aCustomPageTitleCanBeSpecified()
+	{
+		$text = "{table of contents}
+
+	new title <page>
+
+paragraph";
+
+		$this->toc->getSubfiles($text);
+
+		$this->assertEquals('new title', $this->toc->getSpecifiedTitleForPage('page'));
+	}
 }

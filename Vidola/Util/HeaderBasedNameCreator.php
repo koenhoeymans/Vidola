@@ -5,6 +5,7 @@
  */
 namespace Vidola\Util;
 
+use Vidola\Pattern\Patterns\TableOfContents;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 
 /**
@@ -14,13 +15,23 @@ class HeaderBasedNameCreator implements NameCreator
 {
 	private $headerFinder;
 
-	public function __construct(HeaderFinder $headerFinder)
+	private $toc;
+
+	public function __construct(HeaderFinder $headerFinder, TableOfContents $toc)
 	{
 		$this->headerFinder = $headerFinder;
+		$this->toc = $toc;
 	}
 
-	public function getTitle($text)
+	public function getTitle($text, $file)
 	{
+		$specifiedTitle = $this->toc->getSpecifiedTitleForPage($file);
+
+		if ($specifiedTitle)
+		{
+			return $specifiedTitle;
+		}
+
 		$headers = $this->headerFinder->getHeadersSequentially($text);
 
 		if (empty($headers))

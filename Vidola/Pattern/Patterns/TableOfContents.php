@@ -23,6 +23,13 @@ class TableOfContents extends Pattern implements SubfileDetector
 
 	private $internalUrlBuilder;
 
+	/**
+	 * A list of custom page titles as specified in the toc.
+	 * 
+	 * @var array array($page=>$title)
+	 */
+	private $customPageTitles = array();
+
 	public function __construct(
 		HeaderFinder $headerFinder,
 		ContentRetriever $contentRetriever,
@@ -84,11 +91,27 @@ class TableOfContents extends Pattern implements SubfileDetector
 		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
 		foreach ($matches['pages'] as $pages)
 		{
-			$matches = $this->getListFromVidolaText($pages);
+			$matches = $this->getSubpagesFromVidolaText($pages);
 			$pageList = array_merge($pageList, $matches);
 		}
 
 		return $pageList;
+	}
+
+	/**
+	 * If in the toc there was a title specified to use instead of the first header,
+	 * this will find it.
+	 * 
+	 * @param string $page
+	 */
+	public function getSpecifiedTitleForPage($page)
+	{
+		if (isset($this->customPageTitles[$page]))
+		{
+			return $this->customPageTitles[$page];
+		}
+
+		return null;
 	}
 
 	private function buildReplacement(array $regexmatch, \DOMNode $parentNode)
@@ -106,7 +129,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 	{
 		$fileList = array();
 
-		$namesFromCurrentList = $this->getListFromVidolaText($regexPartWithListOfFiles);
+		$namesFromCurrentList = $this->getSubpagesFromVidolaText($regexPartWithListOfFiles);
 
 		foreach ($namesFromCurrentList as $fileToInclude)
 		{
@@ -147,7 +170,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 		return $headers;
 	}
 
-	private function getListFromVidolaText($text)
+	private function getSubpagesFromVidolaText($text)
 	{
 		$inclusionList = array();
 
@@ -156,7 +179,21 @@ class TableOfContents extends Pattern implements SubfileDetector
 		{
 			if ($include !== '')
 			{
-				$inclusionList[] = trim($include);
+				preg_match(
+					"@^(?<page_or_title>.+?)([ ]\<(?<page>.+)\>)?$@", $include, $matches
+				);
+				$page_or_title = trim($matches['page_or_title']);
+				if (isset($matches['page']))
+				{
+					$include = trim($matches['page']);
+					$this->customPageTitles[$include] = $page_or_title;
+				}
+				else
+				{
+					$include = $page_or_title;
+				}
+
+				$inclusionList[] = $include;
 			}
 		}
 

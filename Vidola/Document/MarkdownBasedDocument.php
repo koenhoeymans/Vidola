@@ -181,7 +181,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	 */
 	public function getFileTitle($file)
 	{
-		return $this->nameCreator->getTitle($this->contentRetriever->retrieve($file));
+		return $this->nameCreator->getTitle($this->contentRetriever->retrieve($file), $file);
 	}
 
 	public function getPreviousFileLink($file)
