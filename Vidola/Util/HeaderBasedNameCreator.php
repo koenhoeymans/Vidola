@@ -34,13 +34,12 @@ class HeaderBasedNameCreator implements NameCreator
 
 		$headers = $this->headerFinder->getHeadersSequentially($text);
 
-		if (empty($headers))
+		if (!empty($headers))
 		{
-			return null;
+			$firstHeader = array_shift($headers);
+			return $firstHeader['title'];
 		}
 
-		$firstHeader = array_shift($headers);
-
-		return $firstHeader['title'];
+		return ucfirst(implode(' ', preg_split('@(?=[A-Z])@', $file)));
 	}
 }

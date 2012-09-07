@@ -46,4 +46,23 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals('foo', $this->nameCreator->getTitle('text', 'page'));
 	}
+
+	/**
+	 * @test
+	 */
+	public function fallsBackToFilenameSplitCamelcaseIfAllElseFails()
+	{
+		$this->toc
+			->expects($this->atLeastOnce())
+			->method('getSpecifiedTitleForPage')
+			->with('aboutPage')
+			->will($this->returnValue(null));
+		$this->headerFinder
+			->expects($this->atLeastOnce())
+			->method('getHeadersSequentially')
+			->with('text')
+			->will($this->returnValue(array()));
+
+		$this->assertEquals('About Page', $this->nameCreator->getTitle('text', 'aboutPage'));
+	}
 }
