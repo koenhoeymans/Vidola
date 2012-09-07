@@ -46,6 +46,10 @@ Available methods
  
  	Same as above but provides the title of a specified page.
  
+ *	`linkTo($source)`
+ 
+ 	Point to `$source` relative to the current document.
+ 
  *	`pageHasToc()`
  
  	If a page has a table of contents this method will return `true`.
