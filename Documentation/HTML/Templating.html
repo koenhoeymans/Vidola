@@ -98,7 +98,11 @@ will return null.</p></li>
 below provides a list of pages. For each page this method can give you the url.</p></li>
 <li><p><code>getPageTitle($page)</code></p>
 
-<p>Same as above but provides the title of a specified page.</p></li>
+<p>Same as above but provides the title of a specified page. The title of a page
+is the text of the first header encountered unless a different title was
+specified in the table of contents. If no header is found the title is taken
+from the page name, split by uppercase letters, with first letter uppercased.
+Eg 'aboutMyProject' will generate the title 'About My Project'.</p></li>
 <li><p><code>linkTo($source)</code></p>
 
 <p>Point to <code>$source</code> relative to the current document.</p></li>

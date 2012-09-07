@@ -44,7 +44,11 @@ Available methods
 
  *	`getPageTitle($page)`
  
- 	Same as above but provides the title of a specified page.
+ 	Same as above but provides the title of a specified page. The title of a page
+ 	is the text of the first header encountered unless a different title was
+ 	specified in the table of contents. If no header is found the title is taken
+ 	from the page name, split by uppercase letters, with first letter uppercased.
+ 	Eg 'aboutMyProject' will generate the title 'About My Project'.
  
  *	`linkTo($source)`
  
