@@ -96,6 +96,12 @@ upone the header text. It will translate to something like this:
 
 	<h1 id="a-header">a header</a>
 
+First all white spaces are converted to `-`. Then all characters that are not
+alfanumeric, underscore, dash or point are removed. After this everything up
+to the first letter is removed. All inspired by Pandoc.
+
+When several headers have the same id a number suffix is added to distinguish them.
+
 Paragraphs
 ==========
 

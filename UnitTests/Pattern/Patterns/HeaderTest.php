@@ -305,7 +305,7 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	 */
 	public function headerMustNotBeFollowedByBlankLine()
 	{
-		$text = "\n\nheader\n---\nparagarph\n\n";
+		$text = "\n\nheader\n---\nparagraph\n\n";
 		$doc = new \DOMDocument();
 		$el = $doc->createElement('h1', 'header');
 		$doc->appendChild($el);
@@ -376,7 +376,7 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	 */
 	public function headerMustNotBeFollowedByBlankLine_2()
 	{
-		$text = "\n\n# header\nparagarph\n\n";
+		$text = "\n\n# header\nparagraph\n\n";
 		$doc = new \DOMDocument();
 		$el = $doc->createElement('h1', 'header');
 		$doc->appendChild($el);
@@ -393,5 +393,53 @@ class Vidola_Pattern_Patterns_HeaderTest extends \Vidola\UnitTests\Support\Patte
 	{
 		$text = "paragraph\n# header\n\n";
 		$this->assertDoesNotCreateDomFromText($text);
+	}
+
+	//	------------ id ------------
+
+	public function assertCreatesId($expectedId, $fromHeaderText)
+	{
+		$text = "\n\n# $fromHeaderText\nparagraph\n\n";
+		$doc = new \DOMDocument();
+		$el = $doc->createElement('h1', $fromHeaderText);
+		$doc->appendChild($el);
+		$el->setAttribute('id', $expectedId);
+		$this->assertCreatesDomFromText($doc, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function removesCharactersOtherThanAlfaNumUnderscoreHyphenPeriods()
+	{
+		$this->assertCreatesId('a2_-.z', 'a*2_-[.z');
+	}
+
+	/**
+	 * @test
+	 */
+	public function removesEverythingUpToTheFirstLetter()
+	{
+		$this->assertCreatesId('words', '2. words');
+	}
+
+	/**
+	 * @test
+	 */
+	public function appendsNumbersToDistinguishIds()
+	{
+		$doc = new \DOMDocument();
+		$text1 = "\n\n# header\nparagraph\n\n";
+		$text2 = "\n\n# header\nparagraph\n\n";
+
+		$el1 = $doc->createElement('h1', 'header');
+		$doc->appendChild($el1);
+		$el1->setAttribute('id', 'header');
+		$this->assertCreatesDomFromText($doc, $text1);
+
+		$el2 = $doc->createElement('h1', 'header');
+		$doc->replaceChild($el2, $el1);
+		$el2->setAttribute('id', 'header-2');
+		$this->assertCreatesDomFromText($doc, $text2);
 	}
 }

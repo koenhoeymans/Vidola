@@ -42,7 +42,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Table Of Contents</li>
-              <li><ul><li><a href="#vidola-syntax">Vidola syntax</a><ul><li><a href="#handling-of-special-characters">Handling of special characters</a></li><li><a href="#raw-html">Raw HTML</a></li><li><a href="#headers">Headers</a></li><li><a href="#paragraphs">Paragraphs</a></li><li><a href="#code">Code</a></li><li><a href="#note">Note</a></li><li><a href="#blockquote">blockquote</a></li><li><a href="#lists">Lists</a></li><li><a href="#horizontal-rules">Horizontal rules</a></li><li><a href="#links">Links</a></li><li><a href="#images">Images</a></li><li><a href="#email">Email</a></li><li><a href="#italic--emphasized-and-important-text">Italic, emphasized and important text</a></li><li><a href="#newlines">Newlines</a></li><li><a href="#table-of-contents">Table of contents</a></li><li><a href="#definition-lists">Definition lists</a></li></ul></li></ul>
+              <li><ul><li><a href="#vidola-syntax-2">Vidola syntax</a><ul><li><a href="#handling-of-special-characters-2">Handling of special characters</a></li><li><a href="#raw-html-2">Raw HTML</a></li><li><a href="#headers-2">Headers</a></li><li><a href="#paragraphs-2">Paragraphs</a></li><li><a href="#code-2">Code</a></li><li><a href="#note-2">Note</a></li><li><a href="#blockquote-2">blockquote</a></li><li><a href="#lists-2">Lists</a></li><li><a href="#horizontal-rules-2">Horizontal rules</a></li><li><a href="#links-2">Links</a></li><li><a href="#images-2">Images</a></li><li><a href="#email-2">Email</a></li><li><a href="#italic-emphasized-and-important-text-2">Italic, emphasized and important text</a></li><li><a href="#newlines-2">Newlines</a></li><li><a href="#table-of-contents-2">Table of contents</a></li><li><a href="#definition-lists-2">Definition lists</a></li></ul></li></ul>
 </li>
               <li class="nav-header">Previous Topic</li>
               <li><a href="AboutVidola.html">About Vidola</a></li>
@@ -150,6 +150,12 @@ same level header
 upone the header text. It will translate to something like this:</p>
 
 <pre><code>&lt;h1 id="a-header"&gt;a header&lt;/a&gt;</code></pre>
+
+<p>First all white spaces are converted to <code>-</code>. Then all characters that are not
+alfanumeric, underscore, dash or point are removed. After this everything up
+to the first letter is removed. All inspired by Pandoc.</p>
+
+<p>When several headers have the same id a number suffix is added to distinguish them.</p>
 
 <h2 id="paragraphs">Paragraphs</h2>
 
@@ -378,7 +384,7 @@ and greater than sign.</p>
 
 <pre><code>This is [my email](mailto:mail@example.com).</code></pre>
 
-<h2 id="italic--emphasized-and-important-text">Italic, emphasized and important text</h2>
+<h2 id="italic-emphasized-and-important-text">Italic, emphasized and important text</h2>
 
 <p>Words can be italicized by wrapping them between underscores. Underscores 
 in words are left as is. Underscores that span more than one word are allowed.</p>

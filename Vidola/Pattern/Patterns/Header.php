@@ -22,6 +22,13 @@ class Header extends Pattern
 		6 => array('before' => null, 'after' => null)
 	);
 
+	/**
+	 * array($id => $number);
+	 * 
+	 * @var array
+	 */
+	private $ids;
+
 	public function getRegex()
 	{
 		return
@@ -76,7 +83,7 @@ class Header extends Pattern
 
 		$h = $domDoc->createElement('h' . $level);
 		$h->appendChild($domDoc->createTextNode($match['text']));
-		$h->setAttribute('id', $this->createId($match['text']));
+		$this->addId($h, $match['text']);
 
 		return $h;
 	}
@@ -89,14 +96,50 @@ class Header extends Pattern
 
 		$h = $domDoc->createElement('h' . $level);
 		$h->appendChild($domDoc->createTextNode($match['text']));
-		$h->setAttribute('id', $this->createId($match['text']));
+		$this->addId($h, $match['text']);
 
 		return $h;
 	}
 
+	private function addId(\DOMElement $element, $text)
+	{
+		$id = $this->createId($text);
+		$append = false;
+
+		if (isset($this->ids[$id]))
+		{
+			$append = $this->ids[$id];
+		}
+
+		if (!$append)
+		{
+			$append = 1;
+		}
+		else
+		{
+			$append++;
+		}
+
+		$this->ids[$id] = $append;
+
+		if ($append > 1)
+		{
+			$id .= '-' . $append;
+		}
+
+		$element->setAttribute('id', $id);
+	}
+
+	/**
+	 * Inspired by Pandoc
+	 */
 	private function createId($text)
 	{
 		$text = strtolower($text);
-		return preg_replace('@[^a-z0-9]@', '-', $text);
+		$text = str_replace(' ', '-', $text);
+		$text = preg_replace('@[^a-z0-9_\-.]@', '', $text);
+		$text = preg_replace('@^[^a-z]*@', '', $text);
+
+		return $text;
 	}
 }
