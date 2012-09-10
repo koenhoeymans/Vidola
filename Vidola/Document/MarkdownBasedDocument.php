@@ -113,7 +113,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	 * 
 	 * @param string $file
 	 */
-	public function getFileName($file)
+	public function createFileName($file)
 	{
 		$fileParts = pathinfo($file);
 		return $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'];

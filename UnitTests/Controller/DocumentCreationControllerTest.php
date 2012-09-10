@@ -76,7 +76,7 @@ class Vidola_Controller_DocumentCreationControllerTest extends PHPUnit_Framework
 				->will($this->returnValue(array('file')));
 		$this->documentStructure
 				->expects($this->atLeastOnce())
-				->method('getFilename')
+				->method('createFilename')
 				->will($this->returnValue('foo'));
 		$this->view
 				->expects($this->once())

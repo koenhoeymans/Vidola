@@ -41,7 +41,7 @@ class DocumentCreationController
 	private function createSingleDoc($file)
 	{
 		$this->view->addApi($this->documentApiBuilder->buildApi($file));
-		$this->view->setFilename($this->documentStructure->getFilename($file));
+		$this->view->setFilename($this->documentStructure->createFilename($file));
 		$this->view->render();
 	}
 }

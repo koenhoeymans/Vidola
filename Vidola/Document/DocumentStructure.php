@@ -14,5 +14,5 @@ interface DocumentStructure
 
 	public function getSubfiles($file);
 
-	public function getFilename($file);
+	public function createFilename($file);
 }
