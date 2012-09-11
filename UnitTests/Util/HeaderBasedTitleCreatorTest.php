@@ -4,7 +4,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
+class Vidola_Util_HeaderBasedTitleCreatorTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
@@ -14,7 +14,7 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 		$this->toc = $this->getMockBuilder(
 			'\\Vidola\\Pattern\\Patterns\\TableOfContents'
 		)->disableOriginalConstructor()->getMock();
-		$this->nameCreator = new \Vidola\Util\HeaderBasedNameCreator(
+		$this->titleCreator = new \Vidola\Util\HeaderBasedTitleCreator(
 			$this->headerFinder, $this->toc
 		);
 	}
@@ -30,7 +30,7 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 			->with('text')
 			->will($this->returnValue(array(array('title'=>'header'))));
 
-		$this->assertEquals('header', $this->nameCreator->getTitle('text', 'file'));
+		$this->assertEquals('header', $this->titleCreator->getTitle('text', 'file'));
 	}
 
 	/**
@@ -44,7 +44,7 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 			->with('page')
 			->will($this->returnValue('foo'));
 		
-		$this->assertEquals('foo', $this->nameCreator->getTitle('text', 'page'));
+		$this->assertEquals('foo', $this->titleCreator->getTitle('text', 'page'));
 	}
 
 	/**
@@ -63,6 +63,6 @@ class Vidola_Util_HeaderBasedNameCreatorTest extends PHPUnit_Framework_TestCase
 			->with('text')
 			->will($this->returnValue(array()));
 
-		$this->assertEquals('About Page', $this->nameCreator->getTitle('text', 'aboutPage'));
+		$this->assertEquals('About Page', $this->titleCreator->getTitle('text', 'aboutPage'));
 	}
 }

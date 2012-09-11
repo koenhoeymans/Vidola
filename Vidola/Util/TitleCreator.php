@@ -8,7 +8,7 @@ namespace Vidola\Util;
 /**
  * @package Vidola
  */
-interface NameCreator
+interface TitleCreator
 {
 	/**
 	 * Detects what the title is based on a given text.

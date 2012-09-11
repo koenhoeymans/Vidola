@@ -9,7 +9,7 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Parser\Parser;
 use Vidola\Util\SubfileDetector;
 use Vidola\Util\InternalUrlBuilder;
-use Vidola\Util\NameCreator;
+use Vidola\Util\TitleCreator;
 use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
@@ -29,7 +29,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 
 	private $toc;
 
-	private $nameCreator;
+	private $titleCreator;
 
 	/**
 	 * Keeps Toc in memory so we don't need to build it again.
@@ -55,7 +55,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		SubfileDetector $subfileDetector,
 		InternalUrlBuilder $internalUrlBuilder,
 		TableOfContents $toc,
-		NameCreator $nameCreator
+		TitleCreator $titleCreator
 	) {
 		$this->rootFile = $rootFile;
 		$this->contentRetriever = $contentRetriever;
@@ -63,7 +63,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 		$this->subfileDetector = $subfileDetector;
 		$this->internalUrlBuilder = $internalUrlBuilder;
 		$this->toc = $toc;
-		$this->nameCreator = $nameCreator;
+		$this->titleCreator = $titleCreator;
 	}
 
 	/**
@@ -181,7 +181,7 @@ class MarkdownBasedDocument implements DocumentApiBuilder, DocumentStructure
 	 */
 	public function getFileTitle($file)
 	{
-		return $this->nameCreator->getTitle($this->contentRetriever->retrieve($file), $file);
+		return $this->titleCreator->getTitle($this->contentRetriever->retrieve($file), $file);
 	}
 
 	public function getPreviousFileLink($file)

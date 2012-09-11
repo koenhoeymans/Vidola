@@ -31,8 +31,8 @@ class Vidola
 		$fjor->setSingleton('Vidola\\Patterns\\Pattern\\Header');
 		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
 		$fjor
-			->given('Vidola\\Util\\NameCreator')
-			->thenUse('Vidola\\Util\\HeaderBasedNameCreator');
+			->given('Vidola\\Util\\TitleCreator')
+			->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
 		$fjor
 			->given('Vidola\\Document\\DocumentApiBuilder')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocument')

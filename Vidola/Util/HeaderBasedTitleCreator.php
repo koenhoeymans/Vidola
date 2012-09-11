@@ -11,7 +11,7 @@ use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 /**
  * @package Vidola
  */
-class HeaderBasedNameCreator implements NameCreator
+class HeaderBasedTitleCreator implements TitleCreator
 {
 	private $headerFinder;
 
