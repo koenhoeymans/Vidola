@@ -91,7 +91,7 @@ class Vidola
 
 		// build the document(s)
 		// ---------------------
-		$documentCreationController = $fjor->get('Vidola\\Controller\\DocumentCreationController');
+		$documentCreationController = $fjor->get('Vidola\\Controller\\DocumentationCreationController');
 		$documentCreationController->createDocumentation();
 	}
 

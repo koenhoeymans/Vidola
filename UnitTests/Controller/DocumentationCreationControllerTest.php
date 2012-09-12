@@ -4,7 +4,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..' 
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Controller_DocumentCreationControllerTest extends PHPUnit_Framework_TestCase
+class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
@@ -17,7 +17,7 @@ class Vidola_Controller_DocumentCreationControllerTest extends PHPUnit_Framework
 		$this->view = $this->getMockBuilder('\\Vidola\\View\\TemplatableFileView')
 							->disableOriginalConstructor()
 							->getMock();
-		$this->controller = new \Vidola\Controller\DocumentCreationController(
+		$this->controller = new \Vidola\Controller\DocumentationCreationController(
 			$this->documentApiBuilder,
 			$this->documentStructure,
 			$this->view

@@ -12,7 +12,7 @@ use Vidola\View\TemplatableFileView;
 /**
  * @package Vidola
  */
-class DocumentCreationController
+class DocumentationCreationController
 {
 	private $documentApiBuilder;
 
