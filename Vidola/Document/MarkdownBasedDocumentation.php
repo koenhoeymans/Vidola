@@ -15,7 +15,7 @@ use Vidola\Pattern\Patterns\TableOfContents;
 /**
  * @package Vidola
  */
-class MarkdownBasedDocumentation implements DocumentApiBuilder, DocumentStructure
+class MarkdownBasedDocumentation implements DocumentApiBuilder, DocumentationStructure
 {
 	private $rootFile;
 

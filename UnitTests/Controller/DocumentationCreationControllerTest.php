@@ -11,7 +11,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 		$this->documentApiBuilder = $this->getMockBuilder('\\Vidola\\Document\\DocumentApiBuilder')
 										->disableOriginalConstructor()
 										->getMock();
-		$this->documentStructure = $this->getMockBuilder('\\Vidola\\Document\\DocumentStructure')
+		$this->documentationStructure = $this->getMockBuilder('\\Vidola\\Document\\DocumentationStructure')
 										->disableOriginalConstructor()
 										->getMock();
 		$this->view = $this->getMockBuilder('\\Vidola\\View\\TemplatableFileView')
@@ -19,7 +19,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 							->getMock();
 		$this->controller = new \Vidola\Controller\DocumentationCreationController(
 			$this->documentApiBuilder,
-			$this->documentStructure,
+			$this->documentationStructure,
 			$this->view
 		);
 	}
@@ -33,7 +33,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentStructure
+		$this->documentationStructure
 				->expects($this->atLeastOnce())
 				->method('getFileList')
 				->will($this->returnValue(array('file')));
@@ -50,7 +50,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentStructure
+		$this->documentationStructure
 				->expects($this->atLeastOnce())
 				->method('getFileList')
 				->will($this->returnValue(array('file')));
@@ -70,11 +70,11 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentStructure
+		$this->documentationStructure
 				->expects($this->atLeastOnce())
 				->method('getFileList')
 				->will($this->returnValue(array('file')));
-		$this->documentStructure
+		$this->documentationStructure
 				->expects($this->atLeastOnce())
 				->method('createFilename')
 				->will($this->returnValue('foo'));
@@ -95,7 +95,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentStructure
+		$this->documentationStructure
 				->expects($this->atLeastOnce())
 				->method('getFileList')
 				->will($this->returnValue(array('file')));
@@ -115,7 +115,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->expects($this->exactly(2))
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentStructure
+		$this->documentationStructure
 				->expects($this->at(0))
 				->method('getFileList')
 				->will($this->returnValue(array('file', 'subfile')));

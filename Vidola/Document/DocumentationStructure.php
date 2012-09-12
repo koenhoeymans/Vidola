@@ -8,7 +8,7 @@ namespace Vidola\Document;
 /**
  * @package Vidola
  */
-interface DocumentStructure
+interface DocumentationStructure
 {
 	public function getFileList();
 
