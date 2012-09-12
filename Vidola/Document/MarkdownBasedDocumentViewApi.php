@@ -20,7 +20,7 @@ class MarkdownBasedDocumentViewApi implements ViewApi
 
 	private $currentPage;
 
-	public function __construct(MarkdownBasedDocument $doc, $currentPage)
+	public function __construct(MarkdownBasedDocumentation $doc, $currentPage)
 	{
 		$this->doc = $doc;
 		$this->currentPage = $currentPage;

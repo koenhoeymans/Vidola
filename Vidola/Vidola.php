@@ -35,11 +35,11 @@ class Vidola
 			->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
 		$fjor
 			->given('Vidola\\Document\\DocumentApiBuilder')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocument')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Document\\DocumentStructure')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocument')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Util\\SubfileDetector')
@@ -118,7 +118,7 @@ class Vidola
 		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
 
 		$fjor
-			->given('Vidola\\Document\\MarkdownBasedDocument')
+			->given('Vidola\\Document\\MarkdownBasedDocumentation')
 			->constructWith(array(self::getFile($config->get('source'))));
 		
 		// set the output directory
