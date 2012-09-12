@@ -36,7 +36,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 		$this->assertTrue(
 			$this->mdDoc->buildApi('file')
 			instanceof
-			\Vidola\Document\MarkdownBasedDocumentViewApi
+			\Vidola\Document\MarkdownBasedDocumentationViewApi
 		);
 	}
 

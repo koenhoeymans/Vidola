@@ -12,7 +12,7 @@ use Vidola\View\ViewApi;
  * 
  * @package Vidola
  */
-class MarkdownBasedDocumentViewApi implements ViewApi
+class MarkdownBasedDocumentationViewApi implements ViewApi
 {
 	const VIEW_ACCESS_NAME = 'document';
 

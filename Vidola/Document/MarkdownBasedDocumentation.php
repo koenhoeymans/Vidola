@@ -51,11 +51,11 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	public function __construct(
 		$rootFile,
 		ContentRetriever $contentRetriever,
-Parser $parser,
+		Parser $parser,
 		SubfileDetector $subfileDetector,
-InternalUrlBuilder $internalUrlBuilder,
-TableOfContents $toc,
-TitleCreator $titleCreator
+		InternalUrlBuilder $internalUrlBuilder,
+		TableOfContents $toc,
+		TitleCreator $titleCreator
 	) {
 		$this->rootFile = $rootFile;
 		$this->contentRetriever = $contentRetriever;
@@ -71,7 +71,7 @@ TitleCreator $titleCreator
 	 */
 	public function buildApi($file)
 	{
-		return new \Vidola\Document\MarkdownBasedDocumentViewApi($this, $file);
+		return new \Vidola\Document\MarkdownBasedDocumentationViewApi($this, $file);
 	}
 
 	public function getFileList()

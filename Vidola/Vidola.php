@@ -34,11 +34,11 @@ class Vidola
 			->given('Vidola\\Util\\TitleCreator')
 			->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
 		$fjor
-			->given('Vidola\\Document\\DocumentApiBuilder')
+			->given('Vidola\\Document\\DocumentationApiBuilder')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
 			->inSingletonScope();
 		$fjor
-			->given('Vidola\\Document\\DocumentStructure')
+			->given('Vidola\\Document\\DocumentationStructure')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
 			->inSingletonScope();
 		$fjor
