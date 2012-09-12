@@ -8,7 +8,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 {
 	public function setup()
 	{
-		$this->documentApiBuilder = $this->getMockBuilder('\\Vidola\\Document\\DocumentApiBuilder')
+		$this->documentationApiBuilder = $this->getMockBuilder('\\Vidola\\Document\\DocumentationApiBuilder')
 										->disableOriginalConstructor()
 										->getMock();
 		$this->documentationStructure = $this->getMockBuilder('\\Vidola\\Document\\DocumentationStructure')
@@ -18,7 +18,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 							->disableOriginalConstructor()
 							->getMock();
 		$this->controller = new \Vidola\Controller\DocumentationCreationController(
-			$this->documentApiBuilder,
+			$this->documentationApiBuilder,
 			$this->documentationStructure,
 			$this->view
 		);
@@ -29,7 +29,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function tellsDocumentModelToBuildApi()
 	{
-		$this->documentApiBuilder
+		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
@@ -46,7 +46,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function addsApiToView()
 	{
-		$this->documentApiBuilder
+		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
@@ -66,7 +66,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function tellsViewWhichFilenameToUse()
 	{
-		$this->documentApiBuilder
+		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
@@ -91,7 +91,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function tellsViewToRender()
 	{
-		$this->documentApiBuilder
+		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
@@ -111,7 +111,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function takesCareOfSubpages()
 	{
-		$this->documentApiBuilder
+		$this->documentationApiBuilder
 				->expects($this->exactly(2))
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));

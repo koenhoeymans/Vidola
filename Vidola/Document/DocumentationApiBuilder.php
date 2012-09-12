@@ -8,7 +8,7 @@ namespace Vidola\Document;
 /**
  * @package Vidola
  */
-interface DocumentApiBuilder
+interface DocumentationApiBuilder
 {
 	/**
 	 * @param string $file
