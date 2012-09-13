@@ -30,7 +30,7 @@ class Vidola_Util_HeaderBasedTitleCreatorTest extends PHPUnit_Framework_TestCase
 			->with('text')
 			->will($this->returnValue(array(array('title'=>'header'))));
 
-		$this->assertEquals('header', $this->titleCreator->getTitle('text', 'file'));
+		$this->assertEquals('header', $this->titleCreator->createPageTitle('text', 'file'));
 	}
 
 	/**
@@ -44,7 +44,7 @@ class Vidola_Util_HeaderBasedTitleCreatorTest extends PHPUnit_Framework_TestCase
 			->with('page')
 			->will($this->returnValue('foo'));
 		
-		$this->assertEquals('foo', $this->titleCreator->getTitle('text', 'page'));
+		$this->assertEquals('foo', $this->titleCreator->createPageTitle('text', 'page'));
 	}
 
 	/**
@@ -63,6 +63,6 @@ class Vidola_Util_HeaderBasedTitleCreatorTest extends PHPUnit_Framework_TestCase
 			->with('text')
 			->will($this->returnValue(array()));
 
-		$this->assertEquals('About Page', $this->titleCreator->getTitle('text', 'aboutPage'));
+		$this->assertEquals('About Page', $this->titleCreator->createPageTitle('text', 'aboutPage'));
 	}
 }

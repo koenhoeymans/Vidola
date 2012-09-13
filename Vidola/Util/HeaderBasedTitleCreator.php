@@ -23,7 +23,7 @@ class HeaderBasedTitleCreator implements TitleCreator
 		$this->toc = $toc;
 	}
 
-	public function getTitle($text, $file)
+	public function createPageTitle($text, $file)
 	{
 		$specifiedTitle = $this->toc->getSpecifiedTitleForPage($file);
 

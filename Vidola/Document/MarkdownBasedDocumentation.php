@@ -175,13 +175,13 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	}
 
 	/**
-	 * Get the name of a file from a given filename.
+	 * Get the name of a page from a given filename.
 	 * 
 	 * @param string $file
 	 */
-	public function getFileTitle($file)
+	public function getPageTitle($file)
 	{
-		return $this->titleCreator->getTitle($this->contentRetriever->retrieve($file), $file);
+		return $this->titleCreator->createPageTitle($this->contentRetriever->retrieve($file), $file);
 	}
 
 	public function getPreviousFileLink($file)
@@ -196,13 +196,13 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		return null;
 	}
 
-	public function getPreviousFileTitle($file)
+	public function getPreviousPageTitle($file)
 	{
 		$previousFile = $this->getPreviousFileName($file);
 
 		if ($previousFile)
 		{
-			return $this->getFileTitle($previousFile);
+			return $this->getPageTitle($previousFile);
 		}
 
 		return null;
@@ -222,13 +222,13 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		return null;
 	}
 
-	public function getNextFileTitle($file)
+	public function getNextPageTitle($file)
 	{
 		$nextFile = $this->getNextFileName($file);
 
 		if ($nextFile)
 		{
-			return $this->getFileTitle($nextFile);
+			return $this->getPageTitle($nextFile);
 		}
 
 		return null;

@@ -84,11 +84,11 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->will($this->returnValue('text'));
 		$this->titleCreator
 			->expects($this->atLeastOnce())
-			->method('getTitle')
+			->method('createPageTitle')
 			->with('text')
 			->will($this->returnValue('title'));
 
-		$this->assertEquals('title', $this->mdDoc->getFileTitle('file'));
+		$this->assertEquals('title', $this->mdDoc->getPageTitle('file'));
 	}
 
 	/**

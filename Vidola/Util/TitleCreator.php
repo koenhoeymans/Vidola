@@ -16,5 +16,5 @@ interface TitleCreator
 	 * @param string $text
 	 * @param string $file
 	 */
-	public function getTitle($text, $file);
+	public function createPageTitle($text, $file);
 }

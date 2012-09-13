@@ -49,7 +49,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function currentPageTitle()
 	{
-		return $this->doc->getFileTitle($this->currentPage);
+		return $this->doc->getPageTitle($this->currentPage);
 	}
 
 	/**
@@ -79,7 +79,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function previousPageTitle()
 	{
-		return $this->doc->getPreviousFileTitle($this->currentPage);
+		return $this->doc->getPreviousPageTitle($this->currentPage);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function nextPageTitle()
 	{
-		return $this->doc->getNextFileTitle($this->currentPage);
+		return $this->doc->getNextPageTitle($this->currentPage);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function getPageTitle($page)
 	{
-		return $this->doc->getFileTitle($page);
+		return $this->doc->getPageTitle($page);
 	}
 
 	/**
