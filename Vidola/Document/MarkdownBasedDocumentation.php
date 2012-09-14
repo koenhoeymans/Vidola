@@ -5,8 +5,6 @@
  */
 namespace Vidola\Document;
 
-use Vidola\Util\ContentRetriever;
-use Vidola\Parser\Parser;
 use Vidola\Util\SubfileDetector;
 use Vidola\Util\InternalUrlBuilder;
 use Vidola\Util\TitleCreator;
@@ -19,9 +17,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 {
 	private $rootFile;
 
-	private $contentRetriever;
-
-	private $parser;
+	private $content;
 
 	private $subfileDetector;
 
@@ -45,21 +41,16 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	 */
 	private $fileList = null;
 
-	/**
-	 * @todo refactor
-	 */
 	public function __construct(
 		$rootFile,
-		ContentRetriever $contentRetriever,
-		Parser $parser,
+		Content $content,
 		SubfileDetector $subfileDetector,
 		InternalUrlBuilder $internalUrlBuilder,
 		TableOfContents $toc,
 		TitleCreator $titleCreator
 	) {
 		$this->rootFile = $rootFile;
-		$this->contentRetriever = $contentRetriever;
-		$this->parser = $parser;
+		$this->content = $content;
 		$this->subfileDetector = $subfileDetector;
 		$this->internalUrlBuilder = $internalUrlBuilder;
 		$this->toc = $toc;
@@ -103,7 +94,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 
 	public function getSubfiles($file)
 	{
-		$text = $this->contentRetriever->retrieve($file);
+		$text = $this->getContent($file, true);
 		return $this->subfileDetector->getSubfiles($text);
 	}
 
@@ -127,16 +118,22 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		}
 
 		$this->tocCache[$file] = $this->toc->createTocNode(
-			$this->contentRetriever->retrieve($file),
+			$this->getContent($file, true),
 			new \DOMDocument()
 		);
 
 		return $this->tocCache[$file];
 	}
 
-	public function getContent($file)
+	/**
+	 * Provides the parsed or raw content of a file.
+	 * 
+	 * @param string $file
+	 * @param bool $raw
+	 */
+	public function getContent($file, $raw = false)
 	{
-		return $this->parser->parse($this->contentRetriever->retrieve($file));
+		return $this->content->getContent($file, $raw);
 	}
 
 	/**
@@ -181,7 +178,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	 */
 	public function getPageTitle($file)
 	{
-		return $this->titleCreator->createPageTitle($this->contentRetriever->retrieve($file), $file);
+		return $this->titleCreator->createPageTitle($this->getContent($file, true), $file);
 	}
 
 	public function getPreviousFileLink($file)

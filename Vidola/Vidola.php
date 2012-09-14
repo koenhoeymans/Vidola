@@ -58,7 +58,12 @@ class Vidola
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Parser\\Parser')
-			->thenUse('Vidola\\Parser\\RecursiveReplacer');
+			->thenUse('Vidola\\Parser\\RecursiveReplacer')
+			->inSingletonScope();
+		$fjor
+			->given('Vidola\\Document\\Content')
+			->thenUse('Vidola\\Document\\MdContent')
+			->inSingletonScope();
 
 		// command line options
 		// --------------------------------

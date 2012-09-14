@@ -8,8 +8,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 {
 	public function __construct()
 	{
-		$this->contentRetriever = $this->getMock('\\Vidola\\Util\\ContentRetriever');
-		$this->parser = $this->getMock('\\Vidola\\Parser\\Parser');
+		$this->content = $this->getMock('\\Vidola\\Document\\Content');
 		$this->subfileDetector = $this->getMock('\\Vidola\\Util\\SubfileDetector');
 		$this->internalUrlBuilder = $this->getMock('\\Vidola\\Util\\InternalUrlBuilder');
 		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
@@ -19,8 +18,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->getMock();
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
 			'file',
-			$this->contentRetriever,
-			$this->parser,
+			$this->content,
 			$this->subfileDetector,
 			$this->internalUrlBuilder,
 			$this->toc,
@@ -45,10 +43,9 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function providesParsedContentOfFile()
 	{
-		$this->parser
+		$this->content
 			->expects($this->once())
-			->method('parse')
-			->will($this->returnValue('bar'));
+			->method('getContent');
 		
 		$this->mdDoc->getContent('file');
 	}
@@ -58,9 +55,9 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function knowsSubfilesOfGivenFile()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->atLeastOnce())
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('text'));
 		$this->subfileDetector
@@ -77,9 +74,9 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function asksNameCreatorForFileTitle()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->atLeastOnce())
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('text'));
 		$this->titleCreator
@@ -96,14 +93,14 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function providesListOfFiles()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(0))
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('text'));
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(1))
-			->method('retrieve')
+			->method('getContent')
 			->with('subfile')
 			->will($this->returnValue('subtext'));
 		$this->subfileDetector
@@ -128,9 +125,9 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function hasTocOfFile()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->atLeastOnce())
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('text with header in'));
 		$this->toc
@@ -150,9 +147,9 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function providesBreadCrumbsAsListOfFiles()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(0))
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('some text'));
 		$this->subfileDetector
@@ -180,14 +177,14 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function pointsToHigherDirectoryIfCurrentFileIsInSubdirectoryVersusPrevious()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(0))
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('some text'));
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(1))
-			->method('retrieve')
+			->method('getContent')
 			->with('subfolder/subdocument')
 			->will($this->returnValue('subtext'));
 		$this->subfileDetector
@@ -216,19 +213,19 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function pointsToHigherDirectoryIfCurrentFileIsInSubdirectoryVersusNext()
 	{
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(0))
-			->method('retrieve')
+			->method('getContent')
 			->with('file')
 			->will($this->returnValue('some text'));
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(1))
-			->method('retrieve')
+			->method('getContent')
 			->with('subfolder/subdocument')
 			->will($this->returnValue('subtext'));
-		$this->contentRetriever
+		$this->content
 			->expects($this->at(2))
-			->method('retrieve')
+			->method('getContent')
 			->with('nextfile')
 			->will($this->returnValue('nexttext'));
 		$this->subfileDetector
