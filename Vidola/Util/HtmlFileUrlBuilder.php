@@ -38,7 +38,7 @@ class HtmlFileUrlBuilder implements InternalUrlBuilder, FileExtensionProvider
 		$info = pathinfo($filePart);
 		if (!isset($info['extension']))
 		{
-			$filePart .= '.html';
+			$filePart = $this->addExtension($filePart);
 		}
 
 		return $filePart . $relPart;
