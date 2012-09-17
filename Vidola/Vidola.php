@@ -64,6 +64,10 @@ class Vidola
 			->given('Vidola\\Document\\Content')
 			->thenUse('Vidola\\Document\\MdContent')
 			->inSingletonScope();
+		$fjor
+			->given('Vidola\\Document\\Structure')
+			->thenUse('Vidola\\Document\\MultiMdStructure')
+			->inSingletonScope();
 
 		// command line options
 		// --------------------------------

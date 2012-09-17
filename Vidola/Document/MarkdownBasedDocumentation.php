@@ -5,10 +5,7 @@
  */
 namespace Vidola\Document;
 
-use Vidola\Util\SubfileDetector;
-use Vidola\Util\InternalUrlBuilder;
 use Vidola\Util\TitleCreator;
-use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
  * @package Vidola
@@ -19,11 +16,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 
 	private $content;
 
-	private $subfileDetector;
-
-	private $internalUrlBuilder;
-
-	private $toc;
+	private $structure;
 
 	private $titleCreator;
 
@@ -44,16 +37,12 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	public function __construct(
 		$rootFile,
 		Content $content,
-		SubfileDetector $subfileDetector,
-		InternalUrlBuilder $internalUrlBuilder,
-		TableOfContents $toc,
+		Structure $structure,
 		TitleCreator $titleCreator
 	) {
 		$this->rootFile = $rootFile;
 		$this->content = $content;
-		$this->subfileDetector = $subfileDetector;
-		$this->internalUrlBuilder = $internalUrlBuilder;
-		$this->toc = $toc;
+		$this->structure = $structure;
 		$this->titleCreator = $titleCreator;
 	}
 
@@ -95,7 +84,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	public function getSubfiles($file)
 	{
 		$text = $this->getContent($file, true);
-		return $this->subfileDetector->getSubfiles($text);
+		return $this->structure->getSubfiles($text);
 	}
 
 	/**
@@ -117,7 +106,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 			return $this->tocCache[$file];
 		}
 
-		$this->tocCache[$file] = $this->toc->createTocNode(
+		$this->tocCache[$file] = $this->structure->createTocNode(
 			$this->getContent($file, true),
 			new \DOMDocument()
 		);
@@ -252,7 +241,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	 */
 	public function getLink($file, $relativeTo = null)
 	{
-		return $this->internalUrlBuilder->createLink($file, $relativeTo);
+		return $this->structure->createLink($file, $relativeTo);
 	}
 
 	/**

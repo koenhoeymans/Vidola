@@ -9,19 +9,13 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	public function __construct()
 	{
 		$this->content = $this->getMock('\\Vidola\\Document\\Content');
-		$this->subfileDetector = $this->getMock('\\Vidola\\Util\\SubfileDetector');
-		$this->internalUrlBuilder = $this->getMock('\\Vidola\\Util\\InternalUrlBuilder');
-		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->titleCreator = $this->getMockBuilder('\\Vidola\\Util\\TitleCreator')
-			->getMock();
+		$this->structure = $this->getMock('\\Vidola\\Document\\Structure');
+		$this->titleCreator = $this->getMock('\\Vidola\\Util\\TitleCreator');
+
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
 			'file',
 			$this->content,
-			$this->subfileDetector,
-			$this->internalUrlBuilder,
-			$this->toc,
+			$this->structure,
 			$this->titleCreator
 		);
 	}
@@ -60,7 +54,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->method('getContent')
 			->with('file')
 			->will($this->returnValue('text'));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->atLeastOnce())
 			->method('getSubfiles')
 			->with('text')
@@ -103,12 +97,12 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->method('getContent')
 			->with('subfile')
 			->will($this->returnValue('subtext'));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(0))
 			->method('getSubfiles')
 			->with('text')
 			->will($this->returnValue(array('subfile')));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(1))
 			->method('getSubfiles')
 			->with('subtext')
@@ -130,7 +124,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->method('getContent')
 			->with('file')
 			->will($this->returnValue('text with header in'));
-		$this->toc
+		$this->structure
 			->expects($this->atLeastOnce())
 			->method('createTocNode')
 			->with('text with header in', new \DomDocument())
@@ -152,7 +146,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->method('getContent')
 			->with('file')
 			->will($this->returnValue('some text'));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(0))
 			->method('getSubfiles')
 			->with('some text')
@@ -187,17 +181,17 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->method('getContent')
 			->with('subfolder/subdocument')
 			->will($this->returnValue('subtext'));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(0))
 			->method('getSubfiles')
 			->with('some text')
 			->will($this->returnValue(array('subfolder/subdocument')));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(1))
 			->method('getSubfiles')
 			->with('subtext')
 			->will($this->returnValue(array()));
-		$this->internalUrlBuilder
+		$this->structure
 			->expects($this->once())
 			->method('createLInk')
 			->with('file', 'subfolder/subdocument')
@@ -228,22 +222,22 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->method('getContent')
 			->with('nextfile')
 			->will($this->returnValue('nexttext'));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(0))
 			->method('getSubfiles')
 			->with('some text')
 			->will($this->returnValue(array('subfolder/subdocument')));
-		$this->subfileDetector
+		$this->structure
 			->expects($this->at(1))
 			->method('getSubfiles')
 			->with('subtext')
 			->will($this->returnValue(array('nextfile')));
-			$this->subfileDetector
+		$this->structure
 			->expects($this->at(2))
 			->method('getSubfiles')
 			->with('nexttext')
 			->will($this->returnValue(array()));
-		$this->internalUrlBuilder
+		$this->structure
 			->expects($this->once())
 			->method('createLInk')
 			->with('nextfile', 'subfolder/subdocument')
@@ -259,7 +253,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function createsStartFileLinkRelativeToGivenFile()
 	{
-		$this->internalUrlBuilder
+		$this->structure
 			->expects($this->once())
 			->method('createLInk')
 			->with('file', 'subfile')
