@@ -108,7 +108,7 @@ class Hyperlink extends Pattern
 		$url = (isset($match['url'][0]) && ($match['url'][0] == '<'))
 			? substr($match['url'], 1, -1) : $match['url'];
 		$title = isset($match['title']) ? $match['title'] : null;
-		
+
 		return $this->createDomForLink($url, $match['anchor'], $title, $parentNode);
 	}
 
