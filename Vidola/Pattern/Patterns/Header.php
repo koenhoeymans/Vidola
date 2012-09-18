@@ -89,8 +89,7 @@ class Header extends Pattern
 	}
 
 	private function createAtxHeaders(array $match, \DOMDocument $domDoc)
-	{
-		
+	{	
 		$level = strlen($match['level']);
 		$level = ($level > 5) ? 6 : $level;
 
