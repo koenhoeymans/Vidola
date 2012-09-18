@@ -103,7 +103,25 @@ class Header extends Pattern
 
 	private function addId(\DOMElement $element, $text)
 	{
-		$id = $this->createId($text);
+		$id = $this->appendUnique($this->createId($text));
+		$element->setAttribute('id', $id);
+	}
+
+	/**
+	 * Inspired by Pandoc
+	 */
+	private function createId($text)
+	{
+		$text = strtolower($text);
+		$text = str_replace(' ', '-', $text);
+		$text = preg_replace('@[^a-z0-9_\-.]@', '', $text);
+		$text = preg_replace('@^[^a-z]*@', '', $text);
+
+		return $text;
+	}
+
+	private function appendUnique($id)
+	{
 		$append = false;
 
 		if (isset($this->ids[$id]))
@@ -127,19 +145,6 @@ class Header extends Pattern
 			$id .= '-' . $append;
 		}
 
-		$element->setAttribute('id', $id);
-	}
-
-	/**
-	 * Inspired by Pandoc
-	 */
-	private function createId($text)
-	{
-		$text = strtolower($text);
-		$text = str_replace(' ', '-', $text);
-		$text = preg_replace('@[^a-z0-9_\-.]@', '', $text);
-		$text = preg_replace('@^[^a-z]*@', '', $text);
-
-		return $text;
+		return $id;
 	}
 }
