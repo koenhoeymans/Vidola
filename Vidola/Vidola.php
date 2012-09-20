@@ -93,7 +93,6 @@ class Vidola
 			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler'));
 		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
 			->andMethod('addPostTextProcessor')
-			->addParam(array('Vidola\\Processor\\Processors\\VidolaTagsToHtmlTags'))
 			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler'))
 			->addParam(array('Vidola\\Processor\\Processors\\XmlDeclarationRemover'))
 			->addParam(array('Vidola\\Processor\\Processors\\HtmlPrettifier'));
