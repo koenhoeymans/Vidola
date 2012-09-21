@@ -17,6 +17,13 @@ class MdContent implements Content
 
 	private $retriever;
 
+	/**
+	 * $file => $parsedContent
+	 * 
+	 * @var array
+	 */
+	private $parsedCache = array();
+
 	public function __construct(Parser $parser, ContentRetriever $retriever)
 	{
 		$this->parser = $parser;
@@ -26,15 +33,21 @@ class MdContent implements Content
 	/**
 	 * @see Vidola\Document.Content::getContent()
 	 */
-	public function getContent($page, $raw = false)
+	public function getContent($page, $parse = true)
 	{
-		$content = $this->retriever->retrieve($page);
-
-		if ($raw)
+		if ($parse && isset($this->parsedCache[$page]))
 		{
-			return $content;
+			return $this->parsedCache[$page];
 		}
 
-		return $this->parser->parse($content);
+		$content = $this->retriever->retrieve($page);
+
+		if ($parse)
+		{
+			$content = $this->parser->parse($content);
+			$this->parsedCache[$page] = $content;
+		}
+
+		return $content;
 	}
 }

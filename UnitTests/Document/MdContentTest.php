@@ -38,6 +38,24 @@ class Vidola_Document_MdContentTest extends PHPUnit_Framework_TestCase
 			->expects($this->never())
 			->method('parse');
 		
+		$this->content->getContent('file', false);
+	}
+
+	/**
+	 * @test
+	 */
+	public function cachesParsedContent()
+	{
+		$this->retriever
+			->expects($this->any())
+			->method('retrieve')
+			->will($this->returnValue('foo'));
+		$this->parser
+			->expects($this->once())
+			->method('parse')
+			->will($this->returnValue('bar'));
+
+		$this->content->getContent('file', true);
 		$this->content->getContent('file', true);
 	}
 }
