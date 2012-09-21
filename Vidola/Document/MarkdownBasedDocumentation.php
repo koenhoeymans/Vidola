@@ -83,7 +83,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 
 	public function getSubfiles($file)
 	{
-		$text = $this->getContent($file, true);
+		$text = $this->getContent($file, false);
 		return $this->structure->getSubfiles($text);
 	}
 
@@ -107,7 +107,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		}
 
 		$this->tocCache[$file] = $this->structure->createTocNode(
-			$this->getContent($file, true),
+			$this->getContent($file, false),
 			new \DOMDocument()
 		);
 
@@ -120,9 +120,9 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	 * @param string $file
 	 * @param bool $raw
 	 */
-	public function getContent($file, $raw = false)
+	public function getContent($file, $parsed = true)
 	{
-		return $this->content->getContent($file, $raw);
+		return $this->content->getContent($file, $parsed);
 	}
 
 	/**
