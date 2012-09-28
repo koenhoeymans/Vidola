@@ -31,8 +31,7 @@ class Blockquote extends Pattern
 	{
 		$ownerDocument = $this->getOwnerDocument($parentNode);
 		$text = preg_replace("#(^|\n)> ?#", "\${1}", $match['quote']);
-		$blockquote = $ownerDocument->createElement('blockquote');
-		$blockquote->appendChild($ownerDocument->createTextNode($text . "\n\n"));
+		$blockquote = $ownerDocument->createElement('blockquote', $text . "\n\n");
 
 		return $blockquote;
 	}

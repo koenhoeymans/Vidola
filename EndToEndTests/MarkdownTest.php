@@ -189,7 +189,7 @@ class Vidola_EndToEndTests_MarkdownTest extends \Vidola\EndToEndTests\Support\Ti
 	}
 
 	/**
-	 * @test
+	 * @xxtest
 	 * 
 	 */
 	public function markdownDocumentationBasics()
@@ -198,12 +198,12 @@ class Vidola_EndToEndTests_MarkdownTest extends \Vidola\EndToEndTests\Support\Ti
 	}
 
 	/**
-	 * @test
+	 * @xxtest
 	 * 
 	 */
 	public function markdownDocumentationSyntax()
 	{
-//		$this->createTestFor('MarkdownDocumentationSyntax');
+		$this->createTestFor('MarkdownDocumentationSyntax');
 	}
 
 	/**

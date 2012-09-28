@@ -119,6 +119,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	 * 
 	 * @param string $file
 	 * @param bool $raw
+	 * @return string
 	 */
 	public function getContent($file, $parsed = true)
 	{

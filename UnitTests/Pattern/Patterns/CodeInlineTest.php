@@ -46,4 +46,33 @@ class Vidola_Pattern_Patterns_CodeInlineTest extends \Vidola\UnitTests\Support\P
 		$dom = new \DOMElement('code', 'co`de');
 		$this->assertCreatesDomFromText($dom, $text);
 	}
+
+	/**
+	 * @test
+	 */
+	public function takesTheMostOutwardBackticks()
+	{
+		$text = 'Text with ``code``` in between.';
+		$dom = new \DOMElement('code', 'code`');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function backslashEscapes()
+	{
+		$text = 'Code \`that` is escaped.';
+		$this->assertDoesNotCreateDomFromText($text);
+	}
+
+	/**
+	 * @test
+	 */
+	public function backticksCanBeFollowedByNonSpace()
+	{
+		$text = 'This `code`: look below.';
+		$dom = new \DOMElement('code', 'code');
+		$this->assertCreatesDomFromText($dom, $text);
+	}
 }

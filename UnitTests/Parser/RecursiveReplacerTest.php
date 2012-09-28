@@ -23,6 +23,13 @@ class Vidola_Parser_RecursiveReplacerTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
+	private function domDocWith($xml)
+	{
+		$domDoc = new \DOMDocument();
+		$domDoc->loadXML($xml);
+		return $domDoc;
+	}
+
 	/**
 	 * @test
 	 */
@@ -36,28 +43,9 @@ class Vidola_Parser_RecursiveReplacerTest extends PHPUnit_Framework_TestCase
 		$preProcessor
 			->expects($this->atLeastOnce())
 			->method('process')
-			->with('text
-');
-		$this->replacer->addPreTextProcessor($preProcessor);
-		$this->replacer->parse('text');
-	}
+			->with("text\n");
 
-	/**
-	 * @test
-	 */
-	public function afterProcessingPostTextProcessorsAreCalled()
-	{
-		$this->patternList
-			->expects($this->atLeastOnce())
-			->method('getPatterns')
-			->will($this->returnValue(array()));
-		$postProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
-		$postProcessor
-			->expects($this->atLeastOnce())
-			->method('process')
-			->with('<doc>text
-</doc>');
-		$this->replacer->addPostTextProcessor($postProcessor);
+		$this->replacer->addPreTextProcessor($preProcessor);
 		$this->replacer->parse('text');
 	}
 
@@ -104,8 +92,8 @@ class Vidola_Parser_RecursiveReplacerTest extends PHPUnit_Framework_TestCase
 			->method('getPatterns')
 			->will($this->returnValue(array($mockPattern)));
 		
-		$this->assertEquals('<doc>text
-</doc>', $this->replacer->parse('text'));
+		$this->assertEquals($this->domDocWith('<doc>text
+</doc>'), $this->replacer->parse('text'));
 	}
 
 	/**
@@ -125,8 +113,8 @@ class Vidola_Parser_RecursiveReplacerTest extends PHPUnit_Framework_TestCase
 			->method('getSubpatterns')
 			->will($this->returnValue(array()));
 
-		$this->assertEquals('<doc>t<a>a</a><b>b</b>t
-</doc>', $this->replacer->parse('text'));
+		$this->assertEquals($this->domDocWith('<doc>t<a>a</a><b>b</b>t
+</doc>'), $this->replacer->parse('text'));
 	}
 
 	/**
@@ -146,8 +134,8 @@ class Vidola_Parser_RecursiveReplacerTest extends PHPUnit_Framework_TestCase
 			->method('getSubpatterns')
 			->will($this->returnValue(array($mockSubpattern)));
 
-		$this->assertEquals('<doc>t<a><b>c</b></a>xt
-</doc>', $this->replacer->parse('text'));
+		$this->assertEquals($this->domDocWith('<doc>t<a><b>c</b></a>xt
+</doc>'), $this->replacer->parse('text'));
 	}
 
 	/**
@@ -174,8 +162,8 @@ class Vidola_Parser_RecursiveReplacerTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue(array($mockSubpattern1, $mockSubpattern2)));
 
 		$this->assertEquals(
-			'<doc>t<a><b><c>x</c></b><d><e>y</e></d></a>xt
-</doc>', $this->replacer->parse('text')
+			$this->domDocWith('<doc>t<a><b><c>x</c></b><d><e>y</e></d></a>xt
+</doc>'), $this->replacer->parse('text')
 		);
 	}
 }

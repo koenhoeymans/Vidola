@@ -53,7 +53,7 @@ class Hyperlink extends Pattern
 			|
 
 			(?<reference>(?J)
-				\[(?<anchor>
+				(?<!\\\)\[(?<anchor>
 					(
 						[^[]
 						|

@@ -15,6 +15,7 @@ interface Content
 	 * 
 	 * @param string $page
 	 * @param bool $raw
+	 * @return string
 	 */
 	public function getContent($page, $raw = false);
 }

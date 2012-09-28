@@ -21,8 +21,6 @@ class RecursiveReplacer implements Parser
 
 	private $preTextProcessors = array();
 
-	private $postTextProcessors = array();
-
 	private $preDomProcessors = array();
 
 	private $postDomProcessors = array();
@@ -37,11 +35,6 @@ class RecursiveReplacer implements Parser
 		$this->preTextProcessors[] = $processor;
 	}
 
-	public function addPostTextProcessor(TextProcessor $processor)
-	{
-		$this->postTextProcessors[] = $processor;
-	}
-
 	public function addPreDomProcessor(DomProcessor $domProcessor)
 	{
 		$this->preDomProcessors[] = $domProcessor;
@@ -52,6 +45,10 @@ class RecursiveReplacer implements Parser
 		$this->postDomProcessors[] = $domProcessor;
 	}
 
+	/**
+	 * @see Vidola\Parser.Parser::parse()
+	 * @return \DomDocument
+	 */
 	public function parse($text)
 	{
 		# adding the \n for texts containing only a paragraph
@@ -59,6 +56,7 @@ class RecursiveReplacer implements Parser
 
 		$domDoc = new \DOMDocument();
 		$document = $domDoc->createElement('doc');
+		# $text can contain characters like `>` used for block quotes
 		$textNode = $domDoc->createTextNode($text);
 		$domDoc->appendChild($document);
 		$document->appendChild($textNode);
@@ -67,28 +65,26 @@ class RecursiveReplacer implements Parser
 
 		$this->applyPatterns($textNode);
 
+		$xpath = new \DOMXPath($domDoc);
+		$textNodes = $xpath->query('//text()');
+		foreach ($textNodes as $textNode)
+		{
+			if($textNode->parentNode->nodeName !== 'code')
+			{
+				$textNode->nodeValue = preg_replace(
+					'@\\\\([^ ])@', "\${1}", $textNode->nodeValue
+				);
+			}
+		}
+
 		$this->postProcessDom($domDoc);
 
-		$text = trim($domDoc->saveXML($document));
-
-		$text = $this->postProcess($text);
-
-		return $text;
+		return $domDoc;
 	}
 
 	private function preProcess($text)
 	{
 		foreach ($this->preTextProcessors as $processor)
-		{
-			$text = $processor->process($text);
-		}
-
-		return $text;
-	}
-
-	private function postProcess($text)
-	{
-		foreach ($this->postTextProcessors as $processor)
 		{
 			$text = $processor->process($text);
 		}

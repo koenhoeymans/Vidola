@@ -16,9 +16,9 @@ class CodeInline extends Code
 	{
 		return
 			'@
-			[`](?<extra_backticks>([`])*)
+			(?<=^|\s)[`](?<extra_backticks>([`])*)
 			(?<code>.+?)
-			\g{extra_backticks}[`]
+			\g{extra_backticks}[`](?!`)
 			@x';
 	}
 

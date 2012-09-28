@@ -86,15 +86,12 @@ class Vidola
 			->addParam(array('Vidola\\Processor\\Processors\\EmptyLineFixer'))
 			->addParam(array('Vidola\\Processor\\Processors\\NewLineStandardizer'))
 			->addParam(array('Vidola\\Processor\\Processors\\Detab'))
-			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPreTextHandler'))
 			->addParam(array('Vidola\\Processor\\Processors\\LinkDefinitionCollector'));
 		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
 			->andMethod('addPostDomProcessor')
-			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostDomHandler'));
-		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
+			->addParam(array('Vidola\\Processor\\Processors\\EmailObfuscator'));
+		$fjor->given('Vidola\\Document\\MdContent')
 			->andMethod('addPostTextProcessor')
-			->addParam(array('Vidola\\Processor\\Processors\\SpecialCharacterPostTextHandler'))
-			->addParam(array('Vidola\\Processor\\Processors\\XmlDeclarationRemover'))
 			->addParam(array('Vidola\\Processor\\Processors\\HtmlPrettifier'));
 
 		// build the document(s)

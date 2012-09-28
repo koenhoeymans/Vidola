@@ -20,7 +20,8 @@ class Vidola_Document_MdContentTest extends PHPUnit_Framework_TestCase
 	{
 		$this->parser
 			->expects($this->once())
-			->method('parse');
+			->method('parse')
+			->will($this->returnValue(new \DomDocument()));
 
 		$this->content->getContent('file');
 	}
@@ -36,7 +37,8 @@ class Vidola_Document_MdContentTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue('bar'));
 		$this->parser
 			->expects($this->never())
-			->method('parse');
+			->method('parse')
+			->will($this->returnValue(new \DomDocument()));
 		
 		$this->content->getContent('file', false);
 	}
@@ -53,9 +55,28 @@ class Vidola_Document_MdContentTest extends PHPUnit_Framework_TestCase
 		$this->parser
 			->expects($this->once())
 			->method('parse')
-			->will($this->returnValue('bar'));
+			->will($this->returnValue(new \DomDocument()));
 
 		$this->content->getContent('file', true);
+		$this->content->getContent('file', true);
+	}
+
+	/**
+	* @test
+	*/
+	public function afterProcessingPostTextProcessorsAreCalled()
+	{
+		$postProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
+		$postProcessor
+			->expects($this->atLeastOnce())
+			->method('process');
+		$this->content->addPostTextProcessor($postProcessor);
+
+		$this->parser
+			->expects($this->once())
+			->method('parse')
+			->will($this->returnValue(new \DomDocument()));
+
 		$this->content->getContent('file', true);
 	}
 }
