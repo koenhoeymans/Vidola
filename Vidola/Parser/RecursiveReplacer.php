@@ -56,7 +56,6 @@ class RecursiveReplacer implements Parser
 
 		$domDoc = new \DOMDocument();
 		$document = $domDoc->createElement('doc');
-		# $text can contain characters like `>` used for block quotes
 		$textNode = $domDoc->createTextNode($text);
 		$domDoc->appendChild($document);
 		$document->appendChild($textNode);
@@ -71,6 +70,7 @@ class RecursiveReplacer implements Parser
 		{
 			if($textNode->parentNode->nodeName !== 'code')
 			{
+				# don't need the backslash for escaped characters anymore
 				$textNode->nodeValue = preg_replace(
 					'@\\\\([^ ])@', "\${1}", $textNode->nodeValue
 				);
