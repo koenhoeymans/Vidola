@@ -6,6 +6,7 @@
 namespace Vidola\Document;
 
 use Vidola\Util\TitleCreator;
+use Vidola\Processor\TextProcessor;
 
 /**
  * @package Vidola
@@ -19,6 +20,8 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	private $structure;
 
 	private $titleCreator;
+
+	private $postTextProcessors = array();
 
 	/**
 	 * Keeps Toc in memory so we don't need to build it again.
@@ -83,7 +86,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 
 	public function getSubfiles($file)
 	{
-		$text = $this->getContent($file, false);
+		$text = $this->content->getRawContent($file);
 		return $this->structure->getSubfiles($text);
 	}
 
@@ -107,7 +110,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		}
 
 		$this->tocCache[$file] = $this->structure->createTocNode(
-			$this->getContent($file, false),
+			$this->content->getRawContent($file),
 			new \DOMDocument()
 		);
 
@@ -115,15 +118,47 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	}
 
 	/**
-	 * Provides the parsed or raw content of a file.
+	 * Provides the content of a file.
 	 * 
 	 * @param string $file
-	 * @param bool $raw
-	 * @return string
+	 * @param boolean $dom
+	 * @return string|\DomDocument
 	 */
-	public function getContent($file, $parsed = true)
+	public function getContent($file, $dom = false)
 	{
-		return $this->content->getContent($file, $parsed);
+		$content = $this->content->getParsedContent($file);
+
+		if (!$dom)
+		{
+			$content = $content->saveXml($content->documentElement);
+	
+			# DomDocument::saveXml encodes entities like `&` when added within
+			# a text node.
+			$content = str_replace(
+				array('&amp;amp;', '&amp;copy;', '&amp;quot;', '&amp;#'),
+				array('&amp;', '&copy;', '&quot;', '&#'),
+				$content
+			);
+	
+			$content = $this->postProcess($content);
+		}
+
+		return $content;
+	}
+
+	public function addPostTextProcessor(TextProcessor $processor)
+	{
+		$this->postTextProcessors[] = $processor;
+	}
+
+	private function postProcess($text)
+	{
+		foreach ($this->postTextProcessors as $processor)
+		{
+			$text = $processor->process($text);
+		}
+	
+		return $text;
 	}
 
 	/**
@@ -168,7 +203,9 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	 */
 	public function getPageTitle($file)
 	{
-		return $this->titleCreator->createPageTitle($this->getContent($file, true), $file);
+		return $this->titleCreator->createPageTitle(
+			$this->content->getRawContent($file), $file
+		);
 	}
 
 	public function getPreviousFileLink($file)

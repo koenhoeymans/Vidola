@@ -90,7 +90,7 @@ class Vidola
 		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
 			->andMethod('addPostDomProcessor')
 			->addParam(array('Vidola\\Processor\\Processors\\EmailObfuscator'));
-		$fjor->given('Vidola\\Document\\MdContent')
+		$fjor->given('Vidola\\Document\\MarkdownBasedDocumentation')
 			->andMethod('addPostTextProcessor')
 			->addParam(array('Vidola\\Processor\\Processors\\HtmlPrettifier'));
 

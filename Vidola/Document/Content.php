@@ -11,11 +11,18 @@ namespace Vidola\Document;
 interface Content
 {
 	/**
-	 * Provides the parsed or raw content of a file.
+	 * Get content parsed by the different patterns.
 	 * 
 	 * @param string $page
-	 * @param bool $raw
+	 * @return \DomDocument
+	 */
+	public function getParsedContent($page);
+
+	/**
+	 * Get content as in file.
+	 * 
+	 * @param string $page
 	 * @return string
 	 */
-	public function getContent($page, $raw = false);
+	public function getRawContent($page);
 }

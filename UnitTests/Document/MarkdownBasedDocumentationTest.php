@@ -39,9 +39,23 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->once())
-			->method('getContent');
+			->method('getParsedContent')
+			->will($this->returnValue(new \DomDocument()));
 		
 		$this->mdDoc->getContent('file');
+	}
+
+	/**
+	 * @test
+	 */
+	public function providesParsedContentAsDomDocument()
+	{
+		$this->content
+			->expects($this->once())
+			->method('getParsedContent')
+			->will($this->returnValue(new \DomDocument()));
+		
+		$this->mdDoc->getContent('file', true);
 	}
 
 	/**
@@ -51,7 +65,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->atLeastOnce())
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('text'));
 		$this->structure
@@ -70,7 +84,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->atLeastOnce())
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('text'));
 		$this->titleCreator
@@ -89,12 +103,12 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->at(0))
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('text'));
 		$this->content
 			->expects($this->at(1))
-			->method('getContent')
+			->method('getRawContent')
 			->with('subfile')
 			->will($this->returnValue('subtext'));
 		$this->structure
@@ -121,7 +135,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->atLeastOnce())
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('text with header in'));
 		$this->structure
@@ -143,7 +157,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->at(0))
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('some text'));
 		$this->structure
@@ -173,12 +187,12 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->at(0))
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('some text'));
 		$this->content
 			->expects($this->at(1))
-			->method('getContent')
+			->method('getRawContent')
 			->with('subfolder/subdocument')
 			->will($this->returnValue('subtext'));
 		$this->structure
@@ -209,17 +223,17 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->at(0))
-			->method('getContent')
+			->method('getRawContent')
 			->with('file')
 			->will($this->returnValue('some text'));
 		$this->content
 			->expects($this->at(1))
-			->method('getContent')
+			->method('getRawContent')
 			->with('subfolder/subdocument')
 			->will($this->returnValue('subtext'));
 		$this->content
 			->expects($this->at(2))
-			->method('getContent')
+			->method('getRawContent')
 			->with('nextfile')
 			->will($this->returnValue('nexttext'));
 		$this->structure
@@ -262,5 +276,24 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 		$this->assertEquals(
 			'file', $this->mdDoc->getStartFileLink('subfile')
 		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function afterProcessingPostTextProcessorsAreCalled()
+	{
+		$postProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
+		$postProcessor
+			->expects($this->atLeastOnce())
+			->method('process');
+		$this->mdDoc->addPostTextProcessor($postProcessor);
+		$this->content
+			->expects($this->any())
+			->method('getParsedContent')
+			->with('file')
+			->will($this->returnValue(new \DOMDocument()));
+
+		$this->mdDoc->getContent('file', false);
 	}
 }

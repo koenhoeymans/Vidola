@@ -7,7 +7,6 @@ namespace Vidola\Document;
 
 use Vidola\Parser\Parser;
 use Vidola\Util\ContentRetriever;
-use Vidola\Processor\TextProcessor;
 
 /**
  * @package Vidola
@@ -17,8 +16,6 @@ class MdContent implements Content
 	private $parser;
 
 	private $retriever;
-
-	private $postTextProcessors = array();
 
 	/**
 	 * $file => $parsedContent
@@ -33,52 +30,35 @@ class MdContent implements Content
 		$this->retriever = $retriever;
 	}
 
-	public function addPostTextProcessor(TextProcessor $processor)
-	{
-		$this->postTextProcessors[] = $processor;
-	}
-
 	/**
-	 * @see Vidola\Document.Content::getContent()
-	 * @return string
+	 * Get content parsed by the different patterns.
+	 * 
+	 * @param string $page
+	 * @return \DomDocument
 	 */
-	public function getContent($page, $parse = true)
+	public function getParsedContent($page)
 	{
-		if ($parse && isset($this->parsedCache[$page]))
+		if (isset($this->parsedCache[$page]))
 		{
 			return $this->parsedCache[$page];
 		}
 
 		$content = $this->retriever->retrieve($page);
-
-		if ($parse)
-		{
-			$domDoc = $this->parser->parse($content);
-			$content = $domDoc->saveXml($domDoc->documentElement);
-
-			# DomDocument::saveXml encodes entities like `&` when added within
-			# a text node.
-			$content = str_replace(
-				array('&amp;amp;', '&amp;copy;', '&amp;quot;', '&amp;#'),
-				array('&amp;', '&copy;', '&quot;', '&#'),
-				$content
-			);
-
-			$this->parsedCache[$page] = $content;
-
-			$this->postProcess($content);
-		}
+		$content = $this->parser->parse($content);
+		
+		$this->parsedCache[$page] = $content;
 
 		return $content;
 	}
 
-	private function postProcess($text)
+	/**
+	 * Get content as in file.
+	 * 
+	 * @param string $page
+	 * @return string
+	 */
+	public function getRawContent($page)
 	{
-		foreach ($this->postTextProcessors as $processor)
-		{
-			$text = $processor->process($text);
-		}
-	
-		return $text;
+		return $this->retriever->retrieve($page);
 	}
 }
