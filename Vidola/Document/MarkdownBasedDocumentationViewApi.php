@@ -159,8 +159,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 
 		if ($toc)
 		{
-			$toc->ownerDocument->appendChild($toc);
-			return $toc->ownerDocument->saveHtml();
+			return $toc->ownerDocument->saveXml($toc);
 		}
 
 		return null;

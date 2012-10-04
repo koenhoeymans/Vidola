@@ -37,11 +37,15 @@ class Vidola_Document_MultiMdStructureTest extends PHPUnit_Framework_TestCase
 	 */
 	public function createsTableOfContents()
 	{
+		$domDoc = new \DomDocument();
+		$domDoc->loadXML('<doc><h1 id="id">header</h1></doc>');
+
 		$this->toc
 			->expects($this->any())
-			->method('createToc');
+			->method('buildToc')
+			->with(array(array('id'=>'id', 'level'=>'1', 'title'=>'header')), null, $domDoc);
 
-		$this->structure->createTocNode('text', new \DOMDocument());
+		$this->structure->createTocNode($domDoc);
 	}
 
 	/**

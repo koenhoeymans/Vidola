@@ -109,12 +109,12 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 			return $this->tocCache[$file];
 		}
 
-		$this->tocCache[$file] = $this->structure->createTocNode(
-			$this->content->getRawContent($file),
-			new \DOMDocument()
+		$toc = $this->structure->createTocNode(
+			$this->content->getParsedContent($file)
 		);
+		$this->tocCache[$file] = $toc;
 
-		return $this->tocCache[$file];
+		return $toc;
 	}
 
 	/**

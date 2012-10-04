@@ -20,10 +20,10 @@ interface Structure
 	public function getSubfiles($file);
 
 	/**
-	 * @param string $text
+	 * @param \DomDoc $domDoc
 	 * @return \DomElement|null
 	 */
-	public function createTocNode($text, \DomDocument $domDoc);
+	public function createTocNode(\DomDocument $domDoc);
 
 	/**
 	 * Creates the link pointing to a resource relative to a given resource. Both

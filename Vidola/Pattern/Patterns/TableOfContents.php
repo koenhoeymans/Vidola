@@ -71,18 +71,6 @@ class TableOfContents extends Pattern implements SubfileDetector
 	}
 
 	/**
-	 * @param string $text
-	 * @return \DomElement|null
-	 */
-	public function createTocNode($text, \DomDocument $domDoc)
-	{
-		$headers = $this->headerFinder->getHeadersSequentially($text);
-		$toc = $this->buildToc($headers, null, $domDoc);
-
-		return $toc;
-	}
-
-	/**
 	 * @see Vidola\Util.SubfileDetector::getSubfiles()
 	 */
 	public function getSubfiles($text)
@@ -201,7 +189,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 	}
 
 	// @todo not logical that empty headers array can return ''.
-	private function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
+	public function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
 	{
 		if (empty($headers))
 		{

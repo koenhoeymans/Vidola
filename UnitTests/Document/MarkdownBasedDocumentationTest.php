@@ -135,13 +135,13 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$this->content
 			->expects($this->atLeastOnce())
-			->method('getRawContent')
+			->method('getParsedContent')
 			->with('file')
-			->will($this->returnValue('text with header in'));
+			->will($this->returnValue(new \DomDocument));
 		$this->structure
 			->expects($this->atLeastOnce())
 			->method('createTocNode')
-			->with('text with header in', new \DomDocument())
+			->with(new \DomDocument())
 			->will($this->returnValue('this should be a domNode'));
 
 		$this->assertEquals(

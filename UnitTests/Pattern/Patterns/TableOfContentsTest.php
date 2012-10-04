@@ -589,36 +589,27 @@ paragraph";
 	/**
 	 * @test
 	 */
-	public function createsTocFromText()
+	public function buildsTocFromListOfHeaders()
 	{
-		$this->headerFinder
-			->expects($this->any())
-			->method('getHeadersSequentially')
-			->will($this->returnValue(
-				array(array('title' => 'header', 'level' => 1, 'id' => 'foo'))
-		));
+		$headers = array(array('title' => 'header', 'level' => 1, 'id' => 'foo'));
 
-		$text = 'text
-
-header
-======
-
-text';
-
-		$domDoc1 = new \DOMDocument();
-		$ul = $domDoc1->createElement('ul');
-		$domDoc1->appendChild($ul);
-		$li = $domDoc1->createElement('li');
+		$domDoc = new \DOMDocument();
+		$ul = $domDoc->createElement('ul');
+		$domDoc->appendChild($ul);
+		$li = $domDoc->createElement('li');
 		$ul->appendChild($li);
-		$a = $domDoc1->createElement('a', 'header');
+		$a = $domDoc->createElement('a', 'header');
 		$li->appendChild($a);
 		$a->setAttribute('href', '#foo');
 
 		$domDoc2 = new \DomDocument();
-		$toc = $this->toc->createTocNode($text, $domDoc2);
+		$toc = $this->toc->buildToc($headers, null, $domDoc2);
 		$domDoc2->appendChild($toc);
 
-		$this->assertEquals($domDoc1->saveXML(), $domDoc2->saveXML());
+		$this->assertEquals(
+			$ul->ownerDocument->saveHTML(),
+			$toc->ownerDocument->saveHTML()
+		);
 	}
 
 	/**
