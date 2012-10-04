@@ -17,6 +17,13 @@ class DocFileRetriever implements ContentRetriever
 		$this->sourceDir = realpath($dir);
 	}
 
+	/**
+	 * Retrieves the file relative to the current directory and
+	 * the source directory. It searches for `.txt` and `.text`
+	 * files.
+	 * 
+	 * @see Vidola\Util.ContentRetriever::retrieve()
+	 */
 	public function retrieve($file)
 	{
 		if (file_exists($file))

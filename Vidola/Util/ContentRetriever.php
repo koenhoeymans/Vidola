@@ -10,5 +10,10 @@ namespace Vidola\Util;
  */
 interface ContentRetriever
 {
-	public function retrieve($key);
+	/**
+	 * Retrieve the contents of a file by the projects internal name.
+	 * 
+	 * @param string $file
+	 */
+	public function retrieve($file);
 }
