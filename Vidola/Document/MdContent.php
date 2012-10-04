@@ -43,9 +43,8 @@ class MdContent implements Content
 			return $this->parsedCache[$page];
 		}
 
-		$content = $this->retriever->retrieve($page);
+		$content = $this->getRawContent($page);
 		$content = $this->parser->parse($content);
-		
 		$this->parsedCache[$page] = $content;
 
 		return $content;
@@ -59,6 +58,14 @@ class MdContent implements Content
 	 */
 	public function getRawContent($page)
 	{
-		return $this->retriever->retrieve($page);
+		if (isset($this->rawCache[$page]))
+		{
+			return $this->rawCache[$page];
+		}
+
+		$content = $this->retriever->retrieve($page);
+		$this->rawCache[$page] = $content;
+
+		return $content;
 	}
 }
