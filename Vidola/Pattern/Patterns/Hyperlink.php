@@ -116,7 +116,7 @@ class Hyperlink extends Pattern
 	{
 		if ($this->isRelative($url))
 		{
-			$url = $this->internalUrlBuilder->createLink($url);
+			$url = $this->internalUrlBuilder->createRelativeLink($url);
 		}
 
 		$ownerDocument = $this->getOwnerDocument($parentNode);

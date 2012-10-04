@@ -13,7 +13,7 @@ class HtmlFileUrlBuilder implements InternalUrlBuilder, FileExtensionProvider
 	/**
 	 * @see Vidola\Util.InternalUrlBuilder::createLink()
 	 */
-	public function createLink($to, $relativeTo = null)
+	public function createRelativeLink($to, $relativeTo = null)
 	{
 		$numberSignPos = strpos($to, "#");
 

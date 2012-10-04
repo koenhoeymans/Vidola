@@ -321,7 +321,7 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createLink')
+			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile.html'));
 
 		$doc = new \DOMDocument();
@@ -386,7 +386,7 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createLink')
+			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile.html'));
 
 		$doc = new \DOMDocument();
@@ -463,11 +463,11 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->at(0))
-			->method('createLink')
+			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile1.html'));
 		$this->internalUrlBuilder
 			->expects($this->at(1))
-			->method('createLink')
+			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile2.html'));
 
 		$doc = new \DOMDocument();
@@ -539,7 +539,7 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createLink')
+			->method('createRelativeLink')
 			->will($this->returnValue('Subincludedfile.html'));
 
 		$doc = new \DOMDocument();

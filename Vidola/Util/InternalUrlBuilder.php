@@ -15,5 +15,5 @@ interface InternalUrlBuilder
 	 * @param string $to
 	 * @param string $from
 	 */
-	public function createLink($toResource, $from = null);
+	public function createRelativeLink($toResource, $from = null);
 }

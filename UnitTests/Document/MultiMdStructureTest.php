@@ -55,7 +55,7 @@ class Vidola_Document_MultiMdStructureTest extends PHPUnit_Framework_TestCase
 	{
 		$this->internalUrlBuilder
 			->expects($this->any())
-			->method('createLink');
+			->method('createRelativeLink');
 
 		$this->structure->createLink('index');
 	}

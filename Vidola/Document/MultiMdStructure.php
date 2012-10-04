@@ -64,6 +64,6 @@ class MultiMdStructure implements Structure
 	 */
 	public function createLink($to, $relativeTo = null)
 	{
-		return $this->internalUrlBuilder->createLink($to, $relativeTo);
+		return $this->internalUrlBuilder->createRelativeLink($to, $relativeTo);
 	}
 }

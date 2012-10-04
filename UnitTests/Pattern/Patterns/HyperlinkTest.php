@@ -177,7 +177,7 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\Pa
 	{
 		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('createLink')->with('x')
+			->method('createRelativeLink')->with('x')
 			->will($this->returnValue('x.html'));
 		$text = "See page [x](x) for info.";
 		$dom = $this->createDomForLink('x.html', 'x');
@@ -191,7 +191,7 @@ class Vidola_Pattern_Patterns_HyperlinkTest extends \Vidola\UnitTests\Support\Pa
 	{
 		$this->internalUrlBuilder
 			->expects($this->once())
-			->method('createLink')->with('x/6/f4#f')
+			->method('createRelativeLink')->with('x/6/f4#f')
 			->will($this->returnValue('x.html'));
 		$text = "See page [x/6/f4#f](x/6/f4#f) for info.";
 		$dom = $this->createDomForLink('x.html', 'x/6/f4#f');

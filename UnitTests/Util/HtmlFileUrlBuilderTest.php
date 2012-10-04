@@ -16,7 +16,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function createsLinkToPageWithHtmlExtension()
 	{
-		$this->assertEquals('file.html', $this->urlBuilder->createLink('file'));
+		$this->assertEquals('file.html', $this->urlBuilder->createRelativeLink('file'));
 	}
 
 	/**
@@ -24,7 +24,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function ifLinkedPageHasAlreadyExtensionNoHtmlExtensionIsAdded()
 	{
-		$this->assertEquals('file.js', $this->urlBuilder->createLink('file.js'));
+		$this->assertEquals('file.js', $this->urlBuilder->createRelativeLink('file.js'));
 	}
 
 	/**
@@ -33,7 +33,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	public function keepsHierarchy()
 	{
 		$this->assertEquals('subfolder/index.html',
-		$this->urlBuilder->createLink('subfolder/index'));
+		$this->urlBuilder->createRelativeLink('subfolder/index'));
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	public function createsLinkRelativeToGivenFile()
 	{
 		$this->assertEquals(
-			'../file.html', $this->urlBuilder->createLink('file', 'subfolder/subfile')
+			'../file.html', $this->urlBuilder->createRelativeLink('file', 'subfolder/subfile')
 		);
 	}
 
@@ -53,7 +53,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'../subdir2/foo.html',
-			$this->urlBuilder->createLink('subdir2/foo', 'subdir1/subfile')
+			$this->urlBuilder->createRelativeLink('subdir2/foo', 'subdir1/subfile')
 		);
 	}
 
@@ -64,7 +64,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'../../foo.html',
-			$this->urlBuilder->createLink('foo', 'subdir/subsubdir/subfile')
+			$this->urlBuilder->createRelativeLink('foo', 'subdir/subsubdir/subfile')
 		);
 	}
 
@@ -74,5 +74,13 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	public function addsHtmlExtensionWhenAskedToProvideExtension()
 	{
 		$this->assertEquals('file.html', $this->urlBuilder->addExtension('file'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function extensionIsPlacedBeforeDoubleColon()
+	{
+		$this->assertEquals('x.html#y', $this->urlBuilder->createRelativeLink('x#y'));
 	}
 }
