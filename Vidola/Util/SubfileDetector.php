@@ -11,7 +11,7 @@ namespace Vidola\Util;
 interface SubfileDetector
 {
 	/**
-	 * Return the subfiles, as specified in the toc, in a text string.
+	 * Return the subfiles given in a text string in the toc.
 	 * 
 	 * @param string $text
 	 * @return array
