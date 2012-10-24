@@ -257,8 +257,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	}
 
 	/**
-	 * @param string $file
-	 * @return string
+	 * @see Vidola\Document.FilenameCreator::createFilename()
 	 */
 	public function createFilename($file)
 	{
