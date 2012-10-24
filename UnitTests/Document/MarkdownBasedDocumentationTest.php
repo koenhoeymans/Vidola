@@ -6,27 +6,44 @@ require_once dirname(__FILE__)
 
 class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_TestCase
 {
+	private function createDom($string)
+	{
+		$domDoc = new \DomDocument();
+		$domDoc->loadXML($string);
+
+		return $domDoc;
+	}
+
 	public function __construct()
 	{
-		$this->content = $this->getMock('\\Vidola\\Document\\Content');
-		$this->structure = $this->getMock('\\Vidola\\Document\\Structure');
-		$this->titleCreator = $this->getMock('\\Vidola\\Util\\TitleCreator');
-
+		$this->contentRetriever = $this->getMockBuilder('\\Vidola\\Util\\ContentRetriever')
+			->disableOriginalConstructor()
+			->getMock();
+		$this->parser = $this->getMockBuilder('\\Vidola\\Parser\\Parser')
+			->disableOriginalConstructor()
+			->getMock();
+		$this->titleCreator = $this->getMockBuilder('\\Vidola\\Util\\TitleCreator')
+			->disableOriginalConstructor()
+			->getMock();
+		$this->internalUrlBuilder = $this->getMockBuilder('\\Vidola\\Util\\InternalUrlBuilder')
+			->disableOriginalConstructor()
+			->getMock();
+		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
-			'file',
-			$this->content,
-			$this->structure,
-			$this->titleCreator
+			'my_project', $this->contentRetriever, $this->parser, $this->titleCreator,
+			$this->internalUrlBuilder, $this->toc
 		);
 	}
 
 	/**
 	 * @test
 	 */
-	public function buildsApiBasedOnFile()
+	public function buildsApiBasedOnPage()
 	{
 		$this->assertTrue(
-			$this->mdDoc->buildApi('file')
+			$this->mdDoc->buildApi('my_page')
 			instanceof
 			\Vidola\Document\MarkdownBasedDocumentationViewApi
 		);
@@ -35,14 +52,20 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	/**
 	 * @test
 	 */
-	public function providesParsedContentOfFile()
+	public function providesParsedContentOfFileAsString()
 	{
-		$this->content
-			->expects($this->once())
-			->method('getParsedContent')
-			->will($this->returnValue(new \DomDocument()));
-		
-		$this->mdDoc->getContent('file');
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('about')
+			->will($this->returnValue('text'));
+		$this->parser
+			->expects($this->atLeastOnce())
+			->method('parse')
+			->with('text')
+			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
+
+		$this->assertEquals('<doc>parsed text</doc>', $this->mdDoc->getParsedContent('about'));
 	}
 
 	/**
@@ -50,232 +73,41 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function providesParsedContentAsDomDocument()
 	{
-		$this->content
-			->expects($this->once())
-			->method('getParsedContent')
-			->will($this->returnValue(new \DomDocument()));
-		
-		$this->mdDoc->getContent('file', true);
-	}
-
-	/**
-	 * @test
-	 */
-	public function knowsSubfilesOfGivenFile()
-	{
-		$this->content
+		$this->contentRetriever
 			->expects($this->atLeastOnce())
-			->method('getRawContent')
-			->with('file')
+			->method('retrieve')
+			->with('foo')
 			->will($this->returnValue('text'));
-		$this->structure
+		$this->parser
 			->expects($this->atLeastOnce())
-			->method('getSubfiles')
+			->method('parse')
 			->with('text')
-			->will($this->returnValue(array('subfile')));
+			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
 
-		$this->assertEquals(array('subfile'), $this->mdDoc->getSubfiles('file'));
+		$this->assertEquals(
+			$this->createDom('<doc>parsed text</doc>'),
+			$this->mdDoc->getParsedContent('foo', true)
+		);
 	}
 
 	/**
 	 * @test
 	 */
-	public function asksNameCreatorForFileTitle()
+	public function cachesParsedContent()
 	{
-		$this->content
+		$this->contentRetriever
 			->expects($this->atLeastOnce())
-			->method('getRawContent')
-			->with('file')
+			->method('retrieve')
+			->with('x')
 			->will($this->returnValue('text'));
-		$this->titleCreator
-			->expects($this->atLeastOnce())
-			->method('createPageTitle')
+		$this->parser
+			->expects($this->once())
+			->method('parse')
 			->with('text')
-			->will($this->returnValue('title'));
-
-		$this->assertEquals('title', $this->mdDoc->getPageTitle('file'));
-	}
-
-	/**
-	 * @test
-	 */
-	public function providesListOfFiles()
-	{
-		$this->content
-			->expects($this->at(0))
-			->method('getRawContent')
-			->with('file')
-			->will($this->returnValue('text'));
-		$this->content
-			->expects($this->at(1))
-			->method('getRawContent')
-			->with('subfile')
-			->will($this->returnValue('subtext'));
-		$this->structure
-			->expects($this->at(0))
-			->method('getSubfiles')
-			->with('text')
-			->will($this->returnValue(array('subfile')));
-		$this->structure
-			->expects($this->at(1))
-			->method('getSubfiles')
-			->with('subtext')
-			->will($this->returnValue(array()));
-
-		$this->assertEquals(
-			array('file', 'subfile'),
-			$this->mdDoc->getFileList()
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function hasTocOfFile()
-	{
-		$this->content
-			->expects($this->atLeastOnce())
-			->method('getParsedContent')
-			->with('file')
-			->will($this->returnValue(new \DomDocument));
-		$this->structure
-			->expects($this->atLeastOnce())
-			->method('createTocNode')
-			->with(new \DomDocument())
-			->will($this->returnValue('this should be a domNode'));
-
-		$this->assertEquals(
-			'this should be a domNode',
-			$this->mdDoc->getToc('file')
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function providesBreadCrumbsAsListOfFiles()
-	{
-		$this->content
-			->expects($this->at(0))
-			->method('getRawContent')
-			->with('file')
-			->will($this->returnValue('some text'));
-		$this->structure
-			->expects($this->at(0))
-			->method('getSubfiles')
-			->with('some text')
-			->will($this->returnValue(array('subfile')));
-
-		$this->assertEquals(
-			array('file', 'subfile'),
-			$this->mdDoc->getBreadCrumbs('subfile')
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function givesFileNameTakenSubfolderIntoAccount()
-	{
-		$this->assertEquals('subfolder/index', $this->mdDoc->createFileName('subfolder/index.txt'));
-	}
-
-	/**
-	 * @test
-	 */
-	public function pointsToHigherDirectoryIfCurrentFileIsInSubdirectoryVersusPrevious()
-	{
-		$this->content
-			->expects($this->at(0))
-			->method('getRawContent')
-			->with('file')
-			->will($this->returnValue('some text'));
-		$this->content
-			->expects($this->at(1))
-			->method('getRawContent')
-			->with('subfolder/subdocument')
-			->will($this->returnValue('subtext'));
-		$this->structure
-			->expects($this->at(0))
-			->method('getSubfiles')
-			->with('some text')
-			->will($this->returnValue(array('subfolder/subdocument')));
-		$this->structure
-			->expects($this->at(1))
-			->method('getSubfiles')
-			->with('subtext')
-			->will($this->returnValue(array()));
-		$this->structure
-			->expects($this->once())
-			->method('createLInk')
-			->with('file', 'subfolder/subdocument')
-			->will($this->returnValue('file'));
-
-		$this->assertEquals(
-			'file', $this->mdDoc->getPreviousFileLink('subfolder/subdocument')
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function pointsToHigherDirectoryIfCurrentFileIsInSubdirectoryVersusNext()
-	{
-		$this->content
-			->expects($this->at(0))
-			->method('getRawContent')
-			->with('file')
-			->will($this->returnValue('some text'));
-		$this->content
-			->expects($this->at(1))
-			->method('getRawContent')
-			->with('subfolder/subdocument')
-			->will($this->returnValue('subtext'));
-		$this->content
-			->expects($this->at(2))
-			->method('getRawContent')
-			->with('nextfile')
-			->will($this->returnValue('nexttext'));
-		$this->structure
-			->expects($this->at(0))
-			->method('getSubfiles')
-			->with('some text')
-			->will($this->returnValue(array('subfolder/subdocument')));
-		$this->structure
-			->expects($this->at(1))
-			->method('getSubfiles')
-			->with('subtext')
-			->will($this->returnValue(array('nextfile')));
-		$this->structure
-			->expects($this->at(2))
-			->method('getSubfiles')
-			->with('nexttext')
-			->will($this->returnValue(array()));
-		$this->structure
-			->expects($this->once())
-			->method('createLInk')
-			->with('nextfile', 'subfolder/subdocument')
-			->will($this->returnValue('file'));
-
-		$this->assertEquals(
-			'file', $this->mdDoc->getNextFileLink('subfolder/subdocument')
-		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function createsStartFileLinkRelativeToGivenFile()
-	{
-		$this->structure
-			->expects($this->once())
-			->method('createLInk')
-			->with('file', 'subfile')
-			->will($this->returnValue('file'));
-
-		$this->assertEquals(
-			'file', $this->mdDoc->getStartFileLink('subfile')
-		);
+			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
+	
+		$this->mdDoc->getParsedContent('x');
+		$this->mdDoc->getParsedContent('x');
 	}
 
 	/**
@@ -288,12 +120,194 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->expects($this->atLeastOnce())
 			->method('process');
 		$this->mdDoc->addPostTextProcessor($postProcessor);
-		$this->content
-			->expects($this->any())
-			->method('getParsedContent')
-			->with('file')
-			->will($this->returnValue(new \DOMDocument()));
 
-		$this->mdDoc->getContent('file', false);
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('a_page')
+			->will($this->returnValue('text'));
+		$this->parser
+			->expects($this->atLeastOnce())
+			->method('parse')
+			->with('text')
+			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
+
+		$this->mdDoc->getParsedContent('a_page');
+	}
+
+	/**
+	 * @test
+	 */
+	public function createsPageTitle()
+	{
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('index')
+			->will($this->returnValue('text'));
+		$this->titleCreator
+			->expects($this->atLeastOnce())
+			->method('createPageTitle')
+			->with('text')
+			->will($this->returnValue('title'));
+
+		$this->assertEquals('title', $this->mdDoc->getPageTitle('index'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function createsLinkBetweenPages()
+	{
+		$this->internalUrlBuilder
+			->expects($this->any())
+			->method('createRelativeLink');
+	
+		$this->mdDoc->getLink('index');
+	}
+
+	/**
+	 * @test
+	 */
+	public function retrievesAllSubpagesOfGivenPage()
+	{
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('foo')
+			->will($this->returnValue('text'));
+		$this->toc
+			->expects($this->any())
+			->method('getSubpages')
+			->with('text')
+			->will($this->returnValue(array('subpage')));
+
+		$this->assertEquals(array('subpage'), $this->mdDoc->getSubpages('foo'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function getPreviousPage()
+	{
+		$this->contentRetriever
+			->expects($this->at(0))
+			->method('retrieve')
+			->with('my_project')
+			->will($this->returnValue('text'));
+		$this->contentRetriever
+			->expects($this->at(1))
+			->method('retrieve')
+			->with('second_page')
+			->will($this->returnValue('second_page_text'));
+		$this->contentRetriever
+			->expects($this->at(2))
+			->method('retrieve')
+			->with('third_page')
+			->will($this->returnValue('third_page_text'));
+		$this->toc
+			->expects($this->at(0))
+			->method('getSubpages')
+			->with('text')
+			->will($this->returnValue(array('second_page', 'third_page')));
+		$this->toc
+			->expects($this->at(1))
+			->method('getSubpages')
+			->with('second_page_text')
+			->will($this->returnValue(array()));
+		$this->toc
+			->expects($this->at(2))
+			->method('getSubpages')
+			->with('third_page_text')
+			->will($this->returnValue(array()));
+
+		$this->assertEquals('second_page', $this->mdDoc->getPreviousPage('third_page'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function getNextPage()
+	{
+		$this->contentRetriever
+			->expects($this->at(0))
+			->method('retrieve')
+			->with('my_project')
+			->will($this->returnValue('text'));
+		$this->contentRetriever
+			->expects($this->at(1))
+			->method('retrieve')
+			->with('second_page')
+			->will($this->returnValue('second_page_text'));
+		$this->contentRetriever
+			->expects($this->at(2))
+			->method('retrieve')
+			->with('third_page')
+			->will($this->returnValue('third_page_text'));
+		$this->toc
+			->expects($this->at(0))
+			->method('getSubpages')
+			->with('text')
+			->will($this->returnValue(array('second_page', 'third_page')));
+		$this->toc
+			->expects($this->at(1))
+			->method('getSubpages')
+			->with('second_page_text')
+			->will($this->returnValue(array()));
+		$this->toc
+			->expects($this->at(2))
+			->method('getSubpages')
+			->with('third_page_text')
+			->will($this->returnValue(array()));
+
+		$this->assertEquals('third_page', $this->mdDoc->getNextPage('second_page'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function createsTableOfContents()
+	{
+		$domDoc = $this->createDom('<doc><h1 id="id">header</h1>parsed text</doc>');
+
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('page')
+			->will($this->returnValue('text'));
+		$this->parser
+			->expects($this->atLeastOnce())
+			->method('parse')
+			->with('text')
+			->will($this->returnValue($domDoc));
+
+		$this->toc
+			->expects($this->any())
+			->method('buildToc')
+			->with(array(array('id'=>'id', 'level'=>'1', 'title'=>'header')), null, $domDoc);
+
+		$this->mdDoc->getToc('page');
+	}
+
+	/**
+	 * @test
+	 */
+	public function providesBreadCrumbsAsListOfFiles()
+	{
+		$this->contentRetriever
+			->expects($this->atLeastOnce())
+			->method('retrieve')
+			->with('my_project')
+			->will($this->returnValue('text'));
+		$this->toc
+			->expects($this->any())
+			->method('getSubpages')
+			->with('text')
+			->will($this->returnValue(array('subpage')));
+
+		$this->assertEquals(
+			array('my_project', 'subpage'),
+			$this->mdDoc->getBreadCrumbs('subpage')
+		);
 	}
 }

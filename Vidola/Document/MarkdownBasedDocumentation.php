@@ -5,48 +5,52 @@
  */
 namespace Vidola\Document;
 
-use Vidola\Util\TitleCreator;
+use Vidola\Parser\Parser;
+use Vidola\Util\ContentRetriever;
 use Vidola\Processor\TextProcessor;
+use Vidola\Util\TitleCreator;
+use Vidola\Util\InternalUrlBuilder;
+use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
  * @package Vidola
  */
-class MarkdownBasedDocumentation implements DocumentationApiBuilder, DocumentationStructure
+class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCreator, Structure
 {
 	private $rootFile;
 
-	private $content;
+	private $contentRetriever;
 
-	private $structure;
+	private $parser;
 
 	private $titleCreator;
 
+	private $internalUrlBuilder;
+
+	private $rawCache = array();
+
+	private $parsedCache = array();
+
+	private $toc;
+
 	private $postTextProcessors = array();
 
-	/**
-	 * Keeps Toc in memory so we don't need to build it again.
-	 * 
-	 * @var array array($file => $toc);
-	 */
-	private $tocCache = array();
-
-	/**
-	 * List of files in the project.
-	 * 
-	 * @var Array|null Null if not determined yet.
-	 */
-	private $fileList = null;
+	private $pages = null;
 
 	public function __construct(
 		$rootFile,
-		Content $content,
-		Structure $structure,
-		TitleCreator $titleCreator
+		ContentRetriever $contentRetriever,
+		Parser $parser,
+		TitleCreator $titleCreator,
+		InternalUrlBuilder $internalUrlBuilder,
+		TableOfContents $toc
 	) {
 		$this->rootFile = $rootFile;
-		$this->content = $content;
-		$this->structure = $structure;
+		$this->contentRetriever = $contentRetriever;
+		$this->parser = $parser;
 		$this->titleCreator = $titleCreator;
+		$this->internalUrlBuilder = $internalUrlBuilder;
+		$this->toc = $toc;
 	}
 
 	/**
@@ -57,81 +61,41 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		return new \Vidola\Document\MarkdownBasedDocumentationViewApi($this, $file);
 	}
 
-	public function getFileList()
+	/**
+	 * Add a processor that is called before the content is returned, after
+	 * all parsing is done.
+	 *
+	 * @param TextProcessor $processor
+	 */
+	public function addPostTextProcessor(TextProcessor $processor)
 	{
-		if ($this->fileList)
-		{
-			return $this->fileList;
-		}
-
-		$subfiles = $this->getSubfilesRecursively($this->rootFile);
-		array_unshift($subfiles, $this->rootFile);
-
-		$this->fileList = $subfiles;
-
-		return $subfiles;
-	}
-
-	private function getSubfilesRecursively($file)
-	{
-		$subfiles = $this->getSubfiles($file);
-		foreach ($subfiles as $subfile)
-		{
-			$subsubfiles = $this->getSubfilesRecursively($subfile);
-			$subfiles = array_merge($subfiles, $subsubfiles);
-		}
-
-		return array_unique($subfiles);
-	}
-
-	public function getSubfiles($file)
-	{
-		$text = $this->content->getRawContent($file);
-		return $this->structure->getSubfiles($text);
+		$this->postTextProcessors[] = $processor;
 	}
 
 	/**
-	 * Return name of file without extension and relative to the rootfile. Eg if
-	 * the rootfile is 'index' then a fileName could be 'subfolder/subfile'.
-	 * 
-	 * @param string $file
+  	 * Get content parsed by the different patterns.
+	 *
+	 * @param string $page
+	 * @param bool $dom
+	 * @return \DomDocument|string
 	 */
-	public function createFileName($file)
+	public function getParsedContent($page, $dom = false)
 	{
-		$fileParts = pathinfo($file);
-		return $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'];
-	}
-
-	public function getToc($file)
-	{
-		if (isset($this->tocCache[$file]))
+		if (isset($this->parsedCache[$page]))
 		{
-			return $this->tocCache[$file];
+			$content = $this->parsedCache[$page];
 		}
-
-		$toc = $this->structure->createTocNode(
-			$this->getContent($file, true)
-		);
-		$this->tocCache[$file] = $toc;
-
-		return $toc;
-	}
-
-	/**
-	 * Provides the content of a file.
-	 * 
-	 * @param string $file
-	 * @param boolean $dom
-	 * @return string|\DomDocument
-	 */
-	public function getContent($file, $dom = false)
-	{
-		$content = $this->content->getParsedContent($file);
+		else
+		{
+			$content = $this->getRawContent($page);
+			$content = $this->parser->parse($content);
+			$this->parsedCache[$page] = $content;
+		}
 
 		if (!$dom)
 		{
 			$content = $content->saveXml($content->documentElement);
-	
+
 			# DomDocument::saveXml encodes entities like `&` when added within
 			# a text node.
 			$content = str_replace(
@@ -139,16 +103,30 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 				array('&amp;', '&copy;', '&quot;', '&#'),
 				$content
 			);
-	
+
 			$content = $this->postProcess($content);
 		}
 
 		return $content;
 	}
-
-	public function addPostTextProcessor(TextProcessor $processor)
+	
+	/**
+	 * Get content as in file.
+	 *
+	 * @param string $page
+	 * @return string
+	 */
+	public function getRawContent($page)
 	{
-		$this->postTextProcessors[] = $processor;
+		if (isset($this->rawCache[$page]))
+		{
+			return $this->rawCache[$page];
+		}
+
+		$content = $this->contentRetriever->retrieve($page);
+		$this->rawCache[$page] = $content;
+
+		return $content;
 	}
 
 	private function postProcess($text)
@@ -162,131 +140,171 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 	}
 
 	/**
-	 * Get the previous file as written in the original document.
+	 * Get the title of a page.
 	 *
-	 * @param string $file The file reference as in the original document.
-	 */
-	private function getPreviousFileName($file)
-	{
-		$fileList = $this->getFileList();
-		$fileKey = array_search($file, $fileList);
-		if ($fileKey !== 0)
-		{
-			return $fileList[$fileKey-1];
-		}
-	
-		return null;
-	}
-
-	/**
-	 * Get the next file as written in the original document.
-	 * 
-	 * @param string $file The file as in the original document.
-	 */
-	private function getNextFileName($file)
-	{
-		$fileList = $this->getFileList();
-		$fileKey = array_search($file, $fileList);
-		$fileKey++;
-		if ($fileKey !== count($fileList))
-		{
-			return $fileList[$fileKey];
-		}
-
-		return null;
-	}
-
-	/**
-	 * Get the name of a page from a given filename.
-	 * 
-	 * @param string $file
-	 */
-	public function getPageTitle($file)
-	{
-		return $this->titleCreator->createPageTitle(
-			$this->content->getRawContent($file), $file
-		);
-	}
-
-	public function getPreviousFileLink($file)
-	{
-		$prevFile = $this->getPreviousFileName($file);
-
-		if ($prevFile)
-		{
-			return $this->getLink($prevFile, $file);
-		}
-
-		return null;
-	}
-
-	public function getPreviousPageTitle($file)
-	{
-		$previousFile = $this->getPreviousFileName($file);
-
-		if ($previousFile)
-		{
-			return $this->getPageTitle($previousFile);
-		}
-
-		return null;
-	}
-
-	public function getNextFileLink($file)
-	{
-		$nextFile = $this->getNextFileName($file);
-		
-		if ($nextFile)
-		{
-			return $this->getLink($nextFile, $file);
-			
-			return $nextFile;
-		}
-		
-		return null;
-	}
-
-	public function getNextPageTitle($file)
-	{
-		$nextFile = $this->getNextFileName($file);
-
-		if ($nextFile)
-		{
-			return $this->getPageTitle($nextFile);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Get the link to the start page of the documentation, relative
-	 * to a given file.
-	 * 
-	 * @param string $file
+	 * @param string $page
 	 * @return string
 	 */
-	public function getStartFileLink($relativeTo)
+	public function getPageTitle($page)
 	{
-		return $this->getLink($this->rootFile, $relativeTo);
+		return $this->titleCreator->createPageTitle(
+			$this->contentRetriever->retrieve($page), $page
+		);
 	}
 
 	/**
 	 * Get a link to an internal resource relative to another resource if specified.
-	 * 
-	 * @param string $file
+	 *
+	 * @param string $page
 	 * @param string $relativeTo
 	 * @return string
 	 */
-	public function getLink($file, $relativeTo = null)
+	public function getLink($page, $relativeTo = null)
 	{
-		return $this->structure->createLink($file, $relativeTo);
+		return $this->internalUrlBuilder->createRelativeLink($page, $relativeTo);
 	}
 
 	/**
-	 * @todo consider refactoring using documentStructure
+	 * Get the name of the first page.
 	 * 
+	 * @return string
+	 */
+	public function getStartPage()
+	{
+		return $this->rootFile;
+	}
+
+	/**
+	 * A list of all pages that are referred to in the specified page in
+	 * a table of contents.
+	 * 
+	 * @param string $page
+	 * @return array
+	 */
+	public function getSubpages($page)
+	{
+		$text = $this->contentRetriever->retrieve($page);
+		return $this->toc->getSubpages($text);
+	}
+
+	/**
+	 * Get the previous page.
+	 *
+	 * @param string $page
+	 * @return string|null
+	 */
+	public function getPreviousPage($page)
+	{
+		$pageList = $this->getPages();
+		$pageKey = array_search($page, $pageList);
+		if ($pageKey > 0)
+		{
+			return $pageList[$pageKey-1];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the next page.
+	 *
+	 * @param string $file
+	 * @return string|null
+	 */
+	public function getNextPage($page)
+	{
+		$pageList = $this->getPages();
+		$pageKey = array_search($page, $pageList);
+		$pageKey++;
+		if ($pageKey !== count($pageList))
+		{
+			return $pageList[$pageKey];
+		}
+
+		return null;
+	}
+
+	/**
+	 * A list of all pages in order of appearance in the individual TOC.
+	 * 
+	 * @return array
+	 */
+	public function getPages()
+	{
+		if ($this->pages)
+		{
+			return $this->pages;
+		}
+
+		$pages = $this->getSubpagesRecursively($this->rootFile);
+		array_unshift($pages, $this->rootFile);
+
+		$this->pages = $pages;
+
+		return $pages;
+	}
+
+	private function getSubpagesRecursively($file)
+	{
+		$subpages = $this->getSubpages($file);
+		foreach ($subpages as $subpage)
+		{
+			$subsubpages = $this->getSubpagesRecursively($subpage);
+			$subpages = array_merge($subpages, $subsubpages);
+		}
+
+		return array_unique($subpages);
+	}
+
+	/**
+	 * @param string $file
+	 * @return string
+	 */
+	public function createFilename($file)
+	{
+		$fileParts = pathinfo($file);
+		return $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'];
+	}
+
+	/**
+	 * Creates a DomElement containing the ToC of a page.
+	 *
+	 * @param string $page
+	 * @return \DomElement|null
+	 */
+	public function getToc($page)
+	{
+		if (isset($this->tocCache[$page]))
+		{
+			return $this->tocCache[$page];
+		}
+
+		$toc = $this->createTocNode($this->getParsedContent($page, true));
+		$this->tocCache[$page] = $toc;
+
+		return $toc;
+	}
+
+	private function createTocNode(\DomDocument $domDoc)
+	{
+		$headers = array();
+		$xpath = new \DOMXPath($domDoc);
+		// @todo should be html agnostic
+		$headerNodes = $xpath->query('//h1|h2|h3|h4|h5|h6');
+		foreach ($headerNodes as $headerNode)
+		{
+			$headers[] = array(
+					'id' => $headerNode->getAttribute('id'),
+					'level' => $headerNode->nodeName[1],
+					'title' => $headerNode->nodeValue
+			);
+		}
+		return $this->toc->buildToc($headers, null, $domDoc);
+	}
+
+	/**
 	 * A list of the files that lead to `$file` as subfile.
-	 * 
+	 *
 	 * @param string $file
 	 * @return array
 	 */
@@ -298,22 +316,22 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, Documentati
 		return $breadCrumbs;
 	}
 
-	private function getFilesThatLeadTo($startFile, $endFile)
+	private function getFilesThatLeadTo($startpage, $endpage)
 	{
-		$inBetweenFiles = array();
+		$inBetweenPages = array();
 
-		$subfiles = $this->getSubfiles($startFile);
-		foreach ($subfiles as $subfile)
+		$subpages = $this->getSubpages($startpage);
+		foreach ($subpages as $subpage)
 		{
-			if ($subfile === $endFile)
+			if ($subpage === $endpage)
 			{
-				$inBetweenFiles[] = $subfile;
+				$inBetweenPages[] = $subpage;
 				break;
 			}
 
-			array_merge($inBetweenFiles, $this->getFilesThatLeadTo($subfile, $endFile));
+			array_merge($inBetweenPages, $this->getFilesThatLeadTo($subpage, $endpage));
 		}
 
-		return $inBetweenFiles;
+		return $inBetweenPages;
 	}
 }

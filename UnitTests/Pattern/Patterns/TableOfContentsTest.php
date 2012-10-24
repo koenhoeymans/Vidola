@@ -623,7 +623,7 @@ paragraph";
 
 paragraph";
 
-		$this->toc->getSubfiles($text);
+		$this->toc->getSubpages($text);
 
 		$this->assertEquals('new title', $this->toc->getSpecifiedTitleForPage('page'));
 	}

@@ -12,26 +12,21 @@ namespace Vidola\Document;
 interface Structure
 {
 	/**
-	 * Get all files that are subfiles of a give file.
+	 * Get a list of all pages in the project in order of appearance.
+	 */
+	public function getPages();
+
+	/**
+	 * Get all files that are subpages of a give page.
 	 * 
-	 * @param string $file
+	 * @param string $page
 	 * @return array
 	 */
-	public function getSubfiles($file);
+	public function getSubpages($page);
 
 	/**
-	 * @param \DomDoc $domDoc
+	 * @param string $page
 	 * @return \DomElement|null
 	 */
-	public function createTocNode(\DomDocument $domDoc);
-
-	/**
-	 * Creates the link pointing to a resource relative to a given resource. Both
-	 * should be internal to the project and be absolute relative to the root of
-	 * the project.
-	 *
-	 * @param string $to
-	 * @param string $from
-	 */
-	public function createLink($toResource, $from = null);
+	public function getToc($page);
 }

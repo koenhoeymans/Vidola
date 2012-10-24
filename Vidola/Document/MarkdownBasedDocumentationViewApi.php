@@ -41,7 +41,65 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function currentPageContent()
 	{
-		return $this->doc->getContent($this->currentPage);
+		return $this->doc->getParsedContent($this->currentPage);
+	}
+
+	/**
+	 * The url pointing to a given page relative to the current page.
+	 *
+	 * @param string $page
+	 * @return string
+	 */
+	public function getPageLink($page)
+	{
+		return $this->doc->getLink($page, $this->currentPage);
+	}
+
+	/**
+	 * The url pointing to the previous page or null if there is no previous page.
+	 * 
+	 * @return string|null
+	 */
+	public function previousPageLink()
+	{
+		$previousPage = $this->doc->getPreviousPage($this->currentPage);
+		if ($previousPage)
+		{
+			return $this->doc->getLink($previousPage, $this->currentPage);
+		}
+
+		return null;
+	}
+
+	/**
+	 * The url pointing to the next page or null if there is no next page.
+	 *
+	 * @return string|null
+	 */
+	public function nextPageLink()
+	{
+		$nextPage = $this->doc->getNextPage($this->currentPage);
+		if ($nextPage)
+		{
+			return $this->doc->getLink($nextPage, $this->currentPage);
+		}
+
+		return null;
+	}
+
+	/**
+	 * The url of the page that is the starting point of the documentation.
+	 *
+	 * @return string
+	 */
+	public function startPageLink()
+	{
+		return $this->doc->getLink($this->doc->getStartPage(), $this->currentPage);
+	}
+
+	public function linkTo($resource)
+	{
+		return $this->doc->getLink($resource, $this->currentPage);
 	}
 
 	/**
@@ -53,33 +111,14 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	}
 
 	/**
-	 * The url pointing to the previous page or null if there is no previous page.
-	 * 
-	 * @return string|null
-	 */
-	public function previousPageLink()
-	{
-		return $this->doc->getPreviousFileLink($this->currentPage);
-	}
-
-	/**
-	 * The url pointing to the next page or null if there is no next page.
-	 *
-	 * @return string|null
-	 */
-	public function nextPageLink()
-	{
-		return $this->doc->getNextFileLink($this->currentPage);
-	}
-
-	/**
 	 * The title of the previous page or null if there is no previous page.
 	 * 
 	 * @return string|null
 	 */
 	public function previousPageTitle()
 	{
-		return $this->doc->getPreviousPageTitle($this->currentPage);
+		$page = $this->doc->getPreviousPage($this->currentPage);
+		return $page ? $this->doc->getPageTitle($page) : null;
 	}
 
 	/**
@@ -89,28 +128,8 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function nextPageTitle()
 	{
-		return $this->doc->getNextPageTitle($this->currentPage);
-	}
-
-	/**
-	 * The url of the page that is the starting point of the documentation.
-	 *
-	 * @return string
-	 */
-	public function startPageLink()
-	{
-		return $this->doc->getStartFileLink($this->currentPage);
-	}
-
-	/**
-	 * The url pointing to a given page.
-	 *
-	 * @param string $page
-	 * @return string
-	 */
-	public function getPageLink($page)
-	{
-		return $this->linkTo($page);
+		$page = $this->doc->getNextPage($this->currentPage);
+		return $page ? $this->doc->getPageTitle($page) : null;
 	}
 
 	/**
@@ -122,17 +141,6 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	public function getPageTitle($page)
 	{
 		return $this->doc->getPageTitle($page);
-	}
-
-	/**
-	 * Point to $source relative to the current document.
-	 *
-	 * @param string $source
-	 * @return string
-	 */
-	public function linkTo($source)
-	{
-		return $this->doc->getLink($source, $this->currentPage);
 	}
 
 	/**

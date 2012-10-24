@@ -9,13 +9,11 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use Vidola\Util\InternalUrlBuilder;
 use Vidola\Pattern\Pattern;
-use Vidola\Document\Element;
-use Vidola\Util\SubfileDetector;
 
 /**
  * @package Vidola
  */
-class TableOfContents extends Pattern implements SubfileDetector
+class TableOfContents extends Pattern
 {
 	private $headerFinder;
 
@@ -70,10 +68,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 		return $this->buildReplacement($match, $parentNode);
 	}
 
-	/**
-	 * @see Vidola\Util.SubfileDetector::getSubfiles()
-	 */
-	public function getSubfiles($text)
+	public function getSubpages($text)
 	{
 		$pageList = array();
 		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
@@ -189,6 +184,7 @@ class TableOfContents extends Pattern implements SubfileDetector
 	}
 
 	// @todo not logical that empty headers array can return ''.
+	// @todo method is only public for MDBasedDocument. But should it?
 	public function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
 	{
 		if (empty($headers))

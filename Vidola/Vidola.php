@@ -34,16 +34,11 @@ class Vidola
 			->given('Vidola\\Util\\TitleCreator')
 			->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
 		$fjor
+			->given('Vidola\\Document\\FilenameCreator')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
+		$fjor
 			->given('Vidola\\Document\\DocumentationApiBuilder')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
-			->inSingletonScope();
-		$fjor
-			->given('Vidola\\Document\\DocumentationStructure')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
-			->inSingletonScope();
-		$fjor
-			->given('Vidola\\Util\\SubfileDetector')
-			->thenUse('Vidola\\Pattern\\Patterns\\TableOfContents')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Util\\FileExtensionProvider')
@@ -61,12 +56,8 @@ class Vidola
 			->thenUse('Vidola\\Parser\\RecursiveReplacer')
 			->inSingletonScope();
 		$fjor
-			->given('Vidola\\Document\\Content')
-			->thenUse('Vidola\\Document\\MdContent')
-			->inSingletonScope();
-		$fjor
 			->given('Vidola\\Document\\Structure')
-			->thenUse('Vidola\\Document\\MultiMdStructure')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
 			->inSingletonScope();
 
 		// command line options

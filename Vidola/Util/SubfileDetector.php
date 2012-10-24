@@ -16,5 +16,5 @@ interface SubfileDetector
 	 * @param string $text
 	 * @return array
 	 */
-	public function getSubfiles($text);
+	public function detectSubfiles($text);
 }

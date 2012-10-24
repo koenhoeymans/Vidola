@@ -8,11 +8,7 @@ namespace Vidola\Document;
 /**
  * @package Vidola
  */
-interface DocumentationStructure
+interface FilenameCreator
 {
-	public function getFileList();
-
-	public function getSubfiles($file);
-
 	public function createFilename($file);
 }

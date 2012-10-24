@@ -8,16 +8,20 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 {
 	public function setup()
 	{
+		$this->filenameCreator = $this->getMockBuilder('\\Vidola\\Document\\FilenameCreator')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->documentationApiBuilder = $this->getMockBuilder('\\Vidola\\Document\\DocumentationApiBuilder')
-										->disableOriginalConstructor()
-										->getMock();
-		$this->documentationStructure = $this->getMockBuilder('\\Vidola\\Document\\DocumentationStructure')
-										->disableOriginalConstructor()
-										->getMock();
+			->disableOriginalConstructor()
+			->getMock();
+		$this->documentationStructure = $this->getMockBuilder('\\Vidola\\Document\\Structure')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->view = $this->getMockBuilder('\\Vidola\\View\\TemplatableFileView')
-							->disableOriginalConstructor()
-							->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 		$this->controller = new \Vidola\Controller\DocumentationCreationController(
+			$this->filenameCreator,
 			$this->documentationApiBuilder,
 			$this->documentationStructure,
 			$this->view
@@ -35,7 +39,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 		$this->documentationStructure
 				->expects($this->atLeastOnce())
-				->method('getFileList')
+				->method('getPages')
 				->will($this->returnValue(array('file')));
 
 		$this->controller->createDocumentation();
@@ -52,7 +56,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 		$this->documentationStructure
 				->expects($this->atLeastOnce())
-				->method('getFileList')
+				->method('getPages')
 				->will($this->returnValue(array('file')));
 		$this->view
 				->expects($this->once())
@@ -72,9 +76,9 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 		$this->documentationStructure
 				->expects($this->atLeastOnce())
-				->method('getFileList')
+				->method('getPages')
 				->will($this->returnValue(array('file')));
-		$this->documentationStructure
+		$this->filenameCreator
 				->expects($this->atLeastOnce())
 				->method('createFilename')
 				->will($this->returnValue('foo'));
@@ -97,7 +101,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 		$this->documentationStructure
 				->expects($this->atLeastOnce())
-				->method('getFileList')
+				->method('getPages')
 				->will($this->returnValue(array('file')));
 		$this->view
 				->expects($this->once())
@@ -117,7 +121,7 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
 		$this->documentationStructure
 				->expects($this->at(0))
-				->method('getFileList')
+				->method('getPages')
 				->will($this->returnValue(array('file', 'subfile')));
 
 		$this->controller->createDocumentation();

@@ -5,8 +5,9 @@
  */
 namespace Vidola\Controller;
 
+use Vidola\Document\FilenameCreator;
 use Vidola\Document\DocumentationApiBuilder;
-use Vidola\Document\DocumentationStructure;
+use Vidola\Document\Structure;
 use Vidola\View\TemplatableFileView;
 
 /**
@@ -14,34 +15,38 @@ use Vidola\View\TemplatableFileView;
  */
 class DocumentationCreationController
 {
+	private $filenameCreator;
+
 	private $documentationApiBuilder;
 
-	private $documentationStructure;
+	private $structure;
 
 	private $view;
 
 	public function __construct(
+		FilenameCreator $filenameCreator,
 		DocumentationApiBuilder $documentationApiBuilder,
-		DocumentationStructure $documentationStructure,
+		Structure $structure,
 		TemplatableFileView $view
 	) {
+		$this->filenameCreator = $filenameCreator;
 		$this->documentationApiBuilder = $documentationApiBuilder;
-		$this->documentationStructure = $documentationStructure;
+		$this->structure = $structure;
 		$this->view = $view;
 	}
 
 	public function createDocumentation()
 	{
-		foreach($this->documentationStructure->getFileList() as $file)
+		foreach($this->structure->getPages() as $page)
 		{
-			$this->createSingleDoc($file);
+			$this->createSingleDoc($page);
 		}
 	}
 
-	private function createSingleDoc($file)
+	private function createSingleDoc($page)
 	{
-		$this->view->addApi($this->documentationApiBuilder->buildApi($file));
-		$this->view->setFilename($this->documentationStructure->createFilename($file));
+		$this->view->addApi($this->documentationApiBuilder->buildApi($page));
+		$this->view->setFilename($this->filenameCreator->createFilename($page));
 		$this->view->render();
 	}
 }
