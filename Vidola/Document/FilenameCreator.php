@@ -10,5 +10,5 @@ namespace Vidola\Document;
  */
 interface FilenameCreator
 {
-	public function createFilename($file);
+	public function createFilename($page);
 }
