@@ -589,26 +589,21 @@ paragraph";
 	/**
 	 * @test
 	 */
-	public function buildsTocFromListOfHeaders()
+	public function buildsTocFromDomDocument()
 	{
-		$headers = array(array('title' => 'header', 'level' => 1, 'id' => 'foo'));
+		$domDoc1 = new \DOMDocument();
+		$dom1h1 = $domDoc1->createElement('h1', 'header');
+		$domDoc1->appendChild($dom1h1);
+		$dom1h1->setAttribute('id', 'header');
 
-		$domDoc = new \DOMDocument();
-		$ul = $domDoc->createElement('ul');
-		$domDoc->appendChild($ul);
-		$li = $domDoc->createElement('li');
-		$ul->appendChild($li);
-		$a = $domDoc->createElement('a', 'header');
-		$li->appendChild($a);
-		$a->setAttribute('href', '#foo');
-
-		$domDoc2 = new \DomDocument();
-		$toc = $this->toc->buildToc($headers, null, $domDoc2);
-		$domDoc2->appendChild($toc);
+		$domDoc2 = new \DOMDocument();
+		$dom2h1 = $domDoc2->createElement('h1', 'header');
+		$domDoc2->appendChild($dom2h1);
+		$dom2h1->setAttribute('id', 'header');
 
 		$this->assertEquals(
-			$ul->ownerDocument->saveHTML(),
-			$toc->ownerDocument->saveHTML()
+			$this->toc->createTocNode($domDoc1),
+			$dom2h1
 		);
 	}
 

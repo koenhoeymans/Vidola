@@ -278,27 +278,10 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 			return $this->tocCache[$page];
 		}
 
-		$toc = $this->createTocNode($this->getParsedContent($page, true));
+		$toc = $this->toc->createTocNode($this->getParsedContent($page, true));
 		$this->tocCache[$page] = $toc;
 
 		return $toc;
-	}
-
-	private function createTocNode(\DomDocument $domDoc)
-	{
-		$headers = array();
-		$xpath = new \DOMXPath($domDoc);
-		// @todo should be html agnostic
-		$headerNodes = $xpath->query('//h1|h2|h3|h4|h5|h6');
-		foreach ($headerNodes as $headerNode)
-		{
-			$headers[] = array(
-					'id' => $headerNode->getAttribute('id'),
-					'level' => $headerNode->nodeName[1],
-					'title' => $headerNode->nodeValue
-			);
-		}
-		return $this->toc->buildToc($headers, null, $domDoc);
 	}
 
 	/**

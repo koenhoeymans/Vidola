@@ -183,13 +183,34 @@ class TableOfContents extends Pattern
 		return $inclusionList;
 	}
 
-	// @todo not logical that empty headers array can return ''.
-	// @todo method is only public for MDBasedDocument. But should it?
-	public function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
+	/**
+	 * Create a table of contents from a DomDocument.
+	 * 
+	 * @param \DomDocument $domDoc
+	 * @return \DomElement|null
+	 */
+	public function createTocNode(\DomDocument $domDoc)
+	{
+		$headers = array();
+		$xpath = new \DOMXPath($domDoc);
+		// @todo should be html agnostic
+		$headerNodes = $xpath->query('//h1|h2|h3|h4|h5|h6');
+		foreach ($headerNodes as $headerNode)
+		{
+			$headers[] = array(
+						'id' => $headerNode->getAttribute('id'),
+						'level' => $headerNode->nodeName[1],
+						'title' => $headerNode->nodeValue
+			);
+		}
+		return $this->buildToc($headers, null, $domDoc);
+	}
+
+	private function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
 	{
 		if (empty($headers))
 		{
-			return '';
+			return null;
 		}
 
 		static $depth;
