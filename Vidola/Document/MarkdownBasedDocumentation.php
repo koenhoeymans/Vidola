@@ -43,10 +43,10 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	private $parentPages = array();
 
 	public function __construct(
-	Parser $parser,
-	TitleCreator $titleCreator,
-	TocGenerator $tocGenerator,
-	InternalUrlBuilder $internalUrlBuilder
+		Parser $parser,
+		TitleCreator $titleCreator,
+		TocGenerator $tocGenerator,
+		InternalUrlBuilder $internalUrlBuilder
 	) {
 		$this->parser = $parser;
 		$this->titleCreator = $titleCreator;
