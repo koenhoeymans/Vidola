@@ -16,24 +16,16 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 
 	public function __construct()
 	{
-		$this->contentRetriever = $this->getMockBuilder('\\Vidola\\Util\\ContentRetriever')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->parser = $this->getMockBuilder('\\Vidola\\Parser\\Parser')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->titleCreator = $this->getMockBuilder('\\Vidola\\Util\\TitleCreator')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->internalUrlBuilder = $this->getMockBuilder('\\Vidola\\Util\\InternalUrlBuilder')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
-			->disableOriginalConstructor()
-			->getMock();
+		$this->parser = $this->getMock('\\Vidola\\Parser\\Parser');
+		$this->titleCreator = $this->getMock('\\Vidola\\Util\\TitleCreator');
+		$this->tocGenerator = $this->getMock('\\Vidola\\Util\\TocGenerator');
+		$this->internalUrlBuilder = $this->getMock('\\Vidola\\Util\\InternalUrlBuilder');
+
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
-			'my_project', $this->contentRetriever, $this->parser, $this->titleCreator,
-			$this->internalUrlBuilder, $this->toc
+			$this->parser,
+			$this->titleCreator,
+			$this->tocGenerator,
+			$this->internalUrlBuilder
 		);
 	}
 
@@ -43,7 +35,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	public function buildsApiBasedOnPage()
 	{
 		$this->assertTrue(
-			$this->mdDoc->buildApi('my_page')
+			$this->mdDoc->buildApi(new \Vidola\Document\Page('page', ''))
 			instanceof
 			\Vidola\Document\MarkdownBasedDocumentationViewApi
 		);
@@ -52,20 +44,20 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	/**
 	 * @test
 	 */
-	public function providesParsedContentOfFileAsString()
+	public function providesParsedContentOfPageAsString()
 	{
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('about')
-			->will($this->returnValue('text'));
+		$page = new \Vidola\Document\Page('a_page', 'content');
+
 		$this->parser
 			->expects($this->atLeastOnce())
 			->method('parse')
-			->with('text')
+			->with('content')
 			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
 
-		$this->assertEquals('<doc>parsed text</doc>', $this->mdDoc->getParsedContent('about'));
+		$this->assertEquals(
+			'<doc>parsed text</doc>',
+			$this->mdDoc->getParsedContent($page)
+		);
 	}
 
 	/**
@@ -73,41 +65,18 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function providesParsedContentAsDomDocument()
 	{
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('foo')
-			->will($this->returnValue('text'));
+		$page = new \Vidola\Document\Page('a_page', 'content');
+
 		$this->parser
 			->expects($this->atLeastOnce())
 			->method('parse')
-			->with('text')
+			->with('content')
 			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
 
 		$this->assertEquals(
 			$this->createDom('<doc>parsed text</doc>'),
-			$this->mdDoc->getParsedContent('foo', true)
+			$this->mdDoc->getParsedContent($page, true)
 		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function cachesParsedContent()
-	{
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('x')
-			->will($this->returnValue('text'));
-		$this->parser
-			->expects($this->once())
-			->method('parse')
-			->with('text')
-			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
-	
-		$this->mdDoc->getParsedContent('x');
-		$this->mdDoc->getParsedContent('x');
 	}
 
 	/**
@@ -115,24 +84,21 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function afterProcessingPostTextProcessorsAreCalled()
 	{
+		$page = new \Vidola\Document\Page('a_page', 'content');
+
 		$postProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
 		$postProcessor
 			->expects($this->atLeastOnce())
 			->method('process');
 		$this->mdDoc->addPostTextProcessor($postProcessor);
 
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('a_page')
-			->will($this->returnValue('text'));
 		$this->parser
 			->expects($this->atLeastOnce())
 			->method('parse')
-			->with('text')
+			->with('content')
 			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
 
-		$this->mdDoc->getParsedContent('a_page');
+		$this->mdDoc->getParsedContent($page);
 	}
 
 	/**
@@ -140,127 +106,16 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	 */
 	public function createsPageTitle()
 	{
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('index')
-			->will($this->returnValue('text'));
 		$this->titleCreator
 			->expects($this->atLeastOnce())
 			->method('createPageTitle')
-			->with('text')
+			->with('content', 'a_page')
 			->will($this->returnValue('title'));
 
-		$this->assertEquals('title', $this->mdDoc->getPageTitle('index'));
-	}
-
-	/**
-	 * @test
-	 */
-	public function createsLinkBetweenPages()
-	{
-		$this->internalUrlBuilder
-			->expects($this->any())
-			->method('createRelativeLink');
-	
-		$this->mdDoc->getLink('index');
-	}
-
-	/**
-	 * @test
-	 */
-	public function retrievesAllSubpagesOfGivenPage()
-	{
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('foo')
-			->will($this->returnValue('text'));
-		$this->toc
-			->expects($this->any())
-			->method('getSubpages')
-			->with('text')
-			->will($this->returnValue(array('subpage')));
-
-		$this->assertEquals(array('subpage'), $this->mdDoc->getSubpages('foo'));
-	}
-
-	/**
-	 * @test
-	 */
-	public function getPreviousPage()
-	{
-		$this->contentRetriever
-			->expects($this->at(0))
-			->method('retrieve')
-			->with('my_project')
-			->will($this->returnValue('text'));
-		$this->contentRetriever
-			->expects($this->at(1))
-			->method('retrieve')
-			->with('second_page')
-			->will($this->returnValue('second_page_text'));
-		$this->contentRetriever
-			->expects($this->at(2))
-			->method('retrieve')
-			->with('third_page')
-			->will($this->returnValue('third_page_text'));
-		$this->toc
-			->expects($this->at(0))
-			->method('getSubpages')
-			->with('text')
-			->will($this->returnValue(array('second_page', 'third_page')));
-		$this->toc
-			->expects($this->at(1))
-			->method('getSubpages')
-			->with('second_page_text')
-			->will($this->returnValue(array()));
-		$this->toc
-			->expects($this->at(2))
-			->method('getSubpages')
-			->with('third_page_text')
-			->will($this->returnValue(array()));
-
-		$this->assertEquals('second_page', $this->mdDoc->getPreviousPage('third_page'));
-	}
-
-	/**
-	 * @test
-	 */
-	public function getNextPage()
-	{
-		$this->contentRetriever
-			->expects($this->at(0))
-			->method('retrieve')
-			->with('my_project')
-			->will($this->returnValue('text'));
-		$this->contentRetriever
-			->expects($this->at(1))
-			->method('retrieve')
-			->with('second_page')
-			->will($this->returnValue('second_page_text'));
-		$this->contentRetriever
-			->expects($this->at(2))
-			->method('retrieve')
-			->with('third_page')
-			->will($this->returnValue('third_page_text'));
-		$this->toc
-			->expects($this->at(0))
-			->method('getSubpages')
-			->with('text')
-			->will($this->returnValue(array('second_page', 'third_page')));
-		$this->toc
-			->expects($this->at(1))
-			->method('getSubpages')
-			->with('second_page_text')
-			->will($this->returnValue(array()));
-		$this->toc
-			->expects($this->at(2))
-			->method('getSubpages')
-			->with('third_page_text')
-			->will($this->returnValue(array()));
-
-		$this->assertEquals('third_page', $this->mdDoc->getNextPage('second_page'));
+		$this->assertEquals(
+			'title',
+			$this->mdDoc->getTitle(new \Vidola\Document\Page('a_page', 'content'))
+		);
 	}
 
 	/**
@@ -270,44 +125,106 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$domDoc = $this->createDom('<doc><h1 id="id">header</h1>parsed text</doc>');
 
-		$this->contentRetriever
-			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('page')
-			->will($this->returnValue('text'));
 		$this->parser
 			->expects($this->atLeastOnce())
 			->method('parse')
-			->with('text')
+			->with('content')
 			->will($this->returnValue($domDoc));
 
-		$this->toc
-			->expects($this->any())
-			->method('buildToc')
-			->with(array(array('id'=>'id', 'level'=>'1', 'title'=>'header')), null, $domDoc);
+		$this->tocGenerator
+			->expects($this->atLeastOnce())
+			->method('createTocNode')
+			->with($domDoc);
 
-		$this->mdDoc->getToc('page');
+		$this->mdDoc->getToc(new \Vidola\Document\Page('a_page', 'content'));
 	}
 
 	/**
 	 * @test
 	 */
-	public function providesBreadCrumbsAsListOfFiles()
+	public function keepsListOfAllPages()
 	{
-		$this->contentRetriever
+		$page1 = new \Vidola\Document\Page('page1', 'content');
+		$page2 = new \Vidola\Document\Page('page2', 'content');
+		$this->mdDoc->add($page1);
+		$this->mdDoc->add($page2);
+
+		$this->assertEquals(array($page1, $page2), $this->mdDoc->getPages());
+	}
+
+	/**
+	 * @test
+	 */
+	public function getPreviousPage()
+	{
+		$page1 = new \Vidola\Document\Page('page1', 'content');
+		$page2 = new \Vidola\Document\Page('page2', 'content');
+		$this->mdDoc->add($page1);
+		$this->mdDoc->add($page2);
+
+		$this->assertEquals($page1, $this->mdDoc->getPreviousPage($page2));
+	}
+
+	/**
+	 * @test
+	 */
+	public function getNextPage()
+	{
+		$page1 = new \Vidola\Document\Page('page1', 'content');
+		$page2 = new \Vidola\Document\Page('page2', 'content');
+		$this->mdDoc->add($page1);
+		$this->mdDoc->add($page2);
+
+		$this->assertEquals($page2, $this->mdDoc->getNextPage($page1));
+	}
+
+	/**
+	 * @test
+	 */
+	public function startPageIsFirstPageAdded()
+	{
+		$page1 = new \Vidola\Document\Page('page1', 'content');
+		$page2 = new \Vidola\Document\Page('page2', 'content');
+		$this->mdDoc->add($page1);
+		$this->mdDoc->add($page2);
+
+		$this->assertEquals($page1, $this->mdDoc->getStartPage());
+	}
+
+	/**
+	 * @test
+	 */
+	public function createsUrlFromPageToAnother()
+	{
+		$page1 = new \Vidola\Document\Page('index', 'content');
+		$page2 = new \Vidola\Document\Page('../subpage', 'content');
+		$this->mdDoc->add($page1);
+		$this->mdDoc->add($page2);
+
+		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('retrieve')
-			->with('my_project')
-			->will($this->returnValue('text'));
-		$this->toc
-			->expects($this->any())
-			->method('getSubpages')
-			->with('text')
-			->will($this->returnValue(array('subpage')));
+			->method('createRelativeLink')
+			->with()
+			->will($this->returnValue('../index'));
+
+		$this->assertEquals('../index', $this->mdDoc->getUrl($page2, $page1));
+	}
+
+	/**
+	 * @test
+	 */
+	public function providesBreadCrumbsAsListOfPages()
+	{
+		$page1 = new \Vidola\Document\Page('index', 'content');
+		$page2 = new \Vidola\Document\Page('../subpage', 'content');
+		$page3 = new \Vidola\Document\Page('../sub/subpage', 'content');
+		$this->mdDoc->add($page1);
+		$this->mdDoc->add($page2, $page1);
+		$this->mdDoc->add($page3, $page2);
 
 		$this->assertEquals(
-			array('my_project', 'subpage'),
-			$this->mdDoc->getBreadCrumbs('subpage')
+			array($page1, $page2, $page3),
+			$this->mdDoc->getBreadCrumbs($page3)
 		);
 	}
 }

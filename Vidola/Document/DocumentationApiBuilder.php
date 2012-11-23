@@ -11,8 +11,8 @@ namespace Vidola\Document;
 interface DocumentationApiBuilder
 {
 	/**
-	 * @param string $file
+	 * @param Page $page
 	 * @return Vidola\View\ViewApi
 	 */
-	public function buildApi($file);
+	public function buildApi(Page $page);
 }

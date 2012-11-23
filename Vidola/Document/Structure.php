@@ -6,27 +6,47 @@
 namespace Vidola\Document;
 
 /**
- * @package
- * @todo remove duplication from bundling up
+ * @package Vidola
  */
-interface Structure
+interface Structure extends PageList
 {
 	/**
-	 * Get a list of all pages in the project in order of appearance.
+	 * Get the previous page.
+	 *
+	 * @param Page $page
+	 * @return Page|null
 	 */
-	public function getPages();
+	public function getPreviousPage(Page $page);
+	
+	/**
+	 * Get the next page.
+	 *
+	 * @param Page $page
+	 * @return Page|null
+	 */
+	public function getNextPage(Page $page);
+	
+	/**
+	 * Get the first page of the project.
+	 *
+	 * @return Page
+	 */
+	public function getStartPage();
 
 	/**
-	 * Get all files that are subpages of a give page.
+	 * Get the relative URL from one page to a resource.
 	 * 
-	 * @param string $page
+	 * @param Page $from
+	 * @param Page $to
+	 * @return string
+	 */
+	public function getUrl(Page $from, Linkable $to);
+
+	/**
+	 * A list of the files that lead to `$file` as subfile.
+	 *
+	 * @param Page $page
 	 * @return array
 	 */
-	public function getSubpages($page);
-
-	/**
-	 * @param string $page
-	 * @return \DomElement|null
-	 */
-	public function getToc($page);
+	public function getBreadCrumbs(Page $page);
 }

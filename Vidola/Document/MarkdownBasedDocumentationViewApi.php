@@ -6,6 +6,10 @@
 namespace Vidola\Document;
 
 use Vidola\View\ViewApi;
+use Vidola\Document\PageGuide;
+use Vidola\Document\Structure;
+use Vidola\Document\Page;
+use Vidola\Document\Linkable;
 
 /**
  * The supported API that can be used for templates.
@@ -16,14 +20,20 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 {
 	const VIEW_ACCESS_NAME = 'document';
 
-	private $doc;
-
 	private $currentPage;
 
-	public function __construct(MarkdownBasedDocumentation $doc, $currentPage)
-	{
-		$this->doc = $doc;
+	private $pageGuide;
+
+	private $structure;
+
+	public function __construct(
+		Page $currentPage,
+		PageGuide $pageGuide,
+		Structure $structure
+	) {
 		$this->currentPage = $currentPage;
+		$this->pageGuide = $pageGuide;
+		$this->structure = $structure;
 	}
 
 	/**
@@ -41,7 +51,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function currentPageContent()
 	{
-		return $this->doc->getParsedContent($this->currentPage);
+		return $this->pageGuide->getParsedContent($this->currentPage);
 	}
 
 	/**
@@ -50,9 +60,9 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 * @param string $page
 	 * @return string
 	 */
-	public function getPageLink($page)
+	public function getPageUrl(Page $page)
 	{
-		return $this->doc->getLink($page, $this->currentPage);
+		return $this->structure->getUrl($this->currentPage, $page);
 	}
 
 	/**
@@ -60,12 +70,12 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 * 
 	 * @return string|null
 	 */
-	public function previousPageLink()
+	public function previousPageUrl()
 	{
-		$previousPage = $this->doc->getPreviousPage($this->currentPage);
+		$previousPage = $this->structure->getPreviousPage($this->currentPage);
 		if ($previousPage)
 		{
-			return $this->doc->getLink($previousPage, $this->currentPage);
+			return $this->structure->getUrl($this->currentPage, $previousPage);
 		}
 
 		return null;
@@ -76,12 +86,12 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 *
 	 * @return string|null
 	 */
-	public function nextPageLink()
+	public function nextPageUrl()
 	{
-		$nextPage = $this->doc->getNextPage($this->currentPage);
+		$nextPage = $this->structure->getNextPage($this->currentPage);
 		if ($nextPage)
 		{
-			return $this->doc->getLink($nextPage, $this->currentPage);
+			return $this->structure->getUrl($this->currentPage, $nextPage);
 		}
 
 		return null;
@@ -92,22 +102,33 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 *
 	 * @return string
 	 */
-	public function startPageLink()
+	public function startPageUrl()
 	{
-		return $this->doc->getLink($this->doc->getStartPage(), $this->currentPage);
+		return $this->structure->getUrl(
+			$this->currentPage, $this->structure->getStartPage()
+		);
 	}
 
-	public function linkTo($resource)
+	/**
+	 * Link to a relative resource in the project such as a CSS file.
+	 * 
+	 * @param string $resource
+	 * @return string
+	 */
+	public function urlTo($resource)
 	{
-		return $this->doc->getLink($resource, $this->currentPage);
+		$resource = new \Vidola\Document\Resource($resource);
+		return $this->structure->getUrl($this->currentPage, $resource);
 	}
 
 	/**
 	 * The title of the current page.
+	 * 
+	 * @return string
 	 */
 	public function currentPageTitle()
 	{
-		return $this->doc->getPageTitle($this->currentPage);
+		return $this->pageGuide->getTitle($this->currentPage);
 	}
 
 	/**
@@ -117,8 +138,8 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function previousPageTitle()
 	{
-		$page = $this->doc->getPreviousPage($this->currentPage);
-		return $page ? $this->doc->getPageTitle($page) : null;
+		$page = $this->structure->getPreviousPage($this->currentPage);
+		return $page ? $this->pageGuide->getTitle($page) : null;
 	}
 
 	/**
@@ -128,19 +149,19 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function nextPageTitle()
 	{
-		$page = $this->doc->getNextPage($this->currentPage);
-		return $page ? $this->doc->getPageTitle($page) : null;
+		$page = $this->structure->getNextPage($this->currentPage);
+		return $page ? $this->pageGuide->getTitle($page) : null;
 	}
 
 	/**
 	 * The title of a given page.
 	 *
-	 * @param string $page
+	 * @param Page $page
 	 * @return string
 	 */
-	public function getPageTitle($page)
+	public function getPageTitle(Page $page)
 	{
-		return $this->doc->getPageTitle($page);
+		return $this->pageGuide->getTitle($page);
 	}
 
 	/**
@@ -163,7 +184,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function toc()
 	{
-		$toc = $this->doc->getToc($this->currentPage);
+		$toc = $this->pageGuide->getToc($this->currentPage);
 
 		if ($toc)
 		{
@@ -180,6 +201,6 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 */
 	public function getBreadCrumbs()
 	{
-		return $this->doc->getBreadCrumbs($this->currentPage);
+		return $this->structure->getBreadCrumbs($this->currentPage);
 	}
 }

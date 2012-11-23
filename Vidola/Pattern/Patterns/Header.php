@@ -6,7 +6,6 @@
 namespace Vidola\Pattern\Patterns;
 
 use Vidola\Pattern\Pattern;
-use Vidola\Document\Element;
 
 /**
  * @package Vidola

@@ -13,8 +13,8 @@ interface FilenameCreator
 	/**
 	 * Create a filename for storing a page.
 	 * 
-	 * @param string $page
+	 * @param Page $page
 	 * @return string
 	 */
-	public function createFilename($page);
+	public function createFilename(Page $page);
 }

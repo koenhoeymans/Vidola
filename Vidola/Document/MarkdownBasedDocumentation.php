@@ -5,60 +5,100 @@
  */
 namespace Vidola\Document;
 
-use Vidola\Parser\Parser;
-use Vidola\Util\ContentRetriever;
-use Vidola\Processor\TextProcessor;
-use Vidola\Util\TitleCreator;
 use Vidola\Util\InternalUrlBuilder;
-use Vidola\Pattern\Patterns\TableOfContents;
+use Vidola\Processor\TextProcessor;
+use Vidola\Parser\Parser;
+use Vidola\Util\TitleCreator;
+use Vidola\Util\TocGenerator;
 
 /**
  * @package Vidola
  */
-class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCreator, Structure
+class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCreator, PageGuide, Structure
 {
-	private $rootFile;
+	private $postTextProcessors = array();
 
-	private $contentRetriever;
+	private $content = array();
 
 	private $parser;
 
 	private $titleCreator;
 
+	private $tocGenerator;
+
 	private $internalUrlBuilder;
 
-	private $rawCache = array();
+	/**
+	 * List of Page objects.
+	 *
+	 * @var array
+	 */
+	private $pages = array();
 
-	private $parsedCache = array();
-
-	private $toc;
-
-	private $postTextProcessors = array();
-
-	private $pages = null;
+	/**
+	 * $pageUrl => ParentPage
+	 *
+	 * @var array
+	 */
+	private $parentPages = array();
 
 	public function __construct(
-		$rootFile,
-		ContentRetriever $contentRetriever,
-		Parser $parser,
-		TitleCreator $titleCreator,
-		InternalUrlBuilder $internalUrlBuilder,
-		TableOfContents $toc
+	Parser $parser,
+	TitleCreator $titleCreator,
+	TocGenerator $tocGenerator,
+	InternalUrlBuilder $internalUrlBuilder
 	) {
-		$this->rootFile = $rootFile;
-		$this->contentRetriever = $contentRetriever;
 		$this->parser = $parser;
 		$this->titleCreator = $titleCreator;
+		$this->tocGenerator = $tocGenerator;
 		$this->internalUrlBuilder = $internalUrlBuilder;
-		$this->toc = $toc;
 	}
 
 	/**
-	 * @see Vidola\Document.DocumentApiBuilder::buildApi()
+	 * @see Vidola\Document.DocumentationApiBuilder::buildApi()
 	 */
-	public function buildApi($file)
+	public function buildApi(Page $page)
 	{
-		return new \Vidola\Document\MarkdownBasedDocumentationViewApi($this, $file);
+		return new \Vidola\Document\MarkdownBasedDocumentationViewApi($page, $this, $this);
+	}
+
+	/**
+	 * @see Vidola\Document.PageGuide::getParsedContent()
+	 */
+	public function getParsedContent(Page $page, $dom = false)
+	{
+		# caching contents prevents from parsing more than once on next request
+		# and for \Vidola\Pattern\Patterns\Header to assign another unique id
+		$id = $page->getUrl();
+		if (isset($this->content[$id]))
+		{
+			$content = $this->content[$id];
+		}
+		else
+		{
+			$content = $page->getRawContent();
+			$content = $this->parser->parse($content);
+			$this->content[$id] = $content;
+		}
+
+		if ($dom)
+		{
+			return $content;
+		}
+
+		$content = $content->saveXml($content->documentElement);
+
+		# DomDocument::saveXml encodes entities like `&` when added within
+		# a text node.
+		$content = str_replace(
+		array('&amp;amp;', '&amp;copy;', '&amp;quot;', '&amp;#'),
+		array('&amp;', '&copy;', '&quot;', '&#'),
+		$content
+		);
+
+		$content = $this->postProcess($content);
+
+		return $content;
 	}
 
 	/**
@@ -72,248 +112,152 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 		$this->postTextProcessors[] = $processor;
 	}
 
-	/**
-  	 * Get content parsed by the different patterns.
-	 *
-	 * @param string $page
-	 * @param bool $dom
-	 * @return \DomDocument|string
-	 */
-	public function getParsedContent($page, $dom = false)
-	{
-		if (isset($this->parsedCache[$page]))
-		{
-			$content = $this->parsedCache[$page];
-		}
-		else
-		{
-			$content = $this->getRawContent($page);
-			$content = $this->parser->parse($content);
-			$this->parsedCache[$page] = $content;
-		}
-
-		if (!$dom)
-		{
-			$content = $content->saveXml($content->documentElement);
-
-			# DomDocument::saveXml encodes entities like `&` when added within
-			# a text node.
-			$content = str_replace(
-				array('&amp;amp;', '&amp;copy;', '&amp;quot;', '&amp;#'),
-				array('&amp;', '&copy;', '&quot;', '&#'),
-				$content
-			);
-
-			$content = $this->postProcess($content);
-		}
-
-		return $content;
-	}
-	
-	/**
-	 * Get content as in file.
-	 *
-	 * @param string $page
-	 * @return string
-	 */
-	public function getRawContent($page)
-	{
-		if (isset($this->rawCache[$page]))
-		{
-			return $this->rawCache[$page];
-		}
-
-		$content = $this->contentRetriever->retrieve($page);
-		$this->rawCache[$page] = $content;
-
-		return $content;
-	}
-
 	private function postProcess($text)
 	{
 		foreach ($this->postTextProcessors as $processor)
 		{
 			$text = $processor->process($text);
 		}
-	
+
 		return $text;
 	}
 
 	/**
-	 * Get the title of a page.
-	 *
-	 * @param string $page
-	 * @return string
+	 * @see Vidola\Document.PageGuide::getTitle()
 	 */
-	public function getPageTitle($page)
+	public function getTitle(Page $page)
 	{
 		return $this->titleCreator->createPageTitle(
-			$this->contentRetriever->retrieve($page), $page
+		$page->getRawContent(), $page->getUrl()
 		);
 	}
 
 	/**
-	 * Get a link to an internal resource relative to another resource if specified.
-	 *
-	 * @param string $page
-	 * @param string $relativeTo
-	 * @return string
+	 * @see Vidola\Document.PageGuide::getToc()
 	 */
-	public function getLink($page, $relativeTo = null)
+	public function getToc(Page $page)
 	{
-		return $this->internalUrlBuilder->createRelativeLink($page, $relativeTo);
+		return $this->tocGenerator->createTocNode($this->getParsedContent($page, true));
 	}
 
 	/**
-	 * Get the name of the first page.
-	 * 
-	 * @return string
+	 * @see Vidola\Document.PageList::add()
 	 */
-	public function getStartPage()
+	public function add(Page $page, Page $parentPage = null)
 	{
-		return $this->rootFile;
-	}
-
-	/**
-	 * A list of all pages that are referred to in the specified page in
-	 * a table of contents.
-	 * 
-	 * @param string $page
-	 * @return array
-	 */
-	public function getSubpages($page)
-	{
-		$text = $this->contentRetriever->retrieve($page);
-		return $this->toc->getSubpages($text);
-	}
-
-	/**
-	 * Get the previous page.
-	 *
-	 * @param string $page
-	 * @return string|null
-	 */
-	public function getPreviousPage($page)
-	{
-		$pageList = $this->getPages();
-		$pageKey = array_search($page, $pageList);
-		if ($pageKey > 0)
+		$this->pages[] = $page;
+		if ($parentPage)
 		{
-			return $pageList[$pageKey-1];
+			$this->parentPages[$page->getUrl()] = $parentPage;
 		}
-
-		return null;
 	}
 
 	/**
-	 * Get the next page.
-	 *
-	 * @param string $file
-	 * @return string|null
-	 */
-	public function getNextPage($page)
-	{
-		$pageList = $this->getPages();
-		$pageKey = array_search($page, $pageList);
-		$pageKey++;
-		if ($pageKey !== count($pageList))
-		{
-			return $pageList[$pageKey];
-		}
-
-		return null;
-	}
-
-	/**
-	 * A list of all pages in order of appearance in the individual TOC.
-	 * 
-	 * @return array
+	 * @see Vidola\Document.PageList::getPages()
 	 */
 	public function getPages()
 	{
-		if ($this->pages)
-		{
-			return $this->pages;
-		}
-
-		$pages = $this->getSubpagesRecursively($this->rootFile);
-		array_unshift($pages, $this->rootFile);
-
-		$this->pages = $pages;
-
-		return $pages;
+		return $this->pages;
 	}
 
-	private function getSubpagesRecursively($file)
+	/**
+	 * @see Vidola\Document.Structure::getPreviousPage()
+	 */
+	public function getPreviousPage(Page $page)
 	{
-		$subpages = $this->getSubpages($file);
-		foreach ($subpages as $subpage)
+		$pages = $this->getPages();
+		$pageKey = array_search($page, $pages);
+		if ($pageKey > 0)
 		{
-			$subsubpages = $this->getSubpagesRecursively($subpage);
-			$subpages = array_merge($subpages, $subsubpages);
+			return $pages[$pageKey-1];
 		}
 
-		return array_unique($subpages);
+		return null;
+	}
+
+	/**
+	 * @see Vidola\Document.Structure::getNextPage()
+	 */
+	public function getNextPage(Page $page)
+	{
+		$pages = $this->getPages();
+		$pageKey = array_search($page, $pages);
+		$pageKey++;
+		if ($pageKey !== count($pages))
+		{
+			return $pages[$pageKey];
+		}
+
+		return null;
+	}
+
+	/**
+	 * @see Vidola\Document.Structure::getStartPage()
+	 */
+	public function getStartPage()
+	{
+		if (isset($this->pages[0]))
+		{
+			return $this->pages[0];
+		}
+
+		return null;
+	}
+
+	/**
+	 * @see Vidola\Document.Structure::getUrl()
+	 */
+	public function getUrl(Page $from, Linkable $to)
+	{
+		return $this->internalUrlBuilder->createRelativeLink($to->getUrl(), $from->getUrl());
+	}
+
+	/**
+	 * @see Vidola\Document.Structure::getBreadCrumbs()
+	 */
+	public function getBreadCrumbs(Page $page)
+	{
+		$startPage = $this->getStartPage();
+		$breadCrumbs = $this->getPagesThatLeadTo($startPage, $page);
+		array_unshift($breadCrumbs, $startPage);
+		if ($page != $startPage)
+		{
+			$breadCrumbs[] = $page;
+		}
+
+		return $breadCrumbs;
+	}
+
+	private function getPagesThatLeadTo(Page $from, Page $to)
+	{
+		if ($from == $to)
+		{
+			return array();
+		}
+
+		if (!isset($this->parentPages[$to->getUrl()]))
+		{
+			return array();
+		}
+
+		$parentPage = $this->parentPages[$to->getUrl()];
+		if ($parentPage == $from)
+		{
+			return array();
+		}
+
+		$parentPages = $this->getPagesThatLeadTo($from, $parentPage);
+		array_unshift($parentPages, $parentPage);
+
+		return $parentPages;
 	}
 
 	/**
 	 * @see Vidola\Document.FilenameCreator::createFilename()
 	 */
-	public function createFilename($file)
+	public function createFilename(Page $page)
 	{
-		$fileParts = pathinfo($file);
+		$fileParts = pathinfo($page->getUrl());
 		return $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'];
-	}
-
-	/**
-	 * Creates a DomElement containing the ToC of a page.
-	 *
-	 * @param string $page
-	 * @return \DomElement|null
-	 */
-	public function getToc($page)
-	{
-		if (isset($this->tocCache[$page]))
-		{
-			return $this->tocCache[$page];
-		}
-
-		$toc = $this->toc->createTocNode($this->getParsedContent($page, true));
-		$this->tocCache[$page] = $toc;
-
-		return $toc;
-	}
-
-	/**
-	 * A list of the files that lead to `$file` as subfile.
-	 *
-	 * @param string $file
-	 * @return array
-	 */
-	public function getBreadCrumbs($file)
-	{
-		$breadCrumbs = $this->getFilesThatLeadTo($this->rootFile, $file);
-		array_unshift($breadCrumbs, $this->rootFile);
-
-		return $breadCrumbs;
-	}
-
-	private function getFilesThatLeadTo($startpage, $endpage)
-	{
-		$inBetweenPages = array();
-
-		$subpages = $this->getSubpages($startpage);
-		foreach ($subpages as $subpage)
-		{
-			if ($subpage === $endpage)
-			{
-				$inBetweenPages[] = $subpage;
-				break;
-			}
-
-			array_merge($inBetweenPages, $this->getFilesThatLeadTo($subpage, $endpage));
-		}
-
-		return $inBetweenPages;
 	}
 }

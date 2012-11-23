@@ -8,22 +8,14 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 {
 	public function setup()
 	{
-		$this->filenameCreator = $this->getMockBuilder('\\Vidola\\Document\\FilenameCreator')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->documentationApiBuilder = $this->getMockBuilder('\\Vidola\\Document\\DocumentationApiBuilder')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->documentationStructure = $this->getMockBuilder('\\Vidola\\Document\\Structure')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->view = $this->getMockBuilder('\\Vidola\\View\\TemplatableFileView')
-			->disableOriginalConstructor()
-			->getMock();
+		$this->filenameCreator = $this->getMock('\\Vidola\\Document\\FilenameCreator');
+		$this->documentationApiBuilder = $this->getMock('\\Vidola\\Document\\DocumentationApiBuilder');
+		$this->structure = $this->getMock('\\Vidola\\Document\\Structure');
+		$this->view = $this->getMock('\\Vidola\\View\\TemplatableFileView');
 		$this->controller = new \Vidola\Controller\DocumentationCreationController(
 			$this->filenameCreator,
 			$this->documentationApiBuilder,
-			$this->documentationStructure,
+			$this->structure,
 			$this->view
 		);
 	}
@@ -33,14 +25,16 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function tellsDocumentModelToBuildApi()
 	{
+		$page = new \Vidola\Document\Page('url', 'content');
+
 		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentationStructure
+		$this->structure
 				->expects($this->atLeastOnce())
 				->method('getPages')
-				->will($this->returnValue(array('file')));
+				->will($this->returnValue(array($page)));
 
 		$this->controller->createDocumentation();
 	}
@@ -50,14 +44,16 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function addsApiToView()
 	{
+		$page = new \Vidola\Document\Page('url', 'content');
+
 		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentationStructure
+		$this->structure
 				->expects($this->atLeastOnce())
 				->method('getPages')
-				->will($this->returnValue(array('file')));
+				->will($this->returnValue(array($page)));
 		$this->view
 				->expects($this->once())
 				->method('addApi');
@@ -70,14 +66,16 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function tellsViewWhichFilenameToUse()
 	{
+		$page = new \Vidola\Document\Page('url', 'content');
+
 		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentationStructure
+		$this->structure
 				->expects($this->atLeastOnce())
 				->method('getPages')
-				->will($this->returnValue(array('file')));
+				->will($this->returnValue(array($page)));
 		$this->filenameCreator
 				->expects($this->atLeastOnce())
 				->method('createFilename')
@@ -95,14 +93,16 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function tellsViewToRender()
 	{
+		$page = new \Vidola\Document\Page('url', 'content');
+
 		$this->documentationApiBuilder
 				->expects($this->once())
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentationStructure
+		$this->structure
 				->expects($this->atLeastOnce())
 				->method('getPages')
-				->will($this->returnValue(array('file')));
+				->will($this->returnValue(array($page)));
 		$this->view
 				->expects($this->once())
 				->method('render');
@@ -115,14 +115,17 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 	 */
 	public function takesCareOfSubpages()
 	{
+		$page = new \Vidola\Document\Page('url', 'content');
+		$subpage = new \Vidola\Document\Page('suburl', 'content');
+
 		$this->documentationApiBuilder
 				->expects($this->exactly(2))
 				->method('buildApi')
 				->will($this->returnValue($this->getMock('\\Vidola\\View\\ViewApi')));
-		$this->documentationStructure
+		$this->structure
 				->expects($this->at(0))
 				->method('getPages')
-				->will($this->returnValue(array('file', 'subfile')));
+				->will($this->returnValue(array($page, $subpage)));
 
 		$this->controller->createDocumentation();
 	}

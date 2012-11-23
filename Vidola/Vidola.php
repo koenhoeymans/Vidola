@@ -28,7 +28,9 @@ class Vidola
 
 		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
 		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
-		$fjor->setSingleton('Vidola\\Patterns\\Pattern\\Header');
+//		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\Header');
+		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\TableOfContents');
+		$fjor->setSingleton('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
 		$fjor
 			->given('Vidola\\Util\\TitleCreator')
@@ -38,8 +40,13 @@ class Vidola
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor
 			->given('Vidola\\Document\\DocumentationApiBuilder')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
-			->inSingletonScope();
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
+		$fjor
+			->given('Vidola\\Document\\PageList')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
+		$fjor
+			->given('Vidola\\Document\\Structure')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor
 			->given('Vidola\\Util\\FileExtensionProvider')
 			->thenUse('Vidola\\Util\\HtmlFileUrlBuilder');
@@ -56,8 +63,12 @@ class Vidola
 			->thenUse('Vidola\\Parser\\RecursiveReplacer')
 			->inSingletonScope();
 		$fjor
-			->given('Vidola\\Document\\Structure')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation')
+			->given('Vidola\\Util\\InternalUrlBuilder')
+			->thenUse('Vidola\\Util\\HtmlFileUrlBuilder')
+			->inSingletonScope();
+		$fjor
+			->given('Vidola\\Util\\TocGenerator')
+			->thenUse('Vidola\\Util\\HtmlHeaderBasedTocGenerator')
 			->inSingletonScope();
 
 		// command line options
@@ -84,6 +95,14 @@ class Vidola
 		$fjor->given('Vidola\\Document\\MarkdownBasedDocumentation')
 			->andMethod('addPostTextProcessor')
 			->addParam(array('Vidola\\Processor\\Processors\\HtmlPrettifier'));
+
+		// filling list of pages
+		// ---------------------
+		$pageListFiller = $fjor->get('Vidola\\Document\\PageListFiller');
+		$pageListFiller->fill(
+			$fjor->get('Vidola\\Document\\PageList'),
+			self::getFile($config->get('source'))
+		);
 
 		// build the document(s)
 		// ---------------------
@@ -113,10 +132,6 @@ class Vidola
 		}
 		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
 
-		$fjor
-			->given('Vidola\\Document\\MarkdownBasedDocumentation')
-			->constructWith(array(self::getFile($config->get('source'))));
-		
 		// set the output directory
 		// --target.dir=
 		// ------------------------
