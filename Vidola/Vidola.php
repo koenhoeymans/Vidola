@@ -28,7 +28,6 @@ class Vidola
 
 		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
 		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
-//		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\Header');
 		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\TableOfContents');
 		$fjor->setSingleton('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
