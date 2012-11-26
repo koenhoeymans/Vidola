@@ -5,10 +5,10 @@
  */
 namespace Vidola\Controller;
 
+use Vidola\View\StoredTemplatableFileView;
 use Vidola\Document\FilenameCreator;
 use Vidola\Document\DocumentationApiBuilder;
 use Vidola\Document\PageList;
-use Vidola\View\TemplatableFileView;
 
 /**
  * @package Vidola
@@ -27,7 +27,7 @@ class DocumentationCreationController
 		FilenameCreator $filenameCreator,
 		DocumentationApiBuilder $documentationApiBuilder,
 		PageList $pageList,
-		TemplatableFileView $view
+		StoredTemplatableFileView $view
 	) {
 		$this->filenameCreator = $filenameCreator;
 		$this->documentationApiBuilder = $documentationApiBuilder;

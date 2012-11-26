@@ -135,7 +135,7 @@ class Vidola
 		// set the output directory
 		// --target.dir=
 		// ------------------------
-		$view = $fjor->get('Vidola\\View\\TemplatableFileView');
+		$view = $fjor->get('Vidola\\View\\StoredTemplatableFileView');
 		if (!$config->get('target.dir'))
 		{
 			throw new \Exception('target directory not set: --target.dir=<dir>');
