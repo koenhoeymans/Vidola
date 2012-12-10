@@ -138,7 +138,7 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 			->with($this->currentPage, $resource)
 			->will($this->returnValue('url_my.css'));
 
-		$this->assertEquals('url_my.css', $this->api->urlTo($resource));
+		$this->assertEquals('url_my.css', $this->api->urlTo('my.css'));
 	}
 
 	/**

@@ -5,7 +5,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_TableOfContentsTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
+class Vidola_Pattern_Patterns_TableOfContentsTest extends \AnyMark\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
@@ -14,11 +14,11 @@ class Vidola_Pattern_Patterns_TableOfContentsTest extends \Vidola\UnitTests\Supp
 					->disableOriginalConstructor()
 					->getMock();
 		$this->docFileRetriever =
-			$this->getMockBuilder('\\Vidola\\Util\\DocFileRetriever')
+			$this->getMockBuilder('\\Vidola\\Util\\ContentRetriever')
 					->disableOriginalConstructor()
 					->getMock();
 		$this->internalUrlBuilder =
-			$this->getMockBuilder('\\Vidola\\Util\\InternalUrlBuilder')
+			$this->getMockBuilder('\\AnyMark\\Util\\InternalUrlBuilder')
 					->disableOriginalConstructor()
 					->getMock();
 		$this->toc = new \Vidola\Pattern\Patterns\TableOfContents(

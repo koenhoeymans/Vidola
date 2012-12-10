@@ -8,10 +8,6 @@ namespace Vidola\Document;
 /**
  * @package Vidola
  */
-use Vidola\Util\TitleCreator;
-use Vidola\Util\ContentRetriever;
-use Vidola\Parser\Parser;
-
 class Page implements Linkable
 {
 	private $url;

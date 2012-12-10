@@ -7,7 +7,6 @@ namespace Vidola\View;
 
 use Vidola\View\TemplatableFileView;
 use Vidola\View\ViewApi;
-use Vidola\Util\FileExtensionProvider;
 
 /**
  * @package Vidola
@@ -24,10 +23,7 @@ class StoredTemplatableFileView implements TemplatableFileView
 
 	private $filename;
 
-	public function __construct(FileExtensionProvider $fileExtensionProvider)
-	{
-		$this->fileExtensionProvider = $fileExtensionProvider;
-	}
+	private $extension = '';
 
 	/**
 	 * Set output directory to write files to. The default value used is
@@ -66,6 +62,21 @@ class StoredTemplatableFileView implements TemplatableFileView
 			return $this->filename;
 		}
 		return 'index';
+	}
+
+	/**
+	 * The file extension, without a `.`.
+	 * 
+	 * @param string $ext
+	 */
+	public function setFileExtension($ext)
+	{
+		$this->extension = $ext;
+	}
+
+	private function getFileExtension()
+	{
+		return $this->extension;
 	}
 
 	/**
@@ -129,7 +140,7 @@ class StoredTemplatableFileView implements TemplatableFileView
 			mkdir($dir);
 		}
 
-		$file = $this->fileExtensionProvider->addExtension($dir . $filename);
+		$file = $dir . $filename . '.' . $this->extension;
 
 		$fileHandle = fopen($file, 'w');
 

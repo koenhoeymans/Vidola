@@ -17,16 +17,19 @@ function Vidola_Autoload($className)
 	if (file_exists($classNameFile))
 	{
 		require_once $classNameFile;
+		return;
+	}
+
+	$classNameFile = __DIR__
+		. DIRECTORY_SEPARATOR . '..'
+		. DIRECTORY_SEPARATOR . 'Vendor'
+		. DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className)
+		. '.php';
+
+	if (file_exists($classNameFile))
+	{
+		require_once $classNameFile;
 	}
 }
 
 spl_autoload_register('Vidola_Autoload');
-
-/**
- * Loads the files for the Fjor library
- */
-require_once __DIR__
-	. DIRECTORY_SEPARATOR . '..'
-	. DIRECTORY_SEPARATOR . 'Src'
-	. DIRECTORY_SEPARATOR . 'Fjor'
-	. DIRECTORY_SEPARATOR . 'Autoload.php';

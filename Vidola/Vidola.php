@@ -23,14 +23,17 @@ class Vidola
 
 		// setting up the object graph constructor
 		// ---------------------------------------
-		$fjor = new \Fjor\Dsl\Dsl(new \Fjor\ObjectFactory\GenericObjectFactory());
-		$fjor->given('Fjor\\Fjor')->thenUse($fjor);
-
-		$fjor->setSingleton('Vidola\\Util\\PatternListFiller');
-		$fjor->setSingleton('Vidola\\Pattern\\PatternList');
-		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\TableOfContents');
+		$fjor = \AnyMark\AnyMark::setup();
+		$anyMark = $fjor->get('AnyMark\\AnyMark');
+		$anyMark->setPatternsIni(__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini');
+		$fjor
+			->given('AnyMark\\AnyMark')
+			->thenUse($anyMark);
+		$fjor
+			->given('Vidola\\Util\\ContentRetriever')
+			->thenUse('Vidola\\Util\\DocFileRetriever')
+			->inSingletonScope();
 		$fjor->setSingleton('Vidola\\Document\\MarkdownBasedDocumentation');
-		$fjor->setSingleton('Vidola\\Processor\\Processors\\LinkDefinitionCollector');
 		$fjor
 			->given('Vidola\\Util\\TitleCreator')
 			->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
@@ -47,23 +50,8 @@ class Vidola
 			->given('Vidola\\Document\\Structure')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor
-			->given('Vidola\\Util\\FileExtensionProvider')
-			->thenUse('Vidola\\Util\\HtmlFileUrlBuilder');
-		$fjor
 			->given('Vidola\\View\\TemplatableFileView')
 			->thenUse('Vidola\\View\\StoredTemplatableFileView')
-			->inSingletonScope();
-		$fjor
-			->given('Vidola\\Util\\ContentRetriever')
-			->thenUse('Vidola\\Util\\DocFileRetriever')
-			->inSingletonScope();
-		$fjor
-			->given('Vidola\\Parser\\Parser')
-			->thenUse('Vidola\\Parser\\RecursiveReplacer')
-			->inSingletonScope();
-		$fjor
-			->given('Vidola\\Util\\InternalUrlBuilder')
-			->thenUse('Vidola\\Util\\HtmlFileUrlBuilder')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Util\\TocGenerator')
@@ -73,27 +61,6 @@ class Vidola
 		// command line options
 		// --------------------------------
 		self::setCommandLineOptions($config, $fjor);
-
-		// filling the pattern list with the patterns
-		// ------------------------------------------
-		$patternListFiller = $fjor->get('Vidola\\Util\\PatternListFiller');
-		$patternList = $fjor->get('Vidola\\Pattern\\PatternList');
-		$patternListFiller->fill($patternList, __DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini');
-
-		// adding processors
-		// -----------------
-		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
-			->andMethod('addPreTextProcessor')
-			->addParam(array('Vidola\\Processor\\Processors\\EmptyLineFixer'))
-			->addParam(array('Vidola\\Processor\\Processors\\NewLineStandardizer'))
-			->addParam(array('Vidola\\Processor\\Processors\\Detab'))
-			->addParam(array('Vidola\\Processor\\Processors\\LinkDefinitionCollector'));
-		$fjor->given('Vidola\\Parser\\RecursiveReplacer')
-			->andMethod('addPostDomProcessor')
-			->addParam(array('Vidola\\Processor\\Processors\\EmailObfuscator'));
-		$fjor->given('Vidola\\Document\\MarkdownBasedDocumentation')
-			->andMethod('addPostTextProcessor')
-			->addParam(array('Vidola\\Processor\\Processors\\HtmlPrettifier'));
 
 		// filling list of pages
 		// ---------------------
@@ -150,6 +117,11 @@ class Vidola
 			. DIRECTORY_SEPARATOR . 'Default'
 			. DIRECTORY_SEPARATOR . 'Index.php';
 		$view->setTemplate($template);
+
+		// set the file extension
+		// @todo create command line option
+		// ----------------------
+		$view->setFileExtension('html');
 	}
 
 	private static function getSourceDir($source)

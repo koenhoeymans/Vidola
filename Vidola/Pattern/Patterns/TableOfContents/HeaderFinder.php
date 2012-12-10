@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @package Vidola
+ * @package AnyMark
  */
 namespace Vidola\Pattern\Patterns\TableOfContents;
 
-use \Vidola\Pattern\Patterns\Header;
+use \AnyMark\Pattern\Patterns\Header;
 
 /**
- * @package Vidola
+ * @package AnyMark
  */
 class HeaderFinder
 {

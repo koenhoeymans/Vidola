@@ -11,7 +11,9 @@ class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Fram
 		$this->filenameCreator = $this->getMock('\\Vidola\\Document\\FilenameCreator');
 		$this->documentationApiBuilder = $this->getMock('\\Vidola\\Document\\DocumentationApiBuilder');
 		$this->structure = $this->getMock('\\Vidola\\Document\\Structure');
-		$this->view = $this->getMock('\\Vidola\\View\\TemplatableFileView');
+		$this->view = $this->getMockBuilder('\\Vidola\\View\\StoredTemplatableFileView')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->controller = new \Vidola\Controller\DocumentationCreationController(
 			$this->filenameCreator,
 			$this->documentationApiBuilder,

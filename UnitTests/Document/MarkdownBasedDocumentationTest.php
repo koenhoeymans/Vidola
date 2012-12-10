@@ -16,13 +16,15 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 
 	public function __construct()
 	{
-		$this->parser = $this->getMock('\\Vidola\\Parser\\Parser');
+		$this->anyMark = $anyMark = $this->getMockBuilder('\\AnyMark\\AnyMark')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->titleCreator = $this->getMock('\\Vidola\\Util\\TitleCreator');
 		$this->tocGenerator = $this->getMock('\\Vidola\\Util\\TocGenerator');
-		$this->internalUrlBuilder = $this->getMock('\\Vidola\\Util\\InternalUrlBuilder');
+		$this->internalUrlBuilder = $this->getMock('\\AnyMark\\Util\\InternalUrlBuilder');
 
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
-			$this->parser,
+			$this->anyMark,
 			$this->titleCreator,
 			$this->tocGenerator,
 			$this->internalUrlBuilder
@@ -48,11 +50,16 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$page = new \Vidola\Document\Page('a_page', 'content');
 
-		$this->parser
+		$this->anyMark
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
 			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
+		$this->anyMark
+			->expects($this->once())
+			->method('saveXml')
+			->with($this->createDom('<doc>parsed text</doc>'))
+			->will($this->returnValue('<doc>parsed text</doc>'));
 
 		$this->assertEquals(
 			'<doc>parsed text</doc>',
@@ -67,7 +74,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$page = new \Vidola\Document\Page('a_page', 'content');
 
-		$this->parser
+		$this->anyMark
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
@@ -77,28 +84,6 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			$this->createDom('<doc>parsed text</doc>'),
 			$this->mdDoc->getParsedContent($page, true)
 		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function afterProcessingPostTextProcessorsAreCalled()
-	{
-		$page = new \Vidola\Document\Page('a_page', 'content');
-
-		$postProcessor = $this->getMock('\\Vidola\\Processor\\TextProcessor');
-		$postProcessor
-			->expects($this->atLeastOnce())
-			->method('process');
-		$this->mdDoc->addPostTextProcessor($postProcessor);
-
-		$this->parser
-			->expects($this->atLeastOnce())
-			->method('parse')
-			->with('content')
-			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
-
-		$this->mdDoc->getParsedContent($page);
 	}
 
 	/**
@@ -125,7 +110,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 	{
 		$domDoc = $this->createDom('<doc><h1 id="id">header</h1>parsed text</doc>');
 
-		$this->parser
+		$this->anyMark
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')

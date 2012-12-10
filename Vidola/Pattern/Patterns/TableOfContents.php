@@ -1,17 +1,17 @@
 <?php
 
 /**
- * @package Vidola
+ * @package AnyMark
  */
 namespace Vidola\Pattern\Patterns;
 
 use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
-use Vidola\Util\InternalUrlBuilder;
-use Vidola\Pattern\Pattern;
+use AnyMark\Util\InternalUrlBuilder;
+use AnyMark\Pattern\Pattern;
 
 /**
- * @package Vidola
+ * @package AnyMark
  */
 class TableOfContents extends Pattern
 {
@@ -39,7 +39,7 @@ class TableOfContents extends Pattern
 	}
 
 	/**
-	 * @see Vidola\Pattern.Pattern::getRegex()
+	 * @see AnyMark\Pattern.Pattern::getRegex()
 	 */
 	public function getRegex()
 	{
@@ -74,7 +74,7 @@ class TableOfContents extends Pattern
 		preg_match_all($this->getRegex(), $text, $matches, PREG_PATTERN_ORDER);
 		foreach ($matches['pages'] as $pages)
 		{
-			$matches = $this->getSubpagesFromVidolaText($pages);
+			$matches = $this->getSubpagesFromAnyMarkText($pages);
 			$pageList = array_merge($pageList, $matches);
 		}
 
@@ -112,7 +112,7 @@ class TableOfContents extends Pattern
 	{
 		$fileList = array();
 
-		$namesFromCurrentList = $this->getSubpagesFromVidolaText($regexPartWithListOfFiles);
+		$namesFromCurrentList = $this->getSubpagesFromAnyMarkText($regexPartWithListOfFiles);
 
 		foreach ($namesFromCurrentList as $fileToInclude)
 		{
@@ -153,7 +153,7 @@ class TableOfContents extends Pattern
 		return $headers;
 	}
 
-	private function getSubpagesFromVidolaText($text)
+	private function getSubpagesFromAnyMarkText($text)
 	{
 		$inclusionList = array();
 
@@ -184,7 +184,7 @@ class TableOfContents extends Pattern
 	}
 
 	/**
-	 * @see Vidola\Util.TocGenerator::createTocNode()
+	 * @see AnyMark\Util.TocGenerator::createTocNode()
 	 */
 	public function createTocNode(\DomDocument $domDoc)
 	{

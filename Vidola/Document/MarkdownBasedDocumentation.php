@@ -5,9 +5,9 @@
  */
 namespace Vidola\Document;
 
-use Vidola\Util\InternalUrlBuilder;
+use AnyMark\Util\InternalUrlBuilder;
 use Vidola\Processor\TextProcessor;
-use Vidola\Parser\Parser;
+use AnyMark\AnyMark;
 use Vidola\Util\TitleCreator;
 use Vidola\Util\TocGenerator;
 
@@ -16,11 +16,9 @@ use Vidola\Util\TocGenerator;
  */
 class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCreator, PageGuide, Structure
 {
-	private $postTextProcessors = array();
-
 	private $content = array();
 
-	private $parser;
+	private $anyMark;
 
 	private $titleCreator;
 
@@ -43,12 +41,12 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	private $parentPages = array();
 
 	public function __construct(
-		Parser $parser,
+		AnyMark $anyMark,
 		TitleCreator $titleCreator,
 		TocGenerator $tocGenerator,
 		InternalUrlBuilder $internalUrlBuilder
 	) {
-		$this->parser = $parser;
+		$this->anyMark = $anyMark;
 		$this->titleCreator = $titleCreator;
 		$this->tocGenerator = $tocGenerator;
 		$this->internalUrlBuilder = $internalUrlBuilder;
@@ -68,58 +66,25 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	public function getParsedContent(Page $page, $dom = false)
 	{
 		# caching contents prevents from parsing more than once on next request
-		# and for \Vidola\Pattern\Patterns\Header to assign another unique id
+		# thus for \AnyMark\Pattern\Patterns\Header to assign another unique id
 		$id = $page->getUrl();
 		if (isset($this->content[$id]))
 		{
-			$content = $this->content[$id];
+			$domContent = $this->content[$id];
 		}
 		else
 		{
-			$content = $page->getRawContent();
-			$content = $this->parser->parse($content);
-			$this->content[$id] = $content;
+			$rawContent = $page->getRawContent();
+			$domContent = $this->anyMark->parse($rawContent, true);
+			$this->content[$id] = $domContent;
 		}
 
 		if ($dom)
 		{
-			return $content;
+			return $domContent;
 		}
 
-		$content = $content->saveXml($content->documentElement);
-
-		# DomDocument::saveXml encodes entities like `&` when added within
-		# a text node.
-		$content = str_replace(
-		array('&amp;amp;', '&amp;copy;', '&amp;quot;', '&amp;#'),
-		array('&amp;', '&copy;', '&quot;', '&#'),
-		$content
-		);
-
-		$content = $this->postProcess($content);
-
-		return $content;
-	}
-
-	/**
-	 * Add a processor that is called before the content is returned, after
-	 * all parsing is done.
-	 *
-	 * @param TextProcessor $processor
-	 */
-	public function addPostTextProcessor(TextProcessor $processor)
-	{
-		$this->postTextProcessors[] = $processor;
-	}
-
-	private function postProcess($text)
-	{
-		foreach ($this->postTextProcessors as $processor)
-		{
-			$text = $processor->process($text);
-		}
-
-		return $text;
+		return $this->anyMark->saveXml($domContent);
 	}
 
 	/**
