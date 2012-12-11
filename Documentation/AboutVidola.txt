@@ -5,18 +5,9 @@ About Vidola
 What is Vidola?
 ===============
 
-Vidola is
-
- *	a documentation markup language based on
-	[Markdown](http://daringfireball.net/projects/markdown/syntax).
-	It is designed to make end-user documentation as natural as possible.
-	Vidola extends Markdown to provide a way to interconnect different pages.
- *	a library to transform above mentioned markup language to documentation
-	for your projects providing templates so you can alter the output
-	to your liking.
-
-The above combination makes writing documentation for your projects feel
-more natural.
+Vidola is a library that transform [Markdown-based](http://daringfireball.net/projects/markdown/syntax)
+documentation to HTML. It is designed to make end-user documentation
+as natural as possible.
 
 Why use Vidola
 ==============
