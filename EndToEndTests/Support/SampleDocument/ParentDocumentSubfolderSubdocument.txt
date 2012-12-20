@@ -1,0 +1,22 @@
+{table of contents}
+
+	A Custom Title <Subfolder/Subdocument>
+	NextDocument
+
+header
+------
+
+paragraph
+
+1. ordered
+2. list
+
+* unordered
+* list
+
+paragraph
+
+header
+======
+
+paragraph
