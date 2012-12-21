@@ -1,0 +1,19 @@
+{
+	"name": "vidola/vidola",
+	"description": "PHP Markdown-based documentation",
+	"license": "BSD-2-Clause",
+	"authors": [{
+		"name": "Koen Hoeymans",
+		"email": "koenhoeymans@gmail.com",
+		"role": "lead"
+	}],
+	"require": {
+		"php": ">=5.4.6"
+	},
+	"autoload": {
+		"psr-0": { "Vidola": "/" }
+	},
+	"require": {
+		"anymark/anymark": "0.1.0"
+	}
+}
