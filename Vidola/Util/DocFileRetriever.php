@@ -10,6 +10,8 @@ namespace Vidola\Util;
  */
 class DocFileRetriever implements ContentRetriever
 {
+	private $extensions = array('txt', 'text', 'md');
+
 	private $sourceDir = '';
 
 	public function setSourceDir($dir)
@@ -31,28 +33,19 @@ class DocFileRetriever implements ContentRetriever
 			return file_get_contents($file);
 		}
 
-		if (file_exists($file . '.txt'))
+		foreach ($this->extensions as $extension)
 		{
-			return file_get_contents($file. '.txt');
-		}
+			if (file_exists($file . '.' . $extension))
+			{
+				return file_get_contents($file. '.' . $extension);
+			}
 
-		if (file_exists($file . '.text'))
-		{
-			return file_get_contents($file. '.text');
-		}
-
-		if (file_exists($this->sourceDir . DIRECTORY_SEPARATOR . $file . '.txt'))
-		{
-			return file_get_contents(
-				$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.txt'
-			);
-		}
-
-		if (file_exists($this->sourceDir . DIRECTORY_SEPARATOR . $file . '.text'))
-		{
-			return file_get_contents(
-				$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.text'
-			);
+			if (file_exists($this->sourceDir . DIRECTORY_SEPARATOR . $file . '.' . $extension))
+			{
+				return file_get_contents(
+					$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.' . $extension
+				);
+			}
 		}
 
 		$ucFile = ucfirst($file);
