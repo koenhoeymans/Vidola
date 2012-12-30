@@ -51,7 +51,7 @@ class DocFileRetriever implements ContentRetriever
 		if (file_exists($this->sourceDir . DIRECTORY_SEPARATOR . $file . '.text'))
 		{
 			return file_get_contents(
-			$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.text'
+				$this->sourceDir . DIRECTORY_SEPARATOR . $file . '.text'
 			);
 		}
 
