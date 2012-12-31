@@ -42,8 +42,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Table Of Contents</li>
-              <li><ul><li><a href="#templating">Templating</a><ul><li><a href="#available-methods">Available methods</a></li></ul></li></ul>
-</li>
+              <li><ul><li><a href="#templating">Templating</a><ul><li><a href="#available-methods">Available methods</a></li></ul></li></ul></li>
               <li class="nav-header">Previous Topic</li>
               <li><a href="VidolaSyntax.html">Vidola syntax</a></li>
               <li class="nav-header">Next Topic</li>
@@ -76,39 +75,77 @@ the available methods. You can use them in your template as follows:</p>
 
 <ul><li><p><code>currentPageContent()</code></p>
 
-<p>The parsed content of the current page in the documentation.</p></li>
+<p>The parsed content of the current page in the documentation.</p>
+
+</li>
+
 <li><p><code>currentPageTitle()</code></p>
 
 <p>The title of the current page. It is based on the first header that is
-found.</p></li>
+found.</p>
+
+</li>
+
 <li><p><code>previousPageLink()</code> and <code>nextPageLink()</code></p>
 
 <p>The url pointing the the previous and next page. If there is no previous page this
-will return null.</p></li>
+will return null.</p>
+
+</li>
+
 <li><p><code>previousPageTitle()</code> and <code>nextPageTitle()</code></p>
 
-<p>The title of the previous and next page.</p></li></ul>
+<p>The title of the previous and next page.</p>
 
-<ul><li><p><code>startPageLink()</code></p>
+</li>
 
-<p>The url pointing to the page in your documentation that is the starting point.</p></li>
+<li><p><code>startPageLink()</code></p>
+
+<p>The url pointing to the page in your documentation that is the starting point.</p>
+
+</li>
+
 <li><p><code>getPageLink($page)</code></p>
 
 <p>Get the url pointing to a specified page. Eg the <code>getBreadCrumbs</code> method described
-below provides a list of pages. For each page this method can give you the url.</p></li>
+below provides a list of pages. For each page this method can give you the url.</p>
+
+</li>
+
 <li><p><code>getPageTitle($page)</code></p>
 
-<p>Same as above but provides the title of a specified page.</p></li>
+<p>Same as above but provides the title of a specified page. The title of a page
+is the text of the first header encountered unless a different title was
+specified in the table of contents. If no header is found the title is taken
+from the page name, split by uppercase letters, with first letter uppercased.
+Eg 'aboutMyProject' will generate the title 'About My Project'.</p>
+
+</li>
+
+<li><p><code>linkTo($source)</code></p>
+
+<p>Point to <code>$source</code> relative to the current document.</p>
+
+</li>
+
 <li><p><code>pageHasToc()</code></p>
 
-<p>If a page has a table of contents this method will return <code>true</code>.</p></li>
+<p>If a page has a table of contents this method will return <code>true</code>.</p>
+
+</li>
+
 <li><p><code>toc()</code></p>
 
 <p>The table of contents for the current page. If there is no table of contents this 
-will return <code>null</code>. If there is a table of contents it will return it as a HTML list.</p></li>
+will return <code>null</code>. If there is a table of contents it will return it as a HTML list.</p>
+
+</li>
+
 <li><p><code>getBreadCrumbs()</code></p>
 
-<p>A list of pages that have led to the current page.</p></li></ul>
+<p>A list of pages that have led to the current page.</p>
+
+</li></ul>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->

@@ -40,8 +40,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Table Of Contents</li>
-              <li><ul><li><a href="#library-use">Library use</a><ul><li><a href="#command-line-use">command line use</a></li></ul></li></ul>
-</li>
+              <li><ul><li><a href="#library-use">Library use</a><ul><li><a href="#command-line-use">command line use</a></li></ul></li></ul></li>
               <li class="nav-header">Previous Topic</li>
               <li><a href="Templating.html">Templating</a></li>
             </ul>
@@ -70,6 +69,7 @@ Example:</p>
 <pre><code> --template=/home/Koen/Vidola/Templates/Default.php</code></pre>
 
 </li>
+
 <li><p><code>--source=&lt;source file&gt;</code></p>
 
 <p>Source file to convert.
@@ -78,6 +78,7 @@ Example:</p>
 <pre><code>--source=/home/Koen/MyProject/Docs/Index.txt</code></pre>
 
 </li>
+
 <li><p><code>--target.dir=&lt;output directory&gt;</code></p>
 
 <p>The directory where the documentation files should be placed. Vidola tries to create
@@ -87,6 +88,7 @@ Example:</p>
 <pre><code>--source=/home/Koen/MyProject/Docs/HTML/</code></pre>
 
 </li>
+
 <li><p><code>--internal.links=&lt;internal link builder&gt;</code></p>
 
 <p>Internal links to the generated documentation can follow specified formats. The
@@ -94,7 +96,9 @@ default one is that links have '.html' as extension added, unless an extension
 was already specified. Eg a link to your internal page 'About' will become 'About.html'
 but a link to 'style.css' will be kept 'style.css'. Custom link builders
 can be added by implementing <code>Vidola\Util\InternalUrlBuilder</code> and specifying the
-class as an option here.</p></li></ul>
+class as an option here.</p>
+
+</li></ul>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
