@@ -33,7 +33,7 @@ Available methods
  
  	The title of the previous and next page.
 
- * `startPageLink()`
+ *	`startPageLink()`
 
 	The url pointing to the page in your documentation that is the starting point.
 
