@@ -1,0 +1,30 @@
+------------
+Installation
+------------
+
+The simplest way to install Vidola is through Composer. If you already
+know how to use it, the only thing required is a
+`composer.json` file with the following piece of information:
+
+	{
+		"require": {
+			"vidola/vidola": "0.2.*"
+		}
+	}
+
+If you don't know about Composer already you might want to read
+an [introduction](http://getcomposer.org/doc/00-intro.md).
+
+Optionally you can install Vidola by downloading it from [github]
+(https://github.com/koenhoeymans/Vidola/tags). There's an autoloader
+that needs to be included in your project:
+
+	require_once __DIR__
+		. DIRECTORY_SEPARATOR . 'to'
+		. DIRECTORY_SEPARATOR . 'Vidola'
+		. DIRECTORY_SEPARATOR . 'Autoload.php';
+
+Vidola depends on two other libraries so if you want to do a manual
+install you'll have to install these too. The two libraries Vidola
+depends on are [Fjor](https://github.com/koenhoeymans/Fjor) and [AnyMark]
+(https://github.com/koenhoeymans/AnyMark).

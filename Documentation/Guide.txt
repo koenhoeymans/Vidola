@@ -5,6 +5,7 @@ Guide
 {table of contents}
 
 	AboutVidola
+	Installation
 	VidolaSyntax
 	Templating
 	LibraryUse
