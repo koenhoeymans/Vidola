@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vidola syntax</title>
+    <title>Installation</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -27,10 +27,10 @@
             <div class="navbar-inner">
             	<div class="container">
             		<ul class="nav pull-right">
-            <li><a href="Installation.html">previous</a></li>
+            <li><a href="AboutVidola.html">previous</a></li>
   			<li class="divider-vertical"></li>
 
-            <li><a href="Templating.html">next</a></li>
+            <li><a href="VidolaSyntax.html">next</a></li>
   			<li class="divider-vertical"></li>
             			<li><a href="Guide.html">start</a></li>
             		</ul>
@@ -42,11 +42,11 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Table Of Contents</li>
-              <li><ul><li><a href="#vidola-syntax">Vidola syntax</a><ul><li><a href="#table-of-contents">Table of contents</a></li></ul></li></ul></li>
+              <li><ul><li><a href="#installation">Installation</a></li></ul></li>
               <li class="nav-header">Previous Topic</li>
-              <li><a href="Installation.html">Installation</a></li>
+              <li><a href="AboutVidola.html">About Vidola</a></li>
               <li class="nav-header">Next Topic</li>
-              <li><a href="Templating.html">Templating</a></li>
+              <li><a href="VidolaSyntax.html">Vidola syntax</a></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
@@ -54,48 +54,37 @@
           <ul class="breadcrumb">
           		        		<li><a href="Guide.html">Guide</a>
         			<span class="divider">&raquo;</span></li>
-        		        		<li><a href="VidolaSyntax.html">Vidola syntax</a>
+        		        		<li><a href="Installation.html">Installation</a>
         			<span class="divider">&raquo;</span></li>
         		        	</ul>
           <div class="row-fluid">
             <div class="span12">
-              <doc><h1 id="vidola-syntax">Vidola syntax</h1>
+              <doc><h1 id="installation">Installation</h1>
 
-<p>Vidola relies on <a href="https://github.com/koenhoeymans/AnyMark">AnyMark</a> to provide basic
-Markdown features. Vidola adds a way to interconnect documents through a table
-of contents.</p>
+<p>The simplest way to install Vidola is through Composer. If you already
+know how to use it, the only thing required is a
+<code>composer.json</code> file with the following piece of information:</p>
 
+<pre><code>{
+    "require": {
+        "vidola/vidola": "0.2.*"
+    }
+}</code></pre>
 
-<h2 id="table-of-contents">Table of contents</h2>
+<p>If you don't know about Composer already you might want to read
+an <a href="http://getcomposer.org/doc/00-intro.md">introduction</a>.</p>
 
-<p>You can create a table of contents and have it filled automatically with
-the headers that follow. It takes all headers and displays a nested list
-stopping at the end of the document or when it encounters a header at a
-higher level of the first one encountered. Optionally you can specify the
-depth.</p>
+<p>Optionally you can install Vidola by downloading it from <a href="https://github.com/koenhoeymans/Vidola/tags">github</a>. There's an autoloader
+that needs to be included in your project:</p>
 
-<pre><code>    {table of contents}
-        depth: 2
+<pre><code>require_once __DIR__
+    . DIRECTORY_SEPARATOR . 'to'
+    . DIRECTORY_SEPARATOR . 'Vidola'
+    . DIRECTORY_SEPARATOR . 'Autoload.php';</code></pre>
 
-        about
-        introduction
-
-    a header
-    ========
-
-    A paragraph.</code></pre>
-
-<p>The example above creates a table of contents of the current document, the about document
-and the introduction document with all top-level headers found and their immediate
-subheaders.</p>
-
-<p>There's also the possibility to add custom page titles.</p>
-
-<pre><code>{table of contents}
-
-    custom title &lt;page&gt;</code></pre>
-
-<p>This follows Sphinx convention.</p>
+<p>Vidola depends on two other libraries so if you want to do a manual
+install you'll have to install these too. The two libraries Vidola
+depends on are <a href="https://github.com/koenhoeymans/Fjor">Fjor</a> and <a href="https://github.com/koenhoeymans/AnyMark">AnyMark</a>.</p>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
