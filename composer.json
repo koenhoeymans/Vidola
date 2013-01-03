@@ -14,6 +14,6 @@
 		"psr-0": { "Vidola": "/" }
 	},
 	"require": {
-		"anymark/anymark": "0.1.0"
+		"anymark/anymark": "0.1.1"
 	}
 }
