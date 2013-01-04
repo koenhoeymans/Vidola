@@ -8,12 +8,15 @@
 		"role": "lead"
 	}],
 	"require": {
-		"php": ">=5.4.6"
+		"php": ">=5.4.6",
+		"anymark/anymark": "0.1.1"
+	},
+	"require-dev": {
+		"php": ">=5.4.6",
+		"anymark/anymark": "0.1.1",
+		"phpunit/phpunit": "3.7.*"
 	},
 	"autoload": {
 		"psr-0": { "Vidola": "/" }
-	},
-	"require": {
-		"anymark/anymark": "0.1.1"
 	}
 }
