@@ -32,12 +32,6 @@ class CommandLineConfig implements Config
 			{
 				$keyValue = explode('=', $value);
 
-				# avoid phpunit --debug
-				if (!isset($keyValue[1]))
-				{
-					$keyValue[1] = null;
-				}
-
 				$options[substr($keyValue[0], 2)] = $keyValue[1];
 			}
 			else
