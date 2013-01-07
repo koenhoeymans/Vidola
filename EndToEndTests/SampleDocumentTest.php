@@ -32,14 +32,19 @@ class Vidola_EndToEndTests_SampleDocumentTest extends \Vidola\EndToEndTests\Supp
 	public function createsFullDocument()
 	{
 		// given
-		$_SERVER['argv']['source'] = __DIR__
+		$bin = PHP_BINARY;
+		$vidola = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Vidola'
+			. DIRECTORY_SEPARATOR . 'RunVidola.php';
+		$source = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'SampleDocument'
 			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.txt';
-		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		$targetDir = sys_get_temp_dir();
 
 		// when
-		\Vidola\Vidola::run();
+		shell_exec("$bin $vidola --source={$source} --target.dir={$targetDir}");
 
 		// then
 		$this->assertEquals(
@@ -51,8 +56,7 @@ class Vidola_EndToEndTests_SampleDocumentTest extends \Vidola\EndToEndTests\Supp
 				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
-				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
+				$targetDir . DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
 			))
 		);
 		$this->assertEquals(
@@ -64,8 +68,7 @@ class Vidola_EndToEndTests_SampleDocumentTest extends \Vidola\EndToEndTests\Supp
 				. DIRECTORY_SEPARATOR . 'NextDocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
-				. DIRECTORY_SEPARATOR . 'NextDocument.html'
+				$targetDir . DIRECTORY_SEPARATOR . 'NextDocument.html'
 			))
 		);
 		$this->assertEquals(
@@ -78,7 +81,7 @@ class Vidola_EndToEndTests_SampleDocumentTest extends \Vidola\EndToEndTests\Supp
 				. DIRECTORY_SEPARATOR . 'Subdocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
+				$targetDir
 				. DIRECTORY_SEPARATOR . 'Subfolder'
 				. DIRECTORY_SEPARATOR . 'Subdocument.html'
 			))

@@ -24,16 +24,21 @@ class Vidola_EndToEndTests_TableOfContentsTest extends \Vidola\EndToEndTests\Sup
 	public function createsLocalTableOfContents()
 	{
 		// given
-		$_SERVER['argv']['source'] = __DIR__
+		$bin = PHP_BINARY;
+		$vidola = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Vidola'
+			. DIRECTORY_SEPARATOR . 'RunVidola.php';
+		$source = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'TableOfContents.txt';
-		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-		$_SERVER['argv']['template'] = __DIR__
+		$targetDir = sys_get_temp_dir();
+		$template = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
-		\Vidola\Vidola::run();
+		shell_exec("$bin $vidola --source={$source} --target.dir={$targetDir} --template={$template}");
 
 		// then
 		$this->assertEquals(
@@ -43,8 +48,7 @@ class Vidola_EndToEndTests_TableOfContentsTest extends \Vidola\EndToEndTests\Sup
 				. DIRECTORY_SEPARATOR . 'TableOfContents.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
-				. DIRECTORY_SEPARATOR . 'TableOfContents.html'
+				$targetDir . DIRECTORY_SEPARATOR . 'TableOfContents.html'
 			))
 		);
 	}

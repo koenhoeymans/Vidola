@@ -36,16 +36,21 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 	public function multipleDocumentsAreConnectedThroughTableOfContents()
 	{
 		// given
-		$_SERVER['argv']['source'] = __DIR__
+		$bin = PHP_BINARY;
+		$vidola = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Vidola'
+			. DIRECTORY_SEPARATOR . 'RunVidola.php';
+		$source = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'ParentDocument.txt';
-		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-		$_SERVER['argv']['template'] = __DIR__
+		$targetDir = sys_get_temp_dir();
+		$template = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
-		\Vidola\Vidola::run();
+		shell_exec("$bin $vidola --source={$source} --target.dir={$targetDir} --template={$template}");
 
 		// then
 		$this->assertEquals(
@@ -55,8 +60,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 				. DIRECTORY_SEPARATOR . 'ParentDocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
-				. DIRECTORY_SEPARATOR . 'ParentDocument.html'
+				$targetDir . DIRECTORY_SEPARATOR . 'ParentDocument.html'
 			))
 		);
 
@@ -67,8 +71,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 				. DIRECTORY_SEPARATOR . 'SubDocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
-				. DIRECTORY_SEPARATOR . 'SubDocument.html'
+				$targetDir . DIRECTORY_SEPARATOR . 'SubDocument.html'
 			))
 		);
 	}
@@ -79,16 +82,21 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 	public function subDocumentCanExistInSubDirectory()
 	{
 		// given
-		$_SERVER['argv']['source'] = __DIR__
+		$bin = PHP_BINARY;
+		$vidola = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Vidola'
+			. DIRECTORY_SEPARATOR . 'RunVidola.php';
+		$source = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.txt';
-		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
-		$_SERVER['argv']['template'] = __DIR__
+		$targetDir = sys_get_temp_dir();
+		$template = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
-		\Vidola\Vidola::run();
+		shell_exec("$bin $vidola --source={$source} --target.dir={$targetDir} --template={$template}");
 
 		// then
 		$this->assertEquals(
@@ -98,8 +106,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
-				. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
+				$targetDir . DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
 			))
 		);
 
@@ -111,7 +118,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 				. DIRECTORY_SEPARATOR . 'Subdocument.html'
 			)),
 			$this->tidy(file_get_contents(
-				$_SERVER['argv']['target.dir']
+				$targetDir
 				. DIRECTORY_SEPARATOR . 'Subfolder'
 				. DIRECTORY_SEPARATOR . 'Subdocument.html'
 			))
@@ -125,20 +132,24 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 	{
 		// given
 		// note: using default template
-		$_SERVER['argv']['source'] = __DIR__
+		$bin = PHP_BINARY;
+		$vidola = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Vidola'
+			. DIRECTORY_SEPARATOR . 'RunVidola.php';
+		$source = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
 			. DIRECTORY_SEPARATOR . 'ParentDocument.txt';
-		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+		$targetDir = sys_get_temp_dir();
 
 		// when
-		\Vidola\Vidola::run();
+		shell_exec("$bin $vidola --source={$source} --target.dir={$targetDir}");
 
 		// then
 		$this->assertTrue(
 			is_string(strstr(
 				file_get_contents(
-					$_SERVER['argv']['target.dir']
-					. DIRECTORY_SEPARATOR . 'ParentDocument.html'
+					$targetDir . DIRECTORY_SEPARATOR . 'ParentDocument.html'
 				),
 				'next'
 			))
@@ -147,8 +158,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 		$this->assertTrue(
 			is_string(strstr(
 				file_get_contents(
-					$_SERVER['argv']['target.dir']
-					. DIRECTORY_SEPARATOR . 'SubDocument.html'
+					$targetDir . DIRECTORY_SEPARATOR . 'SubDocument.html'
 				),
 				'previous'
 			))
@@ -162,19 +172,24 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 	{
 		// given
 		// note: using default template
-		$_SERVER['argv']['source'] = __DIR__
+		$bin = PHP_BINARY;
+		$vidola = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Vidola'
+			. DIRECTORY_SEPARATOR . 'RunVidola.php';
+		$source = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
-			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html';
-		$_SERVER['argv']['target.dir'] = sys_get_temp_dir();
+			. DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.txt';
+		$targetDir = sys_get_temp_dir();
 
 		// when
-		\Vidola\Vidola::run();
+		shell_exec("$bin $vidola --source={$source} --target.dir={$targetDir}");
 
 		// then
 		$this->assertTrue(
 			is_string(strstr(
 				file_get_contents(
-					$_SERVER['argv']['target.dir']
+					$targetDir
 					. DIRECTORY_SEPARATOR . 'Subfolder'
 					. DIRECTORY_SEPARATOR . 'Subdocument.html'
 				),
