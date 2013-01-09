@@ -74,6 +74,18 @@ class Vidola
 		// ---------------------
 		$documentCreationController = $fjor->get('Vidola\\Controller\\DocumentationCreationController');
 		$documentCreationController->createDocumentation();
+
+		// copy files
+		// ----------
+		if ($filesOrDirToCopy = $config->get('copy'))
+		{
+			$fileCopy = $fjor->get('Vidola\\Util\\FileCopy');
+			$fileCopy->copy(
+				dirname(self::getTemplate($config)),
+				$config->get('target.dir'),
+				$filesOrDirToCopy
+			);
+		}		
 	}
 
 	private static function setCommandLineOptions(
@@ -111,17 +123,21 @@ class Vidola
 		// set the template
 		// --template=
 		// ----------------
-		$template = $config->get('template') ?:
-			__DIR__
-			. DIRECTORY_SEPARATOR . 'Templates'
-			. DIRECTORY_SEPARATOR . 'Default'
-			. DIRECTORY_SEPARATOR . 'Index.php';
-		$view->setTemplate($template);
+		$view->setTemplate(self::getTemplate($config));
 
 		// set the file extension
 		// @todo create command line option
 		// ----------------------
 		$view->setFileExtension('html');
+	}
+
+	private static function getTemplate(\Vidola\Config\Config $config)
+	{
+		return $config->get('template') ?:
+			__DIR__
+			. DIRECTORY_SEPARATOR . 'Templates'
+			. DIRECTORY_SEPARATOR . 'Default'
+			. DIRECTORY_SEPARATOR . 'Index.php';
 	}
 
 	private static function getSourceDir($source)

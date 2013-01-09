@@ -26,6 +26,12 @@ class CommandLineConfig implements Config
 	{
 		$options = array();
 
+		if (count($argv) === 2 && file_exists($argv[1]))
+		{
+			$config = require $argv[1];
+			$argv = array_merge($argv, $config);
+		}
+
 		foreach ($argv as $key => $value)
 		{
 			if (is_int($key) && substr($value, 0, 2) === '--')
