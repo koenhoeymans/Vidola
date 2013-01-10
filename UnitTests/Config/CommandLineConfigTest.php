@@ -28,10 +28,10 @@ class Vidola_Config_CommandLineConfigTest extends PHPUnit_Framework_TestCase
 	public function acceptsFileWithArrayWithKeys()
 	{
 		// given
-		$_SERVER['argv'][0] = __DIR__
+		$_SERVER['argv'][1] = __DIR__
 				. DIRECTORY_SEPARATOR . '..'
 				. DIRECTORY_SEPARATOR . 'Support'
-				. DIRECTORY_SEPARATOR .'Config.php';
+				. DIRECTORY_SEPARATOR . 'Config.php';
 		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
 		// when
