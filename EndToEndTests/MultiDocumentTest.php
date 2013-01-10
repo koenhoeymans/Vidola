@@ -50,7 +50,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
-		exec("$bin $vidola --source={$source} --target.dir={$targetDir} --template={$template}");
+		exec("$bin $vidola --source={$source} --target-dir={$targetDir} --template={$template}");
 
 		// then
 		$this->assertEquals(
@@ -96,7 +96,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
-		exec("$bin $vidola --source={$source} --target.dir={$targetDir} --template={$template}");
+		exec("$bin $vidola --source={$source} --target-dir={$targetDir} --template={$template}");
 
 		// then
 		$this->assertEquals(
@@ -143,7 +143,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 		$targetDir = sys_get_temp_dir();
 
 		// when
-		exec("$bin $vidola --source={$source} --target.dir={$targetDir}");
+		exec("$bin $vidola --source={$source} --target-dir={$targetDir}");
 
 		// then
 		$this->assertTrue(
@@ -183,7 +183,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 		$targetDir = sys_get_temp_dir();
 
 		// when
-		exec("$bin $vidola --source={$source} --target.dir={$targetDir}");
+		exec("$bin $vidola --source={$source} --target-dir={$targetDir}");
 
 		// then
 		$this->assertTrue(

@@ -82,7 +82,7 @@ class Vidola
 			$fileCopy = $fjor->get('Vidola\\Util\\FileCopy');
 			$fileCopy->copy(
 				dirname(self::getTemplate($config)),
-				$config->get('target.dir'),
+				$config->get('target-dir'),
 				$filesOrDirToCopy
 			);
 		}		
@@ -111,14 +111,14 @@ class Vidola
 		$docFileRetriever->setSourceDir(self::getSourceDir($config->get('source')));
 
 		// set the output directory
-		// --target.dir=
+		// --target-dir=
 		// ------------------------
 		$view = $fjor->get('Vidola\\View\\StoredTemplatableFileView');
-		if (!$config->get('target.dir'))
+		if (!$config->get('target-dir'))
 		{
-			throw new \Exception('target directory not set: --target.dir=<dir>');
+			throw new \Exception('target directory not set: --target-dir=<dir>');
 		}
-		$view->setOutputDir($config->get('target.dir'));
+		$view->setOutputDir($config->get('target-dir'));
 
 		// set the template
 		// --template=

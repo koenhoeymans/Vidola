@@ -44,7 +44,7 @@ class Vidola_EndToEndTests_SampleDocumentTest extends \Vidola\EndToEndTests\Supp
 		$targetDir = sys_get_temp_dir();
 
 		// when
-		exec("$bin $vidola --source={$source} --target.dir={$targetDir}");
+		exec("$bin $vidola --source={$source} --target-dir={$targetDir}");
 
 		// then
 		$this->assertEquals(

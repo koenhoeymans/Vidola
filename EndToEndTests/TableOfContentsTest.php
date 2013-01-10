@@ -38,7 +38,7 @@ class Vidola_EndToEndTests_TableOfContentsTest extends \Vidola\EndToEndTests\Sup
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
-		exec("$bin $vidola --source={$source} --target.dir={$targetDir} --template={$template}");
+		exec("$bin $vidola --source={$source} --target-dir={$targetDir} --template={$template}");
 
 		// then
 		$this->assertEquals(

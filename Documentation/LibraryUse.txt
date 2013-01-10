@@ -22,7 +22,7 @@ options are present:
 
 		--source=/home/Koen/MyProject/Docs/Index.txt
 
-*	`--target.dir=<output directory>`
+*	`--target-dir=<output directory>`
 
 	The directory where the documentation files should be placed. Vidola tries to create
 	it if it doesn't exist.
@@ -55,7 +55,7 @@ somewhere in your project that contains the following:
 	
 	return array(
 		'source'			=> '/home/Bruce/MyDoc/index.txt',
-		'target.dir'		=> '/home/Bruce/MySite',
+		'target-dir'		=> '/home/Bruce/MySite',
 	);
 
 This array can also specify files or a directory to copy. These are files contained
@@ -67,7 +67,7 @@ done by adding it to the build file:
 
 	return array(
 		'source'			=> '/home/Bruce/MyDoc/index.txt',
-		'target.dir'		=> '/home/Bruce/MySiteHtml',
+		'target-dir'		=> '/home/Bruce/MySiteHtml',
 		'template'			=> '/home/Bruce/MyPhpProject/VidolaTemplate/index.php',
 		'copy'				=> 'css'
 	);
