@@ -119,7 +119,7 @@ return array(
     'target-dir'        =&gt; '/home/Bruce/MySite',
 );</code></pre>
 
-<p>This array can also specify files or a directory to copy. These are files contained
+<p>This array can also specify files or directories to copy. These are files contained
 within the template directory. Eg. if you use a template like the one that comes with
 Vidola you'll probably want the css directory copied automatically too. This is
 done by adding it to the build file:</p>
@@ -133,13 +133,14 @@ return array(
     'copy'              =&gt; 'css'
 );</code></pre>
 
-<p>If you need to copy two files you can use an array:</p>
+<p>If you need to copy more than one file or directory you can use an array:</p>
 
 <pre><code>'copy'  =&gt; array('css/style.css', 'header.jpg')</code></pre>
 
-<p>Note that the files or directory to be copied is specified relative to the template
-directory. These pahts are copied back to the target directory (e.i. the file
-<code>css/style.css</code> will be copied to <code>/home/Bruce/MySiteHtml/css/style.css</code>.</p>
+<p>Note that the files or directories to be copied must be specified relative
+to the template directory. These pahts are copied back to the target
+directory (e.i. the file <code>css/style.css</code> will be copied to
+<code>/home/Bruce/MySiteHtml/css/style.css</code>.</p>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
