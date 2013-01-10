@@ -147,8 +147,7 @@ class Vidola
 			throw new \Exception('Source is not a file.');
 		}
 
-		$fileParts = pathinfo($source);
-		return $fileParts['dirname'];
+		return dirname($source);
 	}
 
 	private static function getFile($source)
