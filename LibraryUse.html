@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Library use</title>
+    <title>Library Use</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -40,7 +40,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Table Of Contents</li>
-              <li><ul><li><a href="#library-use">Library use</a><ul><li><a href="#command-line-use">command line use</a></li></ul></li></ul></li>
+              <li><ul><li><a href="#library-use">Library Use</a><ul><li><a href="#options-on-the-command-line">options on the command line</a></li><li><a href="#using-a-build-file">Using a build file</a></li></ul></li></ul></li>
               <li class="nav-header">Previous Topic</li>
               <li><a href="Templating.html">Templating</a></li>
             </ul>
@@ -50,16 +50,17 @@
           <ul class="breadcrumb">
           		        		<li><a href="Guide.html">Guide</a>
         			<span class="divider">&raquo;</span></li>
-        		        		<li><a href="LibraryUse.html">Library use</a>
+        		        		<li><a href="LibraryUse.html">Library Use</a>
         			<span class="divider">&raquo;</span></li>
         		        	</ul>
           <div class="row-fluid">
             <div class="span12">
-              <doc><h1 id="library-use">Library use</h1>
+              <doc><h1 id="library-use">Library Use</h1>
 
-<h2 id="command-line-use">command line use</h2>
+<h2 id="options-on-the-command-line">options on the command line</h2>
 
-<p>Run Vidola with <code>php RunVidola.php</code>. The following options are present:</p>
+<p>Run Vidola with <code>php RunVidola.php</code> on the command line. The following
+options are present:</p>
 
 <ul><li><p><code>--template=&lt;template path&gt;</code></p>
 
@@ -99,6 +100,46 @@ can be added by implementing <code>Vidola\Util\InternalUrlBuilder</code> and spe
 class as an option here.</p>
 
 </li></ul>
+
+<h2 id="using-a-build-file">Using a build file</h2>
+
+<p>Alternatively a 'build' file can be specified:</p>
+
+<pre><code>php RunVidola.php /path/to/build.php</code></pre>
+
+<p>This is a PHP file that returns an array
+with key-value pairs that are the same as the above command line options. Minimally
+a source and target need to be specified. An example file could be <code>build.php</code>
+somewhere in your project that contains the following:</p>
+
+<pre><code>&lt;?php
+
+return array(
+    'source'            =&gt; '/home/Bruce/MyDoc/index.txt',
+    'target.dir'        =&gt; '/home/Bruce/MySite',
+);</code></pre>
+
+<p>This array can also specify files or a directory to copy. These are files contained
+within the template directory. Eg. if you use a template like the one that comes with
+Vidola you'll probably want the css directory copied automatically too. This is
+done by adding it to the build file:</p>
+
+<pre><code>&lt;?php
+
+return array(
+    'source'            =&gt; '/home/Bruce/MyDoc/index.txt',
+    'target.dir'        =&gt; '/home/Bruce/MySiteHtml',
+    'template'          =&gt; '/home/Bruce/MyPhpProject/VidolaTemplate/index.php',
+    'copy'              =&gt; 'css'
+);</code></pre>
+
+<p>If you need to copy two files you can use an array:</p>
+
+<pre><code>'copy'  =&gt; array('css/style.css', 'header.jpg')</code></pre>
+
+<p>Note that the files or directory to be copied is specified relative to the template
+directory. These pahts are copied back to the target directory (e.i. the file
+<code>css/style.css</code> will be copied to <code>/home/Bruce/MySiteHtml/css/style.css</code>.</p>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
