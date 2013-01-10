@@ -17,10 +17,12 @@ class FileCopy
 	 * 
 	 * @param string $sourceDir Eg `/tmp`
 	 * @param string $destinationDir
-	 * @param string|array $filesOrDir Eg `SubDir` or `array('lion.jpg', 'scripts/script.js')`
+	 * @param string|array $filesOrDirsToCopy Eg `SubDir` or `array('lion.jpg', 'scripts/script.js')`
 	 */
-	public function copy($sourceDir, $destinationDir, $filesOrDirToCopy)
+	public function copy($sourceDir, $destinationDir, $filesOrDirsToCopy)
 	{
+		$filesOrDirsToCopy = (array) $filesOrDirsToCopy;
+
 		if (substr($sourceDir, -1) !== DIRECTORY_SEPARATOR)
 		{
 			$sourceDir .= DIRECTORY_SEPARATOR;
@@ -30,28 +32,27 @@ class FileCopy
 			$destinationDir .= DIRECTORY_SEPARATOR;
 		}
 
-		if (is_string($filesOrDirToCopy) && is_dir($sourceDir . $filesOrDirToCopy))
+		foreach ($filesOrDirsToCopy as $fileOrDirToCopy)
 		{
-			$this->recurseCopy(
-				$sourceDir . $filesOrDirToCopy, $destinationDir . $filesOrDirToCopy
-			);
-		}
-		else
-		{
-			$files = (array) $filesOrDirToCopy;
-			foreach ($files as $file)
+			if (is_dir($sourceDir . $fileOrDirToCopy))
 			{
-				if (!is_dir(dirname($destinationDir . $file)))
+				$this->recurseCopy(
+					$sourceDir . $fileOrDirToCopy, $destinationDir . $fileOrDirToCopy
+				);
+			}
+			else
+			{
+				if (!is_dir(dirname($destinationDir . $fileOrDirToCopy)))
 				{
-					mkdir(dirname($destinationDir . $file));
+					mkdir(dirname($destinationDir . $fileOrDirToCopy));
 				}
-				copy($sourceDir . $file, $destinationDir . $file);
+				copy($sourceDir . $fileOrDirToCopy, $destinationDir . $fileOrDirToCopy);
 			}
 		}
 	}
 
 	// http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php/2050909#2050909
-	public function recurseCopy($src,$dst)
+	public function recurseCopy($src, $dst)
 	{
 		$dir = opendir($src);
 
