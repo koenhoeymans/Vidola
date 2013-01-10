@@ -1,11 +1,8 @@
------------
-Library use
------------
+options on the command line
+===========================
 
-command line use
-================
-
-Run Vidola with `php RunVidola.php`. The following options are present:
+Run Vidola with `php RunVidola.php` on the command line. The following
+options are present:
 
 *	`--template=<template path>`
 
@@ -37,3 +34,44 @@ Run Vidola with `php RunVidola.php`. The following options are present:
 	but a link to 'style.css' will be kept 'style.css'. Custom link builders
 	can be added by implementing `Vidola\Util\InternalUrlBuilder` and specifying the
 	class as an option here.
+
+Using a build file
+==================
+
+Alternatively a 'build' file can be specified:
+
+	php RunVidola.php /path/to/build.php
+
+This is a PHP file that returns an array
+with key-value pairs that are the same as the above command line options. Minimally
+a source and target need to be specified. An example file could be `build.php`
+somewhere in your project that contains the following:
+
+	<?php
+	
+	return array(
+		'source'			=> '/home/Bruce/MyDoc/index.txt',
+		'target.dir'		=> '/home/Bruce/MySite',
+	);
+
+This array can also specify files or a directory to copy. These are files contained
+within the template directory. Eg. if you use a template like the one that comes with
+Vidola you'll probably want the css directory copied automatically too. This is
+done by adding it to the build file:
+
+	<?php
+
+	return array(
+		'source'			=> '/home/Bruce/MyDoc/index.txt',
+		'target.dir'		=> '/home/Bruce/MySiteHtml',
+		'template'			=> '/home/Bruce/MyPhpProject/VidolaTemplate/index.php',
+		'copy'				=> 'css'
+	);
+
+If you need to copy two files you can use an array:
+
+	'copy'	=> array('css/style.css', 'header.jpg')
+
+Note that the files or directory to be copied is specified relative to the template
+directory. These pahts are copied back to the target directory (e.i. the file
+`css/style.css` will be copied to `/home/Bruce/MySiteHtml/css/style.css`.
