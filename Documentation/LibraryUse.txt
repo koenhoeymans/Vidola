@@ -30,7 +30,7 @@ options are present:
 
 		--source=/home/Koen/MyProject/Docs/HTML/
 
-*	`--internal.links=<internal link builder>`
+*	`--internal-links=<internal link builder>`
 
 	Internal links to the generated documentation can follow specified formats. The
 	default one is that links have '.html' as extension added, unless an extension

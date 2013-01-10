@@ -92,9 +92,9 @@ class Vidola
 		\Vidola\Config\Config $config, \Fjor\Fjor $fjor
 	) {
 		// set type of internal url builder
-		// --internal.links=
+		// --internal-links=
 		// --------------------------------
-		$urlBuilder = $config->get('internal.links') ?:
+		$urlBuilder = $config->get('internal-links') ?:
 			'Vidola\\Util\\HtmlFileUrlBuilder';
 		$fjor
 			->given('Vidola\\Util\\InternalUrlBuilder')
