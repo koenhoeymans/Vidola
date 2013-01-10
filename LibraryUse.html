@@ -80,7 +80,7 @@ Example:</p>
 
 </li>
 
-<li><p><code>--target.dir=&lt;output directory&gt;</code></p>
+<li><p><code>--target-dir=&lt;output directory&gt;</code></p>
 
 <p>The directory where the documentation files should be placed. Vidola tries to create
 it if it doesn't exist.
@@ -90,7 +90,7 @@ Example:</p>
 
 </li>
 
-<li><p><code>--internal.links=&lt;internal link builder&gt;</code></p>
+<li><p><code>--internal-links=&lt;internal link builder&gt;</code></p>
 
 <p>Internal links to the generated documentation can follow specified formats. The
 default one is that links have '.html' as extension added, unless an extension
@@ -116,7 +116,7 @@ somewhere in your project that contains the following:</p>
 
 return array(
     'source'            =&gt; '/home/Bruce/MyDoc/index.txt',
-    'target.dir'        =&gt; '/home/Bruce/MySite',
+    'target-dir'        =&gt; '/home/Bruce/MySite',
 );</code></pre>
 
 <p>This array can also specify files or a directory to copy. These are files contained
@@ -128,7 +128,7 @@ done by adding it to the build file:</p>
 
 return array(
     'source'            =&gt; '/home/Bruce/MyDoc/index.txt',
-    'target.dir'        =&gt; '/home/Bruce/MySiteHtml',
+    'target-dir'        =&gt; '/home/Bruce/MySiteHtml',
     'template'          =&gt; '/home/Bruce/MyPhpProject/VidolaTemplate/index.php',
     'copy'              =&gt; 'css'
 );</code></pre>
