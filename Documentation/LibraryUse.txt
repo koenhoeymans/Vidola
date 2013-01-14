@@ -80,3 +80,9 @@ Note that the files or directories to be copied must be specified relative
 to the template directory. These pahts are copied back to the target
 directory (e.i. the file `css/style.css` will be copied to
 `/home/Bruce/MySiteHtml/css/style.css`.
+
+Files and directories can be excluded from being copied by adding the following option:
+
+	'copy-exclude'				=> 'css/dev.css'
+
+The `copy-exclude` key can be a string, specifying one file or directory, or an array.
