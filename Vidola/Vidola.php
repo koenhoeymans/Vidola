@@ -77,13 +77,15 @@ class Vidola
 
 		// copy files
 		// ----------
+		$excludedFiles = $config->get('copy-excluded') ?: array();
 		if ($filesOrDirToCopy = $config->get('copy'))
 		{
 			$fileCopy = $fjor->get('Vidola\\Util\\FileCopy');
 			$fileCopy->copy(
 				dirname(self::getTemplate($config)),
 				$config->get('target-dir'),
-				$filesOrDirToCopy
+				$filesOrDirToCopy,
+				$excludedFiles
 			);
 		}		
 	}

@@ -18,27 +18,40 @@ class FileCopy
 	 * @param string $sourceDir Eg `/tmp`
 	 * @param string $destinationDir
 	 * @param string|array $filesOrDirsToCopy Eg `SubDir` or `array('lion.jpg', 'scripts/script.js')`
+	 * @param string|array $exclude Directory(ies) or file(s) not to copy.
 	 */
-	public function copy($sourceDir, $destinationDir, $filesOrDirsToCopy)
+	public function copy($sourceDir, $destinationDir, $filesOrDirsToCopy, $exclude = array())
 	{
-		$filesOrDirsToCopy = (array) $filesOrDirsToCopy;
+		$destinationDir = $this->normalize($destinationDir);
+		$sourceDir = $this->normalize($sourceDir);
+	
+		foreach ((array) $filesOrDirsToCopy as $fileOrDirToCopy)
+		{
+			if ($this->isExcluded($fileOrDirToCopy, (array) $exclude, $sourceDir))
+			{
+				continue;
+			}
 
-		if (substr($sourceDir, -1) !== DIRECTORY_SEPARATOR)
-		{
-			$sourceDir .= DIRECTORY_SEPARATOR;
-		}
-		if (substr($destinationDir, -1) !== DIRECTORY_SEPARATOR)
-		{
-			$destinationDir .= DIRECTORY_SEPARATOR;
-		}
-
-		foreach ($filesOrDirsToCopy as $fileOrDirToCopy)
-		{
 			if (is_dir($sourceDir . $fileOrDirToCopy))
 			{
-				$this->recurseCopy(
-					$sourceDir . $fileOrDirToCopy, $destinationDir . $fileOrDirToCopy
-				);
+				if (!is_dir($destinationDir . $fileOrDirToCopy))
+				{
+					mkdir($destinationDir . $fileOrDirToCopy);
+				}
+				$dir = opendir($sourceDir . $fileOrDirToCopy);
+				while(false !== ($file = readdir($dir)))
+				{
+					if ($file === '.' || $file === '..')
+					{
+						continue;
+					}
+					$this->copy(
+						$sourceDir,
+						$destinationDir,
+						$this->normalize($fileOrDirToCopy) . $file,
+						$exclude
+					);
+				}
 			}
 			else
 			{
@@ -46,31 +59,38 @@ class FileCopy
 				{
 					mkdir(dirname($destinationDir . $fileOrDirToCopy));
 				}
+
 				copy($sourceDir . $fileOrDirToCopy, $destinationDir . $fileOrDirToCopy);
 			}
 		}
 	}
 
-	// http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php/2050909#2050909
-	public function recurseCopy($src, $dst)
+	private function isExcluded($fileOrDir, array $excluded, $sourceDir)
 	{
-		$dir = opendir($src);
-
-		if (!is_dir($dst))
+		$fileOrDir = $sourceDir . $fileOrDir;
+		if (is_dir($fileOrDir))
 		{
-			mkdir($dst);
+			$fileOrDir = $this->normalize($fileOrDir);
 		}
 
-		while(false !== ( $file = readdir($dir)) ) {
-			if (( $file != '.' ) && ( $file != '..' )) { 
-				if ( is_dir($src . '/' . $file) ) {
-					recurse_copy($src . '/' . $file,$dst . '/' . $file);
-				}
-				else {
-					copy($src . '/' . $file,$dst . '/' . $file);
-				}
+		foreach ($excluded as $excludedFileOrDir)
+		{
+			$excludedFileOrDir = $sourceDir . $excludedFileOrDir;
+			if (is_dir($excludedFileOrDir))
+			{
+				$excludedFileOrDir = $this->normalize($excludedFileOrDir);
+			}
+			if ($fileOrDir == $excludedFileOrDir)
+			{
+				return true;
 			}
 		}
-		closedir($dir);
+
+		return false;
+	}
+
+	private function normalize($dir)
+	{
+		return (substr($dir, -1) === DIRECTORY_SEPARATOR) ? $dir : $dir . DIRECTORY_SEPARATOR;
 	}
 }

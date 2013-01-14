@@ -70,13 +70,13 @@ class Vidola_Util_FileCopyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function copiesDirectory()
 	{
-		$targetDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy';
+		$targetDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy2';
 		$baseDir = __DIR__
 			. DIRECTORY_SEPARATOR . '..'
 			. DIRECTORY_SEPARATOR . 'Support';
-		$sourceDir = 'DirCopy' . DIRECTORY_SEPARATOR;
-		$sourceFile = $baseDir . DIRECTORY_SEPARATOR . $sourceDir . 'FileCopy.php';
-		$targetFile = $targetDir . DIRECTORY_SEPARATOR . 'FileCopy.php';
+		$sourceDir = 'DirCopy2' . DIRECTORY_SEPARATOR;
+		$sourceFile = $baseDir . DIRECTORY_SEPARATOR . $sourceDir . 'FileCopy2.php';
+		$targetFile = $targetDir . DIRECTORY_SEPARATOR . 'FileCopy2.php';
 
 		if (file_exists($targetFile))
 		{
@@ -117,6 +117,21 @@ class Vidola_Util_FileCopyTest extends PHPUnit_Framework_TestCase
 		$sourceFile2 = $baseDir . DIRECTORY_SEPARATOR . $sourceDir2 . 'FileCopy2.php';
 		$targetFile2 = $targetDir2 . DIRECTORY_SEPARATOR . 'FileCopy2.php';
 
+		$targetDir3 = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy' . DIRECTORY_SEPARATOR . 'SubDir';
+		$sourceDir3 = 'DirCopy' . DIRECTORY_SEPARATOR . 'SubDir' . DIRECTORY_SEPARATOR;
+		$sourceFile3 = $baseDir . DIRECTORY_SEPARATOR . $sourceDir3 . 'SubDirFile.php';
+		$targetFile3 = $targetDir3 . DIRECTORY_SEPARATOR . 'SubDirFile.php';
+
+		if (file_exists($targetFile3))
+		{
+			unlink($targetFile3);
+		}
+
+		if (is_dir($targetDir3))
+		{
+			rmdir($targetDir3);
+		}
+
 		if (file_exists($targetFile1))
 		{
 			unlink($targetFile1);
@@ -143,13 +158,79 @@ class Vidola_Util_FileCopyTest extends PHPUnit_Framework_TestCase
 			file_get_contents($targetFile1) === file_get_contents($sourceFile1)
 		);
 		$this->assertTrue(
-			file_get_contents($targetFile1) === file_get_contents($sourceFile2)
+			file_get_contents($targetFile2) === file_get_contents($sourceFile2)
+		);
+		$this->assertTrue(
+			file_get_contents($targetFile3) === file_get_contents($sourceFile3)
 		);
 
+		unlink($targetFile3);
+		rmdir($targetDir3);
 		unlink($targetFile1);
 		rmdir($targetDir1);
 		unlink($targetFile2);
 		rmdir($targetDir2);
-		
+	}
+
+	/**
+	 * @test
+	 */
+	public function excludesSpecifiedFilesFromBeingCopied()
+	{
+		$source = __DIR__
+			. DIRECTORY_SEPARATOR . '..';
+		$file = 'Util'
+			. DIRECTORY_SEPARATOR . basename(__FILE__);
+
+		if (file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file))
+		{
+			unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file);
+		}
+		if (is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util'))
+		{
+			rmdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util');
+		}
+
+		$this->fileCopy->copy($source, sys_get_temp_dir(), $file, $file);
+
+		$this->assertFalse(
+			file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file)
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function excludesSpecifiedDirectoryFromBeingCopied()
+	{
+		$baseDir = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support' . DIRECTORY_SEPARATOR;
+		$sourceDir = 'DirCopy' . DIRECTORY_SEPARATOR;
+		$sourceFile = $baseDir . $sourceDir . 'FileCopy.php';
+		$targetDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy' . DIRECTORY_SEPARATOR;
+		$targetFile = $targetDir . DIRECTORY_SEPARATOR . 'FileCopy.php';
+		$excludedSource = $sourceDir . 'SubDir';
+		$excludedTarget = $targetDir . 'SubDir';
+
+		if (file_exists($targetFile))
+		{
+			unlink($targetFile);
+		}
+
+		if (is_dir($targetDir))
+		{
+			rmdir($targetDir);
+		}
+
+		$this->fileCopy->copy($baseDir, sys_get_temp_dir(), $sourceDir, $excludedSource);
+
+		$this->assertTrue(
+			file_get_contents($targetFile) === file_get_contents($sourceFile)
+		);
+		$this->assertFalse(is_dir($excludedTarget));
+
+		unlink($targetFile);
+		rmdir($targetDir);
 	}
 }

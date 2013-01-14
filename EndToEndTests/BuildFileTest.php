@@ -19,6 +19,10 @@ class Vidola_EndToEndTests_BuildFileTest extends \Vidola\EndToEndTests\Support\T
 		{
 			unlink($dir . 'BuildSub' . DIRECTORY_SEPARATOR . 'BuildFile.js');
 		}
+		if (file_exists($dir . 'BuildSub' . DIRECTORY_SEPARATOR . 'Excluded.php'))
+		{
+			unlink($dir . 'BuildSub' . DIRECTORY_SEPARATOR . 'Excluded.php');
+		}
 	}
 
 	public function teardown()
@@ -60,6 +64,9 @@ class Vidola_EndToEndTests_BuildFileTest extends \Vidola\EndToEndTests\Support\T
 		);
 		$this->assertTrue(
 			file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'BuildSub' . DIRECTORY_SEPARATOR . 'BuildFile.js')
+		);
+		$this->assertFalse(
+			file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'BuildSub' . DIRECTORY_SEPARATOR . 'Excluded.php')
 		);
  	}
 }
