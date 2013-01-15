@@ -595,15 +595,13 @@ paragraph";
 		$dom1h1 = $domDoc1->createElement('h1', 'header');
 		$domDoc1->appendChild($dom1h1);
 		$dom1h1->setAttribute('id', 'header');
-
-		$domDoc2 = new \DOMDocument();
-		$dom2h1 = $domDoc2->createElement('h1', 'header');
-		$domDoc2->appendChild($dom2h1);
-		$dom2h1->setAttribute('id', 'header');
+		$dom1h2 = $domDoc1->createElement('h2', 'header2');
+		$domDoc1->appendChild($dom1h2);
+		$dom1h2->setAttribute('id', 'header2');
 
 		$this->assertEquals(
-			$this->toc->createTocNode($domDoc1),
-			$dom2h1
+			$domDoc1->saveXml($this->toc->createTocNode($domDoc1)),
+			'<ul><li><a href="#header">header</a><ul><li><a href="#header2">header2</a></li></ul></li></ul>'
 		);
 	}
 

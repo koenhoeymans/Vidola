@@ -191,7 +191,7 @@ class TableOfContents extends Pattern
 		$headers = array();
 		$xpath = new \DOMXPath($domDoc);
 		// @todo should be html agnostic??
-		$headerNodes = $xpath->query('//h1|h2|h3|h4|h5|h6');
+		$headerNodes = $xpath->query('//h1|//h2|//h3|//h4|//h5|//h6');
 		foreach ($headerNodes as $headerNode)
 		{
 			$headers[] = array(
