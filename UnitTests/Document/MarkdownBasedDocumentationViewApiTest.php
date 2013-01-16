@@ -236,6 +236,26 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 	}
 
 	/**
+	* @test
+	*/
+	public function tocOfCurrentPageWithMaxDepth()
+	{
+		$domDoc = new \DOMDocument();
+		$ul = $domDoc->createElement('ul');
+		$li = $domDoc->createElement('li', 'title');
+		$domDoc->appendChild($ul);
+		$ul->appendChild($li);
+
+		$this->pageGuide
+			->expects($this->any())
+			->method('getToc')
+			->with($this->currentPage, 2)
+			->will($this->returnValue($ul));
+
+		$this->assertEquals('<ul><li>title</li></ul>', $this->api->toc(2));
+	}
+
+	/**
 	 * @test
 	 */
 	public function aListOfFilesThatLeadToCurrentPage()

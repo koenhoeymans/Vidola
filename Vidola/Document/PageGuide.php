@@ -31,7 +31,8 @@ interface PageGuide
 	 * A DomElement containing the ToC of a page.
 	 *
 	 * @param Page $page
+	 * @param int $maxDepth
 	 * @return \DomElement|null
 	 */
-	public function getToc(Page $page);
+	public function getToc(Page $page, $maxDepth = null);
 }

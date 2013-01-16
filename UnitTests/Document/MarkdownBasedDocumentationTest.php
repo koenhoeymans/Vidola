@@ -119,9 +119,9 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 		$this->tocGenerator
 			->expects($this->atLeastOnce())
 			->method('createTocNode')
-			->with($domDoc);
+			->with($domDoc, 1);
 
-		$this->mdDoc->getToc(new \Vidola\Document\Page('a_page', 'content'));
+		$this->mdDoc->getToc(new \Vidola\Document\Page('a_page', 'content'), 1);
 	}
 
 	/**

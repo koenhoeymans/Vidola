@@ -180,11 +180,12 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 	 * and sublists if there are subheaders. If there is no table of contents it will
 	 * return null.
 	 * 
+	 * @param int $maxDepth
 	 * @return string|null The HTML list with headers or null if there is not toc.
 	 */
-	public function toc()
+	public function toc($maxDepth = null)
 	{
-		$toc = $this->pageGuide->getToc($this->currentPage);
+		$toc = $this->pageGuide->getToc($this->currentPage, $maxDepth);
 
 		if ($toc)
 		{

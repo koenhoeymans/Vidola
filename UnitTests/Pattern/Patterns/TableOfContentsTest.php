@@ -600,8 +600,29 @@ paragraph";
 		$dom1h2->setAttribute('id', 'header2');
 
 		$this->assertEquals(
-			$domDoc1->saveXml($this->toc->createTocNode($domDoc1)),
-			'<ul><li><a href="#header">header</a><ul><li><a href="#header2">header2</a></li></ul></li></ul>'
+			'<ul><li><a href="#header">header</a><ul><li><a href="#header2">header2</a></li></ul></li></ul>',
+			$domDoc1->saveXml($this->toc->createTocNode($domDoc1))
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function tocFromDocumentCanHaveMaximumDepth()
+	{
+		$maxDepth = 1;
+
+		$domDoc1 = new \DOMDocument();
+		$dom1h1 = $domDoc1->createElement('h1', 'header1');
+		$domDoc1->appendChild($dom1h1);
+		$dom1h1->setAttribute('id', 'header1');
+		$dom1h2 = $domDoc1->createElement('h2', 'header2');
+		$domDoc1->appendChild($dom1h2);
+		$dom1h2->setAttribute('id', 'header2');
+
+		$this->assertEquals(
+			'<ul><li><a href="#header1">header1</a></li></ul>',
+			$domDoc1->saveXml($this->toc->createTocNode($domDoc1, $maxDepth))
 		);
 	}
 

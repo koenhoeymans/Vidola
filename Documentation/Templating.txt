@@ -58,10 +58,12 @@ Available methods
  
  	If a page has a table of contents this method will return `true`.
 
- *	`toc()`
+ *	`toc($maxDepth)`
  
  	The table of contents for the current page. If there is no table of contents this 
  	will return `null`. If there is a table of contents it will return it as a HTML list.
+ 
+ 	You can specify the maximum depth. It defaults to unlimited if left blank.
  
  *	`getBreadCrumbs()`
  

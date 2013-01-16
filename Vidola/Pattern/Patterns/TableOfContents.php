@@ -186,7 +186,7 @@ class TableOfContents extends Pattern
 	/**
 	 * @see AnyMark\Util.TocGenerator::createTocNode()
 	 */
-	public function createTocNode(\DomDocument $domDoc)
+	public function createTocNode(\DomDocument $domDoc, $maxDepth = null)
 	{
 		$headers = array();
 		$xpath = new \DOMXPath($domDoc);
@@ -200,7 +200,7 @@ class TableOfContents extends Pattern
 						'title' => $headerNode->nodeValue
 			);
 		}
-		return $this->buildToc($headers, null, $domDoc);
+		return $this->buildToc($headers, $maxDepth, $domDoc);
 	}
 
 	private function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)

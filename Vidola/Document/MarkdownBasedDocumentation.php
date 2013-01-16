@@ -100,9 +100,11 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	/**
 	 * @see Vidola\Document.PageGuide::getToc()
 	 */
-	public function getToc(Page $page)
+	public function getToc(Page $page, $maxDepth = null)
 	{
-		return $this->tocGenerator->createTocNode($this->getParsedContent($page, true));
+		return $this->tocGenerator->createTocNode(
+			$this->getParsedContent($page, true), $maxDepth
+		);
 	}
 
 	/**

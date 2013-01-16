@@ -17,8 +17,11 @@ class HtmlHeaderBasedTocGenerator implements TocGenerator
 		$this->toc = $toc;
 	}
 
-	public function createTocNode(\DomDocument $domDoc)
+	/**
+	 * @see Vidola\Util.TocGenerator::createTocNode()
+	 */
+	public function createTocNode(\DomDocument $domDoc, $maxDepth = null)
 	{
-		return $this->toc->createTocNode($domDoc);
+		return $this->toc->createTocNode($domDoc, $maxDepth);
 	}
 }
