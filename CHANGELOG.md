@@ -1,6 +1,10 @@
 Vidola Changelog
 ================
 
+*	0.4.0
+
+	*	Template api accepts a maximum depth for table of contents.
+
 *	0.3.0
 
 	*	Option to build documentation by specifying a `build` file.
