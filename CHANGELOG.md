@@ -1,6 +1,10 @@
 Vidola Changelog
 ================
 
+*	0.5.2
+
+	*	Custom page titles specified in the toc were not applied. Now fixed.
+
 *	0.5.1
 
 	*	`copy` and `copy-excluded` buildfile option renamed to
