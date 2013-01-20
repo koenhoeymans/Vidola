@@ -107,10 +107,10 @@ class as an option here.</p>
 
 <pre><code>php RunVidola.php /path/to/build.php</code></pre>
 
-<p>This is a PHP file that returns an array
-with key-value pairs that are the same as the above command line options. Minimally
-a source and target need to be specified. An example file could be <code>build.php</code>
-somewhere in your project that contains the following:</p>
+<p>This is a PHP file that returns an array with key-value pairs that are the
+same as the above command line options. Minimally a source and target need
+to be specified. An example file could be <code>build.php</code> somewhere in your project
+that contains the following:</p>
 
 <pre><code>&lt;?php
 
@@ -119,34 +119,23 @@ return array(
     'target-dir'        =&gt; '/home/Bruce/MySite',
 );</code></pre>
 
-<p>This array can also specify files or directories to copy. These are files contained
-within the template directory. Eg. if you use a template like the one that comes with
-Vidola you'll probably want the css directory copied automatically too. This is
-done by adding it to the build file:</p>
+<p>All files and directories in the directory with the template file are copied
+automatically. If you want to exclude some files, or directories, from being
+copied you can specify them using the 'copy-exlude' key:</p>
 
-<pre><code>&lt;?php
+<pre><code>'copy-exclude'  =&gt; '/home/Bruce/MySite/css/dev.css'</code></pre>
 
-return array(
-    'source'            =&gt; '/home/Bruce/MyDoc/index.txt',
-    'target-dir'        =&gt; '/home/Bruce/MySiteHtml',
-    'template'          =&gt; '/home/Bruce/MyPhpProject/VidolaTemplate/index.php',
-    'copy'              =&gt; 'css'
-);</code></pre>
+<p>Notice that the full path is required. If you need more than one file or
+directory excluded you can use an array.</p>
 
-<p>If you need to copy more than one file or directory you can use an array:</p>
+<p>Exceptions can be made by using the 'copy' key:</p>
 
-<pre><code>'copy'  =&gt; array('css/style.css', 'header.jpg')</code></pre>
+<pre><code>'copy-exclude'  =&gt; '/home/Bruce/MySite/Layout/Images'
+'copy'          =&gt; '/home/Bruce/MySite/Layout/Images/Header.jpg'</code></pre>
 
-<p>Note that the files or directories to be copied must be specified relative
-to the template directory. These pahts are copied back to the target
-directory (e.i. the file <code>css/style.css</code> will be copied to
-<code>/home/Bruce/MySiteHtml/css/style.css</code>.</p>
-
-<p>Files and directories can be excluded from being copied by adding the following option:</p>
-
-<pre><code>'copy-exclude'              =&gt; 'css/dev.css'</code></pre>
-
-<p>The <code>copy-exclude</code> key can be a string, specifying one file or directory, or an array.</p>
+<p>The above example won't copy the Images directory, except for the file
+Header.jpg. As with <code>copy-exclude</code> you can specify multiple files and
+directories by using an array.</p>
 </doc>            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
