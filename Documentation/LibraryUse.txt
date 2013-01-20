@@ -67,10 +67,10 @@ copied you can specify them using the 'copy-exlude' key:
 Notice that the full path is required. If you need more than one file or
 directory excluded you can use an array.
 
-Exceptions can be made by using the 'copy' key:
+Exceptions can be made by using the 'copy-include' key:
 
 	'copy-exclude'	=> '/home/Bruce/MySite/Layout/Images'
-	'copy'			=> '/home/Bruce/MySite/Layout/Images/Header.jpg'
+	'copy-include'			=> '/home/Bruce/MySite/Layout/Images/Header.jpg'
 
 The above example won't copy the Images directory, except for the file
 Header.jpg. As with `copy-exclude` you can specify multiple files and

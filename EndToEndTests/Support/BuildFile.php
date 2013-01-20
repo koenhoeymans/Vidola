@@ -6,7 +6,7 @@ return array(
 	'template'			=> __DIR__
 							. DIRECTORY_SEPARATOR . 'BuildFileTemplate'
 							. DIRECTORY_SEPARATOR . 'MiniTemplate.php',
-	'copy'				=> array(__DIR__
+	'copy-include'		=> array(__DIR__
 							. DIRECTORY_SEPARATOR . 'BuildFileTemplate'
 							. DIRECTORY_SEPARATOR . 'BuildSub'
 							. DIRECTORY_SEPARATOR . 'BuildFile.js'),
