@@ -1,6 +1,12 @@
 Vidola Changelog
 ================
 
+*	0.5.0
+
+	*	Files and directories within the template directory are
+		copied by default. Options to exclude and set exceptions
+		on the excluded ones are present.
+
 *	0.4.0
 
 	*	Template api accepts a maximum depth for table of contents.
