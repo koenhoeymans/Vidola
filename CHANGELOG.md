@@ -1,6 +1,11 @@
 Vidola Changelog
 ================
 
+*	0.5.1
+
+	*	`copy` and `copy-excluded` buildfile option renamed to
+		`copy-include` and `copy-exclude` respectively.
+
 *	0.5.0
 
 	*	Files and directories within the template directory are
