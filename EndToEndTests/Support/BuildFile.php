@@ -10,7 +10,7 @@ return array(
 							. DIRECTORY_SEPARATOR . 'BuildFileTemplate'
 							. DIRECTORY_SEPARATOR . 'BuildSub'
 							. DIRECTORY_SEPARATOR . 'BuildFile.js'),
-	'copy-excluded'		=> __DIR__
+	'copy-exclude'		=> __DIR__
 							. DIRECTORY_SEPARATOR . 'BuildFileTemplate'
 							. DIRECTORY_SEPARATOR . 'BuildSub'
 );
