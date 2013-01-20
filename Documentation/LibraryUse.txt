@@ -60,7 +60,7 @@ that contains the following:
 
 All files and directories in the directory with the template file are copied
 automatically. If you want to exclude some files, or directories, from being
-copied you can specify them using the 'copy-exlude' key:
+copied you can specify them using the 'copy-exclude' key:
 
 	'copy-exclude'	=> '/home/Bruce/MySite/css/dev.css'
 
