@@ -46,10 +46,10 @@ Alternatively a 'build' file can be specified:
 
 	php RunVidola.php /path/to/build.php
 
-This is a PHP file that returns an array
-with key-value pairs that are the same as the above command line options. Minimally
-a source and target need to be specified. An example file could be `build.php`
-somewhere in your project that contains the following:
+This is a PHP file that returns an array with key-value pairs that are the
+same as the above command line options. Minimally a source and target need
+to be specified. An example file could be `build.php` somewhere in your project
+that contains the following:
 
 	<?php
 	
@@ -58,31 +58,20 @@ somewhere in your project that contains the following:
 		'target-dir'		=> '/home/Bruce/MySite',
 	);
 
-This array can also specify files or directories to copy. These are files contained
-within the template directory. Eg. if you use a template like the one that comes with
-Vidola you'll probably want the css directory copied automatically too. This is
-done by adding it to the build file:
+All files and directories in the directory with the template file are copied
+automatically. If you want to exclude some files, or directories, from being
+copied you can specify them using the 'copy-exlude' key:
 
-	<?php
+	'copy-exclude'	=> '/home/Bruce/MySite/css/dev.css'
 
-	return array(
-		'source'			=> '/home/Bruce/MyDoc/index.txt',
-		'target-dir'		=> '/home/Bruce/MySiteHtml',
-		'template'			=> '/home/Bruce/MyPhpProject/VidolaTemplate/index.php',
-		'copy'				=> 'css'
-	);
+Notice that the full path is required. If you need more than one file or
+directory excluded you can use an array.
 
-If you need to copy more than one file or directory you can use an array:
+Exceptions can be made by using the 'copy' key:
 
-	'copy'	=> array('css/style.css', 'header.jpg')
+	'copy-exclude'	=> '/home/Bruce/MySite/Layout/Images'
+	'copy'			=> '/home/Bruce/MySite/Layout/Images/Header.jpg'
 
-Note that the files or directories to be copied must be specified relative
-to the template directory. These pahts are copied back to the target
-directory (e.i. the file `css/style.css` will be copied to
-`/home/Bruce/MySiteHtml/css/style.css`.
-
-Files and directories can be excluded from being copied by adding the following option:
-
-	'copy-exclude'				=> 'css/dev.css'
-
-The `copy-exclude` key can be a string, specifying one file or directory, or an array.
+The above example won't copy the Images directory, except for the file
+Header.jpg. As with `copy-exclude` you can specify multiple files and
+directories by using an array.

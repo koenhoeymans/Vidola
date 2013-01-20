@@ -11,226 +11,349 @@ class Vidola_Util_FileCopyTest extends PHPUnit_Framework_TestCase
 		$this->fileCopy = new \Vidola\Util\FileCopy();
 	}
 
-	/**
-	 * @test
-	 */
-	public function copiesGivenFileToDestinationDir()
+	private function removeFile($file)
 	{
-		$destFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . basename(__FILE__);
-
-		if (file_exists($destFile))
+		if (file_exists($file))
 		{
-			unlink($destFile);
+			unlink($file);
 		}
+	}
 
-		$this->fileCopy->copy(__DIR__, sys_get_temp_dir(), basename(__FILE__));
-
-		$this->assertTrue(
-			file_get_contents(sys_get_temp_dir() . DIRECTORY_SEPARATOR . basename(__FILE__))
-			===
-			file_get_contents(__FILE__)
-		);
-
-		unlink($destFile);
+	private function removeDir($dir)
+	{
+		if (is_dir($dir))
+		{
+			rmdir($dir);
+		}
 	}
 
 	/**
 	 * @test
 	 */
-	public function copiesFileIntoSubDirs()
+	public function copiesWholeDirectoryToAnother()
 	{
-		$source = __DIR__
-			. DIRECTORY_SEPARATOR . '..';
-		$file = 'Util'
-			. DIRECTORY_SEPARATOR . basename(__FILE__);
+		$this->removeFile(
+			sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'File.php'
+		);
 
-		if (file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file))
-		{
-			unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file);
-		}
-		if (is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util'))
-		{
-			rmdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util');
-		}
+		// given
+		$sourceDir = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'OneFileDir';
 
-		$this->fileCopy->copy($source, sys_get_temp_dir(), $file);
+		// when
+		$this->fileCopy->copy($sourceDir, sys_get_temp_dir());
 
+		// then
 		$this->assertTrue(
-			file_get_contents(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file)
-			===
-			file_get_contents(__FILE__)
+			file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'File.php')
+		);
+
+		$this->removeFile(
+			sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'File.php'
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function copyIncludesSubDirectory()
+	{
+		$this->removeFile(
+			sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+
+		// given
+		$sourceDir = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir';
+
+		// when
+		$this->fileCopy->copy($sourceDir, sys_get_temp_dir());
+
+		// then
+		$this->assertTrue(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File1.php'
+			)
+		);
+		$this->assertTrue(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File2.php'
+			)
+		);
+
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+	}
+
+	/**
+	 * @test
+	 */
+	public function possibleToExcludeFile()
+	{
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+
+		// given
+		$sourceDir = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir';
+		$exclude = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir'
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php';
+
+		// when
+		$this->fileCopy->copy($sourceDir, sys_get_temp_dir(), $exclude);
+
+		// then
+		$this->assertTrue(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File1.php'
+			)
+		);
+		$this->assertFalse(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File2.php'
+			)
+		);
+
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+	}
+
+	/**
+	 * @test
+	 */
+	public function possibleToExcludeMultipleFiles()
+	{
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+
+		// given
+		$sourceDir = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir';
+		$exclude = array(
+			__DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir'
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php',
+			__DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir'
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+
+		// when
+		$this->fileCopy->copy($sourceDir, sys_get_temp_dir(), $exclude);
+
+		// then
+		$this->assertFalse(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File1.php'
+			)
+		);
+		$this->assertFalse(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File2.php'
+			)
+		);
+
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+	}
+
+	/**
+	 * @test
+	 */
+	public function possibleToExcludeDirectory()
+	{
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
+		
+		// given
+		$sourceDir = __DIR__
+		. DIRECTORY_SEPARATOR . '..'
+		. DIRECTORY_SEPARATOR . 'Support'
+		. DIRECTORY_SEPARATOR . 'DirWithSubDir';
+		$exclude = array(
+			__DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir'
+			. DIRECTORY_SEPARATOR . 'SubDir'
 		);
 		
-		unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file);
-		rmdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util');
-	}
-
-	/**
-	 * @test
-	 */
-	public function copiesDirectory()
-	{
-		$targetDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy2';
-		$baseDir = __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Support';
-		$sourceDir = 'DirCopy2' . DIRECTORY_SEPARATOR;
-		$sourceFile = $baseDir . DIRECTORY_SEPARATOR . $sourceDir . 'FileCopy2.php';
-		$targetFile = $targetDir . DIRECTORY_SEPARATOR . 'FileCopy2.php';
-
-		if (file_exists($targetFile))
-		{
-			unlink($targetFile);
-		}
-
-		if (is_dir($targetDir))
-		{
-			rmdir($targetDir);
-		}
-
-		$this->fileCopy->copy($baseDir, sys_get_temp_dir(), $sourceDir);
-
-		$this->assertTrue(
-			file_get_contents($targetFile) === file_get_contents($sourceFile)
-		);
-
-		unlink($targetFile);
-		rmdir($targetDir);
-	}
-
-	/**
-	 * @test
-	 */
-	public function copyDirectories()
-	{
-		$baseDir = __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Support';
-
-		$targetDir1 = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy';
-		$sourceDir1 = 'DirCopy' . DIRECTORY_SEPARATOR;
-		$sourceFile1 = $baseDir . DIRECTORY_SEPARATOR . $sourceDir1 . 'FileCopy.php';
-		$targetFile1 = $targetDir1 . DIRECTORY_SEPARATOR . 'FileCopy.php';
-
-		$targetDir2 = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy2';
-		$sourceDir2 = 'DirCopy2' . DIRECTORY_SEPARATOR;
-		$sourceFile2 = $baseDir . DIRECTORY_SEPARATOR . $sourceDir2 . 'FileCopy2.php';
-		$targetFile2 = $targetDir2 . DIRECTORY_SEPARATOR . 'FileCopy2.php';
-
-		$targetDir3 = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy' . DIRECTORY_SEPARATOR . 'SubDir';
-		$sourceDir3 = 'DirCopy' . DIRECTORY_SEPARATOR . 'SubDir' . DIRECTORY_SEPARATOR;
-		$sourceFile3 = $baseDir . DIRECTORY_SEPARATOR . $sourceDir3 . 'SubDirFile.php';
-		$targetFile3 = $targetDir3 . DIRECTORY_SEPARATOR . 'SubDirFile.php';
-
-		if (file_exists($targetFile3))
-		{
-			unlink($targetFile3);
-		}
-
-		if (is_dir($targetDir3))
-		{
-			rmdir($targetDir3);
-		}
-
-		if (file_exists($targetFile1))
-		{
-			unlink($targetFile1);
-		}
-
-		if (is_dir($targetDir1))
-		{
-			rmdir($targetDir1);
-		}
-
-		if (file_exists($targetFile2))
-		{
-			unlink($targetFile2);
-		}
-
-		if (is_dir($targetDir2))
-		{
-			rmdir($targetDir2);
-		}
-
-		$this->fileCopy->copy($baseDir, sys_get_temp_dir(), array($sourceDir1, $sourceDir2));
-
-		$this->assertTrue(
-			file_get_contents($targetFile1) === file_get_contents($sourceFile1)
-		);
-		$this->assertTrue(
-			file_get_contents($targetFile2) === file_get_contents($sourceFile2)
-		);
-		$this->assertTrue(
-			file_get_contents($targetFile3) === file_get_contents($sourceFile3)
-		);
-
-		unlink($targetFile3);
-		rmdir($targetDir3);
-		unlink($targetFile1);
-		rmdir($targetDir1);
-		unlink($targetFile2);
-		rmdir($targetDir2);
-	}
-
-	/**
-	 * @test
-	 */
-	public function excludesSpecifiedFilesFromBeingCopied()
-	{
-		$source = __DIR__
-			. DIRECTORY_SEPARATOR . '..';
-		$file = 'Util'
-			. DIRECTORY_SEPARATOR . basename(__FILE__);
-
-		if (file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file))
-		{
-			unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file);
-		}
-		if (is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util'))
-		{
-			rmdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Util');
-		}
-
-		$this->fileCopy->copy($source, sys_get_temp_dir(), $file, $file);
-
+		// when
+		$this->fileCopy->copy($sourceDir, sys_get_temp_dir(), $exclude);
+		
+		// then
 		$this->assertFalse(
-			file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file)
+			is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir')
 		);
+
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 	}
 
 	/**
 	 * @test
 	 */
-	public function excludesSpecifiedDirectoryFromBeingCopied()
+	public function possibleToExcludeDirectoryGivingAnException()
 	{
-		$baseDir = __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Support' . DIRECTORY_SEPARATOR;
-		$sourceDir = 'DirCopy' . DIRECTORY_SEPARATOR;
-		$sourceFile = $baseDir . $sourceDir . 'FileCopy.php';
-		$targetDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'DirCopy' . DIRECTORY_SEPARATOR;
-		$targetFile = $targetDir . DIRECTORY_SEPARATOR . 'FileCopy.php';
-		$excludedSource = $sourceDir . 'SubDir';
-		$excludedTarget = $targetDir . 'SubDir';
-
-		if (file_exists($targetFile))
-		{
-			unlink($targetFile);
-		}
-
-		if (is_dir($targetDir))
-		{
-			rmdir($targetDir);
-		}
-
-		$this->fileCopy->copy($baseDir, sys_get_temp_dir(), $sourceDir, $excludedSource);
-
-		$this->assertTrue(
-			file_get_contents($targetFile) === file_get_contents($sourceFile)
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
 		);
-		$this->assertFalse(is_dir($excludedTarget));
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 
-		unlink($targetFile);
-		rmdir($targetDir);
+		// given
+		$sourceDir = __DIR__
+		. DIRECTORY_SEPARATOR . '..'
+		. DIRECTORY_SEPARATOR . 'Support'
+		. DIRECTORY_SEPARATOR . 'DirWithSubDir';
+		$exclude = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir'
+			. DIRECTORY_SEPARATOR . 'SubDir';
+		$include = __DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'DirWithSubDir'
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php';
+
+		// when
+		$this->fileCopy->copy($sourceDir, sys_get_temp_dir(), $exclude, $include);
+
+		// then
+		$this->assertTrue(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File1.php'
+			)
+		);
+		$this->assertFalse(
+			file_exists(
+				sys_get_temp_dir()
+				. DIRECTORY_SEPARATOR . 'SubDir'
+				. DIRECTORY_SEPARATOR . 'File2.php'
+			)
+		);
+
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File1.php'
+		);
+		$this->removeFile(
+			sys_get_temp_dir()
+			. DIRECTORY_SEPARATOR . 'SubDir'
+			. DIRECTORY_SEPARATOR . 'File2.php'
+		);
+		$this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 	}
 }

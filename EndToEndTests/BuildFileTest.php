@@ -7,10 +7,6 @@ class Vidola_EndToEndTests_BuildFileTest extends \Vidola\EndToEndTests\Support\T
 	public function setup()
 	{
 		$dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
-		if (file_exists($dir . 'BuildFile.html'))
-		{
-			unlink($dir . 'BuildFile.html');
-		}
 		if (file_exists($dir . 'BuildFile.css'))
 		{
 			unlink($dir . 'BuildFile.css');
@@ -46,7 +42,7 @@ class Vidola_EndToEndTests_BuildFileTest extends \Vidola\EndToEndTests\Support\T
 			. DIRECTORY_SEPARATOR . 'BuildFile.php';
 
 		// when
-		exec("$bin $vidola $build");
+		exec("$bin $vidola $build", $output);
 
 		// then
 		$this->assertEquals(

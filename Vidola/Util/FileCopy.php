@@ -10,83 +10,83 @@ namespace Vidola\Util;
  */
 class FileCopy
 {
-	/**
-	 * Copies the file or files from a template in the source to the destination
-	 * directory. If a file/dir is in a subdirectory a subdirectory will be
-	 * created in the destination.
-	 * 
-	 * @param string $sourceDir Eg `/tmp`
-	 * @param string $destinationDir
-	 * @param string|array $filesOrDirsToCopy Eg `SubDir` or `array('lion.jpg', 'scripts/script.js')`
-	 * @param string|array $exclude Directory(ies) or file(s) not to copy.
-	 */
-	public function copy($sourceDir, $destinationDir, $filesOrDirsToCopy, $exclude = array())
-	{
-		$destinationDir = $this->normalize($destinationDir);
-		$sourceDir = $this->normalize($sourceDir);
-	
-		foreach ((array) $filesOrDirsToCopy as $fileOrDirToCopy)
-		{
-			if ($this->isExcluded($fileOrDirToCopy, (array) $exclude, $sourceDir))
-			{
-				continue;
-			}
+	public function copy(
+		$sourceDirectory, $targetDirectory, $exclude = array(), $include = array()
+	) {
+		$sourceDirectory = $this->normalize($sourceDirectory);
+		$targetDirectory = $this->normalize($targetDirectory);
+		$exclude = (array) $exclude;
+		$include = (array) $include;
 
-			if (is_dir($sourceDir . $fileOrDirToCopy))
+		foreach ($exclude as $key => &$excluded)
+		{
+			if (is_dir($excluded))
 			{
-				if (!is_dir($destinationDir . $fileOrDirToCopy))
-				{
-					mkdir($destinationDir . $fileOrDirToCopy);
-				}
-				$dir = opendir($sourceDir . $fileOrDirToCopy);
-				while(false !== ($file = readdir($dir)))
-				{
-					if ($file === '.' || $file === '..')
-					{
-						continue;
-					}
-					$this->copy(
-						$sourceDir,
-						$destinationDir,
-						$this->normalize($fileOrDirToCopy) . $file,
-						$exclude
-					);
-				}
+				$excluded = $this->normalize($excluded);
+			}
+		}
+
+		if (!is_dir($targetDirectory))
+		{
+			mkdir($targetDirectory);
+		}
+
+		$this->recurseCopy($sourceDirectory, $targetDirectory, $exclude, $include);
+
+		foreach ($include as $included)
+		{
+			$relPart = explode($sourceDirectory, $included);
+			if (is_dir($included))
+			{
+				$included = $this->normalize($included);
+				$this->copy(
+					$sourceDirectory . $relPart[1],
+					$targetDirectory . $relPart[1],
+					$exclude,
+					$include
+				);
 			}
 			else
 			{
-				if (!is_dir(dirname($destinationDir . $fileOrDirToCopy)))
+				if (!is_dir(dirname($targetDirectory . $relPart[1])))
 				{
-					mkdir(dirname($destinationDir . $fileOrDirToCopy));
+					mkdir(dirname($targetDirectory . $relPart[1]));
 				}
-
-				copy($sourceDir . $fileOrDirToCopy, $destinationDir . $fileOrDirToCopy);
+				copy($sourceDirectory . $relPart[1], $targetDirectory . $relPart[1]);
 			}
 		}
 	}
 
-	private function isExcluded($fileOrDir, array $excluded, $sourceDir)
-	{
-		$fileOrDir = $sourceDir . $fileOrDir;
-		if (is_dir($fileOrDir))
+	public function recurseCopy(
+		$sourceDirectory, $targetDirectory, array $exclude, array $include
+	) {
+		$dir = opendir($sourceDirectory);
+		while(false !== ($file = readdir($dir)))
 		{
-			$fileOrDir = $this->normalize($fileOrDir);
-		}
-
-		foreach ($excluded as $excludedFileOrDir)
-		{
-			$excludedFileOrDir = $sourceDir . $excludedFileOrDir;
-			if (is_dir($excludedFileOrDir))
+			if ($file === '.' || $file === '..')
 			{
-				$excludedFileOrDir = $this->normalize($excludedFileOrDir);
+				continue;
 			}
-			if ($fileOrDir == $excludedFileOrDir)
+
+			if (is_dir($sourceDirectory . $file))
 			{
-				return true;
+				$file = $this->normalize($file);
+			}
+
+			if (in_array($sourceDirectory . $file, $exclude))
+			{
+				continue;
+			}
+
+			if (is_dir($sourceDirectory . $file))
+			{
+				$this->copy($sourceDirectory . $file, $targetDirectory . $file, $exclude, $include);
+			}
+			else
+			{
+				copy($sourceDirectory . $file, $targetDirectory . $file);
 			}
 		}
-
-		return false;
 	}
 
 	private function normalize($dir)
