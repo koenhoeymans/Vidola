@@ -55,8 +55,8 @@ class Vidola
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Util\\TocGenerator')
-			->thenUse('Vidola\\Util\\HtmlHeaderBasedTocGenerator')
-			->inSingletonScope();
+			->thenUse('Vidola\\Util\\HtmlHeaderBasedTocGenerator');
+		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\TableOfContents');
 
 		// command line options
 		// --------------------------------
