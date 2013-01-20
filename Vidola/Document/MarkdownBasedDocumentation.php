@@ -93,7 +93,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	public function getTitle(Page $page)
 	{
 		return $this->titleCreator->createPageTitle(
-		$page->getRawContent(), $page->getUrl()
+			$page->getRawContent(), $page->getUrl()
 		);
 	}
 
