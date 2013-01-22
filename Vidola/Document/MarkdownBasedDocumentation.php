@@ -9,7 +9,7 @@ use AnyMark\Util\InternalUrlBuilder;
 use Vidola\Processor\TextProcessor;
 use AnyMark\AnyMark;
 use Vidola\Util\TitleCreator;
-use Vidola\Util\TocGenerator;
+use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
  * @package Vidola
@@ -22,7 +22,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 
 	private $titleCreator;
 
-	private $tocGenerator;
+	private $toc;
 
 	private $internalUrlBuilder;
 
@@ -43,12 +43,12 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	public function __construct(
 		AnyMark $anyMark,
 		TitleCreator $titleCreator,
-		TocGenerator $tocGenerator,
+		TableOfContents $toc,
 		InternalUrlBuilder $internalUrlBuilder
 	) {
 		$this->anyMark = $anyMark;
 		$this->titleCreator = $titleCreator;
-		$this->tocGenerator = $tocGenerator;
+		$this->toc = $toc;
 		$this->internalUrlBuilder = $internalUrlBuilder;
 	}
 
@@ -102,7 +102,7 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	 */
 	public function getToc(Page $page, $maxDepth = null)
 	{
-		return $this->tocGenerator->createTocNode(
+		return $this->toc->createTocNode(
 			$this->getParsedContent($page, true), $maxDepth
 		);
 	}

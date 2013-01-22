@@ -20,13 +20,15 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->disableOriginalConstructor()
 			->getMock();
 		$this->titleCreator = $this->getMock('\\Vidola\\Util\\TitleCreator');
-		$this->tocGenerator = $this->getMock('\\Vidola\\Util\\TocGenerator');
+		$this->toc = $this->getMockBuilder('\\Vidola\\Pattern\\Patterns\\TableOfContents')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->internalUrlBuilder = $this->getMock('\\AnyMark\\Util\\InternalUrlBuilder');
 
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
 			$this->anyMark,
 			$this->titleCreator,
-			$this->tocGenerator,
+			$this->toc,
 			$this->internalUrlBuilder
 		);
 	}
@@ -116,7 +118,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 			->with('content')
 			->will($this->returnValue($domDoc));
 
-		$this->tocGenerator
+		$this->toc
 			->expects($this->atLeastOnce())
 			->method('createTocNode')
 			->with($domDoc, 1);
