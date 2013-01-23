@@ -6,24 +6,12 @@
 namespace Vidola\Document;
 
 use AnyMark\Util\InternalUrlBuilder;
-use Vidola\Processor\TextProcessor;
-use AnyMark\AnyMark;
-use Vidola\Util\TitleCreator;
-use Vidola\Pattern\Patterns\TableOfContents;
 
 /**
  * @package Vidola
  */
-class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCreator, PageGuide, Structure
+class MarkdownBasedDocumentation implements FilenameCreator, Structure
 {
-	private $content = array();
-
-	private $anyMark;
-
-	private $titleCreator;
-
-	private $toc;
-
 	private $internalUrlBuilder;
 
 	/**
@@ -40,71 +28,9 @@ class MarkdownBasedDocumentation implements DocumentationApiBuilder, FilenameCre
 	 */
 	private $parentPages = array();
 
-	public function __construct(
-		AnyMark $anyMark,
-		TitleCreator $titleCreator,
-		TableOfContents $toc,
-		InternalUrlBuilder $internalUrlBuilder
-	) {
-		$this->anyMark = $anyMark;
-		$this->titleCreator = $titleCreator;
-		$this->toc = $toc;
+	public function __construct(InternalUrlBuilder $internalUrlBuilder)
+	{
 		$this->internalUrlBuilder = $internalUrlBuilder;
-	}
-
-	/**
-	 * @see Vidola\Document.DocumentationApiBuilder::buildApi()
-	 */
-	public function buildApi(Page $page)
-	{
-		return new \Vidola\Document\MarkdownBasedDocumentationViewApi($page, $this, $this);
-	}
-
-	/**
-	 * @see Vidola\Document.PageGuide::getParsedContent()
-	 */
-	public function getParsedContent(Page $page, $dom = false)
-	{
-		# caching contents prevents from parsing more than once on next request
-		# thus for \AnyMark\Pattern\Patterns\Header to assign another unique id
-		$id = $page->getUrl();
-		if (isset($this->content[$id]))
-		{
-			$domContent = $this->content[$id];
-		}
-		else
-		{
-			$rawContent = $page->getRawContent();
-			$domContent = $this->anyMark->parse($rawContent, true);
-			$this->content[$id] = $domContent;
-		}
-
-		if ($dom)
-		{
-			return $domContent;
-		}
-
-		return $this->anyMark->saveXml($domContent);
-	}
-
-	/**
-	 * @see Vidola\Document.PageGuide::getTitle()
-	 */
-	public function getTitle(Page $page)
-	{
-		return $this->titleCreator->createPageTitle(
-			$page->getRawContent(), $page->getUrl()
-		);
-	}
-
-	/**
-	 * @see Vidola\Document.PageGuide::getToc()
-	 */
-	public function getToc(Page $page, $maxDepth = null)
-	{
-		return $this->toc->createTocNode(
-			$this->getParsedContent($page, true), $maxDepth
-		);
 	}
 
 	/**

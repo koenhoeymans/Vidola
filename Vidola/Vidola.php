@@ -33,16 +33,12 @@ class Vidola
 			->given('Vidola\\Util\\ContentRetriever')
 			->thenUse('Vidola\\Util\\DocFileRetriever')
 			->inSingletonScope();
-		$fjor->setSingleton('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor
 			->given('Vidola\\Util\\TitleCreator')
 			->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
 		$fjor
-			->given('Vidola\\Document\\FilenameCreator')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
-		$fjor
 			->given('Vidola\\Document\\DocumentationApiBuilder')
-			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
+			->thenUse('Vidola\\Document\\FjorBasedApiBuilder');
 		$fjor
 			->given('Vidola\\Document\\PageList')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
@@ -50,12 +46,19 @@ class Vidola
 			->given('Vidola\\Document\\Structure')
 			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
 		$fjor
+			->given('Vidola\\Document\\FilenameCreator')
+			->thenUse('Vidola\\Document\\MarkdownBasedDocumentation');
+		$fjor->setSingleton('Vidola\\Document\\MarkdownBasedDocumentation');
+		$fjor
 			->given('Vidola\\View\\TemplatableFileView')
 			->thenUse('Vidola\\View\\StoredTemplatableFileView')
 			->inSingletonScope();
 		$fjor
 			->given('Vidola\\Util\\TocGenerator')
 			->thenUse('Vidola\\Util\\HtmlHeaderBasedTocGenerator');
+		$fjor
+			->given('Vidola\\Document\\PageGuide')
+			->thenUse('Vidola\\Document\\LocalCachingPageGuide');
 		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\TableOfContents');
 
 		// command line options
