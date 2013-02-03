@@ -47,6 +47,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 		$targetDir = sys_get_temp_dir();
 		$template = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
@@ -93,6 +94,7 @@ class Vidola_EndToEndTests_MultiDocumentTest extends \Vidola\EndToEndTests\Suppo
 		$targetDir = sys_get_temp_dir();
 		$template = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when

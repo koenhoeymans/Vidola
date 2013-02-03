@@ -35,6 +35,7 @@ class Vidola_EndToEndTests_TableOfContentsTest extends \Vidola\EndToEndTests\Sup
 		$targetDir = sys_get_temp_dir();
 		$template = __DIR__
 			. DIRECTORY_SEPARATOR . 'Support'
+			. DIRECTORY_SEPARATOR . 'MiniTemplate'
 			. DIRECTORY_SEPARATOR . 'MiniTemplate.php';
 
 		// when
