@@ -1,0 +1,38 @@
+----------------
+Extending Vidola
+----------------
+
+Creating plugins
+================
+
+Vidola can be extended by using or creating plugins (or extensions,
+which I use synonymously).
+
+A plugin should extend `Vidola\Plugin\Plugin` and implement the
+one abstract method `register(EventMapper $mapper)`. The EventMapper
+allows your plugin (or registered class of a plugin) to register
+for an event and define a callback. A sample plugin could look like this:
+
+	class MySamplePlugin extends \Vidola\Plugin\Plugin {
+		public function register(\Vidola\Plugin\EventMapper $eventMapper) {
+			$callback = function (\Vidola\Events\AfterParsing $event) {
+				$this->handleEvent($event);
+			};
+			$eventMapper->register('Vidola\\Events\\AfterParsing', $callback);
+		}
+
+		public function handleEvent(\Vidola\Events\AfterParsing $event) {
+			// do your stuff
+		}
+	}
+
+The event is a small object that is passed into the callback and contains
+the necessary information or objects.
+
+Available events
+================
+
+The events can be found in the Event subdirectory.
+
+*	AfterParsing
+*	SavedToXml

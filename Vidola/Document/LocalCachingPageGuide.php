@@ -8,12 +8,16 @@ namespace Vidola\Document;
 use AnyMark\AnyMark;
 use Vidola\Util\TitleCreator;
 use Vidola\Pattern\Patterns\TableOfContents;
+use Vidola\Plugin\Observable;
+use Vidola\Plugin\Pluggable;
 
 /**
  * @package Vidola
  */
-class LocalCachingPageGuide implements PageGuide
+class LocalCachingPageGuide implements PageGuide, Observable
 {
+	use Pluggable;
+
 	private $content = array();
 
 	private $anyMark;
@@ -47,6 +51,8 @@ class LocalCachingPageGuide implements PageGuide
 			$rawContent = $page->getRawContent();
 			$domContent = $this->anyMark->parse($rawContent, true);
 			$this->content[$id] = $domContent;
+
+			$this->notify(new \Vidola\Events\AfterParsing($domContent));
 		}
 
 		if ($dom)
@@ -54,7 +60,11 @@ class LocalCachingPageGuide implements PageGuide
 			return $domContent;
 		}
 
-		return $this->anyMark->saveXml($domContent);
+		$savedToXml = $this->anyMark->saveXml($domContent);
+		$eventSavedToXml = new \Vidola\Events\SavedToXml($savedToXml);
+		$this->notify($eventSavedToXml);
+
+		return $eventSavedToXml->getXmlString();
 	}
 
 	/**

@@ -75,3 +75,8 @@ Exceptions can be made by using the 'copy-include' key:
 The above example won't copy the Images directory, except for the file
 Header.jpg. As with `copy-exclude` you can specify multiple files and
 directories by using an array.
+
+The plugins that should be loaded can be specified by the `plugins`
+key
+
+	'plugins' => array('class\\of\\the\\plugin');

@@ -9,3 +9,4 @@ Guide
 	VidolaSyntax
 	Templating
 	LibraryUse
+	ExtendingVidola

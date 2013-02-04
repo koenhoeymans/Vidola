@@ -27,6 +27,10 @@ class Vidola
 		$anyMark = $fjor->get('AnyMark\\AnyMark');
 		$anyMark->setPatternsIni(__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini');
 		$fjor
+			->given('Vidola\\Plugin\\Observable')
+			->andMethod('addObserver')
+			->addParam(array('Vidola\\Plugin\\EventDispatcher'));
+		$fjor
 			->given('AnyMark\\AnyMark')
 			->thenUse($anyMark);
 		$fjor
@@ -59,11 +63,12 @@ class Vidola
 		$fjor
 			->given('Vidola\\Document\\PageGuide')
 			->thenUse('Vidola\\Document\\LocalCachingPageGuide');
+		$fjor->setSingleton('Vidola\\Plugin\\EventDispatcher');
 		$fjor->setSingleton('Vidola\\Pattern\\Patterns\\TableOfContents');
 
 		// command line options
 		// --------------------------------
-		self::setCommandLineOptions($config, $fjor);
+		self::setOptions($config, $fjor);
 
 		// filling list of pages
 		// ---------------------
@@ -91,7 +96,7 @@ class Vidola
 		);
 	}
 
-	private static function setCommandLineOptions(
+	private static function setOptions(
 		\Vidola\Config\Config $config, \Fjor\Fjor $fjor
 	) {
 		// set type of internal url builder
@@ -132,6 +137,17 @@ class Vidola
 		// @todo create command line option
 		// ----------------------
 		$view->setFileExtension('html');
+
+		// load plugins
+		// ------------
+		$plugins = $config->get('plugins') ?: array();
+		foreach ($plugins as $plugin)
+		{
+			$fjor
+				->given('Vidola\\Plugin\\EventDispatcher')
+				->andMethod('registerPlugin')
+				->addParam(array($plugin));
+		}
 	}
 
 	private static function getTemplate(\Vidola\Config\Config $config)
