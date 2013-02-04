@@ -1,6 +1,12 @@
 Vidola Changelog
 ================
 
+*	0.6.0
+
+	*	A plugin architecture has been added. This allows for extending
+		Vidola through the use of plugins.
+	*	Vidola no longer adds the document element `<doc>` when saved to xml.
+
 *	0.5.2
 
 	*	Custom page titles specified in the toc were not applied. Now fixed.
