@@ -220,11 +220,9 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 	 */
 	public function tocOfCurrentPage()
 	{
-		$domDoc = new \DOMDocument();
-		$ul = $domDoc->createElement('ul');
-		$li = $domDoc->createElement('li', 'title');
-		$domDoc->appendChild($ul);
-		$ul->appendChild($li);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
 
 		$this->pageGuide
 			->expects($this->any())
@@ -232,7 +230,7 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 			->with($this->currentPage)
 			->will($this->returnValue($ul));
 
-		$this->assertEquals('<ul><li>title</li></ul>', $this->api->toc());
+		$this->assertEquals('<ul><li /></ul>', $this->api->toc());
 	}
 
 	/**
@@ -240,11 +238,9 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 	*/
 	public function tocOfCurrentPageWithMaxDepth()
 	{
-		$domDoc = new \DOMDocument();
-		$ul = $domDoc->createElement('ul');
-		$li = $domDoc->createElement('li', 'title');
-		$domDoc->appendChild($ul);
-		$ul->appendChild($li);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
 
 		$this->pageGuide
 			->expects($this->any())
@@ -252,7 +248,7 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 			->with($this->currentPage, 2)
 			->will($this->returnValue($ul));
 
-		$this->assertEquals('<ul><li>title</li></ul>', $this->api->toc(2));
+		$this->assertEquals('<ul><li /></ul>', $this->api->toc(2));
 	}
 
 	/**

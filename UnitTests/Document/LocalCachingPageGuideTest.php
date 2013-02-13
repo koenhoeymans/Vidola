@@ -42,15 +42,10 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
-			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
-		$this->anyMark
-			->expects($this->once())
-			->method('saveXml')
-			->with($this->createDom('<doc>parsed text</doc>'))
-			->will($this->returnValue('<doc>parsed text</doc>'));
+			->will($this->returnValue(new \AnyMark\ComponentTree\Element('doc')));
 
 		$this->assertEquals(
-			'<doc>parsed text</doc>',
+			'<doc />',
 			$this->pageGuide->getParsedContent($page)
 		);
 	}
@@ -66,10 +61,10 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
-			->will($this->returnValue($this->createDom('<doc>parsed text</doc>')));
+			->will($this->returnValue(new \AnyMark\ComponentTree\Element('doc')));
 
 		$this->assertEquals(
-			$this->createDom('<doc>parsed text</doc>'),
+			new \AnyMark\ComponentTree\Element('doc'),
 			$this->pageGuide->getParsedContent($page, true)
 		);
 	}
@@ -96,18 +91,16 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 	 */
 	public function createsTableOfContents()
 	{
-		$domDoc = $this->createDom('<doc><h1 id="id">header</h1>parsed text</doc>');
-
 		$this->anyMark
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
-			->will($this->returnValue($domDoc));
+			->will($this->returnValue(new \AnyMark\ComponentTree\ComponentTree()));
 
 		$this->toc
 			->expects($this->atLeastOnce())
 			->method('createTocNode')
-			->with($domDoc, 1);
+			->with(new \AnyMark\ComponentTree\ComponentTree(), 1);
 
 		$this->pageGuide->getToc(new \Vidola\Document\Page('a_page', 'content'), 1);
 	}

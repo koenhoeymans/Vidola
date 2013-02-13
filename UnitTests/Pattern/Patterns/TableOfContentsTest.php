@@ -36,7 +36,7 @@ class Vidola_Pattern_Patterns_TableOfContentsTest extends \AnyMark\UnitTests\Sup
 	/**
 	 * @test
 	 */
-	public function createsLocalTocInDomFromMatch()
+	public function createsLocalTocInComponentTreeFromMatch()
 	{
 		$text = "{table of contents}
 
@@ -52,16 +52,16 @@ paragraph";
 				array('title' => 'header', 'level' => 1, 'id' => 'header'))
 			));
 
-		$doc = new \DOMDocument();
-		$ul = $doc->createElement('ul');
-		$doc->appendChild($ul);
-		$li = $doc->createElement('li');
-		$ul->appendChild($li);
-		$a = $doc->createElement('a', 'header');
-		$li->appendChild($a);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
+		$a = $ul->createElement('a');
+		$anchorText = $ul->createText('header');
+		$a->append($anchorText);
+		$li->append($a);
 		$a->setAttribute('href', '#header');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -74,6 +74,9 @@ paragraph";
 header
 ----
 
+subheader
+=========
+
 paragraph";
 
 		$this->headerFinder
@@ -84,24 +87,24 @@ paragraph";
 				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
-		$doc = new \DOMDocument();
-		$ul = $doc->createElement('ul');
-		$doc->appendChild($ul);
-		$li = $doc->createElement('li');
-		$ul->appendChild($li);
-		$a = $doc->createElement('a', 'header');
-		$li->appendChild($a);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
+		$a = $ul->createElement('a', 'header');
+		$a->append($ul->createText('header'));
+		$li->append($a);
 		$a->setAttribute('href', '#header');
 
-		$subUl = $doc->createElement('ul');
-		$li->appendChild($subUl);
-		$subLi = $doc->createElement('li');
-		$subUl->appendChild($subLi);
-		$subA = $doc->createElement('a', 'subheader');
-		$subLi->appendChild($subA);
-		$subA->setAttribute('href', '#subheader');
+		$subUl = new \AnyMark\ComponentTree\Element('ul');
+		$li->append($subUl);
+		$li = $ul->createElement('li');
+		$subUl->append($li);
+		$a = $ul->createElement('a');
+		$a->append($ul->createText('subheader'));
+		$li->append($a);
+		$a->setAttribute('href', '#subheader');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -126,38 +129,40 @@ paragraph";
 				array('title' => 'header1b', 'level' => 1, 'id' => 'header1b')
 			)));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'header1a');
-		$li1->appendChild($a1);
+		$li1 = $ul->createElement('li');
+		$ul->append($li1);
+		$a1 = $ul->createElement('a');
+		$a1->append($ul->createText('header1a'));
+		$li1->append($a1);
 		$a1->setAttribute('href', '#header1a');
 
-		$li2 = $doc->createElement('li');
-		$ul1->appendChild($li2);
-		$a2 = $doc->createElement('a', 'header1b');
-		$li2->appendChild($a2);
+		$li2 = $ul->createElement('li');
+		$ul->append($li2);
+		$a2 = $ul->createElement('a');
+		$a2->append($ul->createText('header1b'));
+		$li2->append($a2);
 		$a2->setAttribute('href', '#header1b');
 
-		$subUl1 = $doc->createElement('ul');
-		$li1->appendChild($subUl1);
+		$subUl1 = $ul->createElement('ul');
+		$li1->append($subUl1);
 
-		$subLi1 = $doc->createElement('li');
-		$subUl1->appendChild($subLi1);
-		$subA1 = $doc->createElement('a', 'header2a');
-		$subLi1->appendChild($subA1);
-		$subA1->setAttribute('href', '#header2a');
+		$subLi1 = $ul->createElement('li');
+		$subUl1->append($subLi1);
+		$suba1 = $ul->createElement('a');
+		$suba1->append($ul->createText('header2a'));
+		$subLi1->append($suba1);
+		$suba1->setAttribute('href', '#header2a');
 
-		$subLi2 = $doc->createElement('li');
-		$subUl1->appendChild($subLi2);
-		$subA2 = $doc->createElement('a', 'header2b');
-		$subLi2->appendChild($subA2);
-		$subA2->setAttribute('href', '#header2b');
+		$subLi2 = $ul->createElement('li');
+		$subUl1->append($subLi2);
+		$suba2 = $ul->createElement('a');
+		$suba2->append($ul->createText('header2b'));
+		$subLi2->append($suba2);
+		$suba2->setAttribute('href', '#header2b');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -185,16 +190,16 @@ paragraph";
 				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'subheader');
-		$li1->appendChild($a1);
-		$a1->setAttribute('href', '#subheader');
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
+		$a = $ul->createElement('a');
+		$anchorText = $ul->createText('subheader');
+		$a->append($anchorText);
+		$li->append($a);
+		$a->setAttribute('href', '#subheader');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -228,17 +233,16 @@ paragraph";
 				array('title' => 'other header', 'level' => 1, 'id' => 'other-header')
 			)));
 
-				$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
+		$a = $ul->createElement('a');
+		$anchorText = $ul->createText('subheader');
+		$a->append($anchorText);
+		$li->append($a);
+		$a->setAttribute('href', '#subheader');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'subheader');
-		$li1->appendChild($a1);
-		$a1->setAttribute('href', '#subheader');
-
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -268,17 +272,16 @@ paragraph";
 				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$li = $ul->createElement('li');
+		$ul->append($li);
+		$a = $ul->createElement('a');
+		$anchorText = $ul->createText('header');
+		$a->append($anchorText);
+		$li->append($a);
+		$a->setAttribute('href', '#header');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'header');
-		$li1->appendChild($a1);
-		$a1->setAttribute('href', '#header');
-
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -324,23 +327,23 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile.html'));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'header');
-		$li1->appendChild($a1);
+		$li1 = $ul->createElement('li');
+		$ul->append($li1);
+		$a1 = $ul->createElement('a');
+		$a1->append($ul->createText('header'));
+		$li1->append($a1);
 		$a1->setAttribute('href', '#header');
 
-		$li2 = $doc->createElement('li');
-		$ul1->appendChild($li2);
-		$a2 = $doc->createElement('a', 'included header');
-		$li2->appendChild($a2);
-		$a2->setAttribute('href', 'Includedfile.html#included-header');
+		$li2 = $ul->createElement('li');
+		$ul->append($li2);
+		$a2 = $ul->createElement('a');
+		$a2->append($ul->createText('included header'));
+		$li2->append($a2);
+		$a2->setAttribute('href', 'Includedfile.html#included-header');		
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -389,26 +392,28 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile.html'));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'level2');
-		$li1->appendChild($a1);
+		$li1 = $ul->createElement('li');
+		$ul->append($li1);
+		$a1 = $ul->createElement('a');
+		$anchorText = $ul->createText('level2');
+		$a1->append($anchorText);
+		$li1->append($a1);
 		$a1->setAttribute('href', '#level2');
 
-		$subUl1 = $doc->createElement('ul');
-		$li1->appendChild($subUl1);
+		$subUl1 = $ul->createElement('ul');
+		$li1->append($subUl1);
 
-		$subLi1 = $doc->createElement('li');
-		$subUl1->appendChild($subLi1);
-		$subA1 = $doc->createElement('a', 'level3');
-		$subLi1->appendChild($subA1);
+		$subLi1 = $ul->createElement('li');
+		$subUl1->append($subLi1);
+		$subA1 = $ul->createElement('a');
+		$anchorText = $ul->createText('level3');
+		$subA1->append($anchorText);
+		$subLi1->append($subA1);
 		$subA1->setAttribute('href', 'Includedfile.html#level3');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -470,23 +475,23 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile2.html'));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'level1a');
-		$li1->appendChild($a1);
+		$li1 = $ul->createElement('li');
+		$ul->append($li1);
+		$a1 = $ul->createElement('a');
+		$a1->append($ul->createText('level1a'));
+		$li1->append($a1);
 		$a1->setAttribute('href', 'Includedfile1.html#level1a');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'level1b');
-		$li1->appendChild($a1);
-		$a1->setAttribute('href', 'Includedfile2.html#level1b');
+		$li2 = $ul->createElement('li');
+		$ul->append($li2);
+		$a2 = $ul->createElement('a');
+		$a2->append($ul->createText('level1b'));
+		$li2->append($a2);
+		$a2->setAttribute('href', 'Includedfile2.html#level1b');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -542,17 +547,16 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Subincludedfile.html'));
 
-		$doc = new \DOMDocument();
-		$ul1 = $doc->createElement('ul');
-		$doc->appendChild($ul1);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
 
-		$li1 = $doc->createElement('li');
-		$ul1->appendChild($li1);
-		$a1 = $doc->createElement('a', 'header');
-		$li1->appendChild($a1);
+		$li1 = $ul->createElement('li');
+		$ul->append($li1);
+		$a1 = $ul->createElement('a');
+		$a1->append($ul->createText('header'));
+		$li1->append($a1);
 		$a1->setAttribute('href', 'Subincludedfile.html#header');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
@@ -574,34 +578,57 @@ paragraph";
 				array('title' => 'header', 'level' => 1, 'id' => 'xyz'))
 			));
 
-		$doc = new \DOMDocument();
-		$ul = $doc->createElement('ul');
-		$doc->appendChild($ul);
-		$li = $doc->createElement('li');
-		$ul->appendChild($li);
-		$a = $doc->createElement('a', 'header');
-		$li->appendChild($a);
+		$ul = new \AnyMark\ComponentTree\Element('ul');
+
+		$li = $ul->createElement('li');
+		$ul->append($li);
+		$a = $ul->createElement('a');
+		$a->append($ul->createText('header'));
+		$li->append($a);
 		$a->setAttribute('href', '#xyz');
 
-		$this->assertCreatesDomFromText($doc, $text);
+		$this->assertEquals($ul, $this->applyPattern($text));
 	}
 
 	/**
 	 * @test
 	 */
-	public function buildsTocFromDomDocument()
+	public function buildsTocFromDocument()
 	{
-		$domDoc1 = new \DOMDocument();
-		$dom1h1 = $domDoc1->createElement('h1', 'header');
-		$domDoc1->appendChild($dom1h1);
-		$dom1h1->setAttribute('id', 'header');
-		$dom1h2 = $domDoc1->createElement('h2', 'header2');
-		$domDoc1->appendChild($dom1h2);
-		$dom1h2->setAttribute('id', 'header2');
+		$doc = new \AnyMark\ComponentTree\ComponentTree;
+		$h1 = $doc->createElement('h1', 'header');
+		$anchor1 = $doc->createText('header');
+		$h1->append($anchor1);
+		$doc->append($h1);
+		$h1->setAttribute('id', 'header');
+		$h2 = $doc->createElement('h2', 'header');
+		$anchor2 = $doc->createText('header2');
+		$h2->append($anchor2);
+		$doc->append($h2);
+		$h2->setAttribute('id', 'header2');
+
+		$toc = new \AnyMark\ComponentTree\Element('ul');
+
+		$li = $toc->createElement('li');
+		$a = $toc->createElement('a');
+		$text = $toc->createText('header');
+		$toc->append($li);
+		$li->append($a);
+		$a->append($text);
+		$a->setAttribute('href', '#header');
+
+		$ul = $toc->createElement('ul');
+		$li2 = $toc->createElement('li');
+		$a = $toc->createElement('a');
+		$text = $toc->createText('header2');
+		$li->append($ul);
+		$ul->append($li2);
+		$li2->append($a);
+		$a->append($text);
+		$a->setAttribute('href', '#header2');
 
 		$this->assertEquals(
-			'<ul><li><a href="#header">header</a><ul><li><a href="#header2">header2</a></li></ul></li></ul>',
-			$domDoc1->saveXml($this->toc->createTocNode($domDoc1))
+			$toc, $this->toc->createTocNode($doc)
 		);
 	}
 
@@ -612,17 +639,29 @@ paragraph";
 	{
 		$maxDepth = 1;
 
-		$domDoc1 = new \DOMDocument();
-		$dom1h1 = $domDoc1->createElement('h1', 'header1');
-		$domDoc1->appendChild($dom1h1);
-		$dom1h1->setAttribute('id', 'header1');
-		$dom1h2 = $domDoc1->createElement('h2', 'header2');
-		$domDoc1->appendChild($dom1h2);
-		$dom1h2->setAttribute('id', 'header2');
+		$doc = new \AnyMark\ComponentTree\ComponentTree;
+		$h1 = $doc->createElement('h1', 'header1');
+		$anchor1 = $doc->createText('header1');
+		$h1->append($anchor1);
+		$doc->append($h1);
+		$h1->setAttribute('id', 'header1');
+		$h2 = $doc->createElement('h2');
+		$anchor2 = $doc->createText('header2');
+		$h2->append($anchor2);
+		$doc->append($h2);
+		$h2->setAttribute('id', 'header2');
+
+		$toc = new \AnyMark\ComponentTree\Element('ul');
+		$li = $toc->createElement('li');
+		$a = $toc->createElement('a');
+		$text = $toc->createText('header1');
+		$toc->append($li);
+		$li->append($a);
+		$a->append($text);
+		$a->setAttribute('href', '#header1');
 
 		$this->assertEquals(
-			'<ul><li><a href="#header1">header1</a></li></ul>',
-			$domDoc1->saveXml($this->toc->createTocNode($domDoc1, $maxDepth))
+			$toc, $this->toc->createTocNode($doc, $maxDepth)
 		);
 	}
 

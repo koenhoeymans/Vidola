@@ -9,6 +9,7 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use AnyMark\Util\InternalUrlBuilder;
 use AnyMark\Pattern\Pattern;
+use AnyMark\ComponentTree\ComponentTree;
 
 /**
  * @package AnyMark
@@ -63,9 +64,10 @@ class TableOfContents extends Pattern
 			@x';
 	}
 
-	public function handleMatch(array $match, \DOMNode $parentNode, Pattern $parentPattern = null)
-	{
-		return $this->buildReplacement($match, $parentNode);
+	public function handleMatch(
+		array $match, ComponentTree $parent, Pattern $parentPattern = null
+	) {
+		return $this->buildReplacement($match, $parent);
 	}
 
 	public function getSubpages($text)
@@ -97,7 +99,7 @@ class TableOfContents extends Pattern
 		return null;
 	}
 
-	private function buildReplacement(array $regexmatch, \DOMNode $parentNode)
+	private function buildReplacement(array $regexmatch, ComponentTree $parent)
 	{
 		$options = $this->getOptions($regexmatch['options']);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
@@ -105,7 +107,7 @@ class TableOfContents extends Pattern
 		$fileList = $this->recursivelyGetFilesToInclude($regexmatch['pages']);
 		$textAfterToc = $regexmatch['text'];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
-		return $this->buildToc($headerList, $maxDepth, $parentNode);
+		return $this->buildToc($headerList, $maxDepth, $parent);
 	}
 
 	private function recursivelyGetFilesToInclude($regexPartWithListOfFiles)
@@ -186,24 +188,36 @@ class TableOfContents extends Pattern
 	/**
 	 * @see AnyMark\Util.TocGenerator::createTocNode()
 	 */
-	public function createTocNode(\DomDocument $domDoc, $maxDepth = null)
+	public function createTocNode(ComponentTree $componentTree, $maxDepth = null)
 	{
 		$headers = array();
-		$xpath = new \DOMXPath($domDoc);
-		// @todo should be html agnostic??
-		$headerNodes = $xpath->query('//h1|//h2|//h3|//h4|//h5|//h6');
-		foreach ($headerNodes as $headerNode)
+		$getHeaders = function($component) use (&$headers)
 		{
+			if (!($component instanceof \AnyMark\ComponentTree\Element))
+			{
+				return;
+			}
+			if ($component->getName() !== 'h1' &&
+				$component->getName() !== 'h2' &&
+				$component->getName() !== 'h3' &&
+				$component->getName() !== 'h4' &&
+				$component->getName() !== 'h5' &&
+				$component->getName() !== 'h6'
+			) {
+				return;
+			}
 			$headers[] = array(
-						'id' => $headerNode->getAttribute('id'),
-						'level' => $headerNode->nodeName[1],
-						'title' => $headerNode->nodeValue
+				'id' => $component->getAttributeValue('id'),
+				'level' => $component->getName(),
+				'title' => $component->getChildren()[0]->getValue()
 			);
-		}
-		return $this->buildToc($headers, $maxDepth, $domDoc);
+		};
+		$componentTree->query($getHeaders);
+
+		return $this->buildToc($headers, $maxDepth, $componentTree);
 	}
 
-	private function buildToc(array $headers, $maxDepth = null, \DOMNode $parentNode)
+	private function buildToc(array $headers, $maxDepth = null, ComponentTree $parent)
 	{
 		if (empty($headers))
 		{
@@ -224,7 +238,7 @@ class TableOfContents extends Pattern
 			}
 		}
 
-		$ul = $this->getOwnerDocument($parentNode)->createElement('ul');
+		$ul = $parent->createElement('ul');
 
 		$listLevel = null;
 
@@ -252,10 +266,11 @@ class TableOfContents extends Pattern
 				continue;
 			}
 
-			$li = $this->getOwnerDocument($parentNode)->createElement('li');
-			$ul->appendChild($li);
-			$a = $this->getOwnerDocument($parentNode)->createElement('a', $title);
-			$li->appendChild($a);
+			$li = $parent->createElement('li');
+			$ul->append($li);
+			$a = $parent->createElement('a');
+			$a->append($parent->createText($title));
+			$li->append($a);
 			$a->setAttribute('href', $file . '#' . $ref);
 
 			if (isset($headers[$key+1]))
@@ -266,7 +281,7 @@ class TableOfContents extends Pattern
 					$subUl = $this->buildToc($headers, $maxDepth, $li);
 					if ($subUl)
 					{
-						$li->appendChild($subUl);
+						$li->append($subUl);
 					}
 					$depth--;
 				}

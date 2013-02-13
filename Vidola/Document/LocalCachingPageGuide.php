@@ -44,23 +44,23 @@ class LocalCachingPageGuide implements PageGuide, Observable
 		$id = $page->getUrl();
 		if (isset($this->content[$id]))
 		{
-			$domContent = $this->content[$id];
+			$parsedContent = $this->content[$id];
 		}
 		else
 		{
 			$rawContent = $page->getRawContent();
-			$domContent = $this->anyMark->parse($rawContent, true);
-			$this->content[$id] = $domContent;
+			$parsedContent = $this->anyMark->parse($rawContent, true);
+			$this->content[$id] = $parsedContent;
 
-			$this->notify(new \Vidola\Events\AfterParsing($domContent));
+			$this->notify(new \Vidola\Events\AfterParsing($parsedContent));
 		}
 
 		if ($dom)
 		{
-			return $domContent;
+			return $parsedContent;
 		}
 
-		$savedToXml = $this->anyMark->saveXml($domContent);
+		$savedToXml = $parsedContent->saveXmlStyle();
 		$eventSavedToXml = new \Vidola\Events\SavedToXml($savedToXml);
 		$this->notify($eventSavedToXml);
 

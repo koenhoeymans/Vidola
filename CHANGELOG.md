@@ -1,6 +1,11 @@
 Vidola Changelog
 ================
 
+*	0.7.0
+
+	*	Changes reflect the use of `\AnyMark\ComponentTree` components instead
+		of the `PHP DOM`.
+
 *	0.6.0
 
 	*	A plugin architecture has been added. This allows for extending

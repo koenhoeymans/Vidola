@@ -42,11 +42,11 @@ class HeaderFinder
 
 		foreach ($headerMatches as $headerMatch)
 		{
-			$headerNode = $this->header->handleMatch($headerMatch, new \DOMDocument());
+			$header = $this->header->handleMatch($headerMatch, new \AnyMark\ComponentTree\ComponentTree());
 			$headers[] = array(
-				'title' => $headerNode->nodeValue,
-				'level' => substr($headerNode->nodeName, 1),
-				'id'	=> $headerNode->getAttribute('id')
+				'title' => $header->getChildren()[0]->getValue(),
+				'level' => substr($header->getName(), 1),
+				'id'	=> $header->getAttributeValue('id')
 			);
 		}
 
