@@ -8,7 +8,7 @@ namespace Vidola\Config;
 /**
  * @package Vidola
  */
-class CommandLineConfig implements Config
+class CommandLineConfig implements Config, TemplateOptions
 {
 	private $settings;
 
@@ -47,5 +47,30 @@ class CommandLineConfig implements Config
 		}
 
 		return $options;
+	}
+
+	public function getTemplate()
+	{
+		return $this->get('template') ?:
+			__DIR__
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . 'Templates'
+			. DIRECTORY_SEPARATOR . 'Default'
+			. DIRECTORY_SEPARATOR . 'Index.php';
+	}
+
+	public function getCopyIncludedFiles()
+	{
+		return (array) $this->get('copy-include');
+	}
+
+	public function getCopyExcludedFiles()
+	{
+		return (array) $this->get('copy-exclude');
+	}
+
+	public function getTargetDir()
+	{
+		return $this->get('target-dir');
 	}
 }

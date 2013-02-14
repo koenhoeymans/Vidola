@@ -86,12 +86,7 @@ class Vidola
 		// copy files
 		// ----------
 		$fileCopyController = $fjor->get('Vidola\\Controller\\FileCopyController');
-		$fileCopyController->copyFiles(
-			self::getTemplate($config),
-			$config->get('copy-exclude'),
-			$config->get('copy-include'),
-			$config->get('target-dir')
-		);
+		$fileCopyController->copyFiles($config);
 	}
 
 	private static function setOptions(
@@ -120,16 +115,16 @@ class Vidola
 		// --target-dir=
 		// ------------------------
 		$view = $fjor->get('Vidola\\View\\StoredTemplatableFileView');
-		if (!$config->get('target-dir'))
+		if (!$config->getTargetDir())
 		{
 			throw new \Exception('target directory not set: --target-dir=<dir>');
 		}
-		$view->setOutputDir($config->get('target-dir'));
+		$view->setOutputDir($config->getTargetDir());
 
 		// set the template
 		// --template=
 		// ----------------
-		$view->setTemplate(self::getTemplate($config));
+		$view->setTemplate($config->getTemplate());
 
 		// set the file extension
 		// @todo create command line option
@@ -146,15 +141,6 @@ class Vidola
 				->andMethod('registerPlugin')
 				->addParam(array($plugin));
 		}
-	}
-
-	private static function getTemplate(\Vidola\Config\Config $config)
-	{
-		return $config->get('template') ?:
-			__DIR__
-			. DIRECTORY_SEPARATOR . 'Templates'
-			. DIRECTORY_SEPARATOR . 'Default'
-			. DIRECTORY_SEPARATOR . 'Index.php';
 	}
 
 	private static function getSourceDir($source)

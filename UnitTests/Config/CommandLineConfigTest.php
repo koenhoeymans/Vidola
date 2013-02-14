@@ -40,4 +40,49 @@ class Vidola_Config_CommandLineConfigTest extends PHPUnit_Framework_TestCase
 		// then
 		$this->assertEquals('bar', $configOption);
 	}
+
+	/**
+	 * @test
+	 */
+	public function getsTemplate()
+	{
+		$template = '/home/Koen/Vidola/Templates/Default.php';
+		$_SERVER['argv']['template'] = $template;
+		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+
+		$this->assertEquals($template, $config->getTemplate());
+	}
+
+	/**
+	 * @test
+	 */
+	public function getsCopyIncludedFiles()
+	{
+		$_SERVER['argv']['copy-include'] = 'file';
+		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+
+		$this->assertEquals(array('file'), $config->getCopyIncludedFiles());
+	}
+
+	/**
+	 * @test
+	 */
+	public function getsCopyExcludedFiles()
+	{
+		$_SERVER['argv']['copy-exclude'] = 'file';
+		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+
+		$this->assertEquals(array('file'), $config->getCopyExcludedFiles());
+	}
+
+	/**
+	 * @test
+	 */
+	public function getsTargetDir()
+	{
+		$_SERVER['argv']['target-dir'] = '/tmp';
+		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+
+		$this->assertEquals('/tmp', $config->getTargetDir());
+	}
 }

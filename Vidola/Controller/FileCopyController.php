@@ -5,6 +5,7 @@
  */
 namespace Vidola\Controller;
 
+use Vidola\Config\CommandLineConfig;
 use Vidola\Util\FileCopy;
 
 /**
@@ -19,15 +20,13 @@ class FileCopyController
 		$this->fileCopy = $fileCopy;
 	}
 
-	public function copyFiles($templateFile, $exclude, $include, $targetDir)
+	public function copyFiles(CommandLineConfig $config)
 	{
-		$include = (array) $include;
-		$exclude = (array) $exclude;
-		$exclude[] = $templateFile;
-		$sourceDir = dirname($templateFile);
-
 		$this->fileCopy->copy(
-			$sourceDir, $targetDir, $exclude, $include
+			dirname($config->getTemplate()),
+			$config->getTargetDir(),
+			$config->getCopyExcludedFiles(),
+			$config->getCopyIncludedFiles()
 		);
 	}
 }
