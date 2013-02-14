@@ -628,7 +628,7 @@ paragraph";
 		$a->setAttribute('href', '#header2');
 
 		$this->assertEquals(
-			$toc, $this->toc->createTocNode($doc)
+			$toc, $this->toc->createToc($doc)
 		);
 	}
 
@@ -661,7 +661,7 @@ paragraph";
 		$a->setAttribute('href', '#header1');
 
 		$this->assertEquals(
-			$toc, $this->toc->createTocNode($doc, $maxDepth)
+			$toc, $this->toc->createToc($doc, $maxDepth)
 		);
 	}
 

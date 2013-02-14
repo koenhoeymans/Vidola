@@ -99,7 +99,7 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 
 		$this->toc
 			->expects($this->atLeastOnce())
-			->method('createTocNode')
+			->method('createToc')
 			->with(new \AnyMark\ComponentTree\ComponentTree(), 1);
 
 		$this->pageGuide->getToc(new \Vidola\Document\Page('a_page', 'content'), 1);

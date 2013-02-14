@@ -186,9 +186,13 @@ class TableOfContents extends Pattern
 	}
 
 	/**
-	 * @see AnyMark\Util.TocGenerator::createTocNode()
+	 * Create a table of contents from a ComponentTree.
+	 * 
+	 * @param ComponentTree $componentTree
+	 * @param string $maxDepth
+	 * @return \AnyMark\ElementTree\Element
 	 */
-	public function createTocNode(ComponentTree $componentTree, $maxDepth = null)
+	public function createToc(ComponentTree $componentTree, $maxDepth = null)
 	{
 		$headers = array();
 		$getHeaders = function($component) use (&$headers)

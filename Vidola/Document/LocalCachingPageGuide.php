@@ -82,7 +82,7 @@ class LocalCachingPageGuide implements PageGuide, Observable
 	 */
 	public function getToc(Page $page, $maxDepth = null)
 	{
-		return $this->toc->createTocNode(
+		return $this->toc->createToc(
 			$this->getParsedContent($page, true), $maxDepth
 		);
 	}
