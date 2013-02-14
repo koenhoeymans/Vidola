@@ -85,14 +85,12 @@ class Vidola
 
 		// copy files
 		// ----------
-		$templateFile = self::getTemplate($config);
-		$sourceDir = dirname($templateFile);
-		$filesOrDirToCopy = (array) $config->get('copy-include');
-		$excludedFiles = (array) $config->get('copy-exclude') ?: array();
-		$excludedFiles[] = $templateFile;
-		$fileCopy = $fjor->get('Vidola\\Util\\FileCopy');
-		$fileCopy->copy(
-			$sourceDir, $config->get('target-dir'), $excludedFiles, $filesOrDirToCopy
+		$fileCopyController = $fjor->get('Vidola\\Controller\\FileCopyController');
+		$fileCopyController->copyFiles(
+			self::getTemplate($config),
+			$config->get('copy-exclude'),
+			$config->get('copy-include'),
+			$config->get('target-dir')
 		);
 	}
 
