@@ -1,6 +1,13 @@
 Vidola Changelog
 ================
 
+*	0.7.1
+
+	*	Renamed `TableOfContents::createTocNode` to `TableOfContents::createToc`.
+	*	Creation of FileCopyController to handle copying of template files.
+	*	Start of putting config options behind interfaces that can be passed to
+		objects.
+
 *	0.7.0
 
 	*	Changes reflect the use of `\AnyMark\ComponentTree` components instead
