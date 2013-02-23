@@ -9,7 +9,7 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use AnyMark\Util\InternalUrlBuilder;
 use AnyMark\Pattern\Pattern;
-use AnyMark\ComponentTree\ComponentTree;
+use ElementTree\ElementTree;
 
 /**
  * @package AnyMark
@@ -65,7 +65,7 @@ class TableOfContents extends Pattern
 	}
 
 	public function handleMatch(
-		array $match, ComponentTree $parent, Pattern $parentPattern = null
+		array $match, ElementTree $parent, Pattern $parentPattern = null
 	) {
 		return $this->buildReplacement($match, $parent);
 	}
@@ -99,7 +99,7 @@ class TableOfContents extends Pattern
 		return null;
 	}
 
-	private function buildReplacement(array $regexmatch, ComponentTree $parent)
+	private function buildReplacement(array $regexmatch, ElementTree $parent)
 	{
 		$options = $this->getOptions($regexmatch['options']);
 		$maxDepth = isset($options['depth']) ? $options['depth'] : null;
@@ -190,14 +190,14 @@ class TableOfContents extends Pattern
 	 * 
 	 * @param ComponentTree $componentTree
 	 * @param string $maxDepth
-	 * @return \AnyMark\ElementTree\Element
+	 * @return \ElementTree\ElementTreeElement
 	 */
-	public function createToc(ComponentTree $componentTree, $maxDepth = null)
+	public function createToc(ElementTree $elementTree, $maxDepth = null)
 	{
 		$headers = array();
 		$getHeaders = function($component) use (&$headers)
 		{
-			if (!($component instanceof \AnyMark\ComponentTree\Element))
+			if (!($component instanceof \ElementTree\Element))
 			{
 				return;
 			}
@@ -216,12 +216,12 @@ class TableOfContents extends Pattern
 				'title' => $component->getChildren()[0]->getValue()
 			);
 		};
-		$componentTree->query($getHeaders);
+		$elementTree->query($getHeaders);
 
-		return $this->buildToc($headers, $maxDepth, $componentTree);
+		return $this->buildToc($headers, $maxDepth, $elementTree);
 	}
 
-	private function buildToc(array $headers, $maxDepth = null, ComponentTree $parent)
+	private function buildToc(array $headers, $maxDepth = null, ElementTree $parent)
 	{
 		if (empty($headers))
 		{
@@ -242,7 +242,9 @@ class TableOfContents extends Pattern
 			}
 		}
 
-		$ul = $parent->createElement('ul');
+		$ownerTree = $parent->getOwnerTree() ?: $parent;
+
+		$ul = $ownerTree->createElement('ul');
 
 		$listLevel = null;
 
@@ -270,10 +272,10 @@ class TableOfContents extends Pattern
 				continue;
 			}
 
-			$li = $parent->createElement('li');
+			$li = $ownerTree->createElement('li');
 			$ul->append($li);
-			$a = $parent->createElement('a');
-			$a->append($parent->createText($title));
+			$a = $ownerTree->createElement('a');
+			$a->append($ownerTree->createText($title));
 			$li->append($a);
 			$a->setAttribute('href', $file . '#' . $ref);
 

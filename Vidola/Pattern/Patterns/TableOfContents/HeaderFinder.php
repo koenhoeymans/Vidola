@@ -42,7 +42,7 @@ class HeaderFinder
 
 		foreach ($headerMatches as $headerMatch)
 		{
-			$header = $this->header->handleMatch($headerMatch, new \AnyMark\ComponentTree\ComponentTree());
+			$header = $this->header->handleMatch($headerMatch, new \ElementTree\ElementTree());
 			$headers[] = array(
 				'title' => $header->getChildren()[0]->getValue(),
 				'level' => substr($header->getName(), 1),

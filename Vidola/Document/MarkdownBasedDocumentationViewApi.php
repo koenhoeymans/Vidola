@@ -189,7 +189,7 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
 
 		if ($toc)
 		{
-			return $toc->saveXmlStyle();
+			return $toc->toString();
 		}
 
 		return null;

@@ -60,7 +60,7 @@ class LocalCachingPageGuide implements PageGuide, Observable
 			return $parsedContent;
 		}
 
-		$savedToXml = $parsedContent->saveXmlStyle();
+		$savedToXml = $parsedContent->toString();
 		$eventSavedToXml = new \Vidola\Events\SavedToXml($savedToXml);
 		$this->notify($eventSavedToXml);
 

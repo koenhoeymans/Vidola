@@ -6,7 +6,7 @@
 namespace Vidola\Events;
 
 use Vidola\Plugin\Event;
-use AnyMark\ComponentTree\ComponentTree;
+use ElementTree\ElementTree;
 
 /**
  * @package Vidola
@@ -15,7 +15,7 @@ class AfterParsing implements Event
 {
 	private $parsedText;
 
-	public function __construct(ComponentTree $parsedText)
+	public function __construct(ElementTree $parsedText)
 	{
 		$this->parsedText = $parsedText;
 	}

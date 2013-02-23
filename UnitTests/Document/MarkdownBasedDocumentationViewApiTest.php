@@ -220,7 +220,7 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 	 */
 	public function tocOfCurrentPage()
 	{
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = new \ElementTree\ElementTreeElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 
@@ -238,7 +238,7 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
 	*/
 	public function tocOfCurrentPageWithMaxDepth()
 	{
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = new \ElementTree\ElementTreeElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 

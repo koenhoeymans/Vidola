@@ -5,7 +5,7 @@ require_once dirname(__FILE__)
 	. DIRECTORY_SEPARATOR . '..'
 	. DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Vidola_Pattern_Patterns_TableOfContentsTest extends \AnyMark\UnitTests\Support\PatternReplacementAssertions
+class Vidola_Pattern_Patterns_TableOfContentsTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
 {
 	public function setup()
 	{
@@ -52,7 +52,7 @@ paragraph";
 				array('title' => 'header', 'level' => 1, 'id' => 'header'))
 			));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 		$a = $ul->createElement('a');
@@ -87,7 +87,7 @@ paragraph";
 				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 		$a = $ul->createElement('a', 'header');
@@ -95,7 +95,7 @@ paragraph";
 		$li->append($a);
 		$a->setAttribute('href', '#header');
 
-		$subUl = new \AnyMark\ComponentTree\Element('ul');
+		$subUl = new \ElementTree\ElementTreeElement('ul');
 		$li->append($subUl);
 		$li = $ul->createElement('li');
 		$subUl->append($li);
@@ -129,7 +129,7 @@ paragraph";
 				array('title' => 'header1b', 'level' => 1, 'id' => 'header1b')
 			)));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 
 		$li1 = $ul->createElement('li');
 		$ul->append($li1);
@@ -190,7 +190,7 @@ paragraph";
 				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 		$a = $ul->createElement('a');
@@ -233,7 +233,7 @@ paragraph";
 				array('title' => 'other header', 'level' => 1, 'id' => 'other-header')
 			)));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 		$a = $ul->createElement('a');
@@ -272,7 +272,7 @@ paragraph";
 				array('title' => 'subheader', 'level' => 2, 'id' => 'subheader')
 			)));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 		$li = $ul->createElement('li');
 		$ul->append($li);
 		$a = $ul->createElement('a');
@@ -327,7 +327,7 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile.html'));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 
 		$li1 = $ul->createElement('li');
 		$ul->append($li1);
@@ -392,7 +392,7 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile.html'));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 
 		$li1 = $ul->createElement('li');
 		$ul->append($li1);
@@ -475,7 +475,7 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Includedfile2.html'));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 
 		$li1 = $ul->createElement('li');
 		$ul->append($li1);
@@ -547,7 +547,7 @@ some text"
 			->method('createRelativeLink')
 			->will($this->returnValue('Subincludedfile.html'));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 
 		$li1 = $ul->createElement('li');
 		$ul->append($li1);
@@ -578,7 +578,7 @@ paragraph";
 				array('title' => 'header', 'level' => 1, 'id' => 'xyz'))
 			));
 
-		$ul = new \AnyMark\ComponentTree\Element('ul');
+		$ul = $this->elementTree()->createElement('ul');
 
 		$li = $ul->createElement('li');
 		$ul->append($li);
@@ -595,19 +595,19 @@ paragraph";
 	 */
 	public function buildsTocFromDocument()
 	{
-		$doc = new \AnyMark\ComponentTree\ComponentTree;
-		$h1 = $doc->createElement('h1', 'header');
+		$doc = new \ElementTree\ElementTree();
+		$h1 = $doc->createElement('h1');
 		$anchor1 = $doc->createText('header');
 		$h1->append($anchor1);
 		$doc->append($h1);
 		$h1->setAttribute('id', 'header');
-		$h2 = $doc->createElement('h2', 'header');
+		$h2 = $doc->createElement('h2');
 		$anchor2 = $doc->createText('header2');
 		$h2->append($anchor2);
 		$doc->append($h2);
 		$h2->setAttribute('id', 'header2');
 
-		$toc = new \AnyMark\ComponentTree\Element('ul');
+		$toc = $doc->createElement('ul');
 
 		$li = $toc->createElement('li');
 		$a = $toc->createElement('a');
@@ -639,8 +639,8 @@ paragraph";
 	{
 		$maxDepth = 1;
 
-		$doc = new \AnyMark\ComponentTree\ComponentTree;
-		$h1 = $doc->createElement('h1', 'header1');
+		$doc = new \ElementTree\ElementTree();
+		$h1 = $doc->createElement('h1');
 		$anchor1 = $doc->createText('header1');
 		$h1->append($anchor1);
 		$doc->append($h1);
@@ -651,10 +651,10 @@ paragraph";
 		$doc->append($h2);
 		$h2->setAttribute('id', 'header2');
 
-		$toc = new \AnyMark\ComponentTree\Element('ul');
-		$li = $toc->createElement('li');
-		$a = $toc->createElement('a');
-		$text = $toc->createText('header1');
+		$toc = $doc->createElement('ul');
+		$li = $doc->createElement('li');
+		$a = $doc->createElement('a');
+		$text = $doc->createText('header1');
 		$toc->append($li);
 		$li->append($a);
 		$a->append($text);

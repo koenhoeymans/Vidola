@@ -1,6 +1,11 @@
 Vidola Changelog
 ================
 
+*	0.8.0
+
+	*	Using the new ElementTree\ElementTree package instead of AnyMarks one
+		reflecting AnyMark changes.
+
 *	0.7.1
 
 	*	Renamed `TableOfContents::createTocNode` to `TableOfContents::createToc`.

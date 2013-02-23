@@ -42,7 +42,7 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
-			->will($this->returnValue(new \AnyMark\ComponentTree\Element('doc')));
+			->will($this->returnValue(new \ElementTree\ElementTreeElement('doc')));
 
 		$this->assertEquals(
 			'<doc />',
@@ -61,10 +61,10 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
-			->will($this->returnValue(new \AnyMark\ComponentTree\Element('doc')));
+			->will($this->returnValue(new \ElementTree\ElementTreeElement('doc')));
 
 		$this->assertEquals(
-			new \AnyMark\ComponentTree\Element('doc'),
+			new \ElementTree\ElementTreeElement('doc'),
 			$this->pageGuide->getParsedContent($page, true)
 		);
 	}
@@ -95,12 +95,12 @@ class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCa
 			->expects($this->atLeastOnce())
 			->method('parse')
 			->with('content')
-			->will($this->returnValue(new \AnyMark\ComponentTree\ComponentTree()));
+			->will($this->returnValue(new \ElementTree\ElementTree()));
 
 		$this->toc
 			->expects($this->atLeastOnce())
 			->method('createToc')
-			->with(new \AnyMark\ComponentTree\ComponentTree(), 1);
+			->with(new \ElementTree\ElementTree(), 1);
 
 		$this->pageGuide->getToc(new \Vidola\Document\Page('a_page', 'content'), 1);
 	}
