@@ -9,8 +9,8 @@
 	}],
 	"require": {
 		"php": ">=5.4.6",
-		"anymark/anymark": "0.3.0",
-		"elementtree/elementtree": "0.1.1"
+		"anymark/anymark": ">=0.3.1",
+		"elementtree/elementtree": ">=0.1.1"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*"

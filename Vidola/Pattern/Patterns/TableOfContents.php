@@ -197,10 +197,6 @@ class TableOfContents extends Pattern
 		$headers = array();
 		$getHeaders = function($component) use (&$headers)
 		{
-			if (!($component instanceof \ElementTree\Element))
-			{
-				return;
-			}
 			if ($component->getName() !== 'h1' &&
 				$component->getName() !== 'h2' &&
 				$component->getName() !== 'h3' &&
@@ -216,7 +212,7 @@ class TableOfContents extends Pattern
 				'title' => $component->getChildren()[0]->getValue()
 			);
 		};
-		$elementTree->query($getHeaders);
+		$elementTree->query($elementTree->createFilter($getHeaders)->allElements());
 
 		return $this->buildToc($headers, $maxDepth, $elementTree);
 	}
