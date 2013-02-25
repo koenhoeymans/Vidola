@@ -16,7 +16,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function createsLinkToPageWithHtmlExtension()
 	{
-		$this->assertEquals('file.html', $this->urlBuilder->createRelativeLink('file'));
+		$this->assertEquals('file.html', $this->urlBuilder->urlToFrom('file'));
 	}
 
 	/**
@@ -24,7 +24,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function ifLinkedPageHasAlreadyExtensionNoHtmlExtensionIsAdded()
 	{
-		$this->assertEquals('file.js', $this->urlBuilder->createRelativeLink('file.js'));
+		$this->assertEquals('file.js', $this->urlBuilder->urlToFrom('file.js'));
 	}
 
 	/**
@@ -33,7 +33,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	public function keepsHierarchy()
 	{
 		$this->assertEquals('subfolder/index.html',
-		$this->urlBuilder->createRelativeLink('subfolder/index'));
+		$this->urlBuilder->urlToFrom('subfolder/index'));
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	public function createsLinkRelativeToGivenFile()
 	{
 		$this->assertEquals(
-			'../file.html', $this->urlBuilder->createRelativeLink('file', 'subfolder/subfile')
+			'../file.html', $this->urlBuilder->urlToFrom('file', 'subfolder/subfile')
 		);
 	}
 
@@ -53,7 +53,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'../subdir2/foo.html',
-			$this->urlBuilder->createRelativeLink('subdir2/foo', 'subdir1/subfile')
+			$this->urlBuilder->urlToFrom('subdir2/foo', 'subdir1/subfile')
 		);
 	}
 
@@ -64,7 +64,7 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'../../foo.html',
-			$this->urlBuilder->createRelativeLink('foo', 'subdir/subsubdir/subfile')
+			$this->urlBuilder->urlToFrom('foo', 'subdir/subsubdir/subfile')
 		);
 	}
 
@@ -73,6 +73,6 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function extensionIsPlacedBeforeDoubleColon()
 	{
-		$this->assertEquals('x.html#y', $this->urlBuilder->createRelativeLink('x#y'));
+		$this->assertEquals('x.html#y', $this->urlBuilder->urlToFrom('x#y'));
 	}
 }

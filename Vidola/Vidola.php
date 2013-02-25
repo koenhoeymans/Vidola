@@ -98,7 +98,10 @@ class Vidola
 		$urlBuilder = $config->get('internal-links') ?:
 			'Vidola\\Util\\HtmlFileUrlBuilder';
 		$fjor
-			->given('Vidola\\Util\\InternalUrlBuilder')
+			->given('Vidola\\Util\\RelativeInternalUrlBuilder')
+			->thenUse($urlBuilder);
+		$fjor
+			->given('AnyMark\\Util\\InternalUrlBuilder')
 			->thenUse($urlBuilder);
 
 		// set the source directory or file

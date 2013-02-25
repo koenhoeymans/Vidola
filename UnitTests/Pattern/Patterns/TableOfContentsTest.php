@@ -324,7 +324,7 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createRelativeLink')
+			->method('urlTo')
 			->will($this->returnValue('Includedfile.html'));
 
 		$ul = $this->elementTree()->createElement('ul');
@@ -389,7 +389,7 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createRelativeLink')
+			->method('urlTo')
 			->will($this->returnValue('Includedfile.html'));
 
 		$ul = $this->elementTree()->createElement('ul');
@@ -468,11 +468,11 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->at(0))
-			->method('createRelativeLink')
+			->method('urlTo')
 			->will($this->returnValue('Includedfile1.html'));
 		$this->internalUrlBuilder
 			->expects($this->at(1))
-			->method('createRelativeLink')
+			->method('urlTo')
 			->will($this->returnValue('Includedfile2.html'));
 
 		$ul = $this->elementTree()->createElement('ul');
@@ -544,7 +544,7 @@ some text"
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createRelativeLink')
+			->method('urlTo')
 			->will($this->returnValue('Subincludedfile.html'));
 
 		$ul = $this->elementTree()->createElement('ul');

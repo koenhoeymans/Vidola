@@ -5,15 +5,22 @@
  */
 namespace Vidola\Util;
 
+use Vidola\Util\RelativeInternalUrlBuilder;
+
 /**
  * @package Vidola
  */
-class HtmlFileUrlBuilder implements \AnyMark\Util\InternalUrlBuilder
+class HtmlFileUrlBuilder implements RelativeInternalUrlBuilder
 {
+	public function urlTo($resource)
+	{
+		return $this->urlToFrom($resource, null);
+	}
+
 	/**
-	 * @see AnyMark\Util.InternalUrlBuilder::createLink()
+	 * @see Vidola\Util.RelativeInternalUrlBuilder::urlToFrom()
 	 */
-	public function createRelativeLink($to, $relativeTo = null)
+	public function urlToFrom($to, $relativeTo = null)
 	{
 		$numberSignPos = strpos($to, "#");
 

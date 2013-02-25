@@ -5,7 +5,7 @@
  */
 namespace Vidola\Document;
 
-use AnyMark\Util\InternalUrlBuilder;
+use Vidola\Util\RelativeInternalUrlBuilder;
 
 /**
  * @package Vidola
@@ -28,7 +28,7 @@ class MarkdownBasedDocumentation implements FilenameCreator, Structure
 	 */
 	private $parentPages = array();
 
-	public function __construct(InternalUrlBuilder $internalUrlBuilder)
+	public function __construct(RelativeInternalUrlBuilder $internalUrlBuilder)
 	{
 		$this->internalUrlBuilder = $internalUrlBuilder;
 	}
@@ -102,7 +102,7 @@ class MarkdownBasedDocumentation implements FilenameCreator, Structure
 	 */
 	public function getUrl(Page $from, Linkable $to)
 	{
-		return $this->internalUrlBuilder->createRelativeLink($to->getUrl(), $from->getUrl());
+		return $this->internalUrlBuilder->urlToFrom($to->getUrl(), $from->getUrl());
 	}
 
 	/**

@@ -252,7 +252,7 @@ class TableOfContents extends Pattern
 			$title = $header['title'];
 			$ref = $header['id'];
 			$file = isset($header['file']) ?
-				$this->internalUrlBuilder->createRelativeLink($header['file']) :
+				$this->internalUrlBuilder->urlTo($header['file']) :
 				'';
 
 			if (!$listLevel)

@@ -8,7 +8,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 {
 	public function __construct()
 	{
-		$this->internalUrlBuilder = $this->getMock('\\AnyMark\\Util\\InternalUrlBuilder');
+		$this->internalUrlBuilder = $this->getMock('\\Vidola\\Util\\RelativeInternalUrlBuilder');
 
 		$this->mdDoc = new \Vidola\Document\MarkdownBasedDocumentation(
 			$this->internalUrlBuilder
@@ -79,7 +79,7 @@ class Vidola_Document_MarkdownBasedDocumentationTest extends PHPUnit_Framework_T
 
 		$this->internalUrlBuilder
 			->expects($this->atLeastOnce())
-			->method('createRelativeLink')
+			->method('urlToFrom')
 			->with()
 			->will($this->returnValue('../index'));
 
