@@ -1,6 +1,11 @@
 Vidola Changelog
 ================
 
+*	0.8.1
+
+	*	Taken HtmlFileUrlBuilder from AnyMark.
+	*	Added RelativeInternalUrlBuilder interface.
+
 *	0.8.0
 
 	*	Using the new ElementTree\ElementTree package instead of AnyMarks one
