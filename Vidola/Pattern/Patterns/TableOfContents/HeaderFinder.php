@@ -5,7 +5,7 @@
  */
 namespace Vidola\Pattern\Patterns\TableOfContents;
 
-use \AnyMark\Pattern\Patterns\Header;
+use \Vidola\Pattern\Patterns\Header;
 
 /**
  * @package AnyMark
@@ -42,7 +42,9 @@ class HeaderFinder
 
 		foreach ($headerMatches as $headerMatch)
 		{
-			$header = $this->header->handleMatch($headerMatch, new \ElementTree\ElementTree());
+			$header = $this->header->handleMatch(
+				$headerMatch, new \ElementTree\ElementTree()
+			);
 			$headers[] = array(
 				'title' => $header->getChildren()[0]->getValue(),
 				'level' => substr($header->getName(), 1),

@@ -6,7 +6,7 @@ namespace Vidola;
  * Sets up the necessary components before building the documents.
  */
 
-class Vidola
+class Vidola implements \Epa\Plugin
 {
 	public static function run()
 	{
@@ -23,9 +23,9 @@ class Vidola
 
 		// setting up the object graph constructor
 		// ---------------------------------------
-		$fjor = \AnyMark\AnyMark::setup();
-		$anyMark = $fjor->get('AnyMark\\AnyMark');
-		$anyMark->setPatternsIni(__DIR__ . DIRECTORY_SEPARATOR . 'Patterns.ini');
+		$fjor = \Fjor\Fjor::defaultSetup();
+		$anyMark = \AnyMark\AnyMark::setup($fjor);
+		$anyMark->registerPlugin(new Vidola());
 		$fjor
 			->given('Vidola\\Plugin\\Observable')
 			->andMethod('addObserver')
@@ -160,6 +160,30 @@ class Vidola
 	{
 		$fileParts = pathinfo($source);
 		return $fileParts['filename'];
+	}
+
+	public function register(\Epa\EventMapper $mapper)
+	{
+		$mapper->registerForEvent(
+			'EditPatternConfigurationEvent',
+			function(\AnyMark\PublicApi\EditPatternConfigurationEvent $event) {
+				$this->addPatterns($event);
+			}
+		);
+	}
+
+	private function addPatterns(\AnyMark\PublicApi\EditPatternConfigurationEvent $config)
+	{
+		$config->setImplementation(
+			'header', 'Vidola\\Pattern\\Patterns\\Header'
+		);
+		$config->setImplementation(
+			'toc', 'Vidola\\Pattern\\Patterns\\TableOfContents'
+		);
+		$config
+			->add('toc')
+			->toParent('root')
+			->first();
 	}
 }
 

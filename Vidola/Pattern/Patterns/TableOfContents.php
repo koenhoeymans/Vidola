@@ -47,7 +47,7 @@ class TableOfContents extends Pattern
 		return
 			'@
 			(?<=\n\n|\n^|^)
- 			{table\ of\ contents} 
+ 			{table\ of\ contents}
  			(?<options>
 				(
 				\n
@@ -107,6 +107,7 @@ class TableOfContents extends Pattern
 		$fileList = $this->recursivelyGetFilesToInclude($regexmatch['pages']);
 		$textAfterToc = $regexmatch['text'];
 		$headerList = $this->getListOfHeaders($textAfterToc, $fileList);
+
 		return $this->buildToc($headerList, $maxDepth, $parent);
 	}
 
@@ -195,24 +196,20 @@ class TableOfContents extends Pattern
 	public function createToc(ElementTree $elementTree, $maxDepth = null)
 	{
 		$headers = array();
-		$getHeaders = function($component) use (&$headers)
+
+		$query = $elementTree->createQuery();
+		$elements = $query->find($query->allElements($query->lOr(
+			$query->withName('h1'), $query->withName('h2'), $query->withName('h1'),
+			$query->withName('h4'), $query->withName('h5'), $query->withName('h5')
+		)));
+		foreach ($elements as $element)
 		{
-			if ($component->getName() !== 'h1' &&
-				$component->getName() !== 'h2' &&
-				$component->getName() !== 'h3' &&
-				$component->getName() !== 'h4' &&
-				$component->getName() !== 'h5' &&
-				$component->getName() !== 'h6'
-			) {
-				return;
-			}
 			$headers[] = array(
-				'id' => $component->getAttributeValue('id'),
-				'level' => $component->getName(),
-				'title' => $component->getChildren()[0]->getValue()
+				'id' => $element->getAttributeValue('id'),
+				'level' => $element->getName(),
+				'title' => $element->getChildren()[0]->getValue()
 			);
-		};
-		$elementTree->query($elementTree->createFilter($getHeaders)->allElements());
+		}
 
 		return $this->buildToc($headers, $maxDepth, $elementTree);
 	}
