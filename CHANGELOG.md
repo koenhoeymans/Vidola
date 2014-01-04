@@ -1,6 +1,10 @@
 Vidola Changelog
 ================
 
+*	0.8.2
+
+	*	Made it work with latest version of AnyMark.
+
 *	0.8.1
 
 	*	Taken HtmlFileUrlBuilder from AnyMark.
