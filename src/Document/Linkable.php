@@ -10,10 +10,10 @@ namespace Vidola\Document;
  */
 interface Linkable
 {
-	/**
-	 * Get URL relative to this documentation.
-	 * 
-	 * @return string
-	 */
-	public function getUrl();
+    /**
+     * Get URL relative to this documentation.
+     *
+     * @return string
+     */
+    public function getUrl();
 }

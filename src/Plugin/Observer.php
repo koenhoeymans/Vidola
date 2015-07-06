@@ -10,5 +10,5 @@ namespace Vidola\Plugin;
  */
 interface Observer
 {
-	public function notify(Event $event);
+    public function notify(Event $event);
 }

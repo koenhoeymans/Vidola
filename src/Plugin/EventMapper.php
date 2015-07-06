@@ -10,5 +10,5 @@ namespace Vidola\Plugin;
  */
 interface EventMapper
 {
-	public function register($event, $callback);
+    public function register($event, $callback);
 }

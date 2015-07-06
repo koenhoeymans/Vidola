@@ -10,18 +10,18 @@ namespace Vidola\Document;
  */
 interface PageList
 {
-	/**
-	 * Adds next page to the list, specifying parentpage if any.
-	 * 
-	 * @param Page $page
-	 * @param Page $parentPage
-	 */
-	public function add(Page $page, Page $parentPage = null);
+    /**
+     * Adds next page to the list, specifying parentpage if any.
+     *
+     * @param Page $page
+     * @param Page $parentPage
+     */
+    public function add(Page $page, Page $parentPage = null);
 
-	/**
-	 * Gets a list of all pages in order of appearance.
-	 * 
-	 * @return array
-	 */
-	public function getPages();
+    /**
+     * Gets a list of all pages in order of appearance.
+     *
+     * @return array
+     */
+    public function getPages();
 }

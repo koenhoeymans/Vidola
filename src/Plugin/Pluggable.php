@@ -10,18 +10,17 @@ namespace Vidola\Plugin;
  */
 trait Pluggable
 {
-	protected $observers = array();
+    protected $observers = array();
 
-	public function addObserver(Observer $observer)
-	{
-		$this->observers[] = $observer;
-	}
+    public function addObserver(Observer $observer)
+    {
+        $this->observers[] = $observer;
+    }
 
-	protected function notify(Event $event)
-	{
-		foreach ($this->observers as $observer)
-		{
-			$observer->notify($event);
-		}
-	}
+    protected function notify(Event $event)
+    {
+        foreach ($this->observers as $observer) {
+            $observer->notify($event);
+        }
+    }
 }

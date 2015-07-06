@@ -15,38 +15,37 @@ use Vidola\Document\PageList;
  */
 class DocumentationCreationController
 {
-	private $filenameCreator;
+    private $filenameCreator;
 
-	private $documentationApiBuilder;
+    private $documentationApiBuilder;
 
-	private $pageLIst;
+    private $pageLIst;
 
-	private $view;
+    private $view;
 
-	public function __construct(
-		FilenameCreator $filenameCreator,
-		DocumentationApiBuilder $documentationApiBuilder,
-		PageList $pageList,
-		StoredTemplatableFileView $view
-	) {
-		$this->filenameCreator = $filenameCreator;
-		$this->documentationApiBuilder = $documentationApiBuilder;
-		$this->pageList = $pageList;
-		$this->view = $view;
-	}
+    public function __construct(
+        FilenameCreator $filenameCreator,
+        DocumentationApiBuilder $documentationApiBuilder,
+        PageList $pageList,
+        StoredTemplatableFileView $view
+    ) {
+        $this->filenameCreator = $filenameCreator;
+        $this->documentationApiBuilder = $documentationApiBuilder;
+        $this->pageList = $pageList;
+        $this->view = $view;
+    }
 
-	public function createDocumentation()
-	{
-		foreach($this->pageList->getPages() as $page)
-		{
-			$this->createSingleDoc($page);
-		}
-	}
+    public function createDocumentation()
+    {
+        foreach ($this->pageList->getPages() as $page) {
+            $this->createSingleDoc($page);
+        }
+    }
 
-	private function createSingleDoc($page)
-	{
-		$this->view->addApi($this->documentationApiBuilder->buildApi($page));
-		$this->view->setFilename($this->filenameCreator->createFilename($page));
-		$this->view->render();
-	}
+    private function createSingleDoc($page)
+    {
+        $this->view->addApi($this->documentationApiBuilder->buildApi($page));
+        $this->view->setFilename($this->filenameCreator->createFilename($page));
+        $this->view->render();
+    }
 }

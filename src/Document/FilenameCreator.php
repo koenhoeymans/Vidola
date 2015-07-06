@@ -10,11 +10,11 @@ namespace Vidola\Document;
  */
 interface FilenameCreator
 {
-	/**
-	 * Create a filename for storing a page.
-	 * 
-	 * @param Page $page
-	 * @return string
-	 */
-	public function createFilename(Page $page);
+    /**
+     * Create a filename for storing a page.
+     *
+     * @param  Page   $page
+     * @return string
+     */
+    public function createFilename(Page $page);
 }

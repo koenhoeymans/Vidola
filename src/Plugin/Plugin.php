@@ -10,5 +10,5 @@ namespace Vidola\Plugin;
  */
 abstract class Plugin
 {
-	abstract public function register(EventMapper $mapper);
+    abstract public function register(EventMapper $mapper);
 }

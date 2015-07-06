@@ -3,22 +3,21 @@
 error_reporting(-1);
 
 require_once __DIR__
-	. DIRECTORY_SEPARATOR . '..'
-	. DIRECTORY_SEPARATOR . 'Vidola'
-	. DIRECTORY_SEPARATOR . 'Autoload.php';
+    .DIRECTORY_SEPARATOR.'..'
+    .DIRECTORY_SEPARATOR.'Vidola'
+    .DIRECTORY_SEPARATOR.'Autoload.php';
 
 function Vidola_UnitTests_Autoload($className)
 {
-	$classNameFile = __DIR__
-		. DIRECTORY_SEPARATOR . '..'
-		. DIRECTORY_SEPARATOR . '..'
-		. DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className)
-		. '.php';
+    $classNameFile = __DIR__
+        .DIRECTORY_SEPARATOR.'..'
+        .DIRECTORY_SEPARATOR.'..'
+        .DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $className)
+        .'.php';
 
-	if (file_exists($classNameFile))
-	{
-		require_once $classNameFile;
-	}
+    if (file_exists($classNameFile)) {
+        require_once $classNameFile;
+    }
 }
 
 spl_autoload_register('Vidola_UnitTests_Autoload');

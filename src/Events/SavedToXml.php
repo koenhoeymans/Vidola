@@ -12,20 +12,20 @@ use Vidola\Plugin\Event;
  */
 class SavedToXml implements Event
 {
-	private $xml;
+    private $xml;
 
-	public function __construct($xml)
-	{
-		$this->xml = $xml;
-	}
+    public function __construct($xml)
+    {
+        $this->xml = $xml;
+    }
 
-	public function getXmlString()
-	{
-		return $this->xml;
-	}
+    public function getXmlString()
+    {
+        return $this->xml;
+    }
 
-	public function setXmlString($xml)
-	{
-		$this->xml = $xml;
-	}
+    public function setXmlString($xml)
+    {
+        $this->xml = $xml;
+    }
 }

@@ -10,5 +10,5 @@ namespace Vidola\Plugin;
  */
 interface Observable
 {
-	public function addObserver(Observer $observer);
+    public function addObserver(Observer $observer);
 }

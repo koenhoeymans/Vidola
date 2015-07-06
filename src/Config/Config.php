@@ -10,5 +10,5 @@ namespace Vidola\Config;
  */
 interface Config
 {
-	public function get($name);
+    public function get($name);
 }

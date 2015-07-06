@@ -13,20 +13,20 @@ use Vidola\Util\FileCopy;
  */
 class FileCopyController
 {
-	private $fileCopy;
+    private $fileCopy;
 
-	public function __construct(FileCopy $fileCopy)
-	{
-		$this->fileCopy = $fileCopy;
-	}
+    public function __construct(FileCopy $fileCopy)
+    {
+        $this->fileCopy = $fileCopy;
+    }
 
-	public function copyFiles(CommandLineConfig $config)
-	{
-		$this->fileCopy->copy(
-			dirname($config->getTemplate()),
-			$config->getTargetDir(),
-			$config->getCopyExcludedFiles(),
-			$config->getCopyIncludedFiles()
-		);
-	}
+    public function copyFiles(CommandLineConfig $config)
+    {
+        $this->fileCopy->copy(
+            dirname($config->getTemplate()),
+            $config->getTargetDir(),
+            $config->getCopyExcludedFiles(),
+            $config->getCopyIncludedFiles()
+        );
+    }
 }

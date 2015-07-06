@@ -10,11 +10,11 @@ namespace Vidola\Util;
  */
 interface TitleCreator
 {
-	/**
-	 * Detects what the title is based on a given text.
-	 * 
-	 * @param string $text
-	 * @param string $file
-	 */
-	public function createPageTitle($text, $file);
+    /**
+     * Detects what the title is based on a given text.
+     *
+     * @param string $text
+     * @param string $file
+     */
+    public function createPageTitle($text, $file);
 }

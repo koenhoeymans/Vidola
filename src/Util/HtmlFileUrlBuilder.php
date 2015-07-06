@@ -5,59 +5,53 @@
  */
 namespace Vidola\Util;
 
-use Vidola\Util\RelativeInternalUrlBuilder;
 
 /**
  * @package Vidola
  */
 class HtmlFileUrlBuilder implements RelativeInternalUrlBuilder
 {
-	public function urlTo($resource)
-	{
-		return $this->urlToFrom($resource, null);
-	}
+    public function urlTo($resource)
+    {
+        return $this->urlToFrom($resource, null);
+    }
 
-	/**
-	 * @see Vidola\Util.RelativeInternalUrlBuilder::urlToFrom()
-	 */
-	public function urlToFrom($to, $relativeTo = null)
-	{
-		$numberSignPos = strpos($to, "#");
+    /**
+     * @see Vidola\Util.RelativeInternalUrlBuilder::urlToFrom()
+     */
+    public function urlToFrom($to, $relativeTo = null)
+    {
+        $numberSignPos = strpos($to, "#");
 
-		if ($numberSignPos === false)
-		{
-			$filePart = $to;
-			$relPart = '';
-		}
-		else
-		{
-			$filePart = substr($to, 0, $numberSignPos);
-			$relPart = substr($to, $numberSignPos);
-		}
+        if ($numberSignPos === false) {
+            $filePart = $to;
+            $relPart = '';
+        } else {
+            $filePart = substr($to, 0, $numberSignPos);
+            $relPart = substr($to, $numberSignPos);
+        }
 
-		$levelsUp = $this->howManyLevelsDeep($relativeTo);
-		while ($levelsUp>0)
-		{
-			$filePart = '../' . $filePart;
-			$levelsUp--;
-		}
+        $levelsUp = $this->howManyLevelsDeep($relativeTo);
+        while ($levelsUp>0) {
+            $filePart = '../'.$filePart;
+            $levelsUp--;
+        }
 
-		$info = pathinfo($filePart);
-		if (!isset($info['extension']))
-		{
-			$filePart = $this->addExtension($filePart);
-		}
+        $info = pathinfo($filePart);
+        if (!isset($info['extension'])) {
+            $filePart = $this->addExtension($filePart);
+        }
 
-		return $filePart . $relPart;
-	}
+        return $filePart.$relPart;
+    }
 
-	private function howManyLevelsDeep($resource)
-	{
-		return count(explode(DIRECTORY_SEPARATOR, $resource)) -1;
-	}
+    private function howManyLevelsDeep($resource)
+    {
+        return count(explode(DIRECTORY_SEPARATOR, $resource)) -1;
+    }
 
-	private function addExtension($resource)
-	{
-		return $resource . '.html';
-	}
+    private function addExtension($resource)
+    {
+        return $resource.'.html';
+    }
 }

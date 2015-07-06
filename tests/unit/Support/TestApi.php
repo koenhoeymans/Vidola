@@ -4,20 +4,20 @@ namespace Vidola\UnitTests\Support;
 
 class TestApi implements \Vidola\View\ViewApi
 {
-	private $vars = array();
+    private $vars = array();
 
-	public function getName()
-	{
-		return 'testApi';
-	}
+    public function getName()
+    {
+        return 'testApi';
+    }
 
-	public function set($name, $value)
-	{
-		$this->vars[$name] = $value;
-	}
+    public function set($name, $value)
+    {
+        $this->vars[$name] = $value;
+    }
 
-	public function get($name)
-	{
-		return $this->vars[$name];
-	}
+    public function get($name)
+    {
+        return $this->vars[$name];
+    }
 }

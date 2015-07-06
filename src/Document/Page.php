@@ -10,31 +10,31 @@ namespace Vidola\Document;
  */
 class Page implements Linkable
 {
-	private $url;
+    private $url;
 
-	private $rawContent;
+    private $rawContent;
 
-	public function __construct($url, $rawContent)
-	{
-		$this->url = $url;
-		$this->rawContent = $rawContent;
-	}
+    public function __construct($url, $rawContent)
+    {
+        $this->url = $url;
+        $this->rawContent = $rawContent;
+    }
 
-	/**
-	 * @see Vidola\Document.Resource::getUrl()
-	 */
-	public function getUrl()
-	{
-		return $this->url;
-	}
+    /**
+     * @see Vidola\Document.Resource::getUrl()
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
 
-	/**
-	 * Get content as in file.
-	 *
-	 * @return string
-	 */
-	public function getRawContent()
-	{
-		return $this->rawContent;
-	}
+    /**
+     * Get content as in file.
+     *
+     * @return string
+     */
+    public function getRawContent()
+    {
+        return $this->rawContent;
+    }
 }

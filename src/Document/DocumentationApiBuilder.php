@@ -10,9 +10,9 @@ namespace Vidola\Document;
  */
 interface DocumentationApiBuilder
 {
-	/**
-	 * @param Page $page
-	 * @return Vidola\View\ViewApi
-	 */
-	public function buildApi(Page $page);
+    /**
+     * @param  Page                $page
+     * @return Vidola\View\ViewApi
+     */
+    public function buildApi(Page $page);
 }

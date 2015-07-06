@@ -13,47 +13,45 @@ use Vidola\Pattern\Patterns\TableOfContents;
 
 class PageListFiller
 {
-	private $contentRetriever;
+    private $contentRetriever;
 
-	private $toc;
+    private $toc;
 
-	private $pages = array();
+    private $pages = array();
 
-	public function __construct(ContentRetriever $contentRetriever, TableOfContents $toc)
-	{
-		$this->contentRetriever = $contentRetriever;
-		$this->toc = $toc;
-	}
+    public function __construct(ContentRetriever $contentRetriever, TableOfContents $toc)
+    {
+        $this->contentRetriever = $contentRetriever;
+        $this->toc = $toc;
+    }
 
-	public function fill(PageList $pageList, $startPageName)
-	{
-		if (in_array($startPageName, $this->pages))
-		{
-			return;
-		}
+    public function fill(PageList $pageList, $startPageName)
+    {
+        if (in_array($startPageName, $this->pages)) {
+            return;
+        }
 
-		$text = $this->contentRetriever->retrieve($startPageName);
-		$page = $this->createPage($startPageName, $text);
+        $text = $this->contentRetriever->retrieve($startPageName);
+        $page = $this->createPage($startPageName, $text);
 
-		$pageList->add($page);
+        $pageList->add($page);
 
-		$this->fillRecursively($pageList, $page, $this->toc->getSubpages($text));
-	}
+        $this->fillRecursively($pageList, $page, $this->toc->getSubpages($text));
+    }
 
-	private function fillRecursively(PageList $pageList, Page $page, array $subpageNames)
-	{
-		foreach ($subpageNames as $subpageName)
-		{
-			$text = $this->contentRetriever->retrieve($subpageName);
-			$subpage = $this->createPage($subpageName, $text);
-			$pageList->add($subpage, $page);
+    private function fillRecursively(PageList $pageList, Page $page, array $subpageNames)
+    {
+        foreach ($subpageNames as $subpageName) {
+            $text = $this->contentRetriever->retrieve($subpageName);
+            $subpage = $this->createPage($subpageName, $text);
+            $pageList->add($subpage, $page);
 
-			$this->fillRecursively($pageList, $subpage, $this->toc->getSubpages($text));
-		}
-	}
+            $this->fillRecursively($pageList, $subpage, $this->toc->getSubpages($text));
+        }
+    }
 
-	private function createPage($name, $text)
-	{
-		return new \Vidola\Document\Page($name, $text);
-	}
+    private function createPage($name, $text)
+    {
+        return new \Vidola\Document\Page($name, $text);
+    }
 }

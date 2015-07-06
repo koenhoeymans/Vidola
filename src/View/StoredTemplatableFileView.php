@@ -5,155 +5,150 @@
  */
 namespace Vidola\View;
 
-use Vidola\View\TemplatableFileView;
-use Vidola\View\ViewApi;
 
 /**
  * @package Vidola
- * 
+ *
  * Writes content of a template to a file.
  */
 class StoredTemplatableFileView implements TemplatableFileView
 {
-	private $api = array();
+    private $api = array();
 
-	private $outputDir;
+    private $outputDir;
 
-	private $template;
+    private $template;
 
-	private $filename;
+    private $filename;
 
-	private $extension = '';
+    private $extension = '';
 
-	/**
-	 * Set output directory to write files to. The default value used is
-	 * the system temp dir.
-	 *
-	 * @param string $dir
-	 */
-	public function setOutputDir($dir)
-	{
-		$this->outputDir = $dir;
-	}
+    /**
+     * Set output directory to write files to. The default value used is
+     * the system temp dir.
+     *
+     * @param string $dir
+     */
+    public function setOutputDir($dir)
+    {
+        $this->outputDir = $dir;
+    }
 
-	private function getOutputDir()
-	{
-		if (isset($this->outputDir))
-		{
-			return $this->outputDir; 
-		}
-		return sys_get_temp_dir();
-	}
+    private function getOutputDir()
+    {
+        if (isset($this->outputDir)) {
+            return $this->outputDir;
+        }
 
-	/**
-	 * The name of the file, without directory and extension.
-	 * 
-	 * @param string $name
-	 */
-	public function setFilename($name)
-	{
-		$this->filename = $name;
-	}
+        return sys_get_temp_dir();
+    }
 
-	private function getFilename()
-	{
-		if (isset($this->filename))
-		{
-			return $this->filename;
-		}
-		return 'index';
-	}
+    /**
+     * The name of the file, without directory and extension.
+     *
+     * @param string $name
+     */
+    public function setFilename($name)
+    {
+        $this->filename = $name;
+    }
 
-	/**
-	 * The file extension, without a `.`.
-	 * 
-	 * @param string $ext
-	 */
-	public function setFileExtension($ext)
-	{
-		$this->extension = $ext;
-	}
+    private function getFilename()
+    {
+        if (isset($this->filename)) {
+            return $this->filename;
+        }
 
-	private function getFileExtension()
-	{
-		return $this->extension;
-	}
+        return 'index';
+    }
 
-	/**
-	 * Adds an API the view can use.
-	 * 
-	 * @param ViewApi $api
-	 */
-	public function addApi(ViewApi $api)
-	{
-		$this->api[$api->getName()] = $api;
-	}
+    /**
+     * The file extension, without a `.`.
+     *
+     * @param string $ext
+     */
+    public function setFileExtension($ext)
+    {
+        $this->extension = $ext;
+    }
 
-	/**
-	 * Render the view.
-	 */
-	public function render()
- 	{
-		extract($this->api);
-		ob_start();
-		require($this->getTemplate());
-		$output = ob_get_clean();
+    private function getFileExtension()
+    {
+        return $this->extension;
+    }
 
-		$this->write($output);
-	}
+    /**
+     * Adds an API the view can use.
+     *
+     * @param ViewApi $api
+     */
+    public function addApi(ViewApi $api)
+    {
+        $this->api[$api->getName()] = $api;
+    }
 
-	/**
-	 * Set the template to use. Full path.
-	 * 
-	 * @param string $template
-	 */
-	public function setTemplate($template)
-	{
-		$this->template = $template;
-	}
+    /**
+     * Render the view.
+     */
+    public function render()
+    {
+        extract($this->api);
+        ob_start();
+        require $this->getTemplate();
+        $output = ob_get_clean();
 
-	private function getTemplate()
-	{
-		if (isset($this->template))
-		{
-			return $this->template;
-		}
-		return __DIR__
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . 'Templates'
-			. DIRECTORY_SEPARATOR . 'Default'
-			. DIRECTORY_SEPARATOR . 'Index.php';
-	}
+        $this->write($output);
+    }
 
-	private function write($text)
-	{
-		$filename = $this->getFilename();
+    /**
+     * Set the template to use. Full path.
+     *
+     * @param string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
 
-		$dir = $this->getOutputDir() . DIRECTORY_SEPARATOR . substr(
-			$filename, 0, strrpos($filename, DIRECTORY_SEPARATOR)
-		);
-		$filename = substr($filename, strrpos($filename, DIRECTORY_SEPARATOR));
+    private function getTemplate()
+    {
+        if (isset($this->template)) {
+            return $this->template;
+        }
 
-		if (!is_dir($dir))
-		{
-			mkdir($dir);
-		}
+        return __DIR__
+            .DIRECTORY_SEPARATOR.'..'
+            .DIRECTORY_SEPARATOR.'..'
+            .DIRECTORY_SEPARATOR.'Templates'
+            .DIRECTORY_SEPARATOR.'Default'
+            .DIRECTORY_SEPARATOR.'Index.php';
+    }
 
-		$file = $dir . $filename . '.' . $this->extension;
+    private function write($text)
+    {
+        $filename = $this->getFilename();
 
-		$fileHandle = fopen($file, 'w');
+        $dir = $this->getOutputDir().DIRECTORY_SEPARATOR.substr(
+            $filename, 0, strrpos($filename, DIRECTORY_SEPARATOR)
+        );
+        $filename = substr($filename, strrpos($filename, DIRECTORY_SEPARATOR));
 
-		if (!$fileHandle)
-		{
-			throw new \Exception('Writer::write() was unable to open ' . $file);
-		}
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
 
-		if(fwrite($fileHandle, $text) === false)
-		{
-			throw new \Exception('Writer::write() was unable to write to ' . $file);
-		}
+        $file = $dir.$filename.'.'.$this->extension;
 
-		fclose($fileHandle);
-	}
+        $fileHandle = fopen($file, 'w');
+
+        if (!$fileHandle) {
+            throw new \Exception('Writer::write() was unable to open '.$file);
+        }
+
+        if (fwrite($fileHandle, $text) === false) {
+            throw new \Exception('Writer::write() was unable to write to '.$file);
+        }
+
+        fclose($fileHandle);
+    }
 }

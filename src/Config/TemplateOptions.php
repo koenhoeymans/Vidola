@@ -10,11 +10,11 @@ namespace Vidola\Config;
  */
 interface TemplateOptions
 {
-	public function getTemplate();
+    public function getTemplate();
 
-	public function getCopyIncludedFiles();
+    public function getCopyIncludedFiles();
 
-	public function getCopyExcludedFiles();
+    public function getCopyExcludedFiles();
 
-	public function getTargetDir();
+    public function getTargetDir();
 }

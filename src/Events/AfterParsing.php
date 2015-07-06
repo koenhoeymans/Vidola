@@ -13,15 +13,15 @@ use ElementTree\ElementTree;
  */
 class AfterParsing implements Event
 {
-	private $parsedText;
+    private $parsedText;
 
-	public function __construct(ElementTree $parsedText)
-	{
-		$this->parsedText = $parsedText;
-	}
+    public function __construct(ElementTree $parsedText)
+    {
+        $this->parsedText = $parsedText;
+    }
 
-	public function getParsedText()
-	{
-		return $this->parsedText;
-	}
+    public function getParsedText()
+    {
+        return $this->parsedText;
+    }
 }

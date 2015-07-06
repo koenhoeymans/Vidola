@@ -1,88 +1,88 @@
 <?php
 
 require_once dirname(__FILE__)
-	. DIRECTORY_SEPARATOR . '..'
-	. DIRECTORY_SEPARATOR . 'TestHelper.php';
+    .DIRECTORY_SEPARATOR.'..'
+    .DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class Vidola_Config_CommandLineConfigTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @test
-	 */
-	public function readsConfigFromCommandLine()
-	{
-		// given
-		$_SERVER['argv']['foo'] = 'bar';
-		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+    /**
+     * @test
+     */
+    public function readsConfigFromCommandLine()
+    {
+        // given
+        $_SERVER['argv']['foo'] = 'bar';
+        $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
-		// when
-		$configOption = $config->get('foo');
+        // when
+        $configOption = $config->get('foo');
 
-		// then
-		$this->assertEquals('bar', $configOption);
-	}
+        // then
+        $this->assertEquals('bar', $configOption);
+    }
 
-	/**
-	 * @test
-	 */
-	public function acceptsFileWithArrayWithKeys()
-	{
-		// given
-		$_SERVER['argv'][1] = __DIR__
-				. DIRECTORY_SEPARATOR . '..'
-				. DIRECTORY_SEPARATOR . 'Support'
-				. DIRECTORY_SEPARATOR . 'Config.php';
-		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+    /**
+     * @test
+     */
+    public function acceptsFileWithArrayWithKeys()
+    {
+        // given
+        $_SERVER['argv'][1] = __DIR__
+                .DIRECTORY_SEPARATOR.'..'
+                .DIRECTORY_SEPARATOR.'Support'
+                .DIRECTORY_SEPARATOR.'Config.php';
+        $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
-		// when
-		$configOption = $config->get('foo');
+        // when
+        $configOption = $config->get('foo');
 
-		// then
-		$this->assertEquals('bar', $configOption);
-	}
+        // then
+        $this->assertEquals('bar', $configOption);
+    }
 
-	/**
-	 * @test
-	 */
-	public function getsTemplate()
-	{
-		$template = '/home/Koen/Vidola/Templates/Default.php';
-		$_SERVER['argv']['template'] = $template;
-		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+    /**
+     * @test
+     */
+    public function getsTemplate()
+    {
+        $template = '/home/Koen/Vidola/Templates/Default.php';
+        $_SERVER['argv']['template'] = $template;
+        $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
-		$this->assertEquals($template, $config->getTemplate());
-	}
+        $this->assertEquals($template, $config->getTemplate());
+    }
 
-	/**
-	 * @test
-	 */
-	public function getsCopyIncludedFiles()
-	{
-		$_SERVER['argv']['copy-include'] = 'file';
-		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+    /**
+     * @test
+     */
+    public function getsCopyIncludedFiles()
+    {
+        $_SERVER['argv']['copy-include'] = 'file';
+        $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
-		$this->assertEquals(array('file'), $config->getCopyIncludedFiles());
-	}
+        $this->assertEquals(array('file'), $config->getCopyIncludedFiles());
+    }
 
-	/**
-	 * @test
-	 */
-	public function getsCopyExcludedFiles()
-	{
-		$_SERVER['argv']['copy-exclude'] = 'file';
-		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+    /**
+     * @test
+     */
+    public function getsCopyExcludedFiles()
+    {
+        $_SERVER['argv']['copy-exclude'] = 'file';
+        $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
-		$this->assertEquals(array('file'), $config->getCopyExcludedFiles());
-	}
+        $this->assertEquals(array('file'), $config->getCopyExcludedFiles());
+    }
 
-	/**
-	 * @test
-	 */
-	public function getsTargetDir()
-	{
-		$_SERVER['argv']['target-dir'] = '/tmp';
-		$config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
+    /**
+     * @test
+     */
+    public function getsTargetDir()
+    {
+        $_SERVER['argv']['target-dir'] = '/tmp';
+        $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
-		$this->assertEquals('/tmp', $config->getTargetDir());
-	}
+        $this->assertEquals('/tmp', $config->getTargetDir());
+    }
 }
