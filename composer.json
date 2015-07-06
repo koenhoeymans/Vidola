@@ -17,6 +17,6 @@
 		"phpunit/phpunit": "*"
 	},
 	"autoload": {
-		"psr-0": { "Vidola": "/" }
+		"psr-4": { "Vidola\\": ["src/", "tests/unit", "tests/e2e", "tests/support"] }
 	}
 }
