@@ -1,6 +1,6 @@
 <?php
 
-namespace Vidola\UnitTests\Support;
+namespace Vidola;
 
 abstract class PatternReplacementAssertions extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,8 @@ abstract class PatternReplacementAssertions extends \PHPUnit_Framework_TestCase
             return;
         }
         $result = $this->getPattern()->handleMatch(
-            $match, $this->elementTree()->createElement('foo')
+            $match,
+            $this->elementTree()->createElement('foo')
         );
 
         return $result;
