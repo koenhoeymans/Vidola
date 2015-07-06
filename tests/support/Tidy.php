@@ -1,6 +1,6 @@
 <?php
 
-namespace Vidola\EndToEndTests\Support;
+namespace Vidola;
 
 class Tidy extends \PHPUnit_Framework_TestCase
 {

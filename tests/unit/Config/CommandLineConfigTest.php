@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Config;
 
-class Vidola_Config_CommandLineConfigTest extends PHPUnit_Framework_TestCase
+class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

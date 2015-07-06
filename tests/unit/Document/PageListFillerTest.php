@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Document;
 
-class Vidola_Document_PageListFillerTest extends PHPUnit_Framework_TestCase
+class PageListFillerTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
@@ -15,7 +13,8 @@ class Vidola_Document_PageListFillerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->filler = new \Vidola\Document\PageListFiller(
-            $this->contentRetriever, $this->toc
+            $this->contentRetriever,
+            $this->toc
         );
         $this->pageList = $this->getMock('\\Vidola\\Document\\PageList');
     }

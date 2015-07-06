@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Util;
 
-class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
+class HtmlFileBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
@@ -32,8 +30,10 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
      */
     public function keepsHierarchy()
     {
-        $this->assertEquals('subfolder/index.html',
-        $this->urlBuilder->urlToFrom('subfolder/index'));
+        $this->assertEquals(
+            'subfolder/index.html',
+            $this->urlBuilder->urlToFrom('subfolder/index')
+        );
     }
 
     /**
@@ -42,7 +42,8 @@ class Vidola_Util_HtmlFileBuilderTest extends PHPUnit_Framework_TestCase
     public function createsLinkRelativeToGivenFile()
     {
         $this->assertEquals(
-            '../file.html', $this->urlBuilder->urlToFrom('file', 'subfolder/subfile')
+            '../file.html',
+            $this->urlBuilder->urlToFrom('file', 'subfolder/subfile')
         );
     }
 

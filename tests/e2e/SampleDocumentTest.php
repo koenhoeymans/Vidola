@@ -1,8 +1,8 @@
 <?php
 
-require_once 'TestHelper.php';
+namespace Vidola;
 
-class Vidola_EndToEndTests_SampleDocumentTest extends \Vidola\EndToEndTests\Support\Tidy
+class SampleDocumentTest extends \Vidola\Support\Tidy
 {
     public function setup()
     {

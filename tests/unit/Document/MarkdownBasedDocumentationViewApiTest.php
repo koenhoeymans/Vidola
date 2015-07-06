@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Document;
 
-class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Framework_TestCase
+class MarkdownBasedDocumentationViewApiTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
@@ -53,7 +51,8 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
             ->will($this->returnValue('url'));
 
         $this->assertEquals(
-            'url', $this->api->getPageUrl(new \Vidola\Document\Page('foo', 'bar'))
+            'url',
+            $this->api->getPageUrl(new \Vidola\Document\Page('foo', 'bar'))
         );
     }
 
@@ -76,7 +75,8 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
             ->will($this->returnValue('url'));
 
         $this->assertEquals(
-            'url', $this->api->previousPageUrl(new \Vidola\Document\Page('foo', 'bar'))
+            'url',
+            $this->api->previousPageUrl(new \Vidola\Document\Page('foo', 'bar'))
         );
     }
 
@@ -99,7 +99,8 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
             ->will($this->returnValue('url'));
 
         $this->assertEquals(
-            'url', $this->api->nextPageUrl(new \Vidola\Document\Page('foo', 'bar'))
+            'url',
+            $this->api->nextPageUrl(new \Vidola\Document\Page('foo', 'bar'))
         );
     }
 
@@ -121,7 +122,8 @@ class Vidola_Document_MarkdownBasedDocumentationViewApiTest extends PHPUnit_Fram
             ->will($this->returnValue('url'));
 
         $this->assertEquals(
-            'url', $this->api->startPageUrl(new \Vidola\Document\Page('foo', 'bar'))
+            'url',
+            $this->api->startPageUrl(new \Vidola\Document\Page('foo', 'bar'))
         );
     }
 

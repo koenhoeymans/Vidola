@@ -1,11 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Pattern\Pattern;
 
-class Vidola_Pattern_Patterns_TableOfContentsTest extends \Vidola\UnitTests\Support\PatternReplacementAssertions
+class TableOfContentsTest extends \Vidola\Support\PatternReplacementAssertions
 {
     public function setup()
     {
@@ -48,9 +45,13 @@ paragraph";
         $this->headerFinder
             ->expects($this->any())
             ->method('getHeadersSequentially')
-            ->will($this->returnValue(array(
-                array('title' => 'header', 'level' => 1, 'id' => 'header'), )
-            ));
+            ->will(
+                $this->returnValue(
+                    array(
+                        array('title' => 'header', 'level' => 1, 'id' => 'header')
+                    )
+                )
+            );
 
         $ul = $this->elementTree()->createElement('ul');
         $li = $ul->createElement('li');
@@ -170,8 +171,7 @@ paragraph";
      */
     public function tocIsLimitedToItsSectionDeterminedByHeaderLevel()
     {
-        $text =
-"header
+        $text = "header
 ---
 
 paragraph
@@ -207,8 +207,7 @@ paragraph";
      */
     public function tocOfSectionStopsAtSectionWithHigherLevelHeader()
     {
-        $text =
-"header
+        $text = "header
 ---
 
 paragraph
@@ -250,8 +249,7 @@ paragraph";
      */
     public function depthOptionLimitsDepthOfToc()
     {
-        $text =
-"{table of contents}
+        $text = "{table of contents}
 	depth: 1
 
 header
@@ -289,8 +287,7 @@ paragraph";
      */
     public function addingFileNameIncludesHeadersFromThatFileAfterCurrentDocumentHeaders()
     {
-        $text =
-"{table of contents}
+        $text = "{table of contents}
 
 	Includedfile
 
@@ -315,12 +312,12 @@ paragraph";
             ->expects($this->any())
             ->method('retrieve')
             ->with('Includedfile')
-            ->will($this->returnValue(
-"included header
+            ->will(
+                $this->returnValue("included header
 ----
 
-some text"
-            ));
+some text")
+            );
 
         $this->internalUrlBuilder
             ->expects($this->atLeastOnce())
@@ -351,8 +348,7 @@ some text"
      */
     public function firstEncounteredHeaderInCurrentDocumentDeterminesHighestLevel()
     {
-        $text =
-"level1
+        $text = "level1
 ===
 
 {table of contents}
@@ -380,12 +376,12 @@ paragraph";
             ->expects($this->any())
             ->method('retrieve')
             ->with('Includedfile')
-            ->will($this->returnValue(
-"level3
+            ->will(
+                $this->returnValue("level3
 +++
 
-some text"
-            ));
+some text")
+            );
 
         $this->internalUrlBuilder
             ->expects($this->atLeastOnce())
@@ -421,8 +417,7 @@ some text"
      */
     public function moreThanOneFileCanBeSpecified()
     {
-        $text =
-"{table of contents}
+        $text = "{table of contents}
 
 	Includedfile1
 	Includedfile2
@@ -449,22 +444,22 @@ paragraph";
             ->expects($this->at(0))
             ->method('retrieve')
             ->with('Includedfile1')
-            ->will($this->returnValue(
-"level1a
+            ->will(
+                $this->returnValue("level1a
 +++
 
-some text"
-            ));
+some text")
+            );
         $this->docFileRetriever
             ->expects($this->at(1))
             ->method('retrieve')
             ->with('Includedfile2')
-            ->will($this->returnValue(
-"level1b
+            ->will(
+                $this->returnValue("level1b
 +++
 
-some text"
-            ));
+some text")
+            );
 
         $this->internalUrlBuilder
             ->expects($this->at(0))
@@ -499,8 +494,7 @@ some text"
      */
     public function usesTocOfIncludedFiles()
     {
-        $text =
-"{table of contents}
+        $text = "{table of contents}
 
 	Includedfile
 
@@ -524,23 +518,23 @@ paragraph";
             ->expects($this->at(0))
             ->method('retrieve')
             ->with('Includedfile')
-            ->will($this->returnValue(
-"{table of contents}
+            ->will(
+                $this->returnValue("{table of contents}
 
 	Subincludedfile
 
-paragraph"
-            ));
+paragraph")
+            );
         $this->docFileRetriever
             ->expects($this->at(1))
             ->method('retrieve')
             ->with('Subincludedfile')
-            ->will($this->returnValue(
-"header
+            ->will(
+                $this->returnValue("header
 ---
 
-some text"
-            ));
+some text")
+            );
 
         $this->internalUrlBuilder
             ->expects($this->atLeastOnce())
@@ -574,9 +568,13 @@ paragraph";
         $this->headerFinder
             ->expects($this->any())
             ->method('getHeadersSequentially')
-            ->will($this->returnValue(array(
-                array('title' => 'header', 'level' => 1, 'id' => 'xyz'), )
-            ));
+            ->will(
+                $this->returnValue(
+                    array(
+                        array('title' => 'header', 'level' => 1, 'id' => 'xyz')
+                    )
+                )
+            );
 
         $ul = $this->elementTree()->createElement('ul');
 
@@ -628,7 +626,8 @@ paragraph";
         $a->setAttribute('href', '#header2');
 
         $this->assertEquals(
-            $toc, $this->toc->createToc($doc)
+            $toc,
+            $this->toc->createToc($doc)
         );
     }
 
@@ -661,7 +660,8 @@ paragraph";
         $a->setAttribute('href', '#header1');
 
         $this->assertEquals(
-            $toc, $this->toc->createToc($doc, $maxDepth)
+            $toc,
+            $this->toc->createToc($doc, $maxDepth)
         );
     }
 

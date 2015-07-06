@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Util;
 
-class Vidola_Util_HeaderBasedTitleCreatorTest extends PHPUnit_Framework_TestCase
+class HeaderBasedTitleCreatorTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
@@ -15,7 +13,8 @@ class Vidola_Util_HeaderBasedTitleCreatorTest extends PHPUnit_Framework_TestCase
             '\\Vidola\\Pattern\\Patterns\\TableOfContents'
         )->disableOriginalConstructor()->getMock();
         $this->titleCreator = new \Vidola\Util\HeaderBasedTitleCreator(
-            $this->headerFinder, $this->toc
+            $this->headerFinder,
+            $this->toc
         );
     }
 

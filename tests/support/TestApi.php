@@ -1,6 +1,6 @@
 <?php
 
-namespace Vidola\UnitTests\Support;
+namespace Vidola;
 
 class TestApi implements \Vidola\View\ViewApi
 {

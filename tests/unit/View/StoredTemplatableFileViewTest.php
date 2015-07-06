@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\View;
 
-class Vidola_View_StoredTemplatableFileViewTest extends PHPUnit_Framework_TestCase
+class StoredTemplatableFileViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

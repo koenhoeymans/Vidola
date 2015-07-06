@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Util;
 
-class Vidola_Util_FileCopyTest extends PHPUnit_Framework_TestCase
+class FileCopyTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
@@ -60,13 +58,13 @@ class Vidola_Util_FileCopyTest extends PHPUnit_Framework_TestCase
     {
         $this->removeFile(
             sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR.'SubDir'
+            . DIRECTORY_SEPARATOR.'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR.'SubDir'
+            . DIRECTORY_SEPARATOR.'File2.php'
         );
         $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
 

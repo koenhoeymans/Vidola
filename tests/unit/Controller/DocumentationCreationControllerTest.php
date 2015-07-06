@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Controller;
 
-class Vidola_Controller_DocumentationCreationControllerTest extends PHPUnit_Framework_TestCase
+class DocumentationCreationControllerTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {

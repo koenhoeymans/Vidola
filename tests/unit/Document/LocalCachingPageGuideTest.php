@@ -1,10 +1,8 @@
 <?php
 
-require_once dirname(__FILE__)
-    .DIRECTORY_SEPARATOR.'..'
-    .DIRECTORY_SEPARATOR.'TestHelper.php';
+namespace Vidola\Document;
 
-class Vidola_Document_LocalCachingPageGuideTest extends PHPUnit_Framework_TestCase
+class LocalCachingPageGuideTest extends \PHPUnit_Framework_TestCase
 {
     private function createDom($string)
     {
