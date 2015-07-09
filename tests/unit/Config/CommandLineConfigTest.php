@@ -27,9 +27,10 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
     {
         // given
         $_SERVER['argv'][1] = __DIR__
-                .DIRECTORY_SEPARATOR.'..'
-                .DIRECTORY_SEPARATOR.'Support'
-                .DIRECTORY_SEPARATOR.'Config.php';
+                . DIRECTORY_SEPARATOR .'..'
+                . DIRECTORY_SEPARATOR .'..'
+                . DIRECTORY_SEPARATOR .'support'
+                . DIRECTORY_SEPARATOR .'Config.php';
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         // when
@@ -44,7 +45,12 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function getsTemplate()
     {
-        $template = '/home/Koen/Vidola/Templates/Default.php';
+        $template = __DIR__
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'BuildFileTemplate'
+            . DIRECTORY_SEPARATOR . 'MiniTemplate.php';
         $_SERVER['argv']['template'] = $template;
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 

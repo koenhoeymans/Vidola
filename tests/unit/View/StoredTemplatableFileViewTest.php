@@ -9,19 +9,20 @@ class StoredTemplatableFileViewTest extends \PHPUnit_Framework_TestCase
      */
     public function rendersGivenTemplate()
     {
-        $target = sys_get_temp_dir().DIRECTORY_SEPARATOR.'foo.html';
+        $target = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'foo.html';
 
         if (file_exists($target)) {
             unlink($target);
         }
 
-        $api = new \Vidola\UnitTests\Support\TestApi();
+        $api = new \Vidola\TestApi();
         $api->set('name', 'bar');
 
         $template = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'Template.html';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'Template.html';
 
         $view = new \Vidola\View\StoredTemplatableFileView();
         $view->setTemplate($template);
@@ -41,10 +42,11 @@ class StoredTemplatableFileViewTest extends \PHPUnit_Framework_TestCase
     public function targetDirMustExist()
     {
         $template = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'Template.html';
-        $api = new \Vidola\UnitTests\Support\TestApi();
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'Template.html';
+        $api = new \Vidola\TestApi();
         $api->set('name', 'bar');
 
         $view = new \Vidola\View\StoredTemplatableFileView();

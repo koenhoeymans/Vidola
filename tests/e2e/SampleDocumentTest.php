@@ -2,19 +2,19 @@
 
 namespace Vidola;
 
-class SampleDocumentTest extends \Vidola\Support\Tidy
+class SampleDocumentTest extends \Vidola\Tidy
 {
     public function setup()
     {
-        $dir = sys_get_temp_dir().DIRECTORY_SEPARATOR;
-        if (file_exists($dir.'ParentDocumentSubfolderSubdocument.html')) {
-            unlink($dir.'ParentDocumentSubfolderSubdocument.html');
+        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
+        if (file_exists($dir . 'ParentDocumentSubfolderSubdocument.html')) {
+            unlink($dir . 'ParentDocumentSubfolderSubdocument.html');
         }
-        if (file_exists($dir.'NextDocument.html')) {
-            unlink($dir.'NextDocument.html');
+        if (file_exists($dir . 'NextDocument.html')) {
+            unlink($dir . 'NextDocument.html');
         }
-        if (file_exists($dir.'Subfolder'.DIRECTORY_SEPARATOR.'Subdocument.html')) {
-            unlink($dir.'Subfolder'.DIRECTORY_SEPARATOR.'Subdocument.html');
+        if (file_exists($dir . 'Subfolder' . DIRECTORY_SEPARATOR . 'Subdocument.html')) {
+            unlink($dir . 'Subfolder' . DIRECTORY_SEPARATOR . 'Subdocument.html');
         }
     }
 
@@ -31,13 +31,15 @@ class SampleDocumentTest extends \Vidola\Support\Tidy
         // given
         $bin = PHP_BINARY;
         $vidola = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Vidola'
-            .DIRECTORY_SEPARATOR.'RunVidola.php';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'src'
+            . DIRECTORY_SEPARATOR . 'RunVidola.php';
         $source = __DIR__
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'SampleDocument'
-            .DIRECTORY_SEPARATOR.'ParentDocumentSubfolderSubdocument.txt';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'SampleDocument'
+            . DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.txt';
         $targetDir = sys_get_temp_dir();
 
         // when
@@ -47,40 +49,43 @@ class SampleDocumentTest extends \Vidola\Support\Tidy
         $this->assertEquals(
             $this->tidy(file_get_contents(
                 __DIR__
-                .DIRECTORY_SEPARATOR.'Support'
-                .DIRECTORY_SEPARATOR.'SampleDocument'
-                .DIRECTORY_SEPARATOR.'Html'
-                .DIRECTORY_SEPARATOR.'ParentDocumentSubfolderSubdocument.html'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'support'
+                . DIRECTORY_SEPARATOR . 'SampleDocument'
+                . DIRECTORY_SEPARATOR . 'Html'
+                . DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
             )),
             $this->tidy(file_get_contents(
-                $targetDir.DIRECTORY_SEPARATOR.'ParentDocumentSubfolderSubdocument.html'
+                $targetDir . DIRECTORY_SEPARATOR . 'ParentDocumentSubfolderSubdocument.html'
             ))
         );
         $this->assertEquals(
             $this->tidy(file_get_contents(
                 __DIR__
-                .DIRECTORY_SEPARATOR.'Support'
-                .DIRECTORY_SEPARATOR.'SampleDocument'
-                .DIRECTORY_SEPARATOR.'Html'
-                .DIRECTORY_SEPARATOR.'NextDocument.html'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'support'
+                . DIRECTORY_SEPARATOR . 'SampleDocument'
+                . DIRECTORY_SEPARATOR . 'Html'
+                . DIRECTORY_SEPARATOR . 'NextDocument.html'
             )),
             $this->tidy(file_get_contents(
-                $targetDir.DIRECTORY_SEPARATOR.'NextDocument.html'
+                $targetDir . DIRECTORY_SEPARATOR . 'NextDocument.html'
             ))
         );
         $this->assertEquals(
             $this->tidy(file_get_contents(
                 __DIR__
-                .DIRECTORY_SEPARATOR.'Support'
-                .DIRECTORY_SEPARATOR.'SampleDocument'
-                .DIRECTORY_SEPARATOR.'Html'
-                .DIRECTORY_SEPARATOR.'Subfolder'
-                .DIRECTORY_SEPARATOR.'Subdocument.html'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'support'
+                . DIRECTORY_SEPARATOR . 'SampleDocument'
+                . DIRECTORY_SEPARATOR . 'Html'
+                . DIRECTORY_SEPARATOR . 'Subfolder'
+                . DIRECTORY_SEPARATOR . 'Subdocument.html'
             )),
             $this->tidy(file_get_contents(
                 $targetDir
-                .DIRECTORY_SEPARATOR.'Subfolder'
-                .DIRECTORY_SEPARATOR.'Subdocument.html'
+                . DIRECTORY_SEPARATOR . 'Subfolder'
+                . DIRECTORY_SEPARATOR . 'Subdocument.html'
             ))
         );
     }

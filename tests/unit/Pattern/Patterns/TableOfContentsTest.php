@@ -2,7 +2,7 @@
 
 namespace Vidola\Pattern\Pattern;
 
-class TableOfContentsTest extends \Vidola\Support\PatternReplacementAssertions
+class TableOfContentsTest extends \Vidola\PatternReplacementAssertions
 {
     public function setup()
     {

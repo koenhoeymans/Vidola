@@ -26,7 +26,7 @@ class CommandLineConfig implements Config, TemplateOptions
     {
         $options = array();
 
-        if (count($argv) === 2 && file_exists($argv[1])) {
+        if (count($argv) === 2 && isset($argv[1]) && file_exists($argv[1])) {
             $config = require $argv[1];
             $argv = array_merge($argv, $config);
         }
@@ -34,7 +34,6 @@ class CommandLineConfig implements Config, TemplateOptions
         foreach ($argv as $key => $value) {
             if (is_int($key) && substr($value, 0, 2) === '--') {
                 $keyValue = explode('=', $value);
-
                 $options[substr($keyValue[0], 2)] = $keyValue[1];
             } else {
                 $options[$key] = $value;

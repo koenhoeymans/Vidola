@@ -29,25 +29,26 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
     public function copiesWholeDirectoryToAnother()
     {
         $this->removeFile(
-            sys_get_temp_dir().DIRECTORY_SEPARATOR.'File.php'
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'File.php'
         );
 
         // given
         $sourceDir = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'OneFileDir';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'OneFileDir';
 
         // when
         $this->fileCopy->copy($sourceDir, sys_get_temp_dir());
 
         // then
         $this->assertTrue(
-            file_exists(sys_get_temp_dir().DIRECTORY_SEPARATOR.'File.php')
+            file_exists(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'File.php')
         );
 
         $this->removeFile(
-            sys_get_temp_dir().DIRECTORY_SEPARATOR.'File.php'
+            sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'File.php'
         );
     }
 
@@ -58,21 +59,22 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
     {
         $this->removeFile(
             sys_get_temp_dir()
-            . DIRECTORY_SEPARATOR.'SubDir'
-            . DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            . DIRECTORY_SEPARATOR.'SubDir'
-            . DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 
         // given
         $sourceDir = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir';
 
         // when
         $this->fileCopy->copy($sourceDir, sys_get_temp_dir());
@@ -81,29 +83,29 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File1.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File1.php'
             )
         );
         $this->assertTrue(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File2.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File2.php'
             )
         );
 
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir(). DIRECTORY_SEPARATOR . 'SubDir');
     }
 
     /**
@@ -113,27 +115,29 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
     {
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 
         // given
         $sourceDir = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir';
         $exclude = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir'
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php';
 
         // when
         $this->fileCopy->copy($sourceDir, sys_get_temp_dir(), $exclude);
@@ -142,29 +146,29 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File1.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File1.php'
             )
         );
         $this->assertFalse(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File2.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File2.php'
             )
         );
 
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
     }
 
     /**
@@ -174,34 +178,37 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
     {
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 
         // given
         $sourceDir = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir';
         $exclude = array(
             __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir'
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php',
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php',
             __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir'
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php',
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php',
         );
 
         // when
@@ -211,29 +218,29 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File1.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File1.php'
             )
         );
         $this->assertFalse(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File2.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File2.php'
             )
         );
 
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
     }
 
     /**
@@ -243,27 +250,29 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
     {
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 
         // given
         $sourceDir = __DIR__
-        .DIRECTORY_SEPARATOR.'..'
-        .DIRECTORY_SEPARATOR.'Support'
-        .DIRECTORY_SEPARATOR.'DirWithSubDir';
+        . DIRECTORY_SEPARATOR . '..'
+        . DIRECTORY_SEPARATOR . '..'
+        . DIRECTORY_SEPARATOR . 'support'
+        . DIRECTORY_SEPARATOR . 'DirWithSubDir';
         $exclude = array(
             __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir'
-            .DIRECTORY_SEPARATOR.'SubDir',
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir'
+            . DIRECTORY_SEPARATOR . 'SubDir',
         );
 
         // when
@@ -271,20 +280,20 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
 
         // then
         $this->assertFalse(
-            is_dir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir')
+            is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir')
         );
 
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir(). DIRECTORY_SEPARATOR . 'SubDir');
     }
 
     /**
@@ -294,32 +303,35 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
     {
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
 
         // given
         $sourceDir = __DIR__
-        .DIRECTORY_SEPARATOR.'..'
-        .DIRECTORY_SEPARATOR.'Support'
-        .DIRECTORY_SEPARATOR.'DirWithSubDir';
+        . DIRECTORY_SEPARATOR . '..'
+        . DIRECTORY_SEPARATOR . '..'
+        . DIRECTORY_SEPARATOR . 'support'
+        . DIRECTORY_SEPARATOR . 'DirWithSubDir';
         $exclude = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir'
-            .DIRECTORY_SEPARATOR.'SubDir';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir'
+            . DIRECTORY_SEPARATOR . 'SubDir';
         $include = __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Support'
-            .DIRECTORY_SEPARATOR.'DirWithSubDir'
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'support'
+            . DIRECTORY_SEPARATOR . 'DirWithSubDir'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php';
 
         // when
         $this->fileCopy->copy($sourceDir, sys_get_temp_dir(), $exclude, $include);
@@ -328,28 +340,28 @@ class FileCopyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File1.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File1.php'
             )
         );
         $this->assertFalse(
             file_exists(
                 sys_get_temp_dir()
-                .DIRECTORY_SEPARATOR.'SubDir'
-                .DIRECTORY_SEPARATOR.'File2.php'
+                . DIRECTORY_SEPARATOR . 'SubDir'
+                . DIRECTORY_SEPARATOR . 'File2.php'
             )
         );
 
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File1.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File1.php'
         );
         $this->removeFile(
             sys_get_temp_dir()
-            .DIRECTORY_SEPARATOR.'SubDir'
-            .DIRECTORY_SEPARATOR.'File2.php'
+            . DIRECTORY_SEPARATOR . 'SubDir'
+            . DIRECTORY_SEPARATOR . 'File2.php'
         );
-        $this->removeDir(sys_get_temp_dir().DIRECTORY_SEPARATOR.'SubDir');
+        $this->removeDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'SubDir');
     }
 }
