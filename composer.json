@@ -15,7 +15,8 @@
         "comparify/comparify": "*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "*"
+		"phpunit/phpunit": "*",
+        "qualitycheck/qualitycheck": "*"
 	},
 	"autoload": {
 		"psr-4": { "Vidola\\": ["src/", "tests/unit", "tests/e2e", "tests/support"] }
