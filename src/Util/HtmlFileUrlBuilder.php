@@ -5,7 +5,6 @@
  */
 namespace Vidola\Util;
 
-
 /**
  * @package Vidola
  */

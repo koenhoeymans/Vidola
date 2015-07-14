@@ -11,7 +11,10 @@ namespace Vidola\Util;
 class FileCopy
 {
     public function copy(
-        $sourceDirectory, $targetDirectory, $exclude = array(), $include = array()
+        $sourceDirectory,
+        $targetDirectory,
+        $exclude = array(),
+        $include = array()
     ) {
         $sourceDirectory = $this->normalize($sourceDirectory);
         $targetDirectory = $this->normalize($targetDirectory);
@@ -50,7 +53,10 @@ class FileCopy
     }
 
     public function recurseCopy(
-        $sourceDirectory, $targetDirectory, array $exclude, array $include
+        $sourceDirectory,
+        $targetDirectory,
+        array $exclude,
+        array $include
     ) {
         $dir = opendir($sourceDirectory);
         while (false !== ($file = readdir($dir))) {

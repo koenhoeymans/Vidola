@@ -5,7 +5,6 @@
  */
 namespace Vidola\View;
 
-
 /**
  * @package Vidola
  *
@@ -129,7 +128,9 @@ class StoredTemplatableFileView implements TemplatableFileView
         $filename = $this->getFilename();
 
         $dir = $this->getOutputDir().DIRECTORY_SEPARATOR.substr(
-            $filename, 0, strrpos($filename, DIRECTORY_SEPARATOR)
+            $filename,
+            0,
+            strrpos($filename, DIRECTORY_SEPARATOR)
         );
         $filename = substr($filename, strrpos($filename, DIRECTORY_SEPARATOR));
 

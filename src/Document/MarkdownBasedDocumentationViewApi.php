@@ -6,6 +6,7 @@
 namespace Vidola\Document;
 
 use Vidola\View\ViewApi;
+
 /**
  * The supported API that can be used for templates.
  *
@@ -98,7 +99,8 @@ class MarkdownBasedDocumentationViewApi implements ViewApi
     public function startPageUrl()
     {
         return $this->structure->getUrl(
-            $this->currentPage, $this->structure->getStartPage()
+            $this->currentPage,
+            $this->structure->getStartPage()
         );
     }
 
