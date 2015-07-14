@@ -223,7 +223,7 @@ class MarkdownBasedDocumentationViewApiTest extends \PHPUnit_Framework_TestCase
     public function tocOfCurrentPage()
     {
         $ul = new \ElementTree\ElementTreeElement('ul');
-        $li = $ul->createElement('li');
+        $li = new \ElementTree\ElementTreeElement('li');
         $ul->append($li);
 
         $this->pageGuide
@@ -241,7 +241,7 @@ class MarkdownBasedDocumentationViewApiTest extends \PHPUnit_Framework_TestCase
     public function tocOfCurrentPageWithMaxDepth()
     {
         $ul = new \ElementTree\ElementTreeElement('ul');
-        $li = $ul->createElement('li');
+        $li = new \ElementTree\ElementTreeElement('li');
         $ul->append($li);
 
         $this->pageGuide

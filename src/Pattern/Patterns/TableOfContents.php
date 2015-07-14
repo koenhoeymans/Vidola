@@ -9,6 +9,7 @@ use Vidola\Util\ContentRetriever;
 use Vidola\Pattern\Patterns\TableOfContents\HeaderFinder;
 use AnyMark\Util\InternalUrlBuilder;
 use AnyMark\Pattern\Pattern;
+use ElementTree\Element;
 use ElementTree\ElementTree;
 
 /**
@@ -65,7 +66,9 @@ class TableOfContents extends Pattern
     }
 
     public function handleMatch(
-        array $match, ElementTree $parent, Pattern $parentPattern = null
+        array $match,
+        Element $parent = null,
+        Pattern $parentPattern = null
     ) {
         return $this->buildReplacement($match, $parent);
     }
@@ -97,7 +100,7 @@ class TableOfContents extends Pattern
         return;
     }
 
-    private function buildReplacement(array $regexmatch, ElementTree $parent)
+    private function buildReplacement(array $regexmatch)
     {
         $options = $this->getOptions($regexmatch['options']);
         $maxDepth = isset($options['depth']) ? $options['depth'] : null;
@@ -106,7 +109,7 @@ class TableOfContents extends Pattern
         $textAfterToc = $regexmatch['text'];
         $headerList = $this->getListOfHeaders($textAfterToc, $fileList);
 
-        return $this->buildToc($headerList, $maxDepth, $parent);
+        return $this->buildToc($headerList, $maxDepth);
     }
 
     private function recursivelyGetFilesToInclude($regexPartWithListOfFiles)
@@ -120,7 +123,10 @@ class TableOfContents extends Pattern
             $fileList[$fileToInclude] = $textOfFile;
 
             preg_match_all(
-                $this->getRegex(), $textOfFile, $tocBlocks, PREG_SET_ORDER
+                $this->getRegex(),
+                $textOfFile,
+                $tocBlocks,
+                PREG_SET_ORDER
             );
 
             foreach ($tocBlocks as $toc) {
@@ -158,7 +164,9 @@ class TableOfContents extends Pattern
         foreach ($lines as $include) {
             if ($include !== '') {
                 preg_match(
-                    "@^(?<page_or_title>.+?)([ ]\<(?<page>.+)\>)?$@", $include, $matches
+                    "@^(?<page_or_title>.+?)([ ]\<(?<page>.+)\>)?$@",
+                    $include,
+                    $matches
                 );
                 $page_or_title = trim($matches['page_or_title']);
                 if (isset($matches['page'])) {
@@ -186,10 +194,14 @@ class TableOfContents extends Pattern
     {
         $headers = array();
 
-        $query = $elementTree->createQuery();
+        $query = $elementTree->createQuery($elementTree);
         $elements = $query->find($query->allElements($query->lOr(
-            $query->withName('h1'), $query->withName('h2'), $query->withName('h1'),
-            $query->withName('h4'), $query->withName('h5'), $query->withName('h5')
+            $query->withName('h1'),
+            $query->withName('h2'),
+            $query->withName('h1'),
+            $query->withName('h4'),
+            $query->withName('h5'),
+            $query->withName('h5')
         )));
         foreach ($elements as $element) {
             $headers[] = array(
@@ -199,10 +211,10 @@ class TableOfContents extends Pattern
             );
         }
 
-        return $this->buildToc($headers, $maxDepth, $elementTree);
+        return $this->buildToc($headers, $maxDepth);
     }
 
-    private function buildToc(array $headers, $maxDepth = null, ElementTree $parent)
+    private function buildToc(array $headers, $maxDepth = null)
     {
         if (empty($headers)) {
             return;
@@ -219,9 +231,7 @@ class TableOfContents extends Pattern
             }
         }
 
-        $ownerTree = $parent->getOwnerTree() ?: $parent;
-
-        $ul = $ownerTree->createElement('ul');
+        $ul = $this->createElement('ul');
 
         $listLevel = null;
 
@@ -243,10 +253,10 @@ class TableOfContents extends Pattern
                 continue;
             }
 
-            $li = $ownerTree->createElement('li');
+            $li = $this->createElement('li');
             $ul->append($li);
-            $a = $ownerTree->createElement('a');
-            $a->append($ownerTree->createText($title));
+            $a = $this->createElement('a');
+            $a->append($this->createText($title));
             $li->append($a);
             $a->setAttribute('href', $file.'#'.$ref);
 

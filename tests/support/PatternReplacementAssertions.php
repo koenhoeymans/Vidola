@@ -25,7 +25,7 @@ abstract class PatternReplacementAssertions extends \PHPUnit_Framework_TestCase
         }
         $result = $this->getPattern()->handleMatch(
             $match,
-            $this->elementTree()->createElement('foo')
+            new \ElementTree\ElementTreeElement('foo')
         );
 
         return $result;

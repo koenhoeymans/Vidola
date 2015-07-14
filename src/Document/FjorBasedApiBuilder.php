@@ -5,7 +5,7 @@
  */
 namespace Vidola\Document;
 
-use Fjor\Fjor;
+use Fjor\Api\ObjectGraphConstructor;
 
 /**
  * @package Vidola
@@ -14,7 +14,7 @@ class FjorBasedApiBuilder implements DocumentationApiBuilder
 {
     private $fjor;
 
-    public function __construct(Fjor $fjor)
+    public function __construct(ObjectGraphConstructor $fjor)
     {
         $this->fjor = $fjor;
     }
@@ -28,7 +28,9 @@ class FjorBasedApiBuilder implements DocumentationApiBuilder
         $structure = $this->fjor->get('Vidola\\Document\\Structure');
 
         return new \Vidola\Document\MarkdownBasedDocumentationViewApi(
-            $page, $pageGuide, $structure
+            $page,
+            $pageGuide,
+            $structure
         );
     }
 }

@@ -11,7 +11,8 @@
 		"php": ">=5.4.6",
 		"anymark/anymark": "~0.13.0",
 		"elementtree/elementtree": "~0.8.1",
-		"epa/epa": "~0.4.0"
+		"epa/epa": "~0.4.0",
+        "comparify/comparify": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"

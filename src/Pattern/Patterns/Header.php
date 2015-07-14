@@ -6,7 +6,7 @@
 namespace Vidola\Pattern\Patterns;
 
 use AnyMark\Pattern\Pattern;
-use ElementTree\ElementTree;
+use ElementTree\Element;
 
 /**
  * @package Vidola
@@ -16,7 +16,9 @@ class Header extends \AnyMark\Pattern\Patterns\Header
     protected $knownIds = array();
 
     public function handleMatch(
-        array $match, ElementTree $parent, Pattern $parentPattern = null
+        array $match,
+        Element $parent = null,
+        Pattern $parentPattern = null
     ) {
         $header = parent::handleMatch($match, $parent, $parentPattern);
         $id = strtolower(preg_replace('@ @', '-', $header->getChildren()[0]->getValue()));

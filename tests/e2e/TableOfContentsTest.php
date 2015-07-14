@@ -6,6 +6,8 @@ class TableOfContentsTest extends \Vidola\Tidy
 {
     public function setup()
     {
+        parent::setup();
+
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
         if (file_exists($dir . 'TableOfContents.html')) {
             unlink($dir . 'TableOfContents.html');

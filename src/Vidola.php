@@ -6,7 +6,7 @@ namespace Vidola;
  * Sets up the necessary components before building the documents.
  */
 
-class Vidola implements \Epa\Plugin
+class Vidola implements \Epa\Api\Plugin
 {
     public static function run()
     {
@@ -22,7 +22,7 @@ class Vidola implements \Epa\Plugin
 
         // setting up the object graph constructor
         // ---------------------------------------
-        $fjor = \Fjor\Fjor::defaultSetup();
+        $fjor = \Fjor\FjorFactory::create();
         $anyMark = \AnyMark\AnyMark::setup($fjor);
         $anyMark->registerPlugin(new Vidola());
         $fjor
@@ -34,8 +34,8 @@ class Vidola implements \Epa\Plugin
             ->thenUse($anyMark);
         $fjor
             ->given('Vidola\\Util\\ContentRetriever')
-            ->thenUse('Vidola\\Util\\DocFileRetriever')
-            ->inSingletonScope();
+            ->thenUse('Vidola\\Util\\DocFileRetriever');
+        $fjor->setSingleton('Vidola\\Util\\DocFileRetriever');
         $fjor
             ->given('Vidola\\Util\\TitleCreator')
             ->thenUse('Vidola\\Util\\HeaderBasedTitleCreator');
@@ -54,8 +54,8 @@ class Vidola implements \Epa\Plugin
         $fjor->setSingleton('Vidola\\Document\\MarkdownBasedDocumentation');
         $fjor
             ->given('Vidola\\View\\TemplatableFileView')
-            ->thenUse('Vidola\\View\\StoredTemplatableFileView')
-            ->inSingletonScope();
+            ->thenUse('Vidola\\View\\StoredTemplatableFileView');
+        $fjor->setSingleton('Vidola\\View\\StoredTemplatableFileView');
         $fjor
             ->given('Vidola\\Util\\TocGenerator')
             ->thenUse('Vidola\\Util\\HtmlHeaderBasedTocGenerator');
@@ -89,7 +89,8 @@ class Vidola implements \Epa\Plugin
     }
 
     private static function setOptions(
-        \Vidola\Config\Config $config, \Fjor\Fjor $fjor
+        \Vidola\Config\Config $config,
+        \Fjor\Api\ObjectGraphConstructor $fjor
     ) {
         // set type of internal url builder
         // --internal-links=
@@ -158,10 +159,10 @@ class Vidola implements \Epa\Plugin
         return $fileParts['filename'];
     }
 
-    public function register(\Epa\EventMapper $mapper)
+    public function registerHandlers(\Epa\Api\EventDispatcher $eventDispatcher)
     {
-        $mapper->registerForEvent(
-            'EditPatternConfigurationEvent',
+        $eventDispatcher->registerForEvent(
+            'AnyMark\\PublicApi\\EditPatternConfigurationEvent',
             function (\AnyMark\PublicApi\EditPatternConfigurationEvent $event) {
                 $this->addPatterns($event);
             }
@@ -171,10 +172,12 @@ class Vidola implements \Epa\Plugin
     private function addPatterns(\AnyMark\PublicApi\EditPatternConfigurationEvent $config)
     {
         $config->setImplementation(
-            'header', 'Vidola\\Pattern\\Patterns\\Header'
+            'header',
+            'Vidola\\Pattern\\Patterns\\Header'
         );
         $config->setImplementation(
-            'toc', 'Vidola\\Pattern\\Patterns\\TableOfContents'
+            'toc',
+            'Vidola\\Pattern\\Patterns\\TableOfContents'
         );
         $config
             ->add('toc')

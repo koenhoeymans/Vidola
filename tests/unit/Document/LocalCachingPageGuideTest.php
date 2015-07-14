@@ -34,13 +34,15 @@ class LocalCachingPageGuideTest extends \PHPUnit_Framework_TestCase
      */
     public function providesParsedContentOfPageAsString()
     {
+        $tree = new \ElementTree\ElementTree();
+        $tree->append($tree->createElement('doc'));
         $page = new \Vidola\Document\Page('a_page', 'content');
 
         $this->anyMark
             ->expects($this->atLeastOnce())
             ->method('parse')
             ->with('content')
-            ->will($this->returnValue(new \ElementTree\ElementTreeElement('doc')));
+            ->will($this->returnValue($tree));
 
         $this->assertEquals(
             '<doc />',
@@ -53,16 +55,18 @@ class LocalCachingPageGuideTest extends \PHPUnit_Framework_TestCase
      */
     public function providesParsedContentAsDomDocument()
     {
+        $tree = new \ElementTree\ElementTree();
+        $tree->append($tree->createElement('doc'));
         $page = new \Vidola\Document\Page('a_page', 'content');
 
         $this->anyMark
             ->expects($this->atLeastOnce())
             ->method('parse')
             ->with('content')
-            ->will($this->returnValue(new \ElementTree\ElementTreeElement('doc')));
+            ->will($this->returnValue($tree));
 
         $this->assertEquals(
-            new \ElementTree\ElementTreeElement('doc'),
+            $tree,
             $this->pageGuide->getParsedContent($page, true)
         );
     }

@@ -6,6 +6,8 @@ class BuildFileTest extends \Vidola\Tidy
 {
     public function setup()
     {
+        parent::setup();
+
         $dir = sys_get_temp_dir().DIRECTORY_SEPARATOR;
         if (file_exists($dir . 'BuildFile.css')) {
             unlink($dir . 'BuildFile.css');

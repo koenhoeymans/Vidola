@@ -23,7 +23,7 @@ class HeaderFinder
      * Creates array with arrays of headers in the order found in the text.
      *
      * array(
-     * 	array('first title' => 'foo', 'level' => 1, 'id' => 'bar')
+     *    array('first title' => 'foo', 'level' => 1, 'id' => 'bar')
      * );
      *
      * @param  string $text
@@ -41,9 +41,7 @@ class HeaderFinder
         );
 
         foreach ($headerMatches as $headerMatch) {
-            $header = $this->header->handleMatch(
-                $headerMatch, new \ElementTree\ElementTree()
-            );
+            $header = $this->header->handleMatch($headerMatch);
             $headers[] = array(
                 'title' => $header->getChildren()[0]->getValue(),
                 'level' => substr($header->getName(), 1),

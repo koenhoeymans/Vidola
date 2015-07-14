@@ -54,10 +54,10 @@ paragraph";
             );
 
         $ul = $this->elementTree()->createElement('ul');
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $ul->append($li);
-        $a = $ul->createElement('a');
-        $anchorText = $ul->createText('header');
+        $a = $this->elementTree()->createElement('a');
+        $anchorText = $this->elementTree()->createText('header');
         $a->append($anchorText);
         $li->append($a);
         $a->setAttribute('href', '#header');
@@ -89,19 +89,19 @@ paragraph";
             )));
 
         $ul = $this->elementTree()->createElement('ul');
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $ul->append($li);
-        $a = $ul->createElement('a', 'header');
-        $a->append($ul->createText('header'));
+        $a = $this->elementTree()->createElement('a', 'header');
+        $a->append($this->elementTree()->createText('header'));
         $li->append($a);
         $a->setAttribute('href', '#header');
 
         $subUl = new \ElementTree\ElementTreeElement('ul');
         $li->append($subUl);
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $subUl->append($li);
-        $a = $ul->createElement('a');
-        $a->append($ul->createText('subheader'));
+        $a = $this->elementTree()->createElement('a');
+        $a->append($this->elementTree()->createText('subheader'));
         $li->append($a);
         $a->setAttribute('href', '#subheader');
 
@@ -132,34 +132,34 @@ paragraph";
 
         $ul = $this->elementTree()->createElement('ul');
 
-        $li1 = $ul->createElement('li');
+        $li1 = $this->elementTree()->createElement('li');
         $ul->append($li1);
-        $a1 = $ul->createElement('a');
-        $a1->append($ul->createText('header1a'));
+        $a1 = $this->elementTree()->createElement('a');
+        $a1->append($this->elementTree()->createText('header1a'));
         $li1->append($a1);
         $a1->setAttribute('href', '#header1a');
 
-        $li2 = $ul->createElement('li');
+        $li2 = $this->elementTree()->createElement('li');
         $ul->append($li2);
-        $a2 = $ul->createElement('a');
-        $a2->append($ul->createText('header1b'));
+        $a2 = $this->elementTree()->createElement('a');
+        $a2->append($this->elementTree()->createText('header1b'));
         $li2->append($a2);
         $a2->setAttribute('href', '#header1b');
 
-        $subUl1 = $ul->createElement('ul');
+        $subUl1 = $this->elementTree()->createElement('ul');
         $li1->append($subUl1);
 
-        $subLi1 = $ul->createElement('li');
+        $subLi1 = $this->elementTree()->createElement('li');
         $subUl1->append($subLi1);
-        $suba1 = $ul->createElement('a');
-        $suba1->append($ul->createText('header2a'));
+        $suba1 = $this->elementTree()->createElement('a');
+        $suba1->append($this->elementTree()->createText('header2a'));
         $subLi1->append($suba1);
         $suba1->setAttribute('href', '#header2a');
 
-        $subLi2 = $ul->createElement('li');
+        $subLi2 = $this->elementTree()->createElement('li');
         $subUl1->append($subLi2);
-        $suba2 = $ul->createElement('a');
-        $suba2->append($ul->createText('header2b'));
+        $suba2 = $this->elementTree()->createElement('a');
+        $suba2->append($this->elementTree()->createText('header2b'));
         $subLi2->append($suba2);
         $suba2->setAttribute('href', '#header2b');
 
@@ -191,10 +191,10 @@ paragraph";
             )));
 
         $ul = $this->elementTree()->createElement('ul');
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $ul->append($li);
-        $a = $ul->createElement('a');
-        $anchorText = $ul->createText('subheader');
+        $a = $this->elementTree()->createElement('a');
+        $anchorText = $this->elementTree()->createText('subheader');
         $a->append($anchorText);
         $li->append($a);
         $a->setAttribute('href', '#subheader');
@@ -233,10 +233,10 @@ paragraph";
             )));
 
         $ul = $this->elementTree()->createElement('ul');
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $ul->append($li);
-        $a = $ul->createElement('a');
-        $anchorText = $ul->createText('subheader');
+        $a = $this->elementTree()->createElement('a');
+        $anchorText = $this->elementTree()->createText('subheader');
         $a->append($anchorText);
         $li->append($a);
         $a->setAttribute('href', '#subheader');
@@ -271,10 +271,10 @@ paragraph";
             )));
 
         $ul = $this->elementTree()->createElement('ul');
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $ul->append($li);
-        $a = $ul->createElement('a');
-        $anchorText = $ul->createText('header');
+        $a = $this->elementTree()->createElement('a');
+        $anchorText = $this->elementTree()->createText('header');
         $a->append($anchorText);
         $li->append($a);
         $a->setAttribute('href', '#header');
@@ -326,17 +326,17 @@ some text")
 
         $ul = $this->elementTree()->createElement('ul');
 
-        $li1 = $ul->createElement('li');
+        $li1 = $this->elementTree()->createElement('li');
         $ul->append($li1);
-        $a1 = $ul->createElement('a');
-        $a1->append($ul->createText('header'));
+        $a1 = $this->elementTree()->createElement('a');
+        $a1->append($this->elementTree()->createText('header'));
         $li1->append($a1);
         $a1->setAttribute('href', '#header');
 
-        $li2 = $ul->createElement('li');
+        $li2 = $this->elementTree()->createElement('li');
         $ul->append($li2);
-        $a2 = $ul->createElement('a');
-        $a2->append($ul->createText('included header'));
+        $a2 = $this->elementTree()->createElement('a');
+        $a2->append($this->elementTree()->createText('included header'));
         $li2->append($a2);
         $a2->setAttribute('href', 'Includedfile.html#included-header');
 
@@ -390,21 +390,21 @@ some text")
 
         $ul = $this->elementTree()->createElement('ul');
 
-        $li1 = $ul->createElement('li');
+        $li1 = $this->elementTree()->createElement('li');
         $ul->append($li1);
-        $a1 = $ul->createElement('a');
-        $anchorText = $ul->createText('level2');
+        $a1 = $this->elementTree()->createElement('a');
+        $anchorText = $this->elementTree()->createText('level2');
         $a1->append($anchorText);
         $li1->append($a1);
         $a1->setAttribute('href', '#level2');
 
-        $subUl1 = $ul->createElement('ul');
+        $subUl1 = $this->elementTree()->createElement('ul');
         $li1->append($subUl1);
 
-        $subLi1 = $ul->createElement('li');
+        $subLi1 = $this->elementTree()->createElement('li');
         $subUl1->append($subLi1);
-        $subA1 = $ul->createElement('a');
-        $anchorText = $ul->createText('level3');
+        $subA1 = $this->elementTree()->createElement('a');
+        $anchorText = $this->elementTree()->createText('level3');
         $subA1->append($anchorText);
         $subLi1->append($subA1);
         $subA1->setAttribute('href', 'Includedfile.html#level3');
@@ -472,17 +472,17 @@ some text")
 
         $ul = $this->elementTree()->createElement('ul');
 
-        $li1 = $ul->createElement('li');
+        $li1 = $this->elementTree()->createElement('li');
         $ul->append($li1);
-        $a1 = $ul->createElement('a');
-        $a1->append($ul->createText('level1a'));
+        $a1 = $this->elementTree()->createElement('a');
+        $a1->append($this->elementTree()->createText('level1a'));
         $li1->append($a1);
         $a1->setAttribute('href', 'Includedfile1.html#level1a');
 
-        $li2 = $ul->createElement('li');
+        $li2 = $this->elementTree()->createElement('li');
         $ul->append($li2);
-        $a2 = $ul->createElement('a');
-        $a2->append($ul->createText('level1b'));
+        $a2 = $this->elementTree()->createElement('a');
+        $a2->append($this->elementTree()->createText('level1b'));
         $li2->append($a2);
         $a2->setAttribute('href', 'Includedfile2.html#level1b');
 
@@ -543,10 +543,10 @@ some text")
 
         $ul = $this->elementTree()->createElement('ul');
 
-        $li1 = $ul->createElement('li');
+        $li1 = $this->elementTree()->createElement('li');
         $ul->append($li1);
-        $a1 = $ul->createElement('a');
-        $a1->append($ul->createText('header'));
+        $a1 = $this->elementTree()->createElement('a');
+        $a1->append($this->elementTree()->createText('header'));
         $li1->append($a1);
         $a1->setAttribute('href', 'Subincludedfile.html#header');
 
@@ -578,10 +578,10 @@ paragraph";
 
         $ul = $this->elementTree()->createElement('ul');
 
-        $li = $ul->createElement('li');
+        $li = $this->elementTree()->createElement('li');
         $ul->append($li);
-        $a = $ul->createElement('a');
-        $a->append($ul->createText('header'));
+        $a = $this->elementTree()->createElement('a');
+        $a->append($this->elementTree()->createText('header'));
         $li->append($a);
         $a->setAttribute('href', '#xyz');
 
@@ -607,18 +607,18 @@ paragraph";
 
         $toc = $doc->createElement('ul');
 
-        $li = $toc->createElement('li');
-        $a = $toc->createElement('a');
-        $text = $toc->createText('header');
+        $li = $this->elementTree()->createElement('li');
+        $a = $this->elementTree()->createElement('a');
+        $text = $this->elementTree()->createText('header');
         $toc->append($li);
         $li->append($a);
         $a->append($text);
         $a->setAttribute('href', '#header');
 
-        $ul = $toc->createElement('ul');
-        $li2 = $toc->createElement('li');
-        $a = $toc->createElement('a');
-        $text = $toc->createText('header2');
+        $ul = $this->elementTree()->createElement('ul');
+        $li2 = $this->elementTree()->createElement('li');
+        $a = $this->elementTree()->createElement('a');
+        $text = $this->elementTree()->createText('header2');
         $li->append($ul);
         $ul->append($li2);
         $li2->append($a);

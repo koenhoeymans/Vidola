@@ -27,7 +27,9 @@ class LocalCachingPageGuide implements PageGuide, Observable
     private $toc;
 
     public function __construct(
-        AnyMark $anyMark, TitleCreator $titleCreator, TableOfContents $toc
+        AnyMark $anyMark,
+        TitleCreator $titleCreator,
+        TableOfContents $toc
     ) {
         $this->anyMark = $anyMark;
         $this->titleCreator = $titleCreator;
@@ -46,7 +48,7 @@ class LocalCachingPageGuide implements PageGuide, Observable
             $parsedContent = $this->content[$id];
         } else {
             $rawContent = $page->getRawContent();
-            $parsedContent = $this->anyMark->parse($rawContent, true);
+            $parsedContent = $this->anyMark->parse($rawContent);
             $this->content[$id] = $parsedContent;
 
             $this->notify(new \Vidola\Events\AfterParsing($parsedContent));
@@ -69,7 +71,8 @@ class LocalCachingPageGuide implements PageGuide, Observable
     public function getTitle(Page $page)
     {
         return $this->titleCreator->createPageTitle(
-            $page->getRawContent(), $page->getUrl()
+            $page->getRawContent(),
+            $page->getUrl()
         );
     }
 
@@ -79,7 +82,8 @@ class LocalCachingPageGuide implements PageGuide, Observable
     public function getToc(Page $page, $maxDepth = null)
     {
         return $this->toc->createToc(
-            $this->getParsedContent($page, true), $maxDepth
+            $this->getParsedContent($page, true),
+            $maxDepth
         );
     }
 }
