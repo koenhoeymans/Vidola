@@ -27,10 +27,10 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
     {
         // given
         $_SERVER['argv'][5] = '--buildfile=' . __DIR__
-                . DIRECTORY_SEPARATOR .'..'
-                . DIRECTORY_SEPARATOR .'..'
-                . DIRECTORY_SEPARATOR .'support'
-                . DIRECTORY_SEPARATOR .'Config.php';
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'support'
+                . DIRECTORY_SEPARATOR . 'Config.php';
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         // when

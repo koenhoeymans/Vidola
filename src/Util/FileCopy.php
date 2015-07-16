@@ -38,16 +38,16 @@ class FileCopy
             if (is_dir($included)) {
                 $included = $this->normalize($included);
                 $this->copy(
-                    $sourceDirectory.$relPart[1],
-                    $targetDirectory.$relPart[1],
+                    $sourceDirectory . $relPart[1],
+                    $targetDirectory . $relPart[1],
                     $exclude,
                     $include
                 );
             } else {
-                if (!is_dir(dirname($targetDirectory.$relPart[1]))) {
-                    mkdir(dirname($targetDirectory.$relPart[1]));
+                if (!is_dir(dirname($targetDirectory . $relPart[1]))) {
+                    mkdir(dirname($targetDirectory . $relPart[1]));
                 }
-                copy($sourceDirectory.$relPart[1], $targetDirectory.$relPart[1]);
+                copy($sourceDirectory . $relPart[1], $targetDirectory . $relPart[1]);
             }
         }
     }
@@ -73,15 +73,15 @@ class FileCopy
             }
 
             if (is_dir($sourceDirectory.$file)) {
-                $this->copy($sourceDirectory.$file, $targetDirectory.$file, $exclude, $include);
+                $this->copy($sourceDirectory . $file, $targetDirectory . $file, $exclude, $include);
             } else {
-                copy($sourceDirectory.$file, $targetDirectory.$file);
+                copy($sourceDirectory . $file, $targetDirectory . $file);
             }
         }
     }
 
     private function normalize($dir)
     {
-        return (substr($dir, -1) === DIRECTORY_SEPARATOR) ? $dir : $dir.DIRECTORY_SEPARATOR;
+        return (substr($dir, -1) === DIRECTORY_SEPARATOR) ? $dir : $dir . DIRECTORY_SEPARATOR;
     }
 }

@@ -46,10 +46,10 @@ class CommandLineConfig implements Config, TemplateOptions
     {
         return $this->get('template') ?:
             __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Templates'
-            .DIRECTORY_SEPARATOR.'Default'
-            .DIRECTORY_SEPARATOR.'Index.php';
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'Templates'
+            . DIRECTORY_SEPARATOR . 'Default'
+            . DIRECTORY_SEPARATOR . 'Index.php';
     }
 
     public function getCopyIncludedFiles()

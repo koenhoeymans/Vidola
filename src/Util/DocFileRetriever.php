@@ -33,13 +33,13 @@ class DocFileRetriever implements ContentRetriever
         }
 
         foreach ($this->extensions as $extension) {
-            if (file_exists($file.'.'.$extension)) {
-                return file_get_contents($file.'.'.$extension);
+            if (file_exists($file . '.' . $extension)) {
+                return file_get_contents($file . '.' . $extension);
             }
 
-            if (file_exists($this->sourceDir.DIRECTORY_SEPARATOR.$file.'.'.$extension)) {
+            if (file_exists($this->sourceDir . DIRECTORY_SEPARATOR.$file . '.' . $extension)) {
                 return file_get_contents(
-                    $this->sourceDir.DIRECTORY_SEPARATOR.$file.'.'.$extension
+                    $this->sourceDir . DIRECTORY_SEPARATOR . $file . '.' . $extension
                 );
             }
         }
@@ -50,7 +50,7 @@ class DocFileRetriever implements ContentRetriever
         }
 
         throw new \Exception(
-            'DocFileRetriever::retrieveContent() couldn\'t find "'.$file.'"'
+            'DocFileRetriever::retrieveContent() couldn\'t find "' . $file . '"'
         );
     }
 }

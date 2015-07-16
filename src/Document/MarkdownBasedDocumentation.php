@@ -144,6 +144,6 @@ class MarkdownBasedDocumentation implements FilenameCreator, Structure
     {
         $fileParts = pathinfo($page->getUrl());
 
-        return $fileParts['dirname'].DIRECTORY_SEPARATOR.$fileParts['filename'];
+        return $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'];
     }
 }

@@ -34,7 +34,7 @@ class Header extends \AnyMark\Pattern\Patterns\Header
             $this->knownIds[] = $id;
         } else {
             $count = ($count === null) ? 2 : $count++;
-            $id = $this->createUniqueId($id.'-'.$count);
+            $id = $this->createUniqueId($id . '-' . $count);
         }
 
         return $id;

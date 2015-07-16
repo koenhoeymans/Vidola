@@ -116,18 +116,18 @@ class StoredTemplatableFileView implements TemplatableFileView
         }
 
         return __DIR__
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'..'
-            .DIRECTORY_SEPARATOR.'Templates'
-            .DIRECTORY_SEPARATOR.'Default'
-            .DIRECTORY_SEPARATOR.'Index.php';
+            . DIRECTORY_SEPARATOR.'..'
+            . DIRECTORY_SEPARATOR.'..'
+            . DIRECTORY_SEPARATOR.'Templates'
+            . DIRECTORY_SEPARATOR.'Default'
+            . DIRECTORY_SEPARATOR.'Index.php';
     }
 
     private function write($text)
     {
         $filename = $this->getFilename();
 
-        $dir = $this->getOutputDir().DIRECTORY_SEPARATOR.substr(
+        $dir = $this->getOutputDir() . DIRECTORY_SEPARATOR . substr(
             $filename,
             0,
             strrpos($filename, DIRECTORY_SEPARATOR)
@@ -138,16 +138,16 @@ class StoredTemplatableFileView implements TemplatableFileView
             mkdir($dir);
         }
 
-        $file = $dir.$filename.'.'.$this->extension;
+        $file = $dir . $filename . '.' . $this->extension;
 
         $fileHandle = fopen($file, 'w');
 
         if (!$fileHandle) {
-            throw new \Exception('Writer::write() was unable to open '.$file);
+            throw new \Exception('Writer::write() was unable to open ' . $file);
         }
 
         if (fwrite($fileHandle, $text) === false) {
-            throw new \Exception('Writer::write() was unable to write to '.$file);
+            throw new \Exception('Writer::write() was unable to write to ' . $file);
         }
 
         fclose($fileHandle);

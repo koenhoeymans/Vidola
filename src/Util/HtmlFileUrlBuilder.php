@@ -32,7 +32,7 @@ class HtmlFileUrlBuilder implements RelativeInternalUrlBuilder
 
         $levelsUp = $this->howManyLevelsDeep($relativeTo);
         while ($levelsUp>0) {
-            $filePart = '../'.$filePart;
+            $filePart = '../' . $filePart;
             $levelsUp--;
         }
 
@@ -41,7 +41,7 @@ class HtmlFileUrlBuilder implements RelativeInternalUrlBuilder
             $filePart = $this->addExtension($filePart);
         }
 
-        return $filePart.$relPart;
+        return $filePart . $relPart;
     }
 
     private function howManyLevelsDeep($resource)
@@ -51,6 +51,6 @@ class HtmlFileUrlBuilder implements RelativeInternalUrlBuilder
 
     private function addExtension($resource)
     {
-        return $resource.'.html';
+        return $resource . '.html';
     }
 }
