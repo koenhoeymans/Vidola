@@ -13,7 +13,7 @@ class Vidola implements \Epa\Api\Plugin
         ini_set('pcre.backtrack_limit', 10000000);
         ini_set('pcre.recursion_limit', "524");
         if (ini_get('xdebug.max_nesting_level')) {
-            ini_set('xdebug.max_nesting_level', 0);
+            ini_set('xdebug.max_nesting_level', 100000);
         }
 
         // configuration
