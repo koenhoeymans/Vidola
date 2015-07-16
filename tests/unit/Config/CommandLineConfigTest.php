@@ -10,7 +10,7 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
     public function readsConfigFromCommandLine()
     {
         // given
-        $_SERVER['argv']['foo'] = 'bar';
+        $_SERVER['argv'][3] = '--foo=bar';
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         // when
@@ -23,10 +23,10 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function acceptsFileWithArrayWithKeys()
+    public function loadsBuildFileWithArrayWithKeys()
     {
         // given
-        $_SERVER['argv'][1] = __DIR__
+        $_SERVER['argv'][5] = '--buildfile=' . __DIR__
                 . DIRECTORY_SEPARATOR .'..'
                 . DIRECTORY_SEPARATOR .'..'
                 . DIRECTORY_SEPARATOR .'support'
@@ -51,7 +51,7 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
             . DIRECTORY_SEPARATOR . 'support'
             . DIRECTORY_SEPARATOR . 'BuildFileTemplate'
             . DIRECTORY_SEPARATOR . 'MiniTemplate.php';
-        $_SERVER['argv']['template'] = $template;
+        $_SERVER['argv'][8] = '--template=' .  $template;
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         $this->assertEquals($template, $config->getTemplate());
@@ -62,7 +62,7 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function getsCopyIncludedFiles()
     {
-        $_SERVER['argv']['copy-include'] = 'file';
+        $_SERVER['argv'][7] = '--copy-include=file';
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         $this->assertEquals(array('file'), $config->getCopyIncludedFiles());
@@ -73,7 +73,7 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function getsCopyExcludedFiles()
     {
-        $_SERVER['argv']['copy-exclude'] = 'file';
+        $_SERVER['argv'][9] = '--copy-exclude=file';
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         $this->assertEquals(array('file'), $config->getCopyExcludedFiles());
@@ -84,7 +84,7 @@ class CommandLineConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function getsTargetDir()
     {
-        $_SERVER['argv']['target-dir'] = '/tmp';
+        $_SERVER['argv'][4] = '--target-dir=/tmp';
         $config = new \Vidola\Config\CommandLineConfig($_SERVER['argv']);
 
         $this->assertEquals('/tmp', $config->getTargetDir());

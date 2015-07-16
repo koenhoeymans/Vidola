@@ -31,7 +31,7 @@ class PluginTest extends \Vidola\Tidy
             . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR . 'src'
             . DIRECTORY_SEPARATOR . 'RunVidola.php';
-        $build = __DIR__
+        $build = '--buildfile=' . __DIR__
             . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR . 'support'
             . DIRECTORY_SEPARATOR . 'Plugin'
