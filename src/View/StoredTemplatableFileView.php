@@ -117,7 +117,6 @@ class StoredTemplatableFileView implements TemplatableFileView
 
         return __DIR__
             . DIRECTORY_SEPARATOR.'..'
-            . DIRECTORY_SEPARATOR.'..'
             . DIRECTORY_SEPARATOR.'Templates'
             . DIRECTORY_SEPARATOR.'Default'
             . DIRECTORY_SEPARATOR.'Index.php';
@@ -135,7 +134,7 @@ class StoredTemplatableFileView implements TemplatableFileView
         $filename = substr($filename, strrpos($filename, DIRECTORY_SEPARATOR));
 
         if (!is_dir($dir)) {
-            mkdir($dir);
+            mkdir($dir, 0700, true);
         }
 
         $file = $dir . $filename . '.' . $this->extension;
