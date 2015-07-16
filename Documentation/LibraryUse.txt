@@ -44,7 +44,7 @@ Using a build file
 
 Alternatively a 'build' file can be specified:
 
-	php RunVidola.php /path/to/build.php
+	php RunVidola.php --buildfile=/path/to/build.php
 
 This is a PHP file that returns an array with key-value pairs that are the
 same as the above command line options. Minimally a source and target need
